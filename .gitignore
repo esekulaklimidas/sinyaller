@@ -5,5 +5,6 @@
 *.pdf
 *.png
 *.log
+*.exe
 __pycache__/
 .system_generated/
