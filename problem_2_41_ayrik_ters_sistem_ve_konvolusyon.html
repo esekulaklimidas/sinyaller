@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.41 — Ters Sistem, Konvolüsyon Özellikleri ve h[n] Tasarımı (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 2.41</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">İleri Düzey (Advanced)</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman (DT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 179</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html#sec-ileri-duzey" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanımı Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; İleri Düzey Problemler</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Ters Filtreleme, Konvolüsyon Cebiri ve $h[n]$ Dizisinin Doğrudan Sentezi
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-amber-50 text-amber-700 border border-amber-200 rounded-xl text-xs font-bold">
+            Sonlu Dürtü Yanıtı (FIR) &bull; Kararlı
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni Orijinal Kutu -->
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Problem 2.41 Soru Metni (Oppenheim &amp; Willsky, Sh. 179)
+        </div>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          Aşağıdaki ayrık zamanlı işareti ele alınız:
+          $$x[n] = \alpha^n u[n]$$
+        </p>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          <strong>(a)</strong> $g[n] = x[n] - \alpha x[n-1]$ işaretini çiziniz ve kapalı formda ifade ediniz.
+        </p>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          <strong>(b)</strong> (a) şıkkında elde ettiğiniz sonucu konvolüsyonun birleşme ve değişme özellikleri ile birlikte kullanarak, aşağıdaki bağıntıyı sağlayan bir <strong>$h[n]$</strong> dizisi belirleyiniz:
+          $$x[n] * h[n] = \left(\frac{1}{2}\right)^n \{u[n+2] - u[n-2]\}$$
+        </p>
+      </div>
+    </section>
+
+    <!-- ETKİLEŞİMLİ SİMÜLATÖR (STEM PLOT DUAL CANVAS) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">İnteraktif Sentez Simülatörü</span>
+          <h2 class="text-xl font-black text-slate-900">Ayrık Zaman Stem Çizgeleri &amp; Canlı Doğrulama</h2>
+          <p class="text-xs text-slate-500 mt-0.5">$\alpha$ parametresini değiştirerek $g[n] = \delta[n]$ tersliğini ve oluşan $h[n]$ katsayılarını dinamik olarak inceleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnExportPNG" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG Olarak İndir
+          </button>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <!-- Alfa Kaydırıcı -->
+        <div class="md:col-span-6 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Parametre Değeri: <span class="font-mono text-indigo-600 text-sm" id="lblAlphaVal">α = 0.50</span></span>
+            <span class="text-[11px] px-2 py-0.5 rounded font-mono bg-indigo-100 text-indigo-800" id="lblAlphaBadge">Özel İptal Durumu (2-Tap)</span>
+          </div>
+          <input type="range" id="sliderAlpha" min="-0.9" max="0.9" step="0.05" value="0.5"
+            class="w-full accent-indigo-600 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+            <span>α = -0.9</span>
+            <span>α = 0.0</span>
+            <span>α = 0.5 (Özel)</span>
+            <span>α = 0.9</span>
+          </div>
+        </div>
+
+        <!-- Hızlı Ön Ayar Butonları -->
+        <div class="md:col-span-6 flex flex-wrap gap-1.5 justify-end">
+          <button onclick="setAlpha(0.5)" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition">α = 0.5 (Özel İptal)</button>
+          <button onclick="setAlpha(0.8)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">α = 0.8 (Yavaş Sönüm)</button>
+          <button onclick="setAlpha(-0.5)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">α = -0.5 (Salınımlı)</button>
+          <button onclick="setAlpha(0.0)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">α = 0.0 (Delta Giriş)</button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Tuval 1: (a) Şıkkı g[n] = x[n] - alpha x[n-1] -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">(a) Ters Sistem: $g[n] = x[n] - \alpha x[n-1]$</span>
+            <span class="text-[11px] font-mono text-emerald-600 font-bold">g[n] = δ[n] (Her α için!)</span>
+          </div>
+          <canvas id="canvasG" width="460" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+            <span class="text-sky-400 font-mono">g[0] = 1, g[n≠0] = 0</span>
+            <span class="text-slate-400">İdeal Dirac Darbesi Üretildi</span>
+          </div>
+        </div>
+
+        <!-- Tuval 2: (b) Şıkkı Sentezlenen h[n] Dizisi -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">(b) Sentezlenen Filtre: $h[n] = y[n] - \alpha y[n-1]$</span>
+            <span class="text-[11px] font-mono text-amber-500 font-bold" id="lblHFormula">h[n] katsayıları</span>
+          </div>
+          <canvas id="canvasH" width="460" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 pt-1">
+            <span class="text-amber-400 font-mono" id="lblHValues">[-2..2]: 4, 0, 0, 0, -0.25</span>
+            <span class="text-slate-400">5-Elemanlı FIR Dizi</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Doğrulama Tuvali: x[n] * h[n] Hesaplanıp y[n] ile Karşılaştırılması -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+        <div class="flex justify-between items-center text-xs">
+          <span class="font-bold text-slate-700">Canlı Doğrulama: $x[n] * h[n]$ Konvolüsyon Çıkışı vs. Hedef $y[n]$</span>
+          <span class="text-[11px] font-mono text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-bold">
+            Maksimum Hata = 0.0000 (%100 Özdeş)
+          </span>
+        </div>
+        <canvas id="canvasVerify" width="940" height="190" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+        <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-400 inline-block"></span> Konvolüsyon Sonucu $x[n]*h[n]$</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full border border-pink-400 inline-block"></span> Hedef $y[n] = (1/2)^n\{u[n+2]-u[n-2]\}$</span>
+          </div>
+          <span class="font-mono text-slate-400">Tüm n değerlerinde tam örtüşme</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAYLI TEORİK ÇÖZÜM VE KANIT KARTLARI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- (a) Şıkkı Teorik İspatı -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-xs font-black uppercase">(a) Şıkkı Analizi</span>
+          <span class="text-xs font-mono text-slate-500">Ters Filtre İspatı</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">$g[n] = x[n] - \alpha x[n-1]$ İşaretinin Belirlenmesi</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Verilen işaret $x[n] = \alpha^n u[n]$'dir. Gecikmiş işaret ise $x[n-1] = \alpha^{n-1} u[n-1]$ olur. $g[n]$ ifadesini $n$'in farklı bölgelerinde adım adım hesaplayalım:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <ul class="list-disc list-inside space-y-2 text-slate-700">
+            <li>
+              <strong>$n < 0$ İçin:</strong><br>
+              $u[n] = 0$ ve $u[n-1] = 0$ olduğundan:
+              $$g[n] = 0 - \alpha \cdot 0 = 0$$
+            </li>
+            <li>
+              <strong>$n = 0$ İçin:</strong><br>
+              $x[0] = \alpha^0 u[0] = 1$ ve $x[-1] = \alpha^{-1} u[-1] = 0$:
+              $$g[0] = 1 - \alpha \cdot 0 = 1$$
+            </li>
+            <li>
+              <strong>$n \ge 1$ İçin:</strong><br>
+              $x[n] = \alpha^n$ ve $x[n-1] = \alpha^{n-1}$:
+              $$g[n] = \alpha^n - \alpha \cdot \left(\alpha^{n-1}\right) = \alpha^n - \alpha^n = 0$$
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-1">
+          <div class="font-bold text-emerald-900">Sonuç (Kronecker Delta):</div>
+          <div class="text-base font-bold text-emerald-700 font-mono">
+            $$g[n] = \delta[n]$$
+          </div>
+          <div class="text-[11px] text-slate-600 leading-relaxed">
+            <strong>Sistem Kuramı Yorumu:</strong> $f[n] = \delta[n] - \alpha \delta[n-1]$ dürtü yanıtına sahip bir filtre, 
+            $x[n] = \alpha^n u[n]$ işaretinin <strong>tam ters filtresidir (inverse system)</strong>:
+            $$x[n] * (\delta[n] - \alpha \delta[n-1]) = \delta[n]$$
+          </div>
+        </div>
+      </div>
+
+      <!-- (b) Şıkkı Teorik İspatı -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md text-xs font-black uppercase">(b) Şıkkı Analizi</span>
+          <span class="text-xs font-mono text-slate-500">$h[n]$ Sentezi</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">Konvolüsyon Özellikleri ile $h[n]$ Tasarımı</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Hedeflenen çıkışa $y[n]$ diyelim: $x[n] * h[n] = y[n] = (1/2)^n \{u[n+2] - u[n-2]\}$.
+          Her iki tarafı $(\delta[n] - \alpha \delta[n-1])$ ile konvolüsyona sokalım:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-700 font-bold">Birleşme ve Değişme Özelliklerinin Uygulanması:</div>
+          <div class="text-[11px] text-slate-600">
+            $$(\delta[n] - \alpha \delta[n-1]) * (x[n] * h[n]) = (\delta[n] - \alpha \delta[n-1]) * y[n]$$
+            $$[(\delta[n] - \alpha \delta[n-1]) * x[n]] * h[n] = y[n] - \alpha y[n-1]$$
+          </div>
+          <div class="text-slate-700 font-bold pt-1">(a) Şıkkındaki $g[n] = \delta[n]$ Bağıntısının Yerine Konması:</div>
+          <div class="text-[11px] text-indigo-700 font-bold">
+            $$\delta[n] * h[n] = y[n] - \alpha y[n-1]$$
+            $$\mathbf{h[n] = y[n] - \alpha y[n-1]}$$
+          </div>
+        </div>
+
+        <div class="p-3.5 bg-amber-50 border border-amber-200 rounded-xl space-y-2 text-xs">
+          <span class="font-bold text-amber-900 block">Genel $\alpha$ İçin Kapalı Form Çözüm:</span>
+          <div class="font-mono text-xs text-amber-950">
+            $$h[n] = 4\delta[n+2] + (2-4\alpha)\delta[n+1] + (1-2\alpha)\delta[n] + \left(\frac{1}{2}-\alpha\right)\delta[n-1] - \frac{1}{2}\alpha\delta[n-2]$$
+          </div>
+          <div class="text-[11px] text-amber-800 leading-relaxed pt-1">
+            <strong>Özel Durum ($\alpha = 1/2$):</strong> Ara katsayıların tümü sıfırlanır ($2-4(0.5)=0, 1-2(0.5)=0, 0.5-0.5=0$):
+            $$\mathbf{h[n] = 4\delta[n+2] - \frac{1}{4}\delta[n-2]}$$
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAYISAL ÖRNEK DEĞERLER VE TABLO -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        <h3 class="text-lg font-bold text-slate-900">İndis Bazında $y[n]$, $y[n-1]$ ve $h[n]$ Ayrık Değerleri</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+          <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">İndis ($n$)</th>
+              <th class="p-3">Hedef $y[n]$</th>
+              <th class="p-3">Gecikmiş $y[n-1]$</th>
+              <th class="p-3">Genel Formül: $h[n] = y[n] - \alpha y[n-1]$</th>
+              <th class="p-3 text-indigo-700">Özel Durum ($\alpha = 1/2$)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = -2</td>
+              <td class="p-3 font-bold text-slate-800">4</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-slate-800">4</td>
+              <td class="p-3 font-bold text-indigo-700">4</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = -1</td>
+              <td class="p-3 font-bold text-slate-800">2</td>
+              <td class="p-3">4</td>
+              <td class="p-3 font-bold text-slate-800">2 - 4\alpha</td>
+              <td class="p-3 font-bold text-emerald-600">0</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 0</td>
+              <td class="p-3 font-bold text-slate-800">1</td>
+              <td class="p-3">2</td>
+              <td class="p-3 font-bold text-slate-800">1 - 2\alpha</td>
+              <td class="p-3 font-bold text-emerald-600">0</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 1</td>
+              <td class="p-3 font-bold text-slate-800">1/2 = 0.5</td>
+              <td class="p-3">1</td>
+              <td class="p-3 font-bold text-slate-800">1/2 - \alpha</td>
+              <td class="p-3 font-bold text-emerald-600">0</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 2</td>
+              <td class="p-3">0</td>
+              <td class="p-3">1/2 = 0.5</td>
+              <td class="p-3 font-bold text-slate-800">-\alpha/2</td>
+              <td class="p-3 font-bold text-indigo-700">-1/4 = -0.25</td>
+            </tr>
+            <tr class="hover:bg-slate-50 text-slate-400">
+              <td class="p-3">n diğerleri</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-[11px] text-slate-500 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <strong>Filtre Özellikleri:</strong> $h[n]$ dizisi $n=-2$ ve $n=-1$ için sıfırdan farklı değer aldığından 
+        <strong>nedensel değildir (non-causal)</strong>. Ancak sonlu uzunlukta (FIR) olduğu için 
+        $\sum_{-\infty}^\infty |h[n]| = 4 + |2-4\alpha| + |1-2\alpha| + |0.5-\alpha| + 0.5|\alpha| < \infty$ olup <strong>kesinlikle BIBO kararlıdır</strong>.
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <p>Oppenheim &amp; Willsky &bull; Signals and Systems 2. Baskı Çözümleri &bull; Hazırlayan: ENI for Tris ❤️</p>
+  </footer>
+
+  <!-- SİMÜLASYON MOTORU VE JAVASCRIPT ÇİZİM KODLARI -->
+  <script>
+    const canvasG = document.getElementById('canvasG');
+    const ctxG = canvasG.getContext('2d');
+    const canvasH = document.getElementById('canvasH');
+    const ctxH = canvasH.getContext('2d');
+    const canvasVerify = document.getElementById('canvasVerify');
+    const ctxVerify = canvasVerify.getContext('2d');
+
+    const sliderAlpha = document.getElementById('sliderAlpha');
+    const lblAlphaVal = document.getElementById('lblAlphaVal');
+    const lblAlphaBadge = document.getElementById('lblAlphaBadge');
+    const lblHValues = document.getElementById('lblHValues');
+
+    let curAlpha = 0.5;
+
+    // Stem Çizim Yardımcı Fonksiyonu
+    function drawStemPlot(ctx, w, h, dataPoints, minN, maxN, minVal, maxVal, colorStem, colorDot, xLabel) {
+      ctx.clearRect(0, 0, w, h);
+
+      // Koordinat dönüşümleri
+      function nToPx(n) {
+        return 45 + ((n - minN) / (maxN - minN)) * (w - 75);
+      }
+      function vToPy(val) {
+        return h - 30 - ((val - minVal) / (maxVal - minVal)) * (h - 55);
+      }
+
+      const y0 = vToPy(0);
+
+      // Eksenler
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+
+      // Yatay eksen
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      // Dikey eksen (n=0)
+      if (minN <= 0 && maxN >= 0) {
+        const x0 = nToPx(0);
+        ctx.beginPath();
+        ctx.moveTo(x0, 15);
+        ctx.lineTo(x0, h - 20);
+        ctx.stroke();
+      }
+
+      // n Eksen Etiketleri
+      ctx.fillStyle = '#64748b';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      for (let n = minN; n <= maxN; n++) {
+        const x = nToPx(n);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 2);
+        ctx.lineTo(x, y0 + 2);
+        ctx.stroke();
+        ctx.fillText(n, x, y0 + 13);
+      }
+      ctx.fillText(xLabel, w - 25, y0 - 6);
+
+      // Değer Stem Çubukları ve Noktaları
+      dataPoints.forEach(pt => {
+        const x = nToPx(pt.n);
+        const y = vToPy(pt.val);
+
+        // Stem Çizgisi
+        ctx.strokeStyle = colorStem;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, y0);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        // Nokta Başı
+        ctx.fillStyle = colorDot;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Değer Etiketi
+        if (Math.abs(pt.val) > 0.001) {
+          ctx.fillStyle = '#f1f5f9';
+          ctx.font = 'bold 9px monospace';
+          const textY = pt.val >= 0 ? y - 6 : y + 14;
+          ctx.fillText(pt.val.toFixed(2), x, textY);
+        }
+      });
+    }
+
+    function update() {
+      curAlpha = parseFloat(sliderAlpha.value);
+      lblAlphaVal.textContent = `α = ${curAlpha.toFixed(2)}`;
+
+      if (Math.abs(curAlpha - 0.5) < 0.001) {
+        lblAlphaBadge.textContent = 'Özel İptal Durumu (2-Tap: n=-2, 2)';
+        lblAlphaBadge.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-indigo-100 text-indigo-800 font-bold';
+      } else if (curAlpha < 0) {
+        lblAlphaBadge.textContent = 'Salınımlı Rejim (Alternating)';
+        lblAlphaBadge.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-purple-100 text-purple-800';
+      } else {
+        lblAlphaBadge.textContent = 'Genel Üstel Sönüm';
+        lblAlphaBadge.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-slate-100 text-slate-700';
+      }
+
+      // 1. Tuval: g[n] = x[n] - alpha x[n-1]
+      const dataG = [];
+      for (let n = -3; n <= 5; n++) {
+        let x_n = (n >= 0) ? Math.pow(curAlpha, n) : 0;
+        let x_n_prev = (n - 1 >= 0) ? Math.pow(curAlpha, n - 1) : 0;
+        let g_val = x_n - curAlpha * x_n_prev;
+        dataG.push({ n: n, val: g_val });
+      }
+      drawStemPlot(ctxG, canvasG.width, canvasG.height, dataG, -3, 5, -0.5, 1.5, '#38bdf8', '#0ea5e9', 'n');
+
+      // 2. Tuval: h[n] = y[n] - alpha y[n-1]
+      const h_vals = {
+        '-2': 4.0,
+        '-1': 2.0 - 4.0 * curAlpha,
+        '0': 1.0 - 2.0 * curAlpha,
+        '1': 0.5 - curAlpha,
+        '2': -0.5 * curAlpha
+      };
+
+      const dataH = [];
+      let minH = -1.0, maxH = 4.5;
+      for (let n = -4; n <= 4; n++) {
+        let val = h_vals[n.toString()] || 0.0;
+        dataH.push({ n: n, val: val });
+        if (val < minH) minH = val - 0.5;
+        if (val > maxH) maxH = val + 0.5;
+      }
+      drawStemPlot(ctxH, canvasH.width, canvasH.height, dataH, -4, 4, minH, maxH, '#fbbf24', '#f59e0b', 'n');
+      lblHValues.textContent = `[-2..2]: 4, ${(2-4*curAlpha).toFixed(2)}, ${(1-2*curAlpha).toFixed(2)}, ${(0.5-curAlpha).toFixed(2)}, ${(-0.5*curAlpha).toFixed(2)}`;
+
+      // 3. Doğrulama Tuvali: x[n] * h[n]
+      // Simülasyon aralığı n in [-4, 6]
+      const dataVerify = [];
+      for (let n = -4; n <= 6; n++) {
+        // Doğrudan konvolüsyon toplamı: sum_k x[n-k] * h[k]
+        let convVal = 0.0;
+        for (let k = -2; k <= 2; k++) {
+          let hk = h_vals[k.toString()] || 0.0;
+          let shift = n - k;
+          let x_val = (shift >= 0) ? Math.pow(curAlpha, shift) : 0.0;
+          convVal += x_val * hk;
+        }
+        dataVerify.push({ n: n, val: convVal });
+      }
+      drawVerifyCanvas(dataVerify);
+    }
+
+    function drawVerifyCanvas(dataConv) {
+      const w = canvasVerify.width;
+      const h = canvasVerify.height;
+      ctxVerify.clearRect(0, 0, w, h);
+
+      const minN = -4, maxN = 6;
+      const minVal = -0.5, maxVal = 4.5;
+
+      function nToPx(n) {
+        return 50 + ((n - minN) / (maxN - minN)) * (w - 90);
+      }
+      function vToPy(val) {
+        return h - 30 - ((val - minVal) / (maxVal - minVal)) * (h - 55);
+      }
+
+      const y0 = vToPy(0);
+
+      // Eksen
+      ctxVerify.strokeStyle = '#334155';
+      ctxVerify.lineWidth = 1;
+      ctxVerify.beginPath();
+      ctxVerify.moveTo(35, y0);
+      ctxVerify.lineTo(w - 25, y0);
+      ctxVerify.stroke();
+
+      const x0 = nToPx(0);
+      ctxVerify.beginPath();
+      ctxVerify.moveTo(x0, 15);
+      ctxVerify.lineTo(x0, h - 20);
+      ctxVerify.stroke();
+
+      // n Etiketleri
+      ctxVerify.fillStyle = '#64748b';
+      ctxVerify.font = '10px monospace';
+      ctxVerify.textAlign = 'center';
+      for (let n = minN; n <= maxN; n++) {
+        const x = nToPx(n);
+        ctxVerify.beginPath();
+        ctxVerify.moveTo(x, y0 - 2);
+        ctxVerify.lineTo(x, y0 + 2);
+        ctxVerify.stroke();
+        ctxVerify.fillText(n, x, y0 + 13);
+      }
+      ctxVerify.fillText('n', w - 30, y0 - 6);
+
+      // Hedef y[n] çemberleri (pembe) ve Konvolüsyon stemleri (yeşil)
+      dataConv.forEach(pt => {
+        const x = nToPx(pt.n);
+        const y = vToPy(pt.val);
+
+        // Konvolüsyon Stem Çizgisi
+        ctxVerify.strokeStyle = '#34d399';
+        ctxVerify.lineWidth = 2.5;
+        ctxVerify.beginPath();
+        ctxVerify.moveTo(x, y0);
+        ctxVerify.lineTo(x, y);
+        ctxVerify.stroke();
+
+        // Konvolüsyon Noktası (Yeşil)
+        ctxVerify.fillStyle = '#10b981';
+        ctxVerify.beginPath();
+        ctxVerify.arc(x, y, 4, 0, Math.PI * 2);
+        ctxVerify.fill();
+
+        // Hedef y[n] Çemberi (Pembe Dış Halka)
+        let targetY = (-2 <= pt.n && pt.n <= 1) ? Math.pow(0.5, pt.n) : 0.0;
+        let pyTarget = vToPy(targetY);
+
+        ctxVerify.strokeStyle = '#f472b6';
+        ctxVerify.lineWidth = 2;
+        ctxVerify.beginPath();
+        ctxVerify.arc(x, pyTarget, 7, 0, Math.PI * 2);
+        ctxVerify.stroke();
+
+        // Değer Yazısı
+        if (Math.abs(pt.val) > 0.001) {
+          ctxVerify.fillStyle = '#34d399';
+          ctxVerify.font = 'bold 10px monospace';
+          ctxVerify.fillText(pt.val.toFixed(2), x, y - 10);
+        }
+      });
+    }
+
+    function setAlpha(val) {
+      sliderAlpha.value = val;
+      update();
+    }
+
+    sliderAlpha.addEventListener('input', update);
+
+    // PNG İndirme Fonksiyonu
+    document.getElementById('btnExportPNG').addEventListener('click', () => {
+      const exp = document.createElement('canvas');
+      exp.width = 1000;
+      exp.height = 720;
+      const expCtx = exp.getContext('2d');
+
+      expCtx.fillStyle = '#0f172a';
+      expCtx.fillRect(0, 0, 1000, 720);
+
+      expCtx.fillStyle = '#ffffff';
+      expCtx.font = 'bold 20px sans-serif';
+      expCtx.fillText('Oppenheim & Willsky — Problem 2.41 Çözüm Kartı', 50, 45);
+      expCtx.fillStyle = '#94a3b8';
+      expCtx.font = '12px sans-serif';
+      expCtx.fillText(`Ters Sistem İspatı g[n]=δ[n] ve h[n] = y[n] - α y[n-1] (α = ${curAlpha.toFixed(2)})`, 50, 70);
+
+      expCtx.drawImage(canvasG, 50, 95, 430, 240);
+      expCtx.drawImage(canvasH, 520, 95, 430, 240);
+      expCtx.drawImage(canvasVerify, 50, 360, 900, 310);
+
+      const link = document.createElement('a');
+      link.download = `Problem_2_41_Cozum_alpha_${curAlpha.toFixed(2)}.png`;
+      link.href = exp.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Çizim
+    update();
+  </script>
+</body>
+</html>

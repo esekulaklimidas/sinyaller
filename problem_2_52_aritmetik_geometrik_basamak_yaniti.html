@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.52 — Aritmetik-Geometrik Seri Basamak Yanıtı s[n] (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 2.52</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">İleri Düzey (Advanced)</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman (DT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 186</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html#sec-ileri-duzey" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanımı Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; İleri Düzey Problemler</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Aritmetik-Geometrik Seri Toplamı, $h[n]=(n+1)\alpha^n u[n]$ ve Basamak Yanıtı $s[n]$
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+            Nedensel &bull; BIBO Kararlı ($|\alpha| < 1$)
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni Orijinal Kutu -->
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Problem 2.52 Soru Metni (Oppenheim &amp; Willsky, Sh. 186)
+        </div>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          Dürtü yanıtı (unit sample response) aşağıdaki gibi verilen bir ayrık zamanlı LTI sistemi ele alınız:
+          $$h[n] = (n + 1)\alpha^n u[n], \quad |\alpha| < 1$$
+          Bu sistemin birim basamak yanıtının (step response) aşağıdaki kapalı formda olduğunu gösteriniz:
+          $$s[n] = \left[ \frac{1}{(\alpha - 1)^2} - \frac{\alpha}{(\alpha - 1)^2}\alpha^n + \frac{\alpha}{\alpha - 1}(n + 1)\alpha^n \right] u[n]$$
+        </p>
+        <div class="p-3 bg-white rounded-xl border border-slate-200 text-xs font-serif text-slate-600 flex items-center justify-between">
+          <span><strong>İpucu (Hint):</strong> $\displaystyle \sum_{k=0}^{N} (k+1)\alpha^k = \frac{d}{d\alpha} \sum_{k=0}^{N+1} \alpha^k$ bağıntısını göz önüne alınız.</span>
+          <span class="font-mono text-indigo-600 font-bold">Kalıcı Durum: $s[\infty] = \frac{1}{(1-\alpha)^2}$</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETKİLEŞİMLİ SİMÜLATÖR (DUAL CANVAS STEM PLOT) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">İnteraktif Ayrık Stem Simülatörü</span>
+          <h2 class="text-xl font-black text-slate-900">Dürtü Yanıtı $h[n]$ ve Birikimli Basamak Yanıtı $s[n]$</h2>
+          <p class="text-xs text-slate-500 mt-0.5">$\alpha$ parametresini değiştirerek $h[n]$'in şekillenmesini, basamak yanıtının doygunluk değerine ($s[\infty]$) yaklaşımını izleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnExportPNG" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG Olarak İndir
+          </button>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <!-- Alfa Kaydırıcı -->
+        <div class="md:col-span-6 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Sönüm Parametresi: <span class="font-mono text-indigo-600 text-sm" id="lblAlphaVal">α = 0.50</span></span>
+            <span class="text-[11px] px-2 py-0.5 rounded font-mono bg-indigo-100 text-indigo-800" id="lblSteadyBadge">Kalıcı Durum: s[∞] = 4.00</span>
+          </div>
+          <input type="range" id="sliderAlpha" min="-0.8" max="0.8" step="0.05" value="0.5"
+            class="w-full accent-indigo-600 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+            <span>α = -0.8 (Salınımlı)</span>
+            <span>α = 0.0</span>
+            <span>α = 0.5 (Örnek)</span>
+            <span>α = 0.8 (Yavaş Yakınsak)</span>
+          </div>
+        </div>
+
+        <!-- Ön Ayar Butonları -->
+        <div class="md:col-span-6 flex flex-wrap gap-1.5 justify-end">
+          <button onclick="setAlpha(0.5)" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition">α = 0.5 (s[∞]=4.0)</button>
+          <button onclick="setAlpha(0.7)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">α = 0.7 (s[∞]≈11.1)</button>
+          <button onclick="setAlpha(-0.5)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">α = -0.5 (Salınımlı)</button>
+          <button onclick="setAlpha(0.0)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">α = 0.0 (Birim Darbe)</button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-4">
+        <!-- Tuval 1: h[n] = (n+1) alpha^n u[n] -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">1. Sistem Dürtü Yanıtı: $h[n] = (n+1)\alpha^n u[n]$</span>
+            <span class="text-[11px] font-mono text-sky-400 font-bold" id="lblHPeak">Tepe: h[1] = 1.00</span>
+          </div>
+          <canvas id="canvasH" width="900" height="200" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-sky-400 inline-block"></span> $h[n]$ Stem Örnekleri ($n \ge 0$)</span>
+            <span class="font-mono text-slate-400">Tekil Kök Katsayısı: Çift Kutuplu Sistem Dürtü Yanıtı</span>
+          </div>
+        </div>
+
+        <!-- Tuval 2: s[n] = sum_{k=0}^n h[k] -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">2. Birim Basamak Yanıtı: $s[n] = \sum_{k=0}^n h[k]$ vs. Kapalı Form Formülü</span>
+            <span class="text-[11px] font-mono text-emerald-400 font-bold" id="lblSFormulaMatch">Formül ile Kümülatif Toplam %100 Uyuşuyor (Fark = 0)</span>
+          </div>
+          <canvas id="canvasS" width="900" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-400 inline-block"></span> $s[n]$ Basamak Yanıtı Stemleri</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full border border-pink-400 inline-block"></span> Kapalı Form Değeri</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-amber-400 inline-block"></span> $s[\infty] = 1/(1-\alpha)^2$ Asimptotu</span>
+            </div>
+            <span class="font-mono text-indigo-400 font-bold" id="lblS10Val">s[10] = 3.987</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAYLI TEORİK ÇÖZÜM VE KANIT KARTLARI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- 1. Yöntem: Türev İpucu ile İspat -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-xs font-black uppercase">1. Yöntem (Kitabın İpucu)</span>
+          <span class="text-xs font-mono text-slate-500">Türev Alma Tekniği</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">Geometrik Serinin Parametrik Türevi</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Birim basamak yanıtı tanımı gereği dürtü yanıtının kümülatif toplamıdır:
+          $$s[n] = \sum_{k=-\infty}^n h[k] u[n-k] = \sum_{k=0}^n (k+1)\alpha^k, \quad (n \ge 0)$$
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-500">Türev bağlantısının kurulması:</div>
+          <div>$$\frac{d}{d\alpha}(\alpha^{k+1}) = (k+1)\alpha^k$$</div>
+          <div class="text-slate-600 text-[11px] leading-relaxed">
+            Toplamı türev operatörüyle ifade edelim:
+            $$\sum_{k=0}^n (k+1)\alpha^k = \frac{d}{d\alpha}\left( \sum_{k=0}^n \alpha^{k+1} \right) = \frac{d}{d\alpha}\left( \sum_{m=1}^{n+1} \alpha^m \right)$$
+            Sabit terim eklemek türevi etkilemez: $\frac{d}{d\alpha}(1) = 0$. Böylece:
+            $$\sum_{k=0}^n (k+1)\alpha^k = \frac{d}{d\alpha}\left( \sum_{m=0}^{n+1} \alpha^m \right) = \frac{d}{d\alpha}\left( \frac{1 - \alpha^{n+2}}{1 - \alpha} \right)$$
+          </div>
+        </div>
+
+        <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 font-mono text-xs space-y-2">
+          <div class="text-indigo-900 font-bold">Bölüm Türevi Formülü ($\frac{u'v - uv'}{v^2}$):</div>
+          <div class="text-[11px] text-slate-700 leading-relaxed">
+            Pay: $u = 1 - \alpha^{n+2} \implies u' = -(n+2)\alpha^{n+1}$<br>
+            Payda: $v = 1 - \alpha \implies v' = -1$
+            $$\frac{d}{d\alpha}\left(\frac{1 - \alpha^{n+2}}{1 - \alpha}\right) = \frac{-(n+2)\alpha^{n+1}(1-\alpha) - (1-\alpha^{n+2})(-1)}{(1-\alpha)^2}$$
+            $$= \frac{1 - (n+2)\alpha^{n+1} + (n+1)\alpha^{n+2}}{(1-\alpha)^2}$$
+          </div>
+        </div>
+
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-1">
+          <div class="font-bold text-emerald-900">Kitaptaki Formülle Özdeşlik:</div>
+          <div class="text-[11px] text-emerald-800 leading-relaxed">
+            Terimleri ayrıştırırsak: $(1-\alpha)^2 = (\alpha-1)^2$ olduğundan:
+            $$\frac{1}{(\alpha-1)^2} - \frac{\alpha}{(\alpha-1)^2}\alpha^n + \frac{\alpha}{\alpha-1}(n+1)\alpha^n$$
+            İfadesi birebir elde edilir! $\mathbf{Q.E.D.}$
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Yöntem: Aritmetik-Geometrik Dizi Farkı (S - alpha S) -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-md text-xs font-black uppercase">2. Yöntem &bull; Doğrudan Cebir</span>
+          <span class="text-xs font-mono text-slate-500">Aritmetik-Geometrik Çıkarma</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">$S_n - \alpha S_n$ İndirgeme Tekniği</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Türev almadan, doğrudan dizi cebri ile çözmek için toplamı $S$ olarak tanımlayıp $\alpha S$ ile farkını alalım:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div>$$S = 1 + 2\alpha + 3\alpha^2 + \dots + (n+1)\alpha^n$$</div>
+          <div>$$\alpha S = \quad \alpha + 2\alpha^2 + \dots + n\alpha^n + (n+1)\alpha^{n+1}$$</div>
+          <div class="text-slate-500 text-[11px]">Taraf tarafa çıkarırsak:</div>
+          <div class="text-purple-900 font-bold">
+            $$(1 - \alpha)S = \underbrace{1 + \alpha + \alpha^2 + \dots + \alpha^n}_{\text{Geometrik Seri}} - (n+1)\alpha^{n+1}$$
+          </div>
+        </div>
+
+        <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 font-mono text-xs space-y-2">
+          <div class="text-[11px] text-purple-950">
+            $1 + \alpha + \dots + \alpha^n = \frac{1 - \alpha^{n+1}}{1 - \alpha}$ olduğunu yerine yazalım:
+            $$(1 - \alpha)S = \frac{1 - \alpha^{n+1}}{1 - \alpha} - (n+1)\alpha^{n+1}$$
+          </div>
+          <div class="text-purple-900 font-bold text-xs pt-1">
+            Her iki tarafı $(1 - \alpha)$'ya bölelim:
+            $$S = \frac{1 - \alpha^{n+1}}{(1 - \alpha)^2} - \frac{(n+1)\alpha^{n+1}}{1 - \alpha}$$
+          </div>
+          <div class="text-[11px] text-purple-800">
+            $$S = \frac{1}{(1-\alpha)^2} - \frac{\alpha}{(1-\alpha)^2}\alpha^n + \frac{\alpha}{\alpha-1}(n+1)\alpha^n$$
+          </div>
+        </div>
+
+        <!-- Kalıcı Durum Değeri -->
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs space-y-1">
+          <span class="font-bold text-amber-900 block">Kalıcı Durum (DC Kazancı) Analizi:</span>
+          <p class="text-[11px] text-amber-800 leading-relaxed">
+            $|\alpha| < 1$ olduğundan $n \to \infty$ iken $\alpha^n \to 0$ ve $(n+1)\alpha^n \to 0$ olur.
+            Böylece basamak yanıtı şu sonlu asimptota yakınsar:
+            $$\lim_{n \to \infty} s[n] = \frac{1}{(1 - \alpha)^2} = H(e^{j0})$$
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAYISAL ÖRNEK DEĞERLER VE DOĞRULAMA TABLOSU -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        <h3 class="text-lg font-bold text-slate-900">Sayısal Örnek: $\alpha = 0.5$ İçin Adım Adım Hesaplama</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+          <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">n</th>
+              <th class="p-3">Dürtü Değeri $h[n] = (n+1)(0.5)^n$</th>
+              <th class="p-3">Birikimli Toplam $\sum_{k=0}^n h[k]$</th>
+              <th class="p-3 text-indigo-700">Kapalı Form Formülü $s[n]$</th>
+              <th class="p-3">Hata Payı</th>
+              <th class="p-3">Doygunluk Oranı ($s[n] / 4$)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 0</td>
+              <td class="p-3">1.0000</td>
+              <td class="p-3 font-bold text-slate-800">1.0000</td>
+              <td class="p-3 font-bold text-indigo-700">1.0000</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">%25.0</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 1</td>
+              <td class="p-3">2 &times; 0.5 = 1.0000</td>
+              <td class="p-3 font-bold text-slate-800">2.0000</td>
+              <td class="p-3 font-bold text-indigo-700">2.0000</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">%50.0</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 2</td>
+              <td class="p-3">3 &times; 0.25 = 0.7500</td>
+              <td class="p-3 font-bold text-slate-800">2.7500</td>
+              <td class="p-3 font-bold text-indigo-700">2.7500</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">%68.75</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 3</td>
+              <td class="p-3">4 &times; 0.125 = 0.5000</td>
+              <td class="p-3 font-bold text-slate-800">3.2500</td>
+              <td class="p-3 font-bold text-indigo-700">3.2500</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">%81.25</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 5</td>
+              <td class="p-3">6 &times; 0.03125 = 0.1875</td>
+              <td class="p-3 font-bold text-slate-800">3.78125</td>
+              <td class="p-3 font-bold text-indigo-700">3.78125</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">%94.53</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 10</td>
+              <td class="p-3">11 &times; 2⁻¹⁰ ≈ 0.0107</td>
+              <td class="p-3 font-bold text-slate-800">3.98730</td>
+              <td class="p-3 font-bold text-indigo-700">3.98730</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">%99.68</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-amber-50/50">
+              <td class="p-3 font-bold text-amber-800">n &rarr; &infin;</td>
+              <td class="p-3">0.0000</td>
+              <td class="p-3 font-bold text-amber-800">4.0000</td>
+              <td class="p-3 font-bold text-amber-800">1 / (1 - 0.5)² = 4.0000</td>
+              <td class="p-3 text-emerald-600">0.0000</td>
+              <td class="p-3 font-sans text-[11px] font-bold">%100.0 (Asimptot)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <p>Oppenheim &amp; Willsky &bull; Signals and Systems 2. Baskı Çözümleri &bull; Hazırlayan: ENI for Tris ❤️</p>
+  </footer>
+
+  <!-- SİMÜLASYON MOTORU VE JAVASCRIPT ÇİZİM KODLARI -->
+  <script>
+    const canvasH = document.getElementById('canvasH');
+    const ctxH = canvasH.getContext('2d');
+    const canvasS = document.getElementById('canvasS');
+    const ctxS = canvasS.getContext('2d');
+
+    const sliderAlpha = document.getElementById('sliderAlpha');
+    const lblAlphaVal = document.getElementById('lblAlphaVal');
+    const lblSteadyBadge = document.getElementById('lblSteadyBadge');
+    const lblHPeak = document.getElementById('lblHPeak');
+    const lblS10Val = document.getElementById('lblS10Val');
+
+    let curAlpha = 0.5;
+
+    function funcH(n, a) {
+      if (n < 0) return 0.0;
+      return (n + 1) * Math.pow(a, n);
+    }
+
+    function funcSClosed(n, a) {
+      if (n < 0) return 0.0;
+      const term1 = 1.0 / Math.pow(a - 1.0, 2);
+      const term2 = (a / Math.pow(a - 1.0, 2)) * Math.pow(a, n);
+      const term3 = (a / (a - 1.0)) * (n + 1) * Math.pow(a, n);
+      return term1 - term2 + term3;
+    }
+
+    // Stem Çizim Yardımcı Fonksiyonu
+    function drawStemPlot(ctx, w, h, dataPoints, minN, maxN, minVal, maxVal, colorStem, colorDot, xLabel, asymptoteVal = null) {
+      ctx.clearRect(0, 0, w, h);
+
+      function nToPx(n) {
+        return 45 + ((n - minN) / (maxN - minN)) * (w - 75);
+      }
+      function vToPy(val) {
+        return h - 30 - ((val - minVal) / (maxVal - minVal)) * (h - 55);
+      }
+
+      const y0 = vToPy(0);
+
+      // Eksenler
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      if (minN <= 0 && maxN >= 0) {
+        const x0 = nToPx(0);
+        ctx.beginPath();
+        ctx.moveTo(x0, 15);
+        ctx.lineTo(x0, h - 20);
+        ctx.stroke();
+      }
+
+      // n Etiketleri
+      ctx.fillStyle = '#64748b';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      for (let n = minN; n <= maxN; n++) {
+        const x = nToPx(n);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 2);
+        ctx.lineTo(x, y0 + 2);
+        ctx.stroke();
+        ctx.fillText(n, x, y0 + 13);
+      }
+      ctx.fillText(xLabel, w - 25, y0 - 6);
+
+      // Asimptot Çizgisi (varsa)
+      if (asymptoteVal !== null && asymptoteVal >= minVal && asymptoteVal <= maxVal) {
+        const yAsymp = vToPy(asymptoteVal);
+        ctx.strokeStyle = '#fbbf24';
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(35, yAsymp);
+        ctx.lineTo(w - 25, yAsymp);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 9px monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText(`s[∞] = ${asymptoteVal.toFixed(2)}`, w - 30, yAsymp - 4);
+      }
+
+      // Stem Çubukları
+      dataPoints.forEach(pt => {
+        const x = nToPx(pt.n);
+        const y = vToPy(pt.val);
+
+        ctx.strokeStyle = colorStem;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(x, y0);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        ctx.fillStyle = colorDot;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Eğer targetVal varsa çember çiz
+        if (pt.targetVal !== undefined) {
+          const yTar = vToPy(pt.targetVal);
+          ctx.strokeStyle = '#f472b6';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.arc(x, yTar, 5.5, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+
+        // Değer yazısı (seyrek)
+        if (Math.abs(pt.val) > 0.05 && (pt.n <= 5 || pt.n % 2 === 0)) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '8px monospace';
+          const textY = pt.val >= 0 ? y - 6 : y + 12;
+          ctx.fillText(pt.val.toFixed(2), x, textY);
+        }
+      });
+    }
+
+    function update() {
+      curAlpha = parseFloat(sliderAlpha.value);
+      lblAlphaVal.textContent = `α = ${curAlpha.toFixed(2)}`;
+
+      const steadyState = 1.0 / Math.pow(1.0 - curAlpha, 2);
+      lblSteadyBadge.textContent = `Kalıcı Durum: s[∞] = ${steadyState.toFixed(2)}`;
+
+      // 1. Tuval: h[n]
+      const dataH = [];
+      let maxH = 0.5, minH = -0.1;
+      let peakN = 0, peakH = 0;
+      for (let n = -1; n <= 15; n++) {
+        let val = funcH(n, curAlpha);
+        dataH.push({ n: n, val: val });
+        if (val > maxH) { maxH = val; peakN = n; peakH = val; }
+        if (val < minH) minH = val;
+      }
+      lblHPeak.textContent = `Maksimum: h[${peakN}] = ${peakH.toFixed(2)}`;
+      drawStemPlot(ctxH, canvasH.width, canvasH.height, dataH, -1, 15, Math.min(minH, -0.1), maxH * 1.2, '#38bdf8', '#0ea5e9', 'n');
+
+      // 2. Tuval: s[n]
+      const dataS = [];
+      let runningSum = 0;
+      let minS = 0, maxS = steadyState;
+      for (let n = -1; n <= 15; n++) {
+        if (n >= 0) runningSum += funcH(n, curAlpha);
+        let closedVal = funcSClosed(n, curAlpha);
+        dataS.push({ n: n, val: runningSum, targetVal: closedVal });
+        if (runningSum > maxS) maxS = runningSum;
+        if (runningSum < minS) minS = runningSum;
+      }
+      lblS10Val.textContent = `s[10] = ${dataS.find(d => d.n === 10).val.toFixed(3)} (Hedef: ${steadyState.toFixed(2)})`;
+
+      const yMaxS = Math.max(maxS, steadyState) * 1.15;
+      const yMinS = Math.min(minS, 0) - 0.2;
+      drawStemPlot(ctxS, canvasS.width, canvasS.height, dataS, -1, 15, yMinS, yMaxS, '#34d399', '#10b981', 'n', steadyState);
+    }
+
+    function setAlpha(val) {
+      sliderAlpha.value = val;
+      update();
+    }
+
+    sliderAlpha.addEventListener('input', update);
+
+    // PNG İndirme Fonksiyonu
+    document.getElementById('btnExportPNG').addEventListener('click', () => {
+      const exp = document.createElement('canvas');
+      exp.width = 1000;
+      exp.height = 700;
+      const expCtx = exp.getContext('2d');
+
+      expCtx.fillStyle = '#0f172a';
+      expCtx.fillRect(0, 0, 1000, 700);
+
+      expCtx.fillStyle = '#ffffff';
+      expCtx.font = 'bold 20px sans-serif';
+      expCtx.fillText('Oppenheim & Willsky — Problem 2.52 Çözüm Kartı', 50, 45);
+      expCtx.fillStyle = '#94a3b8';
+      expCtx.font = '12px sans-serif';
+      expCtx.fillText(`h[n] = (n+1)αⁿ u[n]  |  s[n] Basamak Yanıtı  |  α = ${curAlpha.toFixed(2)}  |  s[∞] = ${(1/( (1-curAlpha)**2 )).toFixed(2)}`, 50, 70);
+
+      expCtx.drawImage(canvasH, 50, 95, 900, 240);
+      expCtx.drawImage(canvasS, 50, 365, 900, 290);
+
+      const link = document.createElement('a');
+      link.download = `Problem_2_52_Cozum_alpha_${curAlpha.toFixed(2)}.png`;
+      link.href = exp.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Çizim
+    update();
+  </script>
+</body>
+</html>

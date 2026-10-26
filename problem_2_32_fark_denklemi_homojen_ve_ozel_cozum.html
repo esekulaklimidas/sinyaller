@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.32 – Fark Denklemi: Homojen ve Özel Çözüm</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-text { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4 md:px-8">
+
+  <div class="max-w-5xl mx-auto space-y-8">
+
+    <!-- Üst Navigasyon -->
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-3">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-indigo-600 hover:border-indigo-300 shadow-sm transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Ana Menüye Dön (Portal)
+        </a>
+        <a href="problem_2_31_fark_denklemi_rekursif_cozum.html" class="inline-flex items-center gap-1 text-xs font-semibold text-slate-500 hover:text-indigo-600 transition">
+          ← Problem 2.31
+        </a>
+      </div>
+      <div class="flex items-center gap-2"><span class="text-xs text-slate-400 font-mono mr-2">Oppenheim 2. Baskı • Bölüm 2</span><a href="problem_2_33_diferansiyel_denklem_lti_ispat.html" class="inline-flex items-center gap-1 text-xs font-semibold text-purple-600 hover:text-purple-800 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200 transition">Sonraki: Problem 2.33 →</a></div>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.32</span>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Nedensel (Causal)</span>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">BIBO Kararlı (Stable)</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.32 – Fark Denklemi: Homojen ve Özel Çözüm</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$y[n] - \frac{1}{2}y[n - 1] = x[n], \quad x[n] = \left(\frac{1}{3}\right)^n u[n]$$
+        Toplam çıkış yanıtı $y[n] = y_h[n] + y_p[n]$ olarak ayrıştırılır. Homojen çözüm (doğal yanıt) $y_h[n] = A(1/2)^n$ ve özel çözüm (zorlanmış yanıt) $y_p[n] = -2(1/3)^n$ bulunur. Başlangıçta dinginlik koşulu ile $y[0] = 1$ hesaplanarak $A = 3$ elde edilir: 
+        <strong>$$y[n] = \left[ 3\left(\frac{1}{2}\right)^n - 2\left(\frac{1}{3}\right)^n \right] u[n]$$</strong>
+      </p>
+    </div>
+
+    <!-- Soru Analizi & Teori Rehberi Kartları -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Kart 1: Soru Bizden Ne İstiyor? -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-indigo-600 font-bold text-sm mb-3">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 flex items-center justify-center text-xs">1</span>
+            Soru Bizden Ne İstiyor?
+          </div>
+          <p class="text-slate-600 text-xs leading-relaxed mb-3">
+            Oppenheim Problem 2.32, bir diferansiyel/fark denkleminde klasik çözüm yöntemini 3 adımda incelememizi ister:
+          </p>
+          <ul class="text-xs text-slate-600 space-y-2 list-disc list-inside">
+            <li><strong>(a) Şıkkı:</strong> $y_h[n] - \frac{1}{2}y_h[n-1] = 0$ homojen denklemini çözerek $y_h[n] = A(1/2)^n$ olduğunu doğrulamak.</li>
+            <li><strong>(b) Şıkkı:</strong> $y_p[n] = B(1/3)^n$ formunda bir özel çözüm önererek denklemi sağlaması için $B = -2$ değerini bulmak.</li>
+            <li><strong>(c) Şıkkı:</strong> Başlangıçta dinginlik şartıyla $y[0]$ değerini bulup bilinmeyen $A$ katsayısını ($A=3$) belirleyerek tam kapalı çözümü oluşturmak.</li>
+          </ul>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-indigo-700 bg-indigo-50/50 p-2.5 rounded-xl">
+          💡 <strong>Hedef:</strong> Doğal yanıt (sistem karakteristiği) ile zorlanmış yanıtın (giriş frekansı) süperpozisyonunu anlamak.
+        </div>
+      </div>
+
+      <!-- Kart 2: Mini Konu Anlatımı -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-emerald-600 font-bold text-sm mb-3">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-xs">2</span>
+            Mini Konu Anlatımı: Homojen ve Özel Çözüm
+          </div>
+          <p class="text-slate-600 text-xs leading-relaxed mb-2">
+            Doğrusal sabit katsayılı fark denklemlerinde tam çözüm iki parçanın toplamıdır:
+            $$y[n] = y_h[n] + y_p[n]$$
+          </p>
+          <div class="space-y-1.5 text-xs text-slate-600">
+            <div>• <strong>Homojen Çözüm $y_h[n]$ (Doğal Yanıt):</strong> Giriş sıfırken ($x[n]=0$) sistemin kendi iç dinamiğini temsil eder. Karakteristik kök $\lambda = 1/2$'ye bağlıdır ($A(1/2)^n$).</div>
+            <div>• <strong>Özel Çözüm $y_p[n]$ (Zorlanmış Yanıt):</strong> Sisteme uygulanan $x[n]=(1/3)^n$ girişinin kalıcı biçimini yansıtır ($B(1/3)^n$).</div>
+          </div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-emerald-700 bg-emerald-50/50 p-2.5 rounded-xl">
+          ⚡ <strong>Kutup & Kararlılık:</strong> Karakteristik kök $z = 1/2$ birim çemberin içindedir ($|1/2| < 1$). Bu nedenle sistem <strong>BIBO Kararlıdır</strong>.
+        </div>
+      </div>
+
+      <!-- Kart 3: Kritik Sınav Tuzağı -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+        <div>
+          <div class="flex items-center gap-2 text-amber-600 font-bold text-sm mb-3">
+            <span class="w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center text-xs">3</span>
+            Kritik Sınav Uyarısı: Başlangıç Koşulu Tuzağı
+          </div>
+          <p class="text-slate-600 text-xs leading-relaxed mb-2">
+            Öğrencilerin en çok yaptığı ölümcül hata: Başlangıç koşulunu ($y[0]=1$) sadece homojen çözüme uygulamaktır:
+          </p>
+          <p class="text-slate-600 text-xs leading-relaxed mb-2 text-rose-600 font-semibold">
+            ❌ Hatalı Yaklaşım: $y_h[0] = A(1/2)^0 = 1 \implies A = 1$ (YANLIŞ!)
+          </p>
+          <p class="text-slate-600 text-xs leading-relaxed text-emerald-700 font-semibold">
+            ✔ Doğru Yaklaşım: Başlangıç koşulu TOPLAM ÇÖZÜME uygulanır:
+            $$y[0] = y_h[0] + y_p[0] = A - 2 = 1 \implies A = 3$$
+          </p>
+        </div>
+        <div class="mt-4 pt-3 border-t border-slate-100 text-[11px] text-amber-800 bg-amber-50/50 p-2.5 rounded-xl">
+          🎯 <strong>Kural:</strong> $A$ sabiti belirlenmeden önce özel çözüm $y_p[n]$ mutlaka bulunmuş olmalıdır.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Canlı Simülatör ve Görsel Ayrıştırma Paneli -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+      
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">İnteraktif Çözüm & Sinyal Ayrışım Simülatörü</h2>
+          <p class="text-xs text-slate-500">Doğal yanıt $y_h[n]$, zorlanmış yanıt $y_p[n]$ ve toplam çıkış $y[n]$'nin gelişimini izleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="downloadXBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Giriş $x[n]$ PNG
+          </button>
+          <button id="downloadYBtn" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Çıkış $y[n]$ PNG
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Canvas Alanı -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <!-- Sol Canvas: Giriş Sinyali x[n] ve Blok Şeması -->
+        <div class="bg-slate-50/70 rounded-2xl p-4 border border-slate-200 flex flex-col justify-between">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              Giriş Sinyali: $x[n] = (1/3)^n u[n]$
+            </span>
+            <span class="text-[11px] font-mono text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+              x[0]=1, x[1]=0.333, x[2]=0.111
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner">
+            <canvas id="canvasX" width="520" height="260" class="w-full h-auto block"></canvas>
+          </div>
+          <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
+            <span>Mavi çubuklar giriş örnekleridir.</span>
+            <span class="font-mono text-indigo-600 font-semibold" id="activeInputLabel">Aktif Adım: n = 0</span>
+          </div>
+        </div>
+
+        <!-- Sağ Canvas: Çıkış Sinyali y[n] ve Ayrışımı -->
+        <div class="bg-slate-50/70 rounded-2xl p-4 border border-slate-200 flex flex-col justify-between">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+              Çıkış: $y[n] = 3(1/2)^n - 2(1/3)^n$
+            </span>
+            <span class="text-[11px] font-mono text-purple-700 font-bold bg-purple-50 px-2 py-0.5 rounded border border-purple-200" id="currentYBadge">
+              y[0] = 1.000
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner">
+            <canvas id="canvasY" width="520" height="260" class="w-full h-auto block"></canvas>
+          </div>
+          <div class="text-[11px] text-slate-500 mt-2 flex justify-between">
+            <span>Mor çubuklar $y[n]$ toplam çıkışıdır.</span>
+            <span class="text-emerald-700 font-medium">BIBO Kararlı: $y[n] \to 0$ ($n \to \infty$)</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Canlı Hesaplama HUD (Head-Up Display) -->
+      <div class="bg-slate-900 text-white rounded-2xl p-5 shadow-md border border-slate-800">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3 mb-3">
+          <div class="text-xs font-semibold text-slate-400 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Canlı Bileşen Ayrışım HUD: <span class="text-white font-mono text-sm" id="hudStepTitle">n = 0</span>
+          </div>
+          <div class="text-xs font-mono text-indigo-300">
+            $$y[n] = y_h[n] + y_p[n] = 3\left(\frac{1}{2}\right)^n - 2\left(\frac{1}{3}\right)^n$$
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-xs font-mono">
+          <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+            <span class="text-emerald-400 block text-[10px] uppercase font-semibold">1. Homojen Yanıt (yh[n])</span>
+            <span class="text-emerald-300 font-bold text-sm block mt-1" id="hudTermYh">3 · (1/2)^0 = 3.000</span>
+          </div>
+          <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+            <span class="text-rose-400 block text-[10px] uppercase font-semibold">2. Özel Yanıt (yp[n])</span>
+            <span class="text-rose-300 font-bold text-sm block mt-1" id="hudTermYp">-2 · (1/3)^0 = -2.000</span>
+          </div>
+          <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700">
+            <span class="text-blue-400 block text-[10px] uppercase font-semibold">3. Şimdiki Giriş (x[n])</span>
+            <span class="text-blue-300 font-bold text-sm block mt-1" id="hudTermX">x[0] = 1.000</span>
+          </div>
+          <div class="bg-indigo-950/80 p-3 rounded-xl border border-indigo-700/60">
+            <span class="text-indigo-300 block text-[10px] uppercase font-bold">Toplam Çıkış (y[n])</span>
+            <span class="text-amber-300 font-extrabold text-base block mt-0.5" id="hudResult">y[0] = 1.000 (1)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- Oynatma Düğmeleri -->
+        <div class="flex items-center gap-2">
+          <button id="prevBtn" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold border border-slate-200 shadow-sm transition">
+            ◀ Önceki Adım
+          </button>
+          <button id="playBtn" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-sm transition flex items-center gap-1.5">
+            <svg id="playIcon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/></svg>
+            <span id="playText">Oynat</span>
+          </button>
+          <button id="nextBtn" class="px-3 py-1.5 bg-white hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold border border-slate-200 shadow-sm transition">
+            Sonraki Adım ▶
+          </button>
+          <button id="resetBtn" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-semibold transition ml-2">
+            Sıfırla
+          </button>
+        </div>
+
+        <!-- Adım Kaydırıcı -->
+        <div class="flex items-center gap-3 flex-1 max-w-md">
+          <span class="text-xs text-slate-500 font-mono font-bold">n =</span>
+          <input type="range" id="stepSlider" min="-2" max="8" value="0" step="1" class="w-full accent-indigo-600 cursor-pointer">
+          <span id="sliderValue" class="text-xs font-mono font-bold text-indigo-700 w-8 text-center bg-white px-1.5 py-0.5 rounded border border-slate-200">0</span>
+        </div>
+
+        <!-- Hız Seçimi -->
+        <div class="flex items-center gap-1.5 text-xs text-slate-500">
+          <span>Hız:</span>
+          <select id="speedSelect" class="bg-white border border-slate-200 rounded-lg px-2 py-1 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+            <option value="1500">Yavaş (1.5s)</option>
+            <option value="900" selected>Normal (0.9s)</option>
+            <option value="400">Hızlı (0.4s)</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- 5 ADIM GRAFİKSEL KARTLARI (HiDPI PNG İNDİRME DESTEKLİ) -->
+    <!-- ============================================================= -->
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım (a Şıkkı)</span>
+        <button onclick="downloadCard('img1', '1_adim_homojen_cozum_dogrulama.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        1. Adım: Homojen Çözüm $y_h[n] = A(1/2)^n$ Doğrulaması
+      </h3>
+      <p class="text-slate-600 text-xs leading-relaxed">
+        Giriş sıfır olduğunda ($x[n]=0$) homojen denklem $y_h[n] - \frac{1}{2}y_h[n-1] = 0$'dır. $y_h[n] = A(1/2)^n$ önerildiğinde:
+        $$A\left(\frac{1}{2}\right)^n - \frac{1}{2}\left[A\left(\frac{1}{2}\right)^{n-1}\right] = A\left(\frac{1}{2}\right)^n - A\left(\frac{1}{2}\right)^n = 0$$
+        Karakteristik denklem $1 - \frac{1}{2}z^{-1} = 0 \implies z = \frac{1}{2}$ kökünü verir. Çözüm her $A$ sabiti için sağlanır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım: Homojen Çözüm Doğrulaması">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">2. Adım (b Şıkkı)</span>
+        <button onclick="downloadCard('img2', '2_adim_ozel_cozum_ve_B_tayini.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        2. Adım: Özel Çözüm $y_p[n] = B(1/3)^n$ ve $B = -2$ Tayini
+      </h3>
+      <p class="text-slate-600 text-xs leading-relaxed">
+        $n \ge 0$ için giriş $x[n] = (1/3)^n$'dir. Giriş biçiminde bir özel çözüm $y_p[n] = B(1/3)^n$ önerilir ve fark denklemine konur:
+        $$B\left(\frac{1}{3}\right)^n - \frac{1}{2}B\left(\frac{1}{3}\right)^{n-1} = \left(\frac{1}{3}\right)^n \implies B\left(\frac{1}{3}\right)^n - \frac{3}{2}B\left(\frac{1}{3}\right)^n = \left(\frac{1}{3}\right)^n$$
+        $$B\left(1 - \frac{3}{2}\right) = 1 \implies B\left(-\frac{1}{2}\right) = 1 \implies \mathbf{B = -2}$$
+        Böylece özel çözüm $y_p[n] = -2(1/3)^n$ ($n \ge 0$) olarak belirlenir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım: Özel Çözüm ve B Katsayısı">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">3. Adım (c Şıkkı)</span>
+        <button onclick="downloadCard('img3', '3_adim_baslangicta_dinginlik_ve_A_katsayisi.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        3. Adım: Başlangıçta Dinginlik ile $y[0] = 1$ ve $A = 3$ Katsayısının Belirlenmesi
+      </h3>
+      <p class="text-slate-600 text-xs leading-relaxed">
+        Giriş $n < 0$ için sıfır olduğundan başlangıçta dinginlik koşulu $y[-1] = 0$'dır. Fark denkleminde $n = 0$ yazılırsa:
+        $$y[0] - \frac{1}{2}y[-1] = x[0] \implies y[0] - 0 = 1 \implies \mathbf{y[0] = 1}$$
+        Toplam çözüm formülünde $n = 0$ yazılır:
+        $$y[0] = A\left(\frac{1}{2}\right)^0 + B\left(\frac{1}{3}\right)^0 = A(1) - 2(1) = 1 \implies A - 2 = 1 \implies \mathbf{A = 3}$$
+        Sonuç kapalı form: <strong>$y[n] = \left[ 3\left(\frac{1}{2}\right)^n - 2\left(\frac{1}{3}\right)^n \right] u[n]$</strong>
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım: Başlangıçta Dinginlik ve A Katsayısı">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_dogal_ve_zorlanmis_yanit_ayrisimi.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        4. Adım: Çıkışın Ayrışımı – Doğal Yanıt ($y_h$) vs. Zorlanmış Yanıt ($y_p$)
+      </h3>
+      <p class="text-slate-600 text-xs leading-relaxed">
+        Sistem yanıtı iki farklı üssel bileşenin yarışıdır:
+        $$y[n] = \underbrace{3\left(\frac{1}{2}\right)^n}_{\text{Doğal Yanıt (Kutup } z=1/2)} - \underbrace{2\left(\frac{1}{3}\right)^n}_{\text{Zorlanmış Yanıt (Giriş } z=1/3)}$$
+        $n = 0$ anında $3 - 2 = 1$'dir. $n$ büyüdükçe $(1/3)^n$ terimi $(1/2)^n$'den çok daha hızlı sönümlenir; böylece $n \ge 3$ sonrasında sistem neredeyse tamamen doğal yanıt $3(1/2)^n$ tarafından domine edilir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım: Doğal ve Zorlanmış Yanıt Ayrışımı">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_konvolusyon_ve_z_donusumu_dogrulama.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        5. Adım: Alternatif Doğrulamalar – Konvolüsyon & Z-Dönüşümü
+      </h3>
+      <p class="text-slate-600 text-xs leading-relaxed">
+        <strong>1. Konvolüsyon ile Doğrulama:</strong> Sistemin birim darbe yanıtı $h[n] = (1/2)^n u[n]$'dir.
+        $$y[n] = x[n] * h[n] = \sum_{k=0}^n \left(\frac{1}{3}\right)^k \left(\frac{1}{2}\right)^{n-k} = \left(\frac{1}{2}\right)^n \frac{1 - (2/3)^{n+1}}{1 - 2/3} = 3\left(\frac{1}{2}\right)^n - 2\left(\frac{1}{3}\right)^n$$
+        <strong>2. Z-Dönüşümü ile Doğrulama:</strong>
+        $$Y(z) = \frac{1}{(1 - \frac{1}{2}z^{-1})(1 - \frac{1}{3}z^{-1})} = \frac{3}{1 - \frac{1}{2}z^{-1}} - \frac{2}{1 - \frac{1}{3}z^{-1}} \iff y[n] = \left[3\left(\frac{1}{2}\right)^n - 2\left(\frac{1}{3}\right)^n\right] u[n]$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım: Konvolüsyon ve Z-Dönüşümü Doğrulaması">
+      </div>
+    </div>
+
+    <!-- Adım Adım Ayrıntılı Matematiksel Çözüm Tablosu -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <h2 class="text-base font-bold text-slate-900">Adım Adım Sayısal Değerler & Doğrulama Tablosu</h2>
+        <span class="text-xs text-slate-500 font-mono">y[n] = 0.5 y[n-1] + (1/3)^n</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+              <th class="p-3 font-mono">Zaman (n)</th>
+              <th class="p-3">Giriş: $x[n] = (1/3)^n$</th>
+              <th class="p-3 text-emerald-700">Doğal Yanıt: $y_h[n] = 3(1/2)^n$</th>
+              <th class="p-3 text-rose-700">Zorlanmış: $y_p[n] = -2(1/3)^n$</th>
+              <th class="p-3 font-bold text-slate-900">Toplam Çıkış: $y[n]$ (Rasyonel)</th>
+              <th class="p-3 font-bold text-indigo-700">Ondalık Değer</th>
+              <th class="p-3 text-slate-500">Rekürsif Test ($0.5y[n-1] + x[n]$)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700 font-mono">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-500">n < 0</td>
+              <td class="p-3 text-slate-400">0</td>
+              <td class="p-3 text-slate-400">0</td>
+              <td class="p-3 text-slate-400">0</td>
+              <td class="p-3 font-bold text-slate-400">0</td>
+              <td class="p-3 text-slate-400">0.00000</td>
+              <td class="p-3 text-slate-400 font-sans">Başlangıçta Dinginlik ($y[-1] = 0$)</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-indigo-50/30">
+              <td class="p-3 font-bold text-indigo-700">n = 0</td>
+              <td class="p-3">1</td>
+              <td class="p-3 text-emerald-700">+3.00000</td>
+              <td class="p-3 text-rose-700">-2.00000</td>
+              <td class="p-3 font-bold text-indigo-900">1</td>
+              <td class="p-3 font-bold text-indigo-700">1.000000</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(0) + 1 = 1 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-indigo-700">n = 1</td>
+              <td class="p-3">1/3 (0.33333)</td>
+              <td class="p-3 text-emerald-700">+1.50000 (3/2)</td>
+              <td class="p-3 text-rose-700">-0.66667 (-2/3)</td>
+              <td class="p-3 font-bold text-indigo-900">5/6</td>
+              <td class="p-3 font-bold text-indigo-700">0.833333</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(1) + 1/3 = 5/6 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-indigo-50/30">
+              <td class="p-3 font-bold text-indigo-700">n = 2</td>
+              <td class="p-3">1/9 (0.11111)</td>
+              <td class="p-3 text-emerald-700">+0.75000 (3/4)</td>
+              <td class="p-3 text-rose-700">-0.22222 (-2/9)</td>
+              <td class="p-3 font-bold text-indigo-900">19/36</td>
+              <td class="p-3 font-bold text-indigo-700">0.527778</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(5/6) + 1/9 = 19/36 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-indigo-700">n = 3</td>
+              <td class="p-3">1/27 (0.03704)</td>
+              <td class="p-3 text-emerald-700">+0.37500 (3/8)</td>
+              <td class="p-3 text-rose-700">-0.07407 (-2/27)</td>
+              <td class="p-3 font-bold text-indigo-900">65/216</td>
+              <td class="p-3 font-bold text-indigo-700">0.300926</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(19/36) + 1/27 = 65/216 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-indigo-50/30">
+              <td class="p-3 font-bold text-indigo-700">n = 4</td>
+              <td class="p-3">1/81 (0.01235)</td>
+              <td class="p-3 text-emerald-700">+0.18750 (3/16)</td>
+              <td class="p-3 text-rose-700">-0.02469 (-2/81)</td>
+              <td class="p-3 font-bold text-indigo-900">211/1296</td>
+              <td class="p-3 font-bold text-indigo-700">0.162809</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(65/216) + 1/81 = 211/1296 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-indigo-700">n = 5</td>
+              <td class="p-3">1/243 (0.00412)</td>
+              <td class="p-3 text-emerald-700">+0.09375 (3/32)</td>
+              <td class="p-3 text-rose-700">-0.00823 (-2/243)</td>
+              <td class="p-3 font-bold text-indigo-900">665/7776</td>
+              <td class="p-3 font-bold text-indigo-700">0.085520</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(211/1296) + 1/243 = 665/7776 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-indigo-50/30">
+              <td class="p-3 font-bold text-indigo-700">n = 6</td>
+              <td class="p-3">1/729 (0.00137)</td>
+              <td class="p-3 text-emerald-700">+0.04688 (3/64)</td>
+              <td class="p-3 text-rose-700">-0.00274 (-2/729)</td>
+              <td class="p-3 font-bold text-indigo-900">2059/46656</td>
+              <td class="p-3 font-bold text-indigo-700">0.044132</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(665/7776) + 1/729 = 2059/46656 ✔</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-indigo-700">n = 7</td>
+              <td class="p-3">1/2187 (0.00046)</td>
+              <td class="p-3 text-emerald-700">+0.02344 (3/128)</td>
+              <td class="p-3 text-rose-700">-0.00091 (-2/2187)</td>
+              <td class="p-3 font-bold text-indigo-900">6305/279936</td>
+              <td class="p-3 font-bold text-indigo-700">0.022523</td>
+              <td class="p-3 text-slate-600 font-sans">0.5·(2059/46656) + 1/2187 = 6305/279936 ✔</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sistem Özellikleri & Karşılaştırma -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Sol Kart: Nedensellik Analizi -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <h3 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          Sistem Özelliği 1: Nedensellik (Causality)
+        </h3>
+        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+          Fark denklemi $y[n] = \frac{1}{2}y[n-1] + x[n]$ şimdiki çıkışı yalnızca geçmiş çıkış $y[n-1]$ ve şimdiki giriş $x[n]$ ile ilişkilendirir.
+        </p>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs font-mono text-emerald-900 space-y-1">
+          <div>• Birim darbe yanıtı: $h[n] = (1/2)^n u[n]$</div>
+          <div>• $n < 0 \implies h[n] = 0$</div>
+          <div>• Başlangıçta dinginlik: $x[n]=0 (n<0) \implies y[n]=0 (n<0)$</div>
+        </div>
+        <p class="text-emerald-700 text-xs font-semibold mt-3">
+          ✔ Sistem <strong>NEDENSELDİR (Causal)</strong>. Gelecekteki girişlere bağımlılık yoktur.
+        </p>
+      </div>
+
+      <!-- Sağ Kart: BIBO Kararlılık Analizi -->
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <h3 class="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          Sistem Özelliği 2: BIBO Kararlılık (Stability)
+        </h3>
+        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+          Problem 2.30 ve 2.31'deki kararsız sistemlerin ($z = -2$, $|z|=2>1$) aksine, bu sistemin kutbu birim çemberin içindedir:
+        </p>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs font-mono text-emerald-900 space-y-1">
+          <div>• Karakteristik Kök: $z = 1/2 \implies |z| = 0.5 < 1$</div>
+          <div>• Dürte Yanıtının Mutlak Toplamı:</div>
+          <div>  $$\sum_{n=-\infty}^\infty |h[n]| = \sum_{n=0}^\infty \left(\frac{1}{2}\right)^n = \frac{1}{1 - 1/2} = 2 < \infty$$</div>
+        </div>
+        <p class="text-emerald-700 text-xs font-semibold mt-3">
+          ✔ Dürte yanıtı mutlak toplanabilir olduğundan sistem <strong>BIBO KARARLIDIR (Stable)</strong>.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Alt Navigasyon -->
+    <div class="flex items-center justify-between border-t border-slate-200 pt-6">
+      <a href="problem_2_31_fark_denklemi_rekursif_cozum.html" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-indigo-600 transition">
+        ← Önceki Soru: Problem 2.31
+      </a>
+      <a href="index.html" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+        Ana Sayfa (Portal)
+      </a>
+      <a href="problem_2_33_diferansiyel_denklem_lti_ispat.html" class="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition">
+        Sonraki Soru: Problem 2.33 →
+      </a>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    // Matematiksel Model
+    function getX(n) {
+      if (n < 0) return 0;
+      return Math.pow(1 / 3, n);
+    }
+
+    function getYh(n) {
+      if (n < 0) return 0;
+      return 3 * Math.pow(0.5, n);
+    }
+
+    function getYp(n) {
+      if (n < 0) return 0;
+      return -2 * Math.pow(1 / 3, n);
+    }
+
+    function getY(n) {
+      if (n < 0) return 0;
+      return getYh(n) + getYp(n);
+    }
+
+    // Durum Değişkenleri
+    let currentStep = 0;
+    let isPlaying = false;
+    let playTimer = null;
+
+    // DOM Elemanları
+    const canvasX = document.getElementById('canvasX');
+    const ctxX = canvasX.getContext('2d');
+    const canvasY = document.getElementById('canvasY');
+    const ctxY = canvasY.getContext('2d');
+
+    const stepSlider = document.getElementById('stepSlider');
+    const sliderValue = document.getElementById('sliderValue');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const playBtn = document.getElementById('playBtn');
+    const playText = document.getElementById('playText');
+    const resetBtn = document.getElementById('resetBtn');
+    const speedSelect = document.getElementById('speedSelect');
+
+    const hudStepTitle = document.getElementById('hudStepTitle');
+    const hudTermYh = document.getElementById('hudTermYh');
+    const hudTermYp = document.getElementById('hudTermYp');
+    const hudTermX = document.getElementById('hudTermX');
+    const hudResult = document.getElementById('hudResult');
+    const currentYBadge = document.getElementById('currentYBadge');
+    const activeInputLabel = document.getElementById('activeInputLabel');
+
+    // Stem Çizim Yardımcısı
+    function drawStem(ctx, x, y0, y1, color, labelText, isHighlight) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = isHighlight ? 3.5 : 2;
+
+      ctx.beginPath();
+      ctx.moveTo(x, y0);
+      ctx.lineTo(x, y1);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(x, y1, isHighlight ? 5 : 3.5, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (labelText !== undefined) {
+        ctx.font = isHighlight ? "bold 10px monospace" : "9px monospace";
+        ctx.textAlign = "center";
+        ctx.textBaseline = y1 < y0 ? "bottom" : "top";
+        ctx.fillText(labelText, x, y1 + (y1 < y0 ? -5 : 5));
+      }
+      ctx.restore();
+    }
+
+    function drawXCanvas() {
+      const w = canvasX.width;
+      const h = canvasX.height;
+      ctxX.clearRect(0, 0, w, h);
+
+      const originX = 100;
+      const originY = 210;
+      const stepX = 45;
+      const scaleY = 140;
+
+      // Izgara ve Eksen
+      ctxX.strokeStyle = '#e2e8f0';
+      ctxX.lineWidth = 1;
+      ctxX.beginPath();
+      ctxX.moveTo(25, originY);
+      ctxX.lineTo(w - 25, originY);
+      ctxX.stroke();
+
+      ctxX.beginPath();
+      ctxX.moveTo(originX, 25);
+      ctxX.lineTo(originX, h - 20);
+      ctxX.stroke();
+
+      ctxX.fillStyle = '#94a3b8';
+      ctxX.font = '10px sans-serif';
+      ctxX.textAlign = 'center';
+      ctxX.fillText('n', w - 15, originY + 4);
+      ctxX.fillText('x[n]', originX, 15);
+
+      for (let n = -2; n <= 8; n++) {
+        const xPos = originX + n * stepX;
+        ctxX.fillStyle = '#64748b';
+        ctxX.fillText(n.toString(), xPos, originY + 15);
+
+        const val = getX(n);
+        const yPos = originY - val * scaleY;
+        const isCurrent = (n === currentStep);
+
+        const color = isCurrent ? '#2563eb' : (val > 0 ? '#3b82f6' : '#94a3b8');
+        drawStem(ctxX, xPos, originY, yPos, color, val > 0 ? val.toFixed(2) : "0", isCurrent);
+      }
+
+      // Eğri (Zarf)
+      ctxX.strokeStyle = 'rgba(59, 130, 246, 0.4)';
+      ctxX.lineWidth = 1.5;
+      ctxX.setLineDash([4, 4]);
+      ctxX.beginPath();
+      for (let n = 0; n <= 8; n += 0.1) {
+        const px = originX + n * stepX;
+        const py = originY - Math.pow(1 / 3, n) * scaleY;
+        if (n === 0) ctxX.moveTo(px, py);
+        else ctxX.lineTo(px, py);
+      }
+      ctxX.stroke();
+      ctxX.setLineDash([]);
+    }
+
+    function drawYCanvas() {
+      const w = canvasY.width;
+      const h = canvasY.height;
+      ctxY.clearRect(0, 0, w, h);
+
+      const originX = 100;
+      const originY = 210;
+      const stepX = 45;
+      const scaleY = 140;
+
+      // Yatay ve Dikey Eksen
+      ctxY.strokeStyle = '#e2e8f0';
+      ctxY.lineWidth = 1;
+      ctxY.beginPath();
+      ctxY.moveTo(25, originY);
+      ctxY.lineTo(w - 25, originY);
+      ctxY.stroke();
+
+      ctxY.beginPath();
+      ctxY.moveTo(originX, 25);
+      ctxY.lineTo(originX, h - 20);
+      ctxY.stroke();
+
+      ctxY.fillStyle = '#94a3b8';
+      ctxY.font = '10px sans-serif';
+      ctxY.textAlign = 'center';
+      ctxY.fillText('n', w - 15, originY + 4);
+      ctxY.fillText('y[n]', originX, 15);
+
+      // Doğal Yanıt Zarfı (Yeşil Kesikli)
+      ctxY.strokeStyle = 'rgba(16, 185, 129, 0.5)';
+      ctxY.lineWidth = 1.5;
+      ctxY.setLineDash([3, 3]);
+      ctxY.beginPath();
+      for (let n = 0; n <= 8; n += 0.1) {
+        const px = originX + n * stepX;
+        const py = originY - getYh(n) * (scaleY / 3);
+        if (n === 0) ctxY.moveTo(px, py);
+        else ctxY.lineTo(px, py);
+      }
+      ctxY.stroke();
+      ctxY.setLineDash([]);
+
+      // Toplam Yanıt Stemleri
+      for (let n = -2; n <= 8; n++) {
+        const xPos = originX + n * stepX;
+        ctxY.fillStyle = '#64748b';
+        ctxY.fillText(n.toString(), xPos, originY + 15);
+
+        if (n <= currentStep) {
+          const val = getY(n);
+          const yPos = originY - val * scaleY;
+          const isLatest = (n === currentStep);
+          const color = isLatest ? '#f59e0b' : (val > 0 ? '#7c3aed' : '#94a3b8');
+          drawStem(ctxY, xPos, originY, yPos, color, val.toFixed(2), isLatest);
+        } else {
+          ctxY.fillStyle = '#e2e8f0';
+          ctxY.beginPath();
+          ctxY.arc(xPos, originY, 2.5, 0, Math.PI * 2);
+          ctxY.fill();
+        }
+      }
+
+      // Legend
+      ctxY.font = '10px sans-serif';
+      ctxY.textAlign = 'right';
+      ctxY.fillStyle = '#7c3aed';
+      ctxY.fillText('● y[n] Toplam Çıkış', w - 30, 35);
+      ctxY.fillStyle = '#10b981';
+      ctxY.fillText('-- yh[n] Doğal Zarf', w - 30, 50);
+    }
+
+    function updateHUD() {
+      const n = currentStep;
+      sliderValue.innerText = n;
+      stepSlider.value = n;
+      hudStepTitle.innerText = `n = ${n}`;
+
+      const yhVal = getYh(n);
+      const ypVal = getYp(n);
+      const xVal = getX(n);
+      const yVal = getY(n);
+
+      hudTermYh.innerHTML = `3 · (1/2)^${n} = <span class="text-white">${yhVal.toFixed(3)}</span>`;
+      hudTermYp.innerHTML = `-2 · (1/3)^${n} = <span class="text-white">${ypVal.toFixed(3)}</span>`;
+      hudTermX.innerHTML = `x[${n}] = <span class="text-white">${xVal.toFixed(3)}</span>`;
+      hudResult.innerHTML = `y[${n}] = ${yVal.toFixed(3)}`;
+
+      currentYBadge.innerText = `y[${n}] = ${yVal.toFixed(3)}`;
+      activeInputLabel.innerText = `Aktif Adım: n = ${n}`;
+
+      drawXCanvas();
+      drawYCanvas();
+    }
+
+    function stepNext() {
+      if (currentStep < 8) {
+        currentStep++;
+        updateHUD();
+      } else {
+        stopPlay();
+      }
+    }
+
+    function stepPrev() {
+      if (currentStep > -2) {
+        currentStep--;
+        updateHUD();
+      }
+    }
+
+    function startPlay() {
+      isPlaying = true;
+      playText.innerText = 'Durdur';
+      playBtn.classList.replace('bg-indigo-600', 'bg-amber-600');
+      playBtn.classList.replace('hover:bg-indigo-700', 'hover:bg-amber-700');
+      const speed = parseInt(speedSelect.value) || 900;
+      playTimer = setInterval(() => {
+        if (currentStep >= 8) {
+          stopPlay();
+        } else {
+          stepNext();
+        }
+      }, speed);
+    }
+
+    function stopPlay() {
+      isPlaying = false;
+      playText.innerText = 'Oynat';
+      playBtn.classList.replace('bg-amber-600', 'bg-indigo-600');
+      playBtn.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+      if (playTimer) {
+        clearInterval(playTimer);
+        playTimer = null;
+      }
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) stopPlay();
+      else {
+        if (currentStep >= 8) currentStep = -2;
+        startPlay();
+      }
+    });
+
+    nextBtn.addEventListener('click', () => {
+      stopPlay();
+      stepNext();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      stopPlay();
+      stepPrev();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      stopPlay();
+      currentStep = 0;
+      updateHUD();
+    });
+
+    stepSlider.addEventListener('input', (e) => {
+      stopPlay();
+      currentStep = parseInt(e.target.value);
+      updateHUD();
+    });
+
+    speedSelect.addEventListener('change', () => {
+      if (isPlaying) {
+        stopPlay();
+        startPlay();
+      }
+    });
+
+    function downloadCanvasAsPNG(canvas, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    document.getElementById('downloadXBtn').addEventListener('click', () => {
+      downloadCanvasAsPNG(canvasX, 'Problem_2_32_Giris_Sinyali_x_n.png');
+    });
+
+    document.getElementById('downloadYBtn').addEventListener('click', () => {
+      downloadCanvasAsPNG(canvasY, 'Problem_2_32_Cikis_Sinyali_y_n.png');
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+
+    // =============================================================
+    // HiDPI ADIM KARTLARI ÇİZİM MOTORU (860 x 200 px)
+    // =============================================================
+    const DPR = window.devicePixelRatio || 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawCardAxis(ctx, w, h, ox, oy, minN, maxN, stepPx, labelX = "n", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 20; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, oy + 70); ctx.lineTo(ox, 18);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 18); ctx.lineTo(ox, 10); ctx.lineTo(ox + 4, 18); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 15);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let n = minN; n <= maxN; n++) {
+        const px = ox + n * stepPx;
+        if (px >= 28 && px <= w - 28) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          ctx.textAlign = "center";
+          ctx.fillText(n.toString(), px, oy + 15);
+        }
+      }
+    }
+
+    // 1. Adım Çizimi: Homojen Çözüm Doğrulaması (yh[n] = A(1/2)^n)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const w = 860, h = 200;
+      const ox = 150, oy = 160, stepPx = 48, scaleY = 120;
+
+      drawCardAxis(ctx, w, h, ox, oy, -2, 7, stepPx, "n", "yh[n]");
+
+      for (let n = 0; n <= 6; n++) {
+        const val = Math.pow(0.5, n);
+        const px = ox + n * stepPx;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, "#10b981", `(${val.toFixed(2)})A`, true);
+      }
+
+      ctx.fillStyle = "#f8fafc"; ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(490, 25, 340, 150, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = "#065f46"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Homojen Çözüm Testi: yh[n] - 0.5 yh[n-1] = 0", 505, 48);
+      ctx.font = "11px monospace"; ctx.fillStyle = "#334155";
+      ctx.fillText("Öneri: yh[n] = A · (1/2)^n", 505, 75);
+      ctx.fillText("A(1/2)^n - 0.5 · A(1/2)^(n-1)", 505, 95);
+      ctx.fillText("= A(1/2)^n - A(1/2)^n = 0 ✔", 505, 115);
+      ctx.font = "10px sans-serif"; ctx.fillStyle = "#047857";
+      ctx.fillText("Karakteristik Kök: z = 1/2 (|z| < 1 ⟹ Kararlı)", 505, 145);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // 2. Adım Çizimi: Özel Çözüm ve B Katsayısı Tayini (yp[n] = -2(1/3)^n)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const w = 860, h = 200;
+      const ox = 150, oy = 60, stepPx = 48, scaleY = 55;
+
+      drawCardAxis(ctx, w, h, ox, oy, -2, 7, stepPx, "n", "yp[n]");
+
+      for (let n = 0; n <= 6; n++) {
+        const val = -2 * Math.pow(1 / 3, n);
+        const px = ox + n * stepPx;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, "#e11d48", val.toFixed(2), true);
+      }
+
+      ctx.fillStyle = "#f8fafc"; ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(490, 25, 340, 150, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = "#9f1239"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Özel Çözüm Tayini: yp[n] = B · (1/3)^n", 505, 48);
+      ctx.font = "11px monospace"; ctx.fillStyle = "#334155";
+      ctx.fillText("B(1/3)^n - 0.5 B(1/3)^(n-1) = (1/3)^n", 505, 75);
+      ctx.fillText("B(1/3)^n - 1.5 B(1/3)^n = (1/3)^n", 505, 95);
+      ctx.fillText("B · (1 - 1.5) = 1 ⟹ B · (-0.5) = 1", 505, 115);
+      ctx.font = "bold 11px monospace"; ctx.fillStyle = "#be123c";
+      ctx.fillText("⟹ B = -2 ⟹ yp[n] = -2 · (1/3)^n", 505, 145);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // 3. Adım Çizimi: Başlangıçta Dinginlik ile A = 3 Katsayısı
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const w = 860, h = 200;
+      const ox = 150, oy = 160, stepPx = 48, scaleY = 120;
+
+      drawCardAxis(ctx, w, h, ox, oy, -2, 7, stepPx, "n", "y[n]");
+
+      // n = -1 (0), n = 0 (1)
+      drawStem(ctx, ox - 1 * stepPx, oy, oy, "#94a3b8", "y[-1]=0", true);
+      drawStem(ctx, ox + 0 * stepPx, oy, oy - 1 * scaleY, "#4f46e5", "y[0]=1", true);
+
+      for (let n = 1; n <= 6; n++) {
+        const val = getY(n);
+        const px = ox + n * stepPx;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, "#7c3aed", val.toFixed(2), false);
+      }
+
+      ctx.fillStyle = "#f8fafc"; ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(490, 20, 340, 160, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = "#1e293b"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Başlangıçta Dinginlik & A Katsayısı:", 505, 42);
+      ctx.font = "11px monospace"; ctx.fillStyle = "#334155";
+      ctx.fillText("Dinginlik: x[n<0]=0 ⟹ y[-1] = 0", 505, 65);
+      ctx.fillText("n = 0: y[0] - 0.5 y[-1] = x[0]", 505, 85);
+      ctx.fillText("⟹ y[0] - 0 = 1 ⟹ y[0] = 1", 505, 105);
+      ctx.fillText("y[0] = A(1/2)^0 + B(1/3)^0 = 1", 505, 125);
+      ctx.font = "bold 11px monospace"; ctx.fillStyle = "#4338ca";
+      ctx.fillText("A - 2 = 1 ⟹ A = 3", 505, 145);
+      ctx.font = "10px sans-serif"; ctx.fillStyle = "#15803d";
+      ctx.fillText("Kapalı Form: y[n] = [ 3(1/2)^n - 2(1/3)^n ] u[n]", 505, 168);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // 4. Adım Çizimi: Doğal ve Zorlanmış Yanıt Ayrışımı Grafiği
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const w = 860, h = 200;
+      const ox = 150, oy = 110, stepPx = 45, scaleY = 30;
+
+      drawCardAxis(ctx, w, h, ox, oy, 0, 8, stepPx, "n", "Genlik");
+
+      for (let n = 0; n <= 6; n++) {
+        const yhVal = getYh(n);
+        const ypVal = getYp(n);
+        const yVal = getY(n);
+        const px = ox + n * stepPx;
+
+        // yh (yeşil)
+        drawStem(ctx, px - 6, oy, oy - yhVal * scaleY, "#10b981", yhVal.toFixed(1), false);
+        // yp (kırmızı)
+        drawStem(ctx, px + 6, oy, oy - ypVal * scaleY, "#e11d48", ypVal.toFixed(1), false);
+        // y (mor)
+        drawStem(ctx, px, oy, oy - yVal * scaleY, "#7c3aed", yVal.toFixed(2), true);
+      }
+
+      ctx.fillStyle = "#f8fafc"; ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(480, 20, 360, 160, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = "#1e293b"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Bileşenlerin Karşılaştırmalı Gelişimi:", 495, 42);
+      ctx.font = "11px monospace";
+      ctx.fillStyle = "#10b981"; ctx.fillText("● Doğal Yanıt yh[n]  = +3 · (1/2)^n", 495, 68);
+      ctx.fillStyle = "#e11d48"; ctx.fillText("● Zorlanmış yp[n]    = -2 · (1/3)^n", 495, 92);
+      ctx.fillStyle = "#7c3aed"; ctx.fillText("● Toplam Çıkış y[n]  = yh[n] + yp[n]", 495, 116);
+
+      ctx.font = "10px sans-serif"; ctx.fillStyle = "#64748b";
+      ctx.fillText("(1/3)^n çok hızlı söner; n >= 3'te çıkış neredeyse", 495, 142);
+      ctx.fillText("tamamen doğal yanıt 3(1/2)^n tarafından belirlenir.", 495, 160);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // 5. Adım Çizimi: Konvolüsyon ve Z-Dönüşümü Doğrulaması
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const w = 860, h = 200;
+      const ox = 150, oy = 160, stepPx = 45, scaleY = 120;
+
+      drawCardAxis(ctx, w, h, ox, oy, 0, 7, stepPx, "n", "y[n]");
+
+      for (let n = 0; n <= 6; n++) {
+        const val = getY(n);
+        const px = ox + n * stepPx;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, "#4338ca", val.toFixed(3), true);
+      }
+
+      ctx.fillStyle = "#f8fafc"; ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.roundRect(470, 20, 370, 160, 8); ctx.fill(); ctx.stroke();
+
+      ctx.fillStyle = "#1e293b"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "left";
+      ctx.fillText("Alternatif Doğrulama Yöntemleri:", 485, 42);
+      ctx.font = "11px monospace"; ctx.fillStyle = "#334155";
+      ctx.fillText("1. Konvolüsyon Toplamı: y[n] = x[n] * h[n]", 485, 68);
+      ctx.fillText("   h[n] = (1/2)^n u[n],  x[n] = (1/3)^n u[n]", 485, 86);
+      ctx.fillText("2. Z-Dönüşümü / Kısmi Kesirler:", 485, 112);
+      ctx.fillText("   Y(z) = 3/(1 - 0.5z^-1) - 2/(1 - (1/3)z^-1)", 485, 130);
+      ctx.font = "bold 11px sans-serif"; ctx.fillStyle = "#15803d";
+      ctx.fillText("✔ Üç farklı analitik yöntem birebir aynıdır!", 485, 158);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    window.addEventListener('load', () => {
+      updateHUD();
+    });
+  </script>
+</body>
+</html>

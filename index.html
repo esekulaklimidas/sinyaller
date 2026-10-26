@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sinyaller ve Sistemler — İnteraktif Problem Portalı (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen">
+
+  <!-- Üst Gezinme ve Başlık Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-800 flex items-center justify-center text-white font-black text-sm shadow-md shadow-indigo-100">
+          S&amp;S
+        </div>
+        <div>
+          <a href="#hero" class="text-sm font-extrabold text-slate-900 tracking-tight hover:text-indigo-600 transition flex items-center gap-2">
+            Sinyaller ve Sistemler Portalı
+            <span class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-200 font-bold">Bölüm 2 &bull; LTI</span>
+          </a>
+          <p class="text-[10px] text-slate-500 hidden sm:block">Oppenheim &amp; Willsky (2. Baskı) &bull; İnteraktif Kütüphane</p>
+        </div>
+      </div>
+
+      <!-- Kategori Atlama Linkleri -->
+      <nav class="hidden lg:flex items-center gap-1 text-xs font-semibold text-slate-600">
+        <a href="#sec-konvolusyon" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">1. Konvolüsyon</a>
+        <a href="#sec-ozellikler" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">2. Nedensellik &amp; Kararlılık</a>
+        <a href="#sec-fark-denklemleri" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">3. Fark Denklemleri</a>
+        <a href="#sec-dinginlik-sinirlari" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">4. Dinginlik &amp; LTI</a>
+        <a href="#sec-blok-diyagramlari" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">5. Blok Diyagramları</a>
+        <a href="#sec-ileri-duzey" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-amber-600 transition">6. İleri Düzey</a>
+        <a href="#sec-fiziksel-sistemler" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-emerald-600 transition">7. Fiziksel Sistemler</a>
+      </nav>
+
+      <div class="flex items-center gap-2">
+        <span class="text-[11px] font-mono text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 font-bold hidden sm:inline-block">
+          47 Soru Çözüldü (%100)
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero & İstatistikler Alanı -->
+  <section id="hero" class="max-w-7xl mx-auto px-4 sm:px-6 pt-10 pb-6 space-y-6">
+    <div class="bg-gradient-to-br from-indigo-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl border border-indigo-800/40 relative overflow-hidden">
+      <!-- Arka Plan Dekoratif Işıklar -->
+      <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-4 max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-800/60 border border-indigo-700/60 text-indigo-200 text-xs font-bold tracking-wide uppercase">
+          <svg class="w-3.5 h-3.5 text-indigo-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          Kapsamlı İnteraktif Eğitim Platformu
+        </div>
+        <h1 class="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+          Sinyaller ve Sistemler: <br class="hidden sm:inline">
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 via-sky-200 to-indigo-100">
+            LTI Sistemler Master Portalı
+          </span>
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+          Alan Oppenheim &amp; Alan Willsky'nin klasik <em>Signals &amp; Systems</em> kitabının 2. Bölümündeki tüm bölüm sonu problemlerinin 
+          (2.21 &ndash; 2.39) eksiksiz, matematiksel olarak kanıtlanmış, adım adım etkileşimli simülatörlerle ve HiDPI grafik kartlarıyla donatılmış web platformu.
+        </p>
+      </div>
+
+      <!-- Sayaç İstatistikleri -->
+      <div class="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-indigo-800/60 mt-8">
+        <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+          <div class="text-2xl sm:text-3xl font-black text-white">47</div>
+          <div class="text-xs text-indigo-200 font-medium">İnteraktif Web Çözümü</div>
+        </div>
+        <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+          <div class="text-2xl sm:text-3xl font-black text-white">7</div>
+          <div class="text-xs text-indigo-200 font-medium">Ana Teori Kategorisi</div>
+        </div>
+        <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+          <div class="text-2xl sm:text-3xl font-black text-white">100+</div>
+          <div class="text-xs text-indigo-200 font-medium">PNG İndirilebilir Kart</div>
+        </div>
+        <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
+          <div class="text-2xl sm:text-3xl font-black text-emerald-400">%100</div>
+          <div class="text-xs text-indigo-200 font-medium">Çift Tuval Simülasyonu</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filtreleme ve Arama Çubuğu -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 sticky top-16 z-40">
+    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-md space-y-3">
+      <!-- Canlı Arama Inputu -->
+      <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+        <input type="text" id="searchInput" placeholder="Problem, konu veya formül ara... (örn: konvolüsyon, 2.28, nedensellik, blok diyagram, basamak, fark denklemi, dinginlik)"
+          class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition">
+        <button id="btnClearSearch" class="hidden absolute inset-y-0 right-0 pr-3.5 flex items-center text-xs text-slate-400 hover:text-slate-600">Temizle</button>
+      </div>
+
+      <!-- Kategori Filtreleme Butonları (Pills) -->
+      <div class="flex flex-wrap items-center gap-1.5 pt-1 text-xs font-semibold" id="filterPills">
+        <button data-filter="all" class="filter-pill active px-3 py-1.5 bg-indigo-600 text-white rounded-lg shadow-sm transition">Tüm Problemler (47)</button>
+        <button data-filter="cat-conv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Konvolüsyon (17)</button>
+        <button data-filter="cat-props" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Nedensellik &amp; Kararlılık (14)</button>
+        <button data-filter="cat-diff" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Fark Denklemleri (3)</button>
+        <button data-filter="cat-rest" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Dinginlik &amp; LTI Sınırları (5)</button>
+        <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
+        <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
+        <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
+        <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
+        <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
+        <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem Kartları Ana Gövdesi -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-12">
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 1: KONVOLÜSYON İŞLEMLERİ VE TEMEL LTI YANITLARI (2.21 - 2.25) -->
+    <!-- ========================================================================= -->
+    <section id="sec-konvolusyon" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-indigo-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 1</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Konvolüsyon İşlemleri ve Temel LTI Yanıtları</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Ayrık Zaman Konvolüsyon Toplamları ($x[n]*h[n]$), Sürekli Zaman Konvolüsyon İntegralleri ($x(t)*h(t)$), Dirac Dürtü Trenleri ve Kaskat Sistemler.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.21 &bull; 2.22 &bull; 2.23 &bull; 2.24 &bull; 2.25</span>
+      </div>
+
+      <!-- Alt Kategori 1.1: Problem 2.21 (DT Konvolüsyon Toplamları) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+          <span>Problem 2.21 &mdash; Ayrık Zaman Konvolüsyon Toplamı ($y[n] = \sum_k x[k]h[n-k]$)</span>
+          <span class="text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 text-[10px]">Ayrık Zaman (DT)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- 2.21 a -->
+          <a href="problem_2_21_a_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="dt" data-keywords="2.21a ayrık zaman konvolüsyon toplamı alfa n basamak u[n]">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Problem 2.21 (a)</span>
+              <span class="text-[10px] text-slate-400 font-mono">Tek Taraflı Üstel</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Üstel Dizi ile Basamak Konvolüsyonu</h3>
+            <p class="text-xs font-mono text-slate-600">$$x[n] = \alpha^n u[n], \; h[n] = \beta^n u[n]$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">Geometrik seri toplamı, $\alpha 
+eq \beta$ ve $\alpha = \beta$ durumları, kapalı form çözüm.</p>
+          </a>
+
+          <!-- 2.21 b -->
+          <a href="problem_2_21_b_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="dt" data-keywords="2.21b sonlu süreli darbe ayrık zaman konvolüsyon">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Problem 2.21 (b)</span>
+              <span class="text-[10px] text-slate-400 font-mono">Sonlu Darbeler</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sonlu Süreli Darbelerin Çakışması</h3>
+            <p class="text-xs font-mono text-slate-600">$$x[n] = u[n] - u[n-N], \; h[n]$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">Kısmi ve tam örtüşme bölgeleri, yamuk / üçgen dalga çıkış oluşumu ve örtüşme sınırları.</p>
+          </a>
+
+          <!-- 2.21 c -->
+          <a href="problem_2_21_c_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="dt" data-keywords="2.21c ötelenmiş basamak darbesi ayrık zaman">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Problem 2.21 (c)</span>
+              <span class="text-[10px] text-slate-400 font-mono">Ötelenmiş Basamak</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ötelenmiş Sinyallerin Konvolüsyonu</h3>
+            <p class="text-xs font-mono text-slate-600">$$x[n] = 2^n u[-n], \; h[n] = u[n]$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">Sol-taraflı üstel dizi ile sağ-taraflı basamağın konvolüsyonu, iki taraflı süreklilik.</p>
+          </a>
+
+          <!-- 2.21 d -->
+          <a href="problem_2_21_d_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="dt" data-keywords="2.21d modüleli ayrık dizi konvolüsyon">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Problem 2.21 (d)</span>
+              <span class="text-[10px] text-slate-400 font-mono">Salınımlı Dizi</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Modüleli ve Salınımlı Ayrık Diziler</h3>
+            <p class="text-xs font-mono text-slate-600">$$x[n] = (-1)^n u[n], \; h[n]$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">İşaret değiştiren geometrik dizilerde sönümlenme ve çift/tek indis pariteleri.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Alt Kategori 1.2: Problem 2.22 (CT Konvolüsyon İntegralleri) -->
+      <div class="space-y-3 pt-2">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+          <span>Problem 2.22 &mdash; Sürekli Zaman Konvolüsyon İntegrali ($y(t) = \int x(	au)h(t-	au)d	au$)</span>
+          <span class="text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 text-[10px]">Sürekli Zaman (CT)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <!-- 2.22 a -->
+          <a href="problem_2_22_a_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="ct" data-keywords="2.22a sürekli zaman üstel konvolüsyon integrali">
+            <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Problem 2.22 (a)</span>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">Tek Taraflı Üsteller</h3>
+            <p class="text-[11px] font-mono text-slate-600 leading-tight">$$e^{-at}u(t) * e^{-bt}u(t)$$</p>
+            <p class="text-[10px] text-slate-500 leading-normal">$a 
+eq b$ ve $a = b$ durumları, $t e^{-at}u(t)$ çıkışı.</p>
+          </a>
+          <!-- 2.22 b -->
+          <a href="problem_2_22_b_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="ct" data-keywords="2.22b dikdörtgen darbeler sürekli zaman yamuk">
+            <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Problem 2.22 (b)</span>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">Dikdörtgen Darbeler</h3>
+            <p class="text-[11px] font-mono text-slate-600 leading-tight">$$[u(t)-u(t-T)] * [u(t)-u(t-2T)]$$</p>
+            <p class="text-[10px] text-slate-500 leading-normal">5 aşamalı örtüşme, yamuk dalga integrali.</p>
+          </a>
+          <!-- 2.22 c -->
+          <a href="problem_2_22_c_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="ct" data-keywords="2.22c rampa sinyali sürekli konvolüsyon">
+            <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Problem 2.22 (c)</span>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">Rampa ve Darbe</h3>
+            <p class="text-[11px] font-mono text-slate-600 leading-tight">$$t u(t) * [u(t) - u(t-2)]$$</p>
+            <p class="text-[10px] text-slate-500 leading-normal">Karesel parabolik integral artışı ve doyumu.</p>
+          </a>
+          <!-- 2.22 d -->
+          <a href="problem_2_22_d_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="ct" data-keywords="2.22d çift taraflı üstel sürekli konvolüsyon">
+            <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Problem 2.22 (d)</span>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">İki Taraflı Üstel</h3>
+            <p class="text-[11px] font-mono text-slate-600 leading-tight">$$e^{-2|t|} * u(t)$$</p>
+            <p class="text-[10px] text-slate-500 leading-normal">$t < 0$ ve $t \ge 0$ asimetrik integral bölgeleri.</p>
+          </a>
+          <!-- 2.22 e -->
+          <a href="problem_2_22_e_konvolusyon_gorsellestirici.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="ct" data-keywords="2.22e ötelenmiş sürekli basamak konvolüsyon">
+            <span class="text-xs font-extrabold text-amber-700 bg-amber-50 px-2 py-0.5 rounded">Problem 2.22 (e)</span>
+            <h3 class="text-xs font-bold text-slate-900 group-hover:text-amber-600 transition">Ötelenmiş Basamaklar</h3>
+            <p class="text-[11px] font-mono text-slate-600 leading-tight">$$e^{2t} u(-t) * e^{-3t} u(t)$$</p>
+            <p class="text-[10px] text-slate-500 leading-normal">Çift kutuplu sürekli zaman Laplace eşleniği.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Alt Kategori 1.3, 1.4, 1.5: Problemler 2.23, 2.24, 2.25 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+        <!-- 2.23 Grubu -->
+        <div class="p-4 bg-slate-100/70 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-800">Problem 2.23 &bull; Dirac Dürtü Treni</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-1.5 py-0.5 rounded font-mono">CT Dürtüler</span>
+          </div>
+          <p class="text-[11px] text-slate-600">Periyodik dürtü treni $\sum \delta(t-kT)$ ile üçgen darbe $x(t)$ konvolüsyonu ve örtüşme analizi.</p>
+          <div class="grid grid-cols-2 gap-1.5 pt-1 text-center font-bold text-xs">
+            <a href="problem_2_23_a_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-amber-500 text-slate-700 hover:text-amber-600 transition">2.23 (a) &rarr;</a>
+            <a href="problem_2_23_b_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-amber-500 text-slate-700 hover:text-amber-600 transition">2.23 (b) &rarr;</a>
+            <a href="problem_2_23_c_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-amber-500 text-slate-700 hover:text-amber-600 transition">2.23 (c) &rarr;</a>
+            <a href="problem_2_23_d_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-amber-500 text-slate-700 hover:text-amber-600 transition">2.23 (d) &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 2.24 Grubu -->
+        <div class="p-4 bg-slate-100/70 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-800">Problem 2.24 &bull; Kaskat LTI &amp; Ters Sistem</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-mono">DT Kaskat</span>
+          </div>
+          <p class="text-[11px] text-slate-600">Seri bağlı $h_1[n]$ ve $h_2[n]$ sistemleri, ters sistem $h[n]*h_{inv}[n]=\delta[n]$ ve geri fark operatörü.</p>
+          <div class="grid grid-cols-2 gap-1.5 pt-1 text-center font-bold text-xs">
+            <a href="problem_2_24_a_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-indigo-500 text-slate-700 hover:text-indigo-600 transition">2.24 (a) &rarr;</a>
+            <a href="problem_2_24_b_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-indigo-500 text-slate-700 hover:text-indigo-600 transition">2.24 (b) &rarr;</a>
+          </div>
+        </div>
+
+        <!-- 2.25 Grubu -->
+        <div class="p-4 bg-slate-100/70 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center">
+            <span class="text-xs font-bold text-slate-800">Problem 2.25 &bull; İki Taraflı Üstel</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 px-1.5 py-0.5 rounded font-mono">DT $|n|$ Üstel</span>
+          </div>
+          <p class="text-[11px] text-slate-600">$x[n] = (1/3)^{|n|}$ mutlak değerli çift taraflı geometrik dizisinin ayrık basamaklarla konvolüsyonu.</p>
+          <div class="grid grid-cols-2 gap-1.5 pt-1 text-center font-bold text-xs">
+            <a href="problem_2_25_a_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-indigo-500 text-slate-700 hover:text-indigo-600 transition">2.25 (a) &rarr;</a>
+            <a href="problem_2_25_b_konvolusyon_gorsellestirici.html" class="p-1.5 bg-white rounded-lg border hover:border-indigo-500 text-slate-700 hover:text-indigo-600 transition">2.25 (b) &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 2: LTI SİSTEM ÖZELLİKLERİ: NEDENSELLİK VE BIBO KARARLILIK (2.28 - 2.29) -->
+    <!-- ========================================================================= -->
+    <section id="sec-ozellikler" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-emerald-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 2</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">LTI Sistem Özellikleri: Nedensellik ve BIBO Kararlılık</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Dürtü yanıtı üzerinden Nedensellik ($h=0, t < 0$) ve BIBO Kararlılık (Mutlak Toplanabilirlik / İntegrallenebilirlik) testleri.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.28 (a-g) &bull; 2.29 (a-g)</span>
+      </div>
+
+      <!-- Problem 2.28 (Ayrık Zaman 7 Sistem) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+          <span>Problem 2.28 &mdash; Ayrık Zaman LTI Sistem Karar Matrisi ($S = \sum_{n=-\infty}^\infty |h[n]| < \infty$)</span>
+          <span class="text-purple-700 bg-purple-50 px-2 py-0.5 rounded border border-purple-200 text-[10px]">Ayrık Zaman (DT)</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+          <a href="problem_2_28_a_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28a nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (a)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">h[n]=(1/5)ⁿ u[n]</p>
+            <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">Nedensel &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_28_b_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28b nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (b)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">(0.8)ⁿ u[n+2]</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_28_c_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28c nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (c)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">(1/2)ⁿ u[-n]</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararsız</span>
+          </a>
+          <a href="problem_2_28_d_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28d nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (d)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">(5)ⁿ u[3-n]</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_28_e_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28e nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (e)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">(-1/2)ⁿ u[n] + ...</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_28_f_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28f nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (f)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">(-1/3)ⁿ u[n] + ...</p>
+            <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">Nedensel &bull; Kararsız</span>
+          </a>
+          <a href="problem_2_28_g_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-emerald-500 transition text-center space-y-1" data-cat="cat-props" data-domain="dt" data-keywords="2.28g nedensellik kararlılık ayrık">
+            <span class="text-[10px] font-bold text-slate-400">2.28 (g)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">Sonlu Dürtü Serisi</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararlı</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Problem 2.29 (Sürekli Zaman 7 Sistem) -->
+      <div class="space-y-3 pt-2">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+          <span>Problem 2.29 &mdash; Sürekli Zaman LTI Sistem Karar Matrisi ($I = \int_{-\infty}^\infty |h(t)| dt < \infty$)</span>
+          <span class="text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 text-[10px]">Sürekli Zaman (CT)</span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2.5">
+          <a href="problem_2_29_a_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29a nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (a)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">e⁻⁴ᵗ u(t-2)</p>
+            <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">Nedensel &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_29_b_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29b nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (b)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">e⁻ᵗ u(t+3)</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_29_c_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29c nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (c)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">e⁻²ᵗ u(1-t)</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararsız</span>
+          </a>
+          <a href="problem_2_29_d_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29d nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (d)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">e⁻⁴ᵗ u(t)</p>
+            <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">Nedensel &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_29_e_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29e nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (e)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">e⁻ᵗ cos(3t)u(t)</p>
+            <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">Nedensel &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_29_f_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29f nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (f)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">t e⁻ᵗ u(t)</p>
+            <span class="inline-block text-[9px] bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">Nedensel &bull; Kararlı</span>
+          </a>
+          <a href="problem_2_29_g_nedensellik_kararlilik.html" class="problem-card block p-3 bg-white rounded-xl border border-slate-200 hover:border-amber-500 transition text-center space-y-1" data-cat="cat-props" data-domain="ct" data-keywords="2.29g nedensellik kararlılık sürekli">
+            <span class="text-[10px] font-bold text-slate-400">2.29 (g)</span>
+            <p class="text-xs font-mono font-bold text-slate-800">Darbe Treni</p>
+            <span class="inline-block text-[9px] bg-rose-100 text-rose-800 px-1.5 py-0.2 rounded font-bold">Anti-N &bull; Kararlı</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 3: AYRIK ZAMAN FARK DENKLEMLERİ VE ÇÖZÜM TEKNİKLERİ (2.30 - 2.32) -->
+    <!-- ========================================================================= -->
+    <section id="sec-fark-denklemleri" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-purple-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 3</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Ayrık Zaman Fark Denklemleri ve Çözüm Teknikleri</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">1. Derece fark denklemleri, başlangıçta dinginlik altında rekürsif ardışık açılım ve homojen + özel çözüm kapalı formları.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.30 &bull; 2.31 &bull; 2.32</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 2.30 -->
+        <a href="problem_2_30_fark_denklemi_durte_yaniti.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-purple-500 hover:shadow-md transition space-y-3" data-cat="cat-diff" data-domain="dt" data-keywords="2.30 fark denklemi dürtü yanıtı rekürsif (-2)^n">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-lg">Problem 2.30</span>
+            <span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded">Kararsız Kutup (|z|=2)</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-purple-600 transition">1. Derece Fark Denklemi ve Geometrik Dürtü Yanıtı</h3>
+          <p class="text-xs font-mono text-slate-700">$$y[n] + 2y[n-1] = x[n] \implies h[n] = (-2)^n u[n]$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Başlangıçta dinginlik koşulu ile birim darbe $x[n]=\delta[n]$ uyarımı. Kutuplar $z=-2$, geometrik patlayan salınımlı dürtü yanıtı.
+          </p>
+        </a>
+
+        <!-- 2.31 -->
+        <a href="problem_2_31_fark_denklemi_rekursif_cozum.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-purple-500 hover:shadow-md transition space-y-3" data-cat="cat-diff" data-domain="dt" data-keywords="2.31 şekil p2.31 darbe girişi rekürsif yinelemeli çözüm">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-lg">Problem 2.31</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">Adım Adım Rekürsiyon</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-purple-600 transition">Keyfi Girişe Karşılık Yinelemeli Çözüm</h3>
+          <p class="text-xs font-mono text-slate-700">$$y[n] = -2y[n-1] + x[n] + 2x[n-2]$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Şekil P2.31'deki sonlu darbe treni ($n_0=-2$) için adım adım özyineleme ($y[-2]=1, y[-1]=0, y[0]=5, y[1]=-4, \dots$).
+          </p>
+        </a>
+
+        <!-- 2.32 -->
+        <a href="problem_2_32_fark_denklemi_homojen_ve_ozel_cozum.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-purple-500 hover:shadow-md transition space-y-3" data-cat="cat-diff" data-domain="dt" data-keywords="2.32 homojen özel çözüm kapalı form yanıt">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-lg">Problem 2.32</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Kararlı (|z|=1/2)</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-purple-600 transition">Homojen ve Özel Çözüm ile Kapalı Form</h3>
+          <p class="text-xs font-mono text-slate-700">$$y[n] = [3(1/2)^n - 2(1/3)^n] u[n]$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            $(1/3)^n u[n]$ girişine karşılık doğal yanıt $y_h[n]$ ve zorlanmış yanıt $y_p[n]$. Başlangıçta dinginlik ile katsayı belirleme.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 4: DİFERANSİYEL/FARK DENKLEMLERİ, DİNGİNLİK VE LTI SINIRLARI (2.33 - 2.37) -->
+    <!-- ========================================================================= -->
+    <section id="sec-dinginlik-sinirlari" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-amber-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 4</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Dinginlik Koşulları, Ek Koşullar ve LTI Sınırları</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Başlangıçta Dinginlik (Initial Rest) LTI ispatı, sabit ek koşulların doğrusallık ve nedenselliği kırması, Sonda Dinginlik (Final Rest).</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.33 &bull; 2.34 &bull; 2.35 &bull; 2.36 &bull; 2.37</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- 2.33 -->
+        <a href="problem_2_33_diferansiyel_denklem_lti_ispat.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-3" data-cat="cat-rest" data-domain="ct" data-keywords="2.33 diferansiyel denklem lti ispatı initial rest başlangıçta dinginlik">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg">Problem 2.33 (Teorem)</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">LTI &amp; Nedensel</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Diferansiyel Denklemlerin LTI İspatı</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{dy}{dt} + 2y(t) = x(t) \quad [	ext{Initial Rest}]$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Başlangıçta dinginlik koşulu altında bir diferansiyel denklemin hem Doğrusal (Linear) hem de Zamanla Değişmez (TI) olduğunu kanıtlayan ana Oppenheim teoremi.
+          </p>
+        </a>
+
+        <!-- 2.34 -->
+        <a href="problem_2_34_ek_kosullar_ve_lti_sinirlari.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-3" data-cat="cat-rest" data-domain="ct" data-keywords="2.34 ek koşullar lti sınırları y(1)=1 artımlı doğrusallık zamanla değişen">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg">Problem 2.34</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">Artımlı Doğrusal</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Ek Koşullar ve LTI Sistem Sınırları</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(1)=1, \quad y(1)=0, \quad y(0)+y(4)=0$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Sabit zamanlı ek koşulların doğrusallık ve zamanla değişmezliği nasıl kırdığını karşı örneklerle ispatlayan ve artımlı doğrusallığı ayrıştıran çalışma.
+          </p>
+        </a>
+
+        <!-- 2.35 -->
+        <a href="problem_2_35_ek_kosullar_ve_nedensellik.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-3" data-cat="cat-rest" data-domain="ct" data-keywords="2.35 sabit ek koşul y(0)=0 nedensellik ihlali karşı örnek">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg">Problem 2.35</span>
+            <span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded">Nedensel Değil</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Sabit Ek Koşul ve Nedensellik İhlali</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(0) = 0 \quad 	ext{ve} \quad x_2(t) = u(t+1)$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            $t < -1$ için $x_1=x_2=0$ olmasına rağmen $y_1=0 
+eq y_2 \approx -0.43 e^{-2t}$ çıktısı vererek sistemin geleceği hissettiğini ve nedenselliği yıktığını kanıtlayan problem.
+          </p>
+        </a>
+
+        <!-- 2.36 -->
+        <a href="problem_2_36_ayrik_zaman_fark_denklemi_lti_ve_nedensellik.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-purple-500 hover:shadow-md transition space-y-3" data-cat="cat-rest" data-domain="dt" data-keywords="2.36 ayrık zaman fark denklemi lti ve nedensellik y[0]=0 geriye rekürsiyon">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-purple-700 bg-purple-50 px-2.5 py-0.5 rounded-lg">Problem 2.36</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT İkizi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-purple-600 transition">Ayrık Zamanda LTI ve Nedensellik</h3>
+          <p class="text-xs font-mono text-slate-700">$$y[n] = \frac{1}{2}y[n-1] + x[n]$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Initial Rest altında $h[n]=(1/2)^n u[n]$ LTI ispatı ve sabit $y[0]=0$ koşulunun geriye doğru rekürsiyonla $y[-2]=-6$ üreterek nedenselliği çökerttiğinin ispatı.
+          </p>
+        </a>
+
+        <!-- 2.37 -->
+        <a href="problem_2_37_sonda_dinginlik_ve_nedensellik.html" class="problem-card group block p-5 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-3" data-cat="cat-rest" data-domain="ct" data-keywords="2.37 sonda dinginlik final rest anti-nedensel h(t)=-e^{-2t}u(-t)">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg">Problem 2.37</span>
+            <span class="text-[10px] bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded">Anti-Nedensel LTI</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Sonda Dinginlik (Final Rest) Teoremi</h3>
+          <p class="text-xs font-mono text-slate-700">$$x(t>t_0)=0 \implies y(t>t_0)=0$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Gelecekten geriye doğru entegrasyonla $h(t)=-e^{-2t}u(-t)$ dürtü yanıtının elde edilmesi ve $t < 0$ için $y_2 \approx -6.36 e^{-2t} 
+eq 0$ ile nedensellik ihlali.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 5: DONANIM VE SİSTEM MİMARİLERİ: BLOK DİYAGRAMLARI (2.38 - 2.39) -->
+    <!-- ========================================================================= -->
+    <section id="sec-blok-diyagramlari" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-blue-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-blue-100 text-blue-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 5</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Donanım ve Sistem Mimarileri: Blok Diyagram Gösterimleri</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Ayrık Zaman Gecikme Elemanları ($D$) &bull; Doğrudan Biçim I ve Kanonik Biçim II (Minimum Bellek) &bull; Sürekli Zaman İntegratör ($\int$) Mimarileri.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.38 &bull; 2.39</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- 2.38 -->
+        <a href="problem_2_38_blok_diyagram_gosterimleri.html" class="problem-card group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-3" data-cat="cat-block" data-domain="dt" data-keywords="2.38 blok diyagram ayrık zaman direct form I II kanonik gecikme D register">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-lg">Problem 2.38 (DT Mimarisi)</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Direct Form II Kanonik</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Blok Diyagram Mimarileri</h3>
+          <p class="text-xs font-mono text-slate-700">$$y[n] = \frac{1}{3}y[n-1] + \frac{1}{2}x[n] \quad 	ext{ve} \quad y[n] = \frac{1}{3}y[n-1] + x[n-1]$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Toplayıcı ($\oplus$), çarpan ($	imes a$) ve birim gecikme ($D$) blokları. 2 gecikmeli Direct Form I ile %50 bellek tasarrufu sağlayan tek gecikmeli Kanonik Direct Form II karşılaştırması ve canlı saat darbesi simülatörü.
+          </p>
+        </a>
+
+        <!-- 2.39 -->
+        <a href="problem_2_39_surekli_zaman_blok_diyagramlari.html" class="problem-card group block p-6 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-3" data-cat="cat-block" data-domain="ct" data-keywords="2.39 sürekli zaman blok diyagramı integratör analog op-amp türev izolasyonu">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-lg">Problem 2.39 (CT Mimarisi)</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded">İntegratör Tabanlı ($\int$)</span>
+          </div>
+          <h3 class="text-base font-bold text-slate-900 group-hover:text-amber-600 transition">Sürekli Zaman Blok Diyagram Temsilleri</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(t) = -\frac{1}{2}\frac{dy}{dt} + 4x(t) \quad 	ext{ve} \quad \frac{dy}{dt} + 3y(t) = x(t)$$</p>
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Gürültü büyümesini önlemek için türev yerine integratör ($\int$) kullanımı. En yüksek türev teriminin ($\frac{dy}{dt}$) toplayıcı çıkışına bağlandığı analog simülasyon diyagramları ve canlı sürekli yanıt simülatörü.
+          </p>
+        </a>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 6: İLERİ DÜZEY PROBLEMLER VE ÖZEL LTI ANALİZİ (2.40+) -->
+    <!-- ========================================================================= -->
+    <section id="sec-ileri-duzey" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-amber-500 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 6</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">İleri Düzey Problemler (Advanced Problems)</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Özel integral operatörleri ile tanımlanan LTI sistemler, genel dürtü yanıtı çıkarımları ve karmaşık darbe girişleri analizi.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.40 &bull; 2.41 &bull; 2.46 &bull; 2.52 &bull; İleri Düzey Serisi</span>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+          <span>Problem 2.40 &mdash; LTI İntegral Bağıntısından $h(t)$ Çıkarımı ve Dikdörtgen Darbe Yanıtı</span>
+          <span class="text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 text-[10px]">Sürekli Zaman (CT)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- 2.40 -->
+          <a href="problem_2_40_lti_integral_ve_darbe_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-adv" data-domain="ct" data-keywords="2.40 ileri düzey advanced lti integral bağıntısı dürtü yanıtı dikdörtgen darbe süperpozisyon basamak yanıtı">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Problem 2.40</span>
+              <span class="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">Nedensel &amp; BIBO Kararlı</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">İntegral Bağıntılı LTI Sistem ve Darbe Çıkışı</h3>
+            <p class="text-xs font-mono text-slate-600">$$y(t) = \int_{-\infty}^t e^{-(t-\tau)}x(\tau-2)d\tau \implies h(t) = e^{-(t-2)}u(t-2)$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              Gecikmeli 1. derece RC dinamiği, Dirac sifting özelliği, $x(t)=u(t+1)-u(t-2)$ dikdörtgen darbesi için 3 bölgeli parçalı sürekli çözüm ve çift tuval simülatörü.
+            </p>
+          </a>
+
+          <!-- 2.41 -->
+          <a href="problem_2_41_ayrik_ters_sistem_ve_konvolusyon.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-adv" data-domain="dt" data-keywords="2.41 ileri düzey advanced ayrık zaman ters sistem inverse filter konvolüsyon özellikleri birleşme değişme fir">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Problem 2.41</span>
+              <span class="text-[10px] text-purple-700 font-bold bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">Ayrık Zaman (DT)</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Ters Filtreleme ve h[n] Dizisinin Sentezi</h3>
+            <p class="text-xs font-mono text-slate-600">$$g[n] = x[n] - \alpha x[n-1] = \delta[n] \implies h[n] = y[n] - \alpha y[n-1]$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              Konvolüsyon cebirinde birleşme özelliği, $x[n]=\alpha^n u[n]$ için ideal ters sistem, 5 elemanlı FIR filtre tasarımı ve $\alpha=1/2$ özel iptal durumu.
+            </p>
+          </a>
+
+          <!-- 2.46 -->
+          <a href="problem_2_46_lti_turev_ozelligi_ve_h_t_bulma.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-adv" data-domain="ct" data-keywords="2.46 ileri düzey advanced lti türev özelliği dirac delta ayrışımı diferansiyel denklem h(t) bulma anti-nedensel bibo kararlı">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Problem 2.46</span>
+              <span class="text-[10px] text-rose-600 font-bold bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">Non-Causal &bull; Kararlı</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Türev Özelliği ve h(t) Dürtü Yanıtı Sentezi</h3>
+            <p class="text-xs font-mono text-slate-600">$$\frac{dx}{dt} \to -3y + e^{-2t}u(t) \implies h(t) = \frac{e}{2} e^{-2t} u(t+1)$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              Distribüsyonel türev ve $2e^{-3}\delta(t-1)$ darbesi, cebirsel sadeleşme ile $h(t)$ izolasyonu, diferansiyel denklem çözümü $y(t)=(e^{-2t}-e^{-3t})u(t)$ ve tam konvolüsyon kanıtı.
+            </p>
+          </a>
+
+          <!-- 2.52 -->
+          <a href="problem_2_52_aritmetik_geometrik_basamak_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-amber-500 hover:shadow-md transition space-y-2" data-cat="cat-adv" data-domain="dt" data-keywords="2.52 ileri düzey advanced ayrık zaman aritmetik geometrik seri basamak yanıtı s[n] türev ipucu çift kutup kalıcı durum dc kazancı">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Problem 2.52</span>
+              <span class="text-[10px] text-purple-700 font-bold bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200">Ayrık Zaman (DT)</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition">Aritmetik-Geometrik Seri ve s[n] Basamak Yanıtı</h3>
+            <p class="text-xs font-mono text-slate-600">$$h[n] = (n+1)\alpha^n u[n] \implies s[n] = \left[ \frac{1}{(\alpha-1)^2} - \frac{\alpha}{(\alpha-1)^2}\alpha^n + \frac{\alpha}{\alpha-1}(n+1)\alpha^n \right]u[n]$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              Geometrik serinin parametrik türevi, $(1-\alpha)S_n$ cebirsel indirgemesi, çift kutuplu rezonans ve kalıcı durum asimptotu $s[\infty] = \frac{1}{(1-\alpha)^2}$.
+            </p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 7: FİZİKSEL VE UYGULAMALI SİSTEMLER (EXTENSION PROBLEMS 2.61+) -->
+    <!-- ========================================================================= -->
+    <section id="sec-fiziksel-sistemler" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-emerald-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Bölüm 7</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Fiziksel ve Uygulamalı Sistemler (Extension Problems)</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">RLC elektrik devreleri, mekanik kütle-yay-sönümleyici modelleri ve diferansiyel denklem doğal yanıt dinamikleri.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.61 &bull; Devre &amp; Mekanik Serisi</span>
+      </div>
+
+      <div class="space-y-3">
+        <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
+          <span>Problem 2.61 &mdash; Elektrik Devreleri: LC, RC ve RLC Sistemlerinde Doğal Yanıt ve Diferansiyel Denklemler</span>
+          <span class="text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">Sürekli Zaman (CT)</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- 2.61 -->
+          <a href="problem_2_61_rlc_devre_modelleme_ve_dogal_yanit.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-emerald-500 hover:shadow-md transition space-y-2" data-cat="cat-ext" data-domain="ct" data-keywords="2.61 fiziksel sistemler extension problems elektrik devresi rlc rc lc doğal yanıt homojen çözüm s-düzlemi kutuplar sönümlü sinüs">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-extrabold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Problem 2.61</span>
+              <span class="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.5 rounded border border-indigo-200">3'ü 1 Arada Laboratuvar</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition">LC, RC ve RLC Devre Modelleme ve Doğal Yanıt</h3>
+            <p class="text-xs font-mono text-slate-600">$$LC: s = \pm j1 \quad | \quad RC: s = -1 \quad | \quad RLC: s = -1 \pm j2$$</p>
+            <p class="text-[11px] text-slate-500 leading-relaxed">
+              KVL ile diferansiyel denklem türetimi, saf osilasyon vs. sönümleme, s-düzlemi kutup yerleşimi ve dinamik devre simülatörü.
+            </p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Alt Bilgi (Footer) -->
+  <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-slate-800">Sinyaller ve Sistemler İnteraktif Eğitim Portalı</span>
+        <span>&bull;</span>
+        <span>Oppenheim &amp; Willsky 2. Baskı Bölüm 2</span>
+      </div>
+      <div class="text-slate-400">
+        47 Tam Problem Çözümü &bull; HTML5 Canvas &bull; Tailwind CSS &bull; KaTeX
+      </div>
+    </div>
+  </footer>
+
+  <!-- İstemci Tarafı Arama ve Filtreleme Motoru -->
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const btnClearSearch = document.getElementById('btnClearSearch');
+    const filterPills = document.querySelectorAll('.filter-pill');
+    const domainPills = document.querySelectorAll('.domain-pill');
+    const problemCards = document.querySelectorAll('.problem-card');
+    const categorySections = document.querySelectorAll('.category-section');
+
+    let currentCategory = 'all';
+    let currentDomain = 'all'; // 'all', 'dt', 'ct'
+    let currentQuery = '';
+
+    function filterCards() {
+      const q = currentQuery.trim().toLowerCase();
+      let visibleCount = 0;
+
+      problemCards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        const keywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+        const cat = card.getAttribute('data-cat') || '';
+        const domain = card.getAttribute('data-domain') || '';
+
+        const matchesQuery = !q || text.includes(q) || keywords.includes(q);
+        const matchesCategory = (currentCategory === 'all') || (cat === currentCategory);
+        const matchesDomain = (currentDomain === 'all') || (domain === currentDomain);
+
+        if (matchesQuery && matchesCategory && matchesDomain) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Bölüm başlıklarını da içindeki kart durumuna göre gizle/göster
+      categorySections.forEach(sec => {
+        const hasVisible = sec.querySelectorAll('.problem-card:not(.hidden)').length > 0;
+        if (hasVisible) {
+          sec.classList.remove('hidden');
+        } else {
+          sec.classList.add('hidden');
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => {
+      currentQuery = e.target.value;
+      if (currentQuery.length > 0) {
+        btnClearSearch.classList.remove('hidden');
+      } else {
+        btnClearSearch.classList.add('hidden');
+      }
+      filterCards();
+    });
+
+    btnClearSearch.addEventListener('click', () => {
+      searchInput.value = '';
+      currentQuery = '';
+      btnClearSearch.classList.add('hidden');
+      filterCards();
+      searchInput.focus();
+    });
+
+    filterPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterPills.forEach(p => {
+          p.classList.remove('active', 'bg-indigo-600', 'text-white');
+          p.classList.add('bg-slate-100', 'text-slate-700');
+        });
+        pill.classList.add('active', 'bg-indigo-600', 'text-white');
+        pill.classList.remove('bg-slate-100', 'text-slate-700');
+
+        currentCategory = pill.getAttribute('data-filter');
+        filterCards();
+      });
+    });
+
+    domainPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const dom = pill.getAttribute('data-domain');
+        if (currentDomain === dom) {
+          currentDomain = 'all';
+          pill.classList.remove('ring-2', 'ring-indigo-500', 'font-bold');
+        } else {
+          domainPills.forEach(p => p.classList.remove('ring-2', 'ring-indigo-500', 'font-bold'));
+          currentDomain = dom;
+          pill.classList.add('ring-2', 'ring-indigo-500', 'font-bold');
+        }
+        filterCards();
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.61 — RLC Devre Modelleme ve Doğal Yanıt Analizi (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 2.61</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Genişletilmiş (Extension)</span>
+            <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold">Sürekli Zaman (CT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 194-195</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html#sec-fiziksel-sistemler" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanımı Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; Fiziksel Sistem Modelleme</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Elektrik Devre Modellemesi: LC, RC ve RLC Sistemlerinde Doğal Yanıt Karakteristiği
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-xl text-xs font-bold">
+            KVL &bull; Karakteristik Kökler &bull; Sönümlü Osilasyon
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni Orijinal Kutu -->
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Problem 2.61 Soru Metni (Oppenheim &amp; Willsky, Sh. 194-195)
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-700">
+          <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-indigo-700 block">Kısım (a) &mdash; LC Devresi</span>
+            <p>Giriş $x(t)$, çıkış kondansatör gerilimi $y(t)$. $L = 1\text{ H}, C = 1\text{ F}$.</p>
+            <p class="text-[11px] text-slate-500">Diferansiyel denklemi, homojen çözümü $K_1 e^{j\omega_1 t} + K_2 e^{j\omega_2 t}$ ve gerilimin reel olmasından ötürü saf <strong>sinüzoidal osilasyon</strong> olduğunu gösteriniz.</p>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-indigo-700 block">Kısım (b) &mdash; RC Devresi</span>
+            <p>Giriş $x(t)$, çıkış kondansatör gerilimi $y(t)$. $R = 1\,\Omega, C = 1\text{ F}$.</p>
+            <p class="text-[11px] text-slate-500">Diferansiyel denklemi belirleyiniz. Doğal yanıtın $K e^{-at}$ biçiminde olduğunu gösterip $a$ değerini bulunuz.</p>
+          </div>
+          <div class="p-3 bg-white rounded-xl border border-slate-200 space-y-1.5">
+            <span class="font-bold text-indigo-700 block">Kısım (c) &mdash; RLC Devresi</span>
+            <p>Giriş $x(t)$, çıkış $y(t)$. $R = 2\,\Omega, L = 1\text{ H}, C = \frac{1}{5}\text{ F}$.</p>
+            <p class="text-[11px] text-slate-500">Diferansiyel denklemi bulunuz. Homojen çözümün $e^{-at}\{K_1 e^{j2t} + K_2 e^{-j2t}\}$ ve <strong>üstel sönümlü sinüzoyit</strong> olduğunu gösteriniz.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETKİLEŞİMLİ 3'Ü 1 ARADA DEVRE SİMÜLATÖRÜ -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">İnteraktif Devre Laboratuvarı</span>
+          <h2 class="text-xl font-black text-slate-900">Devre Mimarisi, Kutup Dağılımı ve Doğal Yanıt Simülatörü</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Farklı devre tipleri arasında geçiş yaparak osilasyon, sönümleme ve enerji salınımını canlı gözlemleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnExportPNG" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG Olarak İndir
+          </button>
+        </div>
+      </div>
+
+      <!-- Devre Seçim Sekmeleri (Tabs) -->
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3" id="circuitTabs">
+        <button onclick="selectCircuit('lc')" id="tabLC" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-indigo-600 text-white shadow-sm transition">
+          (a) LC Devresi (Sönümsüz Osilatör: s = &plusmn;j1)
+        </button>
+        <button onclick="selectCircuit('rc')" id="tabRC" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          (b) RC Devresi (Monotonik Üstel Sönüm: s = -1)
+        </button>
+        <button onclick="selectCircuit('rlc')" id="tabRLC" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+          (c) RLC Devresi (Sönümlü Osilatör: s = -1 &plusmn; j2)
+        </button>
+      </div>
+
+      <!-- Şematik & Parametre Özeti -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <div class="md:col-span-8 flex items-center gap-4">
+          <div id="circuitSVGContainer" class="w-48 h-24 bg-white rounded-xl border border-slate-200 p-2 flex items-center justify-center shadow-inner">
+            <!-- Dinamik SVG devre çizimi gelecek -->
+          </div>
+          <div class="space-y-1">
+            <span class="text-xs font-mono font-bold text-indigo-700" id="lblCircuitTitle">LC Devresi &bull; Saf Reaktif Osilasyon</span>
+            <p class="text-xs text-slate-600 font-mono" id="lblDiffEq">d²y/dt² + y(t) = x(t)</p>
+            <p class="text-[11px] text-slate-500" id="lblCircuitDesc">Direnç yok ($R=0$). Enerji bobin ile kondansatör arasında sonsuza dek salınır.</p>
+          </div>
+        </div>
+        <div class="md:col-span-4 flex flex-col justify-center items-end space-y-1 text-right">
+          <span class="text-[10px] text-slate-400 font-mono uppercase">Karakteristik Kökler (Kutuplar)</span>
+          <span class="text-sm font-mono font-bold text-slate-800" id="lblPoles">s₁,₂ = &plusmn; j1.00</span>
+          <span class="text-xs font-bold text-emerald-600" id="lblDampingState">Marjinal Kararlı &bull; Saf Sinüs</span>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı: S-Düzlemi Kutupları ve Zaman Yanıtı y_h(t) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <!-- Tuval 1: S-Düzlemi (Kutup Yerleşimi) -->
+        <div class="lg:col-span-4 bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">Kompleks s-Düzlemi ($s = \sigma + j\omega$)</span>
+            <span class="text-[10px] text-slate-400 font-mono">Kutuplar (&times;)</span>
+          </div>
+          <canvas id="canvasSPlane" width="300" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono pt-1">
+            <span>Reel Eksen ($\sigma$)</span>
+            <span>İmajiner Eksen ($j\omega$)</span>
+          </div>
+        </div>
+
+        <!-- Tuval 2: Zaman Bölgesi Doğal Yanıtı y_h(t) -->
+        <div class="lg:col-span-8 bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">Doğal Yanıt Dalga Biçimi $y_h(t)$ ($y(0)=1\text{V}, y'(0)=0$)</span>
+            <span class="text-[11px] font-mono text-indigo-600 font-bold" id="lblYhFormula">y_h(t) = \cos(t)</span>
+          </div>
+          <canvas id="canvasTime" width="600" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-indigo-400 inline-block"></span> Gerilim $y_h(t)$</span>
+              <span class="flex items-center gap-1.5"><span class="w-3 h-0.5 bg-amber-400 inline-block"></span> Üstel Zarf $\pm e^{-at}$</span>
+            </div>
+            <span class="font-mono text-slate-400">t &in; [0, 10] saniye</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAYLI TEORİK ÇÖZÜM VE KANIT KARTLARI -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- Bölüm (a) Çözüm Kartı -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-xs font-black uppercase">(a) LC Devresi</span>
+          <span class="text-xs font-mono text-slate-500">Sönümsüz Osilatör</span>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900">1. KVL ve Diferansiyel Denklem</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          Devrede $v_L(t) + v_C(t) = x(t)$'dir. Kondansatör akımı $i(t) = C \frac{dy}{dt}$ olup bobinden geçen akımla aynıdır:
+          $$v_L(t) = L \frac{di}{dt} = LC \frac{d^2 y}{dt^2}$$
+          $L=1\text{ H}, C=1\text{ F} \implies LC = 1$:
+          $$\mathbf{\frac{d^2 y(t)}{dt^2} + y(t) = x(t)}$$
+        </p>
+
+        <h3 class="text-sm font-bold text-slate-900 pt-1">2. Karakteristik Kökler</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          $s^2 + 1 = 0 \implies s_{1,2} = \pm j1$.<br>
+          Homojen çözüm:
+          $$y_h(t) = K_1 e^{j1 t} + K_2 e^{-j1 t}$$
+          Burada $\mathbf{\omega_1 = 1}$ ve $\mathbf{\omega_2 = -1}$'dir.
+        </p>
+
+        <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl text-[11px] text-indigo-900 leading-relaxed">
+          <strong>Reel Fonksiyon Kısıtı:</strong> $y(t) \in \mathbb{R} \implies K_2 = K_1^*$.<br>
+          Kutup koordinatlarında $K_1 = \frac{A}{2}e^{j\phi}$ yazarsak:
+          $$\mathbf{y_h(t) = A \cos(t + \phi)}$$
+          Sistem saf bir <strong>sinüzoidal osilatördür</strong>.
+        </div>
+      </div>
+
+      <!-- Bölüm (b) Çözüm Kartı -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-sky-100 text-sky-800 rounded-md text-xs font-black uppercase">(b) RC Devresi</span>
+          <span class="text-xs font-mono text-slate-500">1. Derece Alçak Geçiren</span>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900">1. KVL ve Diferansiyel Denklem</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          Devrede $v_R(t) + v_C(t) = x(t)$'dir. $i(t) = C \frac{dy}{dt}$ olduğundan:
+          $$v_R(t) = R \cdot i(t) = RC \frac{dy}{dt}$$
+          $R=1\,\Omega, C=1\text{ F} \implies RC = 1$:
+          $$\mathbf{\frac{dy(t)}{dt} + y(t) = x(t)}$$
+        </p>
+
+        <h3 class="text-sm font-bold text-slate-900 pt-1">2. Doğal Yanıt Analizi</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          Homojen denklem: $\frac{dy}{dt} + y = 0 \implies s + 1 = 0 \implies s = -1$.
+          Doğal yanıt:
+          $$y_h(t) = K e^{-at}$$
+          Burada $\mathbf{a = 1}$'dir.
+        </p>
+
+        <div class="p-3 bg-sky-50 border border-sky-200 rounded-xl text-[11px] text-sky-900 leading-relaxed">
+          <strong>Fiziksel Anlamı:</strong> Sistemde bobin bulunmadığından rezonans veya osilasyon oluşamaz. Direnç enerjiyi ısıya dönüştürür; gerilim <strong>monotonik üstel olarak sönümlenir</strong>.
+        </div>
+      </div>
+
+      <!-- Bölüm (c) Çözüm Kartı -->
+      <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md text-xs font-black uppercase">(c) RLC Devresi</span>
+          <span class="text-xs font-mono text-slate-500">Sönümlü Osilatör</span>
+        </div>
+        <h3 class="text-sm font-bold text-slate-900">1. KVL ve Diferansiyel Denklem</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          $v_R(t) + v_L(t) + v_C(t) = x(t)$ eşitliğinde $i = C \frac{dy}{dt}$ yazılır:
+          $$LC \frac{d^2 y}{dt^2} + RC \frac{dy}{dt} + y = x(t)$$
+          $L=1, R=2, C=1/5 \implies LC=1/5, RC=2/5$:
+          $$\frac{1}{5}\frac{d^2 y}{dt^2} + \frac{2}{5}\frac{dy}{dt} + y = x(t)$$
+          5 ile çarparsak:
+          $$\mathbf{\frac{d^2 y(t)}{dt^2} + 2\frac{dy(t)}{dt} + 5y(t) = 5x(t)}$$
+        </p>
+
+        <h3 class="text-sm font-bold text-slate-900 pt-1">2. Karakteristik Kökler</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          $s^2 + 2s + 5 = 0 \implies s = \frac{-2 \pm \sqrt{4-20}}{2} = -1 \pm j2$.<br>
+          Homojen çözüm:
+          $$y_h(t) = e^{-at} \{ K_1 e^{j2t} + K_2 e^{-j2t} \}$$
+          Burada $\mathbf{a = 1}$'dir.
+        </p>
+
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-900 leading-relaxed">
+          <strong>Sönümlü Sinüs:</strong> $K_2 = K_1^*$ şartı ile:
+          $$\mathbf{y_h(t) = A e^{-t} \cos(2t + \phi)}$$
+          Osilasyon frekansı $\omega_d = 2\text{ rad/s}$ olup $e^{-t}$ üstel zarfı altında sönümlenir.
+        </div>
+      </div>
+    </section>
+
+    <!-- KARŞILAŞTIRMA VE SİSTEM TİPLERİ TABLOSU -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        <h3 class="text-lg font-bold text-slate-900">Devre Mimarileri ve Dinamik Tepki Karşılaştırma Matrisi</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+          <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">Devre Tipi</th>
+              <th class="p-3">Eleman Değerleri</th>
+              <th class="p-3">Diferansiyel Denklem</th>
+              <th class="p-3">Kutup Konumları ($s$)</th>
+              <th class="p-3">Doğal Yanıt $y_h(t)$</th>
+              <th class="p-3">Fiziksel Durum</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800 font-sans">(a) LC</td>
+              <td class="p-3">L=1H, C=1F</td>
+              <td class="p-3 font-bold text-indigo-700">y'' + y = x</td>
+              <td class="p-3 font-bold text-indigo-700">&plusmn; j1</td>
+              <td class="p-3 font-bold text-slate-800">A \cos(t + \phi)</td>
+              <td class="p-3 font-sans text-emerald-700 font-bold">Sönümsüz Osilatör (Kayıpsız)</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800 font-sans">(b) RC</td>
+              <td class="p-3">R=1Ω, C=1F</td>
+              <td class="p-3 font-bold text-sky-700">y' + y = x</td>
+              <td class="p-3 font-bold text-sky-700">-1</td>
+              <td class="p-3 font-bold text-slate-800">K e^{-t}</td>
+              <td class="p-3 font-sans text-slate-700 font-semibold">1. Derece Monotonik Sönüm</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-amber-50/40">
+              <td class="p-3 font-bold text-slate-800 font-sans">(c) RLC</td>
+              <td class="p-3">R=2Ω, L=1H, C=0.2F</td>
+              <td class="p-3 font-bold text-amber-700">y'' + 2y' + 5y = 5x</td>
+              <td class="p-3 font-bold text-amber-700">-1 &plusmn; j2</td>
+              <td class="p-3 font-bold text-slate-800">A e^{-t} \cos(2t + \phi)</td>
+              <td class="p-3 font-sans text-amber-800 font-bold">Az Sönümlü (Underdamped) Osilatör</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <p>Oppenheim &amp; Willsky &bull; Signals and Systems 2. Baskı Çözümleri &bull; Hazırlayan: ENI for Tris ❤️</p>
+  </footer>
+
+  <!-- SİMÜLASYON MOTORU VE JAVASCRIPT ÇİZİM KODLARI -->
+  <script>
+    const canvasSPlane = document.getElementById('canvasSPlane');
+    const ctxSPlane = canvasSPlane.getContext('2d');
+    const canvasTime = document.getElementById('canvasTime');
+    const ctxTime = canvasTime.getContext('2d');
+
+    const circuitSVGContainer = document.getElementById('circuitSVGContainer');
+    const lblCircuitTitle = document.getElementById('lblCircuitTitle');
+    const lblDiffEq = document.getElementById('lblDiffEq');
+    const lblCircuitDesc = document.getElementById('lblCircuitDesc');
+    const lblPoles = document.getElementById('lblPoles');
+    const lblDampingState = document.getElementById('lblDampingState');
+    const lblYhFormula = document.getElementById('lblYhFormula');
+
+    let currentCircuit = 'lc';
+
+    // SVG Devre Şemaları
+    const svgSchematics = {
+      lc: `<svg viewBox="0 0 160 80" class="w-full h-full text-slate-700 font-mono text-[9px]">
+        <circle cx="25" cy="40" r="10" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="25" y="43" text-anchor="middle" fill="#6366f1" font-weight="bold">x(t)</text>
+        <line x1="25" y1="30" x2="25" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <line x1="25" y1="15" x2="50" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <!-- Bobin (L=1H) -->
+        <path d="M50,15 C55,5 60,5 65,15 C70,5 75,5 80,15 C85,5 90,5 95,15" fill="none" stroke="#f59e0b" stroke-width="1.8"/>
+        <text x="72" y="10" text-anchor="middle" fill="#d97706" font-weight="bold">L=1H</text>
+        <line x1="95" y1="15" x2="135" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <line x1="135" y1="15" x2="135" y2="30" stroke="#334155" stroke-width="1.5"/>
+        <!-- Kondansatör (C=1F) -->
+        <line x1="125" y1="30" x2="145" y2="30" stroke="#38bdf8" stroke-width="2"/>
+        <line x1="125" y1="36" x2="145" y2="36" stroke="#38bdf8" stroke-width="2"/>
+        <text x="110" y="36" text-anchor="middle" fill="#0284c7" font-weight="bold">C=1F</text>
+        <line x1="135" y1="36" x2="135" y2="65" stroke="#334155" stroke-width="1.5"/>
+        <line x1="135" y1="65" x2="25" y2="65" stroke="#334155" stroke-width="1.5"/>
+        <line x1="25" y1="65" x2="25" y2="50" stroke="#334155" stroke-width="1.5"/>
+        <text x="145" y="55" fill="#6366f1" font-weight="bold">y(t)</text>
+      </svg>`,
+
+      rc: `<svg viewBox="0 0 160 80" class="w-full h-full text-slate-700 font-mono text-[9px]">
+        <circle cx="25" cy="40" r="10" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="25" y="43" text-anchor="middle" fill="#6366f1" font-weight="bold">x(t)</text>
+        <line x1="25" y1="30" x2="25" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <line x1="25" y1="15" x2="50" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <!-- Direnç (R=1 ohm) -->
+        <path d="M50,15 L55,10 L65,20 L75,10 L85,20 L90,15" fill="none" stroke="#ef4444" stroke-width="1.8"/>
+        <text x="70" y="8" text-anchor="middle" fill="#dc2626" font-weight="bold">R=1Ω</text>
+        <line x1="90" y1="15" x2="135" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <line x1="135" y1="15" x2="135" y2="30" stroke="#334155" stroke-width="1.5"/>
+        <!-- Kondansatör (C=1F) -->
+        <line x1="125" y1="30" x2="145" y2="30" stroke="#38bdf8" stroke-width="2"/>
+        <line x1="125" y1="36" x2="145" y2="36" stroke="#38bdf8" stroke-width="2"/>
+        <text x="110" y="36" text-anchor="middle" fill="#0284c7" font-weight="bold">C=1F</text>
+        <line x1="135" y1="36" x2="135" y2="65" stroke="#334155" stroke-width="1.5"/>
+        <line x1="135" y1="65" x2="25" y2="65" stroke="#334155" stroke-width="1.5"/>
+        <line x1="25" y1="65" x2="25" y2="50" stroke="#334155" stroke-width="1.5"/>
+        <text x="145" y="55" fill="#6366f1" font-weight="bold">y(t)</text>
+      </svg>`,
+
+      rlc: `<svg viewBox="0 0 160 80" class="w-full h-full text-slate-700 font-mono text-[9px]">
+        <circle cx="20" cy="40" r="9" fill="none" stroke="#6366f1" stroke-width="1.5"/>
+        <text x="20" y="43" text-anchor="middle" fill="#6366f1" font-weight="bold">x(t)</text>
+        <line x1="20" y1="31" x2="20" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <line x1="20" y1="15" x2="35" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <!-- Direnç (R=2) -->
+        <path d="M35,15 L40,11 L48,19 L56,11 L64,19 L68,15" fill="none" stroke="#ef4444" stroke-width="1.6"/>
+        <text x="52" y="8" text-anchor="middle" fill="#dc2626" font-weight="bold">2Ω</text>
+        <!-- Bobin (L=1) -->
+        <path d="M68,15 C72,7 76,7 80,15 C84,7 88,7 92,15 C96,7 100,7 104,15" fill="none" stroke="#f59e0b" stroke-width="1.6"/>
+        <text x="86" y="8" text-anchor="middle" fill="#d97706" font-weight="bold">1H</text>
+        <line x1="104" y1="15" x2="135" y2="15" stroke="#334155" stroke-width="1.5"/>
+        <line x1="135" y1="15" x2="135" y2="28" stroke="#334155" stroke-width="1.5"/>
+        <!-- Kondansatör (C=1/5) -->
+        <line x1="125" y1="28" x2="145" y2="28" stroke="#38bdf8" stroke-width="2"/>
+        <line x1="125" y1="34" x2="145" y2="34" stroke="#38bdf8" stroke-width="2"/>
+        <text x="110" y="34" text-anchor="middle" fill="#0284c7" font-weight="bold">0.2F</text>
+        <line x1="135" y1="34" x2="135" y2="65" stroke="#334155" stroke-width="1.5"/>
+        <line x1="135" y1="65" x2="20" y2="65" stroke="#334155" stroke-width="1.5"/>
+        <line x1="20" y1="65" x2="20" y2="49" stroke="#334155" stroke-width="1.5"/>
+        <text x="145" y="55" fill="#6366f1" font-weight="bold">y(t)</text>
+      </svg>`
+    };
+
+    function selectCircuit(type) {
+      currentCircuit = type;
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-slate-100', 'text-slate-700');
+      });
+
+      if (type === 'lc') {
+        document.getElementById('tabLC').classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        document.getElementById('tabLC').classList.remove('bg-slate-100', 'text-slate-700');
+        lblCircuitTitle.textContent = 'LC Devresi • Saf Reaktif Osilasyon';
+        lblDiffEq.textContent = 'd²y/dt² + y(t) = x(t)';
+        lblCircuitDesc.textContent = 'Direnç yok (R=0). Enerji bobin ve kondansatör arasında kayıpsız salınır.';
+        lblPoles.textContent = 's₁,₂ = ± j1.00';
+        lblDampingState.textContent = 'Marjinal Kararlı • Saf Sinüs';
+        lblDampingState.className = 'text-xs font-bold text-emerald-600';
+        lblYhFormula.textContent = 'y_h(t) = \\cos(t)';
+      } else if (type === 'rc') {
+        document.getElementById('tabRC').classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        document.getElementById('tabRC').classList.remove('bg-slate-100', 'text-slate-700');
+        lblCircuitTitle.textContent = 'RC Devresi • 1. Derece Termal Sönümlenme';
+        lblDiffEq.textContent = 'dy/dt + y(t) = x(t)';
+        lblCircuitDesc.textContent = 'Bobin yok (L=0). Kondansatör enerjisi direnç üzerinde ısıya dönüşerek boşalır.';
+        lblPoles.textContent = 's = -1.00';
+        lblDampingState.textContent = 'Aperiyodik • Monotonik Sönüm';
+        lblDampingState.className = 'text-xs font-bold text-sky-600';
+        lblYhFormula.textContent = 'y_h(t) = e^{-t}';
+      } else {
+        document.getElementById('tabRLC').classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+        document.getElementById('tabRLC').classList.remove('bg-slate-100', 'text-slate-700');
+        lblCircuitTitle.textContent = 'RLC Devresi • Az Sönümlü Osilatör';
+        lblDiffEq.textContent = 'd²y/dt² + 2 dy/dt + 5y(t) = 5 x(t)';
+        lblCircuitDesc.textContent = 'R=2, L=1, C=0.2. Osilasyon frekansı ω_d=2 rad/s, üstel zarf sönümü a=1.';
+        lblPoles.textContent = 's₁,₂ = -1.00 ± j2.00';
+        lblDampingState.textContent = 'Az Sönümlü • Sönümlü Sinüs';
+        lblDampingState.className = 'text-xs font-bold text-amber-600';
+        lblYhFormula.textContent = 'y_h(t) = e^{-t} \\cos(2t)';
+      }
+
+      circuitSVGContainer.innerHTML = svgSchematics[type];
+      drawSPlane();
+      drawTimeResponse();
+    }
+
+    // 1. Tuval: Kompleks s-Düzlemi Çizimi
+    function drawSPlane() {
+      const w = canvasSPlane.width;
+      const h = canvasSPlane.height;
+      ctxSPlane.clearRect(0, 0, w, h);
+
+      const cx = w * 0.65; // sigma=0 düşey ekseni
+      const cy = h * 0.50; // jw=0 yatay ekseni
+      const scale = 40;   // 1 birim = 40 piksel
+
+      // Izgara ve Eksenler
+      ctxSPlane.strokeStyle = '#334155';
+      ctxSPlane.lineWidth = 1;
+
+      // Yatay sigma ekseni
+      ctxSPlane.beginPath();
+      ctxSPlane.moveTo(15, cy);
+      ctxSPlane.lineTo(w - 15, cy);
+      ctxSPlane.stroke();
+
+      // Dikey jw ekseni
+      ctxSPlane.beginPath();
+      ctxSPlane.moveTo(cx, 15);
+      ctxSPlane.lineTo(cx, h - 15);
+      ctxSPlane.stroke();
+
+      ctxSPlane.fillStyle = '#64748b';
+      ctxSPlane.font = '9px monospace';
+      ctxSPlane.textAlign = 'center';
+      ctxSPlane.fillText('σ', w - 10, cy - 5);
+      ctxSPlane.fillText('jω', cx + 10, 15);
+
+      // Kutupların Çizimi
+      function drawPole(sigma, omega, color) {
+        const px = cx + sigma * scale;
+        const py = cy - omega * scale;
+
+        ctxSPlane.strokeStyle = color;
+        ctxSPlane.lineWidth = 2.5;
+
+        ctxSPlane.beginPath();
+        ctxSPlane.moveTo(px - 5, py - 5);
+        ctxSPlane.lineTo(px + 5, py + 5);
+        ctxSPlane.moveTo(px + 5, py - 5);
+        ctxSPlane.lineTo(px - 5, py + 5);
+        ctxSPlane.stroke();
+
+        ctxSPlane.fillStyle = color;
+        ctxSPlane.font = 'bold 9px monospace';
+        ctxSPlane.textAlign = sigma <= 0 ? 'right' : 'left';
+        ctxSPlane.fillText(`(${sigma}, ${omega})`, px + (sigma <= 0 ? -8 : 8), py + 3);
+      }
+
+      if (currentCircuit === 'lc') {
+        drawPole(0, 1, '#34d399');
+        drawPole(0, -1, '#34d399');
+      } else if (currentCircuit === 'rc') {
+        drawPole(-1, 0, '#38bdf8');
+      } else if (currentCircuit === 'rlc') {
+        drawPole(-1, 2, '#fbbf24');
+        drawPole(-1, -2, '#fbbf24');
+      }
+    }
+
+    // 2. Tuval: Zaman Yanıtı y_h(t) Çizimi
+    function drawTimeResponse() {
+      const w = canvasTime.width;
+      const h = canvasTime.height;
+      ctxTime.clearRect(0, 0, w, h);
+
+      const maxT = 10.0;
+      function tToPx(t) {
+        return 45 + (t / maxT) * (w - 75);
+      }
+
+      const minVal = -1.2, maxVal = 1.2;
+      function vToPy(v) {
+        return h - 30 - ((v - minVal) / (maxVal - minVal)) * (h - 55);
+      }
+
+      const y0 = vToPy(0);
+
+      // Eksen
+      ctxTime.strokeStyle = '#334155';
+      ctxTime.lineWidth = 1;
+      ctxTime.beginPath();
+      ctxTime.moveTo(35, y0);
+      ctxTime.lineTo(w - 20, y0);
+      ctxTime.stroke();
+
+      const x0 = tToPx(0);
+      ctxTime.beginPath();
+      ctxTime.moveTo(x0, 15);
+      ctxTime.lineTo(x0, h - 15);
+      ctxTime.stroke();
+
+      // Zaman etiketleri
+      ctxTime.fillStyle = '#64748b';
+      ctxTime.font = '9px monospace';
+      ctxTime.textAlign = 'center';
+      for (let t = 0; t <= 10; t += 2) {
+        const x = tToPx(t);
+        ctxTime.beginPath();
+        ctxTime.moveTo(x, y0 - 3);
+        ctxTime.lineTo(x, y0 + 3);
+        ctxTime.stroke();
+        ctxTime.fillText(t + 's', x, y0 + 14);
+      }
+
+      // Fonksiyon hesabı
+      function calcY(t) {
+        if (currentCircuit === 'lc') {
+          return Math.cos(t);
+        } else if (currentCircuit === 'rc') {
+          return Math.exp(-t);
+        } else {
+          return Math.exp(-t) * Math.cos(2.0 * t);
+        }
+      }
+
+      // Üstel Zarf Çizimi (RLC veya RC için)
+      if (currentCircuit === 'rlc') {
+        ctxTime.strokeStyle = '#fbbf24';
+        ctxTime.lineWidth = 1.5;
+        ctxTime.setLineDash([3, 3]);
+
+        // Üst zarf
+        ctxTime.beginPath();
+        for (let t = 0; t <= maxT; t += 0.1) {
+          const px = tToPx(t);
+          const py = vToPy(Math.exp(-t));
+          if (t === 0) ctxTime.moveTo(px, py); else ctxTime.lineTo(px, py);
+        }
+        ctxTime.stroke();
+
+        // Alt zarf
+        ctxTime.beginPath();
+        for (let t = 0; t <= maxT; t += 0.1) {
+          const px = tToPx(t);
+          const py = vToPy(-Math.exp(-t));
+          if (t === 0) ctxTime.moveTo(px, py); else ctxTime.lineTo(px, py);
+        }
+        ctxTime.stroke();
+        ctxTime.setLineDash([]);
+      }
+
+      // Ana Eğri Çizimi
+      ctxTime.strokeStyle = currentCircuit === 'lc' ? '#34d399' : (currentCircuit === 'rc' ? '#38bdf8' : '#818cf8');
+      ctxTime.lineWidth = 2.5;
+      ctxTime.beginPath();
+      for (let t = 0; t <= maxT; t += 0.05) {
+        const px = tToPx(t);
+        const py = vToPy(calcY(t));
+        if (t === 0) ctxTime.moveTo(px, py); else ctxTime.lineTo(px, py);
+      }
+      ctxTime.stroke();
+
+      // Başlangıç Noktası (y(0) = 1)
+      ctxTime.fillStyle = '#ef4444';
+      ctxTime.beginPath();
+      ctxTime.arc(tToPx(0), vToPy(1.0), 4, 0, Math.PI * 2);
+      ctxTime.fill();
+      ctxTime.fillStyle = '#f87171';
+      ctxTime.font = 'bold 9px monospace';
+      ctxTime.textAlign = 'left';
+      ctxTime.fillText('y(0) = 1V', tToPx(0) + 8, vToPy(1.0) - 4);
+    }
+
+    // PNG İndirme Fonksiyonu
+    document.getElementById('btnExportPNG').addEventListener('click', () => {
+      const exp = document.createElement('canvas');
+      exp.width = 1000;
+      exp.height = 700;
+      const expCtx = exp.getContext('2d');
+
+      expCtx.fillStyle = '#0f172a';
+      expCtx.fillRect(0, 0, 1000, 700);
+
+      expCtx.fillStyle = '#ffffff';
+      expCtx.font = 'bold 20px sans-serif';
+      expCtx.fillText('Oppenheim & Willsky — Problem 2.61 Çözüm Kartı', 50, 45);
+      expCtx.fillStyle = '#94a3b8';
+      expCtx.font = '12px sans-serif';
+      expCtx.fillText(`Devre: ${lblCircuitTitle.textContent}  |  ${lblDiffEq.textContent}  |  Kutuplar: ${lblPoles.textContent}`, 50, 70);
+
+      expCtx.drawImage(canvasSPlane, 50, 100, 320, 260);
+      expCtx.drawImage(canvasTime, 400, 100, 550, 260);
+
+      // Metin tablosu
+      expCtx.fillStyle = '#1e293b';
+      expCtx.fillRect(50, 390, 900, 260);
+
+      expCtx.fillStyle = '#38bdf8';
+      expCtx.font = 'bold 14px sans-serif';
+      expCtx.fillText('(a) LC Devresi: y" + y = x  ==>  s = ±j1  ==>  y_h(t) = A cos(t + φ)  [Saf Sinüs]', 70, 430);
+      expCtx.fillStyle = '#34d399';
+      expCtx.fillText('(b) RC Devresi: y\' + y = x  ==>  s = -1  ==>  y_h(t) = K e^{-t}  [Monotonik Sönüm]', 70, 480);
+      expCtx.fillStyle = '#fbbf24';
+      expCtx.fillText('(c) RLC Devresi: y" + 2y\' + 5y = 5x  ==>  s = -1 ± j2  ==>  y_h(t) = A e^{-t} cos(2t + φ)  [Sönümlü Sinüs]', 70, 530);
+
+      const link = document.createElement('a');
+      link.download = `Problem_2_61_${currentCircuit.toUpperCase()}_Cozum.png`;
+      link.href = exp.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Yükleme
+    selectCircuit('lc');
+  </script>
+</body>
+</html>

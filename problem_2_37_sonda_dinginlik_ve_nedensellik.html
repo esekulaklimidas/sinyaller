@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.37 — Sonda Dinginlik (Final Rest) ve Nedensellik İhlali</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Portal
+        </a>
+        <a href="problem_2_36_ayrik_zaman_fark_denklemi_lti_ve_nedensellik.html" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 transition">
+          ← Problem 2.36
+        </a>
+        <span class="text-slate-300">|</span>
+        <a href="problem_2_38_blok_diyagram_gosterimleri.html" class="text-xs font-semibold text-slate-600 hover:text-amber-600 transition">
+          Problem 2.38 →
+        </a>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-1 bg-amber-50 text-amber-800 text-[11px] font-extrabold rounded-md border border-amber-200">
+          Oppenheim 2.37
+        </span>
+        <span class="text-xs text-slate-400 font-mono hidden sm:inline">Bölüm 2 &bull; Sayfa 178</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Başlık & Teorem Kartı -->
+    <div class="bg-gradient-to-br from-white to-amber-50/50 p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          Sürekli Zaman (CT) Diferansiyel Denklemler
+        </span>
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          Sonda Dinginlik (Final Rest)
+        </span>
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          Anti-Nedensel (Anticausal) Sistem
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        Problem 2.37: Sonda Dinginlik (Final Rest) Koşulu ve Nedensellik İhlali
+      </h1>
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        Bu problemde, <em>Başlangıçta Dinginlik</em> (Initial Rest) koşulunun simetrik karşıtı olan <strong>Sonda Dinginlik (Final Rest)</strong> koşulunu inceliyoruz. Sonda dinginlik koşulu, girdi sona erdikten sonra sistemin sıfıra dinlenmesini şart koşar ($x(t)=0, \forall t > t_0 \implies y(t)=0, \forall t > t_0$). Bu varsayımın diferansiyel denklemi <strong>gelecekten geriye doğru</strong> entegre olmaya zorladığını ve sistemin henüz hiçbir girdi uygulanmamışken ($t < 0$) gelecekteki darbeyi hissederek tepki verdiğini; dolayısıyla sistemin <strong>nedensel olmadığını (anti-nedensel)</strong> kesin matematiksel adımlarla kanıtlıyoruz.
+      </p>
+    </div>
+
+    <!-- Soru Bizden Ne İstiyor? & Mini Konu Anlatımı -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Sol: Soru Özeti -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Soru Bizden Ne İstiyor?
+        </div>
+        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
+          <p>
+            $\frac{dy(t)}{dt} + 2y(t) = x(t)$ diferansiyel denklemi verilmiştir.
+          </p>
+          <p>
+            Sistem <strong>sonda dinginlik (final rest)</strong> koşulunu sağlamaktadır:
+            $$x(t) = 0 \quad (\forall t > t_0) \implies y(t) = 0 \quad (\forall t > t_0)$$
+          </p>
+          <p class="font-semibold text-slate-800">
+            Aşağıdaki iki girdiyi ele alarak sistemin nedensel olmadığını gösteriniz:
+          </p>
+          <ul class="list-disc list-inside space-y-1 font-mono text-slate-800">
+            <li>$x_1(t) = 0 \implies y_1(t)$</li>
+            <li>$x_2(t) = e^t [u(t) - u(t - 1)] \implies y_2(t)$</li>
+          </ul>
+          <p class="pt-1">
+            $t < 0$ için $x_1(t) = x_2(t) = 0$ iken $y_1(t) \neq y_2(t)$ olduğunu kanıtlayınız.
+          </p>
+        </div>
+      </div>
+
+      <!-- Sağ: Mini Konu Anlatımı -->
+      <div class="bg-amber-50/60 p-6 rounded-2xl border border-amber-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-amber-800 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Mini Konu Anlatımı: Gelecekten Geriye Entegrasyon
+        </div>
+        <div class="text-xs text-slate-700 space-y-2 leading-relaxed">
+          <p>
+            <strong>Başlangıçta Dinginlik:</strong> Girdi gelmeden önce hafıza sıfırdır $\implies$ İntegral geçmişten ($-\infty$) günümüze ($t$) akar: $h(t) = e^{-2t}u(t)$ (Nedensel LTI).
+          </p>
+          <p>
+            <strong>Sonda Dinginlik:</strong> Girdi bittikten sonra ($t > t_0$) çıktı sıfırdır $\implies$ İntegral günümüzden ($t$) geleceğe ($+\infty$) akar:
+            $$y(t) = - \int_t^\infty e^{-2(t - \tau)} x(\tau) d\tau$$
+            Birim darbe yanıtı $h(t) = -e^{-2t}u(-t)$ olan bu sistem <strong>Anti-Nedenseldir (Anticausal)</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- İNTERAKTİF DUAL SİMÜLATÖR -->
+    <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-black text-slate-900">İnteraktif Sürekli Zaman Görselleştirici: Sonda Dinginlik</h2>
+          <p class="text-xs text-slate-500">Zaman imlecini ($t$) kaydırarak girdileri ($x_1, x_2$) ve anti-nedensel çıktıları ($y_1, y_2$) anlık kıyaslayınız.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnFocusViolation" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition">
+            İhlal Noktasına Git ($t = -0.5\text{s}$)
+          </button>
+          <button id="btnResetT" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+            Darbe Bölgesine Git ($t = 0.5\text{s}$)
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Canvas Alanı -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Canvas 1: Girdiler -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Girdi Sinyalleri: $x_1(t)$ vs. $x_2(t)$</span>
+            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
+              $t < 0$ Bölgesinde $x_1(t) \equiv x_2(t) = 0$
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner aspect-[16/9]">
+            <canvas id="canvasInputs" class="w-full h-full block"></canvas>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><span class="inline-block w-3 h-0.5 bg-slate-400 mr-1"></span>$x_1(t) = 0$</span>
+            <span><span class="inline-block w-3 h-0.5 bg-blue-600 mr-1"></span>$x_2(t) = e^t [u(t)-u(t-1)]$</span>
+          </div>
+        </div>
+
+        <!-- Canvas 2: Çıktılar -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Çıktı Sinyalleri: $y_1(t)$ vs. $y_2(t)$ (Sonda Dinginlik)</span>
+            <span id="badgeStatus" class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-[10px] font-bold">
+              NEDENSELLİK İHLALİ: $y_1 \neq y_2$
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner aspect-[16/9]">
+            <canvas id="canvasOutputs" class="w-full h-full block"></canvas>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><span class="inline-block w-3 h-0.5 bg-slate-400 mr-1"></span>$y_1(t) = 0$</span>
+            <span><span class="inline-block w-3 h-0.5 bg-purple-600 mr-1"></span>$y_2(t)$ (Anti-Nedensel)</span>
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1"></span>$y_2(t \ge 1) = 0$</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zaman Kaydırıcı (Scrubber) -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-700">Zaman İmleci ($t$):</span>
+          <span class="font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md border border-indigo-200">
+            t = <span id="lblT">-0.50</span> s
+          </span>
+        </div>
+        <input type="range" id="sliderT" min="-1.5" max="1.5" step="0.02" value="-0.5"
+          class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+        <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+          <span>t = -1.5 s</span>
+          <span class="text-rose-600 font-bold">t &lt; 0 s (İhlal Bölgesi)</span>
+          <span class="text-blue-600 font-bold">0 &le; t &le; 1 s (Girdi Darbesi)</span>
+          <span class="text-emerald-600 font-bold">t &ge; 1 s (Sonda Dinginlik: y=0)</span>
+          <span>t = +1.5 s</span>
+        </div>
+      </div>
+
+      <!-- Dinamik HUD Kartları -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">Girdi $x_1(t)$</div>
+          <div id="hudX1" class="text-sm font-mono font-black text-slate-700">0.000</div>
+        </div>
+        <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-200">
+          <div class="text-[10px] text-blue-700 font-bold">Girdi $x_2(t)$</div>
+          <div id="hudX2" class="text-sm font-mono font-black text-blue-700">0.000</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">Çıktı $y_1(t)$</div>
+          <div id="hudY1" class="text-sm font-mono font-black text-slate-700">0.000</div>
+        </div>
+        <div class="p-3 bg-purple-50/50 rounded-xl border border-purple-200">
+          <div class="text-[10px] text-purple-700 font-bold">Çıktı $y_2(t)$</div>
+          <div id="hudY2" class="text-sm font-mono font-black text-purple-700">-17.293</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADIM ADIM MATEMATİKSEL İSPAT KARTLARI -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-amber-500 rounded-full inline-block"></span>
+        Adım Adım Matematiksel İspatlar ve Çözüm Detayı
+      </h2>
+
+      <!-- Kart 1: Sonda Dinginlik İntegral Modeli -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">1</span>
+            Sonda Dinginlik (Final Rest) ve Genel İntegral Modeli
+          </div>
+          <button onclick="downloadCard('card1')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
+          <p>
+            Diferansiyel denklem $\frac{dy(t)}{dt} + 2y(t) = x(t)$ integrasyon çarpanı $e^{2t}$ ile çarpılır:
+          </p>
+          <p class="font-mono text-center text-slate-800 bg-slate-50 py-2 rounded-lg">
+            $$\frac{d}{dt}\left[ e^{2t} y(t) \right] = e^{2t} x(t)$$
+          </p>
+          <p>
+            Sonda dinginlik koşulu $t > t_0$ için $y(t) = 0$ olmasını gerektirdiğinden, integrali $t$'den $+\infty$'a kadar alırız:
+          </p>
+          <p class="font-mono text-center text-slate-800 bg-slate-50 py-2 rounded-lg">
+            $$\lim_{\tau \to \infty} \left[ e^{2\tau} y(\tau) \right] - e^{2t} y(t) = \int_t^\infty e^{2\tau} x(\tau) d\tau$$
+          </p>
+          <p>
+            $t > t_0$ için $y(\tau) \equiv 0$ olduğundan sol taraftaki limit sıfırdır ($0 - e^{2t}y(t)$). Her iki tarafı $-e^{-2t}$ ile çarptığımızda:
+          </p>
+          <p class="font-mono text-center font-bold text-indigo-700 bg-indigo-50/50 py-2.5 rounded-lg border border-indigo-100">
+            $$y(t) = - e^{-2t} \int_t^\infty e^{2\tau} x(\tau) d\tau = - \int_t^\infty e^{-2(t - \tau)} x(\tau) d\tau$$
+          </p>
+          <p class="text-[11px] text-slate-500">
+            İntegrasyon aralığı $\tau \in [t, \infty)$'dur; yani sistemin anlık çıktısı $t$'den sonraki <strong>gelecek girdi değerlerine</strong> göre belirlenir.
+          </p>
+        </div>
+        <canvas id="card1Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 2: (a) Sıfır Girdi Yanıtı -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">2</span>
+            1. Girdi: Sıfır Girdi $x_1(t) = 0$ Yanıtı
+          </div>
+          <button onclick="downloadCard('card2')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
+          <p>
+            Girdi tüm zaman ekseninde sıfır olduğunda ($x_1(t) = 0, \forall t$):
+          </p>
+          <p class="font-mono text-center text-slate-800 bg-slate-50 py-2 rounded-lg">
+            $$y_1(t) = - e^{-2t} \int_t^\infty e^{2\tau} \cdot (0) \, d\tau = 0, \quad \forall t \in \mathbb{R}$$
+          </p>
+          <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-emerald-800 text-xs">
+            <strong>Referans Taban Çıktı:</strong> Sıfır girdiye karşılık sistem tüm zamanlarda özdeş olarak sıfır çıktı üretir ($y_1(t) = 0$).
+          </div>
+        </div>
+        <canvas id="card2Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 3: (b) Parçalı Çözüm -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">3</span>
+            2. Girdi: $x_2(t) = e^t [u(t) - u(t - 1)]$ ve Parçalı İntegral
+          </div>
+          <button onclick="downloadCard('card3')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <p>
+            Girdi darbesi yalnızca $[0, 1)$ aralığında etkindir: $x_2(t) = e^t$ ($0 \le t < 1$) ve $0$ (diğer yerlerde).
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px]">
+            <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-200 space-y-1">
+              <span class="font-bold text-emerald-900 block">Bölge 1: $t \ge 1$</span>
+              <p class="text-slate-600">$\tau \ge t \ge 1$ için $x_2(\tau) = 0$:</p>
+              <p class="font-mono text-emerald-700 font-bold">$$y_2(t) = 0$$</p>
+              <p class="text-[10px] text-emerald-800">Sonda dinginlik şartı sağlanır.</p>
+            </div>
+
+            <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-200 space-y-1">
+              <span class="font-bold text-blue-900 block">Bölge 2: $0 \le t < 1$</span>
+              <p class="text-slate-600">$\int_t^1 e^{2\tau}e^\tau d\tau = \frac{e^3 - e^{3t}}{3}$:</p>
+              <p class="font-mono text-blue-700 font-bold">$$y_2(t) = \frac{e^t - e^3 e^{-2t}}{3}$$</p>
+              <p class="text-[10px] text-blue-800">$t=1 \implies y_2(1)=0$ (sürekli).</p>
+            </div>
+
+            <div class="p-3 bg-rose-50/60 rounded-xl border border-rose-200 space-y-1">
+              <span class="font-bold text-rose-900 block">Bölge 3: $t < 0$ (İhlal)</span>
+              <p class="text-slate-600">$\int_0^1 e^{3\tau} d\tau = \frac{e^3 - 1}{3}$:</p>
+              <p class="font-mono text-rose-700 font-bold">$$y_2(t) = - \left(\frac{e^3 - 1}{3}\right) e^{-2t}$$</p>
+              <p class="text-[10px] text-rose-800">$\approx -6.3618 \, e^{-2t} \neq 0$!</p>
+            </div>
+          </div>
+        </div>
+        <canvas id="card3Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 4: Nedensellik İspatı -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">4</span>
+            Nedensellik İspatı (Causality Proof): $t < 0$ Karşılaştırması
+          </div>
+          <button onclick="downloadCard('card4')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <p>
+            Şimdi $t < 0$ zaman aralığını inceleyelim:
+          </p>
+          <div class="grid grid-cols-2 gap-3 text-center font-mono">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="text-slate-500 text-[10px] block">Girdiler ($t < 0$)</span>
+              <strong class="text-xs text-slate-800">$$x_1(t) = 0 \quad \text{ve} \quad x_2(t) = 0$$</strong>
+              <span class="text-[11px] text-emerald-600 font-bold block pt-1">$$x_1(t) = x_2(t)$$ (Özdeş Girdiler)</span>
+            </div>
+            <div class="p-3 bg-rose-50 rounded-xl border border-rose-200">
+              <span class="text-rose-500 text-[10px] block">Çıktılar ($t < 0$)</span>
+              <strong class="text-xs text-rose-800">$$y_1(t) = 0 \quad \text{ama} \quad y_2(t) \neq 0$$</strong>
+              <span class="text-[11px] text-rose-600 font-bold block pt-1">$$y_1(t) \neq y_2(t)$$ (Farklı Çıktılar!)</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-slate-700 text-xs space-y-1.5">
+            <p class="font-bold text-amber-900">Nedensellik Teoreminin İhlali:</p>
+            <p>
+              Nedensellik tanımı: <em>"Eğer $t \le t_0$ için girdiler özdeşse, çıktılar da bu ana kadar özdeş olmak zorundadır."</em>
+            </p>
+            <p>
+              Burada $t_0 = 0$ için girdiler tamamen aynıdır ($x_1(t) = x_2(t) = 0, \forall t \le 0$). Fakat sistemin çıktısı $y_2(t)$, gelecekteki $[0, 1]$ darbesini önceden bilerek $t < 0$ anında $-6.3618 e^{-2t}$ tepkisi üretmiştir!
+            </p>
+            <p class="font-bold text-rose-700 pt-1">
+              Dolayısıyla Sonda Dinginlik (Final Rest) koşulu altındaki sistem <strong>NEDENSEL DEĞİLDİR (NOT CAUSAL / ANTICAUSAL)</strong>.
+            </p>
+          </div>
+        </div>
+        <canvas id="card4Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 5: Sınav Özeti & Büyük Karşılaştırma -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">5</span>
+            Büyük Teorem Özeti: Dinginlik Koşulları ve Sistem Sınıflandırması
+          </div>
+          <button onclick="downloadCard('card5')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+              <thead class="bg-slate-100 text-slate-700 font-bold">
+                <tr>
+                  <th class="p-2.5 border-b border-slate-200">Problem &amp; Koşul</th>
+                  <th class="p-2.5 border-b border-slate-200">Entegrasyon Yönü</th>
+                  <th class="p-2.5 border-b border-slate-200">Dürtü Yanıtı ($h(t)$)</th>
+                  <th class="p-2.5 border-b border-slate-200">LTI mı?</th>
+                  <th class="p-2.5 border-b border-slate-200">Nedensel mi?</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-[11px]">
+                <tr class="bg-emerald-50/40">
+                  <td class="p-2.5 font-bold text-emerald-800">Problem 2.33: Başlangıçta Dinginlik (Initial Rest)</td>
+                  <td class="p-2.5 font-mono">$\int_{-\infty}^t (\text{İleriye})$</td>
+                  <td class="p-2.5 font-mono">$e^{-2t} u(t)$</td>
+                  <td class="p-2.5 text-emerald-700 font-bold">EVET (LTI)</td>
+                  <td class="p-2.5 text-emerald-700 font-bold">EVET (Nedensel)</td>
+                </tr>
+                <tr class="bg-purple-50/40">
+                  <td class="p-2.5 font-bold text-purple-800">Problem 2.37: Sonda Dinginlik (Final Rest)</td>
+                  <td class="p-2.5 font-mono">$\int_t^\infty (\text{Geriye})$</td>
+                  <td class="p-2.5 font-mono">$-e^{-2t} u(-t)$</td>
+                  <td class="p-2.5 text-emerald-700 font-bold">EVET (LTI)</td>
+                  <td class="p-2.5 text-rose-700 font-bold">HAYIR (Anti-Nedensel)</td>
+                </tr>
+                <tr class="bg-rose-50/40">
+                  <td class="p-2.5 font-bold text-rose-800">Problem 2.34 &amp; 2.35: Sabit Ek Koşul ($y(0)=0$)</td>
+                  <td class="p-2.5 font-mono">$\int_0^t (\text{Sabit Çapa})$</td>
+                  <td class="p-2.5 font-mono">Tanımsız ($t$-bağımlı)</td>
+                  <td class="p-2.5 text-rose-700 font-bold">HAYIR (Time-Varying)</td>
+                  <td class="p-2.5 text-rose-700 font-bold">HAYIR (Non-Causal)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            <strong>Büyük Çıkarım:</strong> Başlangıçta dinginlik nedensel bir LTI sistem üretir; sonda dinginlik anti-nedensel bir LTI sistem üretir; sabit ek koşul ise zamanla değişmezliği de yıkar!
+          </p>
+        </div>
+        <canvas id="card5Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+    </div>
+
+    <!-- Alt Navigasyon Butonları -->
+    <div class="flex items-center justify-between border-t border-slate-200 pt-6">
+      <a href="problem_2_36_ayrik_zaman_fark_denklemi_lti_ve_nedensellik.html" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-indigo-600 transition">
+        ← Önceki Soru: Problem 2.36
+      </a>
+      <a href="index.html" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+        Ana Sayfa (Portal)
+      </a>
+      <a href="problem_2_38_blok_diyagram_gosterimleri.html" class="inline-flex items-center gap-2 text-sm font-bold text-indigo-600 hover:text-indigo-800 transition">
+        Sonraki Soru: Problem 2.38 →
+      </a>
+    </div>
+
+  </main>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    // Matematiksel Model
+    function evalX1(t) {
+      return 0.0;
+    }
+
+    function evalX2(t) {
+      if (t >= 0.0 && t < 1.0) {
+        return Math.exp(t);
+      }
+      return 0.0;
+    }
+
+    function evalY1(t) {
+      return 0.0;
+    }
+
+    function evalY2(t) {
+      if (t >= 1.0) {
+        return 0.0;
+      } else if (t >= 0.0) {
+        return (Math.exp(t) - Math.exp(3.0) * Math.exp(-2.0 * t)) / 3.0;
+      } else {
+        return - ((Math.exp(3.0) - 1.0) / 3.0) * Math.exp(-2.0 * t);
+      }
+    }
+
+    // HiDPI Canvas Desteği
+    function setupHiDPI(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      return { ctx, width: rect.width, height: rect.height };
+    }
+
+    const canvasInputs = document.getElementById('canvasInputs');
+    const canvasOutputs = document.getElementById('canvasOutputs');
+    const sliderT = document.getElementById('sliderT');
+    const lblT = document.getElementById('lblT');
+    const hudX1 = document.getElementById('hudX1');
+    const hudX2 = document.getElementById('hudX2');
+    const hudY1 = document.getElementById('hudY1');
+    const hudY2 = document.getElementById('hudY2');
+    const badgeStatus = document.getElementById('badgeStatus');
+
+    let curT = -0.5;
+    const tMin = -1.5, tMax = 1.5;
+
+    function drawSimulations() {
+      // 1. Girdi Canvas Çizimi
+      const inSetup = setupHiDPI(canvasInputs);
+      const ctxIn = inSetup.ctx;
+      const wIn = inSetup.width;
+      const hIn = inSetup.height;
+
+      ctxIn.clearRect(0, 0, wIn, hIn);
+
+      const xToPixel = (t) => ((t - tMin) / (tMax - tMin)) * (wIn - 70) + 40;
+      const yToPixelIn = (v) => hIn - 35 - ((v - (-0.3)) / (3.2 - (-0.3))) * (hIn - 55);
+
+      // Yeşil Vurgu: t < 0 için girdiler özdeş
+      const pZero = xToPixel(0.0);
+      const pMin = xToPixel(tMin);
+      ctxIn.fillStyle = 'rgba(16, 185, 129, 0.08)';
+      ctxIn.fillRect(pMin, 15, pZero - pMin, hIn - 45);
+
+      ctxIn.fillStyle = '#059669';
+      ctxIn.font = 'bold 9px sans-serif';
+      ctxIn.fillText('Girdiler Özdeş (x₁ = x₂ = 0)', pMin + 8, 30);
+
+      // Eksenler
+      ctxIn.strokeStyle = '#e2e8f0';
+      ctxIn.lineWidth = 1;
+      ctxIn.beginPath();
+      ctxIn.moveTo(pZero, 15); ctxIn.lineTo(pZero, hIn - 25);
+      const pYZeroIn = yToPixelIn(0.0);
+      ctxIn.moveTo(25, pYZeroIn); ctxIn.lineTo(wIn - 15, pYZeroIn);
+      ctxIn.stroke();
+
+      // Izgara Çizgileri & Etiketler
+      ctxIn.fillStyle = '#94a3b8';
+      ctxIn.font = '10px monospace';
+      ctxIn.textAlign = 'center';
+      [-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5].forEach(tv => {
+        const px = xToPixel(tv);
+        ctxIn.fillText(tv.toFixed(1) + 's', px, hIn - 12);
+        ctxIn.strokeStyle = '#f1f5f9';
+        ctxIn.beginPath();
+        ctxIn.moveTo(px, 15); ctxIn.lineTo(px, hIn - 25);
+        ctxIn.stroke();
+      });
+
+      // x1(t) = 0 Gri Kesikli Çizgi
+      ctxIn.strokeStyle = '#64748b';
+      ctxIn.lineWidth = 2;
+      ctxIn.setLineDash([4, 4]);
+      ctxIn.beginPath();
+      ctxIn.moveTo(xToPixel(tMin), yToPixelIn(0));
+      ctxIn.lineTo(xToPixel(tMax), yToPixelIn(0));
+      ctxIn.stroke();
+      ctxIn.setLineDash([]);
+
+      // x2(t) Mavi Eğri
+      ctxIn.strokeStyle = '#2563eb';
+      ctxIn.lineWidth = 2.5;
+      ctxIn.beginPath();
+      ctxIn.moveTo(xToPixel(tMin), yToPixelIn(0));
+      ctxIn.lineTo(xToPixel(0.0), yToPixelIn(0));
+      ctxIn.lineTo(xToPixel(0.0), yToPixelIn(1.0));
+      for (let tv = 0.0; tv <= 1.0; tv += 0.02) {
+        ctxIn.lineTo(xToPixel(tv), yToPixelIn(Math.exp(tv)));
+      }
+      ctxIn.lineTo(xToPixel(1.0), yToPixelIn(0));
+      ctxIn.lineTo(xToPixel(tMax), yToPixelIn(0));
+      ctxIn.stroke();
+
+      // Zaman İmleci
+      const pCurIn = xToPixel(curT);
+      ctxIn.strokeStyle = '#6366f1';
+      ctxIn.lineWidth = 1.5;
+      ctxIn.setLineDash([3, 3]);
+      ctxIn.beginPath();
+      ctxIn.moveTo(pCurIn, 15); ctxIn.lineTo(pCurIn, hIn - 25);
+      ctxIn.stroke();
+      ctxIn.setLineDash([]);
+
+      ctxIn.fillStyle = '#2563eb';
+      ctxIn.beginPath();
+      ctxIn.arc(pCurIn, yToPixelIn(evalX2(curT)), 4, 0, Math.PI * 2);
+      ctxIn.fill();
+
+      // -------------------------------------------------------------
+      // 2. Çıktı Canvas Çizimi
+      const outSetup = setupHiDPI(canvasOutputs);
+      const ctxOut = outSetup.ctx;
+      const wOut = outSetup.width;
+      const hOut = outSetup.height;
+
+      ctxOut.clearRect(0, 0, wOut, hOut);
+
+      // Y ekseni ölçeği: -25 ile +2 arası
+      const yMinOut = -25.0, yMaxOut = 2.0;
+      const yToPixelOut = (v) => hOut - 35 - ((v - yMinOut) / (yMaxOut - yMinOut)) * (hOut - 55);
+
+      // Kırmızı Vurgu: t < 0 Nedensellik İhlali
+      ctxOut.fillStyle = 'rgba(244, 63, 94, 0.08)';
+      ctxOut.fillRect(pMin, 15, pZero - pMin, hOut - 45);
+
+      ctxOut.fillStyle = '#e11d48';
+      ctxOut.font = 'bold 9px sans-serif';
+      ctxOut.fillText('NEDENSELLİK İHLAL BÖLGESİ (y₁ ≠ y₂)', pMin + 8, 30);
+
+      // Yeşil Vurgu: t >= 1 Sonda Dinginlik
+      const pOne = xToPixel(1.0);
+      const pMax = xToPixel(tMax);
+      ctxOut.fillStyle = 'rgba(16, 185, 129, 0.08)';
+      ctxOut.fillRect(pOne, 15, pMax - pOne, hOut - 45);
+
+      ctxOut.fillStyle = '#059669';
+      ctxOut.font = 'bold 9px sans-serif';
+      ctxOut.fillText('Sonda Dinginlik (y₂ ≡ 0)', pOne + 8, 30);
+
+      // Eksenler
+      ctxOut.strokeStyle = '#e2e8f0';
+      ctxOut.lineWidth = 1;
+      ctxOut.beginPath();
+      ctxOut.moveTo(pZero, 15); ctxOut.lineTo(pZero, hOut - 25);
+      const pYZeroOut = yToPixelOut(0.0);
+      ctxOut.moveTo(25, pYZeroOut); ctxOut.lineTo(wOut - 15, pYZeroOut);
+      ctxOut.stroke();
+
+      // Izgara Çizgileri & Etiketler
+      ctxOut.fillStyle = '#94a3b8';
+      ctxOut.font = '10px monospace';
+      ctxOut.textAlign = 'center';
+      [-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5].forEach(tv => {
+        const px = xToPixel(tv);
+        ctxOut.fillText(tv.toFixed(1) + 's', px, hOut - 12);
+        ctxOut.strokeStyle = '#f1f5f9';
+        ctxOut.beginPath();
+        ctxOut.moveTo(px, 15); ctxOut.lineTo(px, hOut - 25);
+        ctxOut.stroke();
+      });
+
+      // y1(t) = 0 Gri Kesikli Çizgi
+      ctxOut.strokeStyle = '#64748b';
+      ctxOut.lineWidth = 2;
+      ctxOut.setLineDash([4, 4]);
+      ctxOut.beginPath();
+      ctxOut.moveTo(xToPixel(tMin), yToPixelOut(0));
+      ctxOut.lineTo(xToPixel(tMax), yToPixelOut(0));
+      ctxOut.stroke();
+      ctxOut.setLineDash([]);
+
+      // y2(t) Mor Eğri
+      ctxOut.strokeStyle = '#9333ea';
+      ctxOut.lineWidth = 2.5;
+      ctxOut.beginPath();
+      let first = true;
+      for (let tv = tMin; tv <= tMax; tv += 0.02) {
+        const val = evalY2(tv);
+        const px = xToPixel(tv);
+        const py = yToPixelOut(val);
+        const clampedPy = Math.max(15, Math.min(hOut - 15, py));
+        if (first) {
+          ctxOut.moveTo(px, clampedPy);
+          first = false;
+        } else {
+          ctxOut.lineTo(px, clampedPy);
+        }
+      }
+      ctxOut.stroke();
+
+      // t = 1 Sonda Dinginlik Başlangıç Noktası (Yeşil Çember)
+      ctxOut.fillStyle = '#10b981';
+      ctxOut.beginPath();
+      ctxOut.arc(pOne, pYZeroOut, 5, 0, Math.PI * 2);
+      ctxOut.fill();
+      ctxOut.fillStyle = '#047857';
+      ctxOut.font = 'bold 9px sans-serif';
+      ctxOut.fillText('y(1)=0', pOne + 18, pYZeroOut - 8);
+
+      // Zaman İmleci
+      const pCurOut = xToPixel(curT);
+      ctxOut.strokeStyle = '#6366f1';
+      ctxOut.lineWidth = 1.5;
+      ctxOut.setLineDash([3, 3]);
+      ctxOut.beginPath();
+      ctxOut.moveTo(pCurOut, 15); ctxOut.lineTo(pCurOut, hOut - 25);
+      ctxOut.stroke();
+      ctxOut.setLineDash([]);
+
+      const valY2Cur = evalY2(curT);
+      ctxOut.fillStyle = '#9333ea';
+      ctxOut.beginPath();
+      ctxOut.arc(pCurOut, Math.max(15, Math.min(hOut - 15, yToPixelOut(valY2Cur))), 4, 0, Math.PI * 2);
+      ctxOut.fill();
+
+      // HUD Güncellemeleri
+      lblT.textContent = curT.toFixed(2);
+      hudX1.textContent = evalX1(curT).toFixed(3);
+      hudX2.textContent = evalX2(curT).toFixed(3);
+      hudY1.textContent = evalY1(curT).toFixed(3);
+      hudY2.textContent = valY2Cur.toFixed(3);
+
+      if (curT < 0.0) {
+        badgeStatus.textContent = 'NEDENSELLİK İHLALİ: y₁ ≠ y₂ (x₁=x₂=0 iken)';
+        badgeStatus.className = 'text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-[10px] font-bold';
+      } else if (curT >= 1.0) {
+        badgeStatus.textContent = 'Sonda Dinginlik Bölgesi (y₂ ≡ 0)';
+        badgeStatus.className = 'text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px] font-bold';
+      } else {
+        badgeStatus.textContent = 'Girdi Darbesi / Geçici Rejim (0 ≤ t < 1)';
+        badgeStatus.className = 'text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 text-[10px] font-semibold';
+      }
+    }
+
+    sliderT.addEventListener('input', (e) => {
+      curT = parseFloat(e.target.value);
+      drawSimulations();
+    });
+
+    document.getElementById('btnFocusViolation').addEventListener('click', () => {
+      sliderT.value = -0.5;
+      curT = -0.5;
+      drawSimulations();
+    });
+
+    document.getElementById('btnResetT').addEventListener('click', () => {
+      sliderT.value = 0.5;
+      curT = 0.5;
+      drawSimulations();
+    });
+
+    window.addEventListener('resize', drawSimulations);
+    window.addEventListener('load', drawSimulations);
+
+    // HiDPI İndirilebilir Kartlar
+    function drawStepCard(canvasId, title, equations, description) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      // Başlık Bandı
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, w, 70);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.strokeRect(0, 0, w, 70);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('Oppenheim Problem 2.37 — ' + title, 30, 42);
+
+      // Denklem Kutusu
+      ctx.fillStyle = '#f1f5f9';
+      ctx.fillRect(30, 95, w - 60, 140);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.strokeRect(30, 95, w - 60, 140);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 16px monospace';
+      let eqY = 135;
+      equations.forEach(eq => {
+        ctx.fillText(eq, 50, eqY);
+        eqY += 35;
+      });
+
+      // Açıklama Metni
+      ctx.fillStyle = '#475569';
+      ctx.font = '14px sans-serif';
+      let descY = 275;
+      description.forEach(line => {
+        ctx.fillText(line, 35, descY);
+        descY += 26;
+      });
+
+      // Alt Bilgi
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('Sinyaller ve Sistemler • Oppenheim & Willsky 2. Baskı • Bölüm 2', 35, h - 25);
+    }
+
+    function initAllStepCards() {
+      drawStepCard('card1Canvas', 'Sonda Dinginlik & İntegral Modeli',
+        [
+          'dy(t)/dt + 2y(t) = x(t)',
+          'Final Rest: x(t)=0 (t > t_0) ==> y(t)=0 (t > t_0)',
+          'y(t) = - integral_t^infinity e^{-2(t - tau)} x(tau) dtau'
+        ],
+        [
+          '• Sonda dinginlik koşulu diferansiyel denklemi t den sonsuza entegre eder.',
+          '• Çıktı günümüzdeki andan sonraki gelecek girdi değerlerine bağımlıdır.',
+          '• Birim darbe yanıtı h(t) = -e^{-2t} u(-t) olan anti-nedensel bir sistemdir.'
+        ]
+      );
+
+      drawStepCard('card2Canvas', '1. Girdi: Sıfır Girdi Yanıtı',
+        [
+          'x_1(t) = 0  (tum t degerleri icin)',
+          'y_1(t) = - integral_t^infinity e^{-2(t - tau)} (0) dtau',
+          'y_1(t) = 0  (tum t in R icin)'
+        ],
+        [
+          '• Girdi hiçbir zaman enerjilenmemiştir (tamamen sıfırdır).',
+          '• Sonda dinginlik koşulu altında çıktı da her zaman sıfırdır.',
+          '• y_1(t) = 0 referans karşılaştırma taban sinyalimizdir.'
+        ]
+      );
+
+      drawStepCard('card3Canvas', '2. Girdi: Parçalı Çözüm Analizi',
+        [
+          'x_2(t) = e^t [u(t) - u(t - 1)]',
+          't >= 1: y_2(t) = 0  (Sonda Dinginlik)',
+          't < 0:  y_2(t) = - [(e^3 - 1)/3] e^{-2t} ~= -6.3618 e^{-2t}'
+        ],
+        [
+          '• t >= 1 bölgesinde girdi sona erdiği için çıktı sıfıra dinlenir.',
+          '• 0 <= t < 1 bölgesinde geçici rejim y_2(t) = (e^t - e^3 e^{-2t})/3 oluşur.',
+          '• t < 0 bölgesinde integral sabit kalır ve çıktı sıfırdan sapar.'
+        ]
+      );
+
+      drawStepCard('card4Canvas', 'Nedensellik İspatı & Karşı Örnek',
+        [
+          't < 0 icin: x_1(t) = x_2(t) = 0  (Girdiler tam ozdes)',
+          'y_1(t) = 0  iken  y_2(t) = -6.3618 e^{-2t} != 0',
+          'y_1(t) != y_2(t)  ===>  NEDENSELLIK IHLALI!'
+        ],
+        [
+          '• t <= 0 için girdiler tamamen aynıdır (ikisi de sıfır).',
+          '• Çıktılar ise t < 0 anında farklıdır (0 != -6.36 e^{-2t}).',
+          '• Sistem t in [0, 1] aralığındaki geleceği önceden sezmiştir ==> NEDENSEL DEĞİL!'
+        ]
+      );
+
+      drawStepCard('card5Canvas', 'Büyük Teorem Özeti: Dinginlik Koşulları',
+        [
+          'Initial Rest (2.33): h(t) = e^{-2t} u(t)     ===>  LTI + NEDENSEL',
+          'Final Rest (2.37):   h(t) = -e^{-2t} u(-t)   ===>  LTI + ANTI-NEDENSEL',
+          'Sabit Kosul (2.35):  y(0) = 0                ===>  ZAMANLA DEGISEN + NON-CAUSAL'
+        ],
+        [
+          '• Başlangıçta dinginlik geçmişten günümüze nedensel filtreleme yapar.',
+          '• Sonda dinginlik gelecekten günümüze anti-nedensel filtreleme yapar.',
+          '• Oppenheim Bölüm 2 Diferansiyel Denklemler teorisinin nihai sentezidir.'
+        ]
+      );
+    }
+
+    function downloadCard(cardId) {
+      const canvas = document.getElementById(cardId + 'Canvas');
+      const link = document.createElement('a');
+      link.download = 'Oppenheim_Problem_2_37_' + cardId + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    window.addEventListener('load', () => {
+      initAllStepCards();
+    });
+  </script>
+</body>
+</html>

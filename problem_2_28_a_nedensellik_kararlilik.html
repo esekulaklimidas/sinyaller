@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.28 (a) — Nedensellik ve BIBO Kararlılık Analizi</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-text { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- 🧭 Ana Menüye Dönüş & Şıklar Arası Hızlı Geçiş -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-slate-200/80">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular)</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-400 font-semibold">2.28 Şıkları:</span>
+        <div class="flex flex-wrap items-center gap-1.5 py-1"><a href="problem_2_28_a_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-purple-600 text-white font-bold">(a)</a><a href="problem_2_28_b_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-white text-slate-700 hover:bg-slate-100 border border-slate-200">(b)</a><a href="problem_2_28_c_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-white text-slate-700 hover:bg-slate-100 border border-slate-200">(c)</a><a href="problem_2_28_d_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-white text-slate-700 hover:bg-slate-100 border border-slate-200">(d)</a><a href="problem_2_28_e_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-white text-slate-700 hover:bg-slate-100 border border-slate-200">(e)</a><a href="problem_2_28_f_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-white text-slate-700 hover:bg-slate-100 border border-slate-200">(f)</a><a href="problem_2_28_g_nedensellik_kararlilik.html" class="px-2.5 py-1 rounded-lg text-xs font-mono transition bg-white text-slate-700 hover:bg-slate-100 border border-slate-200">(g)</a></div>
+      </div>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex flex-wrap items-center gap-2 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.28 (a)</span>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">Nedensel (Causal)</span>
+        <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">BIBO Kararlı (Stable)</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.28 (a) — Nedensellik ve BIBO Kararlılık Analizi</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$h[n] = \left(\frac{1}{5}\right)^n u[n]$$
+        Sağ yanlı geometrik azalan dizi. Taban 1/5 < 1 olduğundan mutlak toplanabilir.
+      </p>
+    </div>
+
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Teori Rehberi</h2>
+          <p class="text-xs text-slate-500">Ayrık Zamanlı LTI Sistemlerde 2 Temel Özelliğin Kesin Matematiksel Kriterleri</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            ⏱️ 1. Nedensellik (Causality) Kriteri
+          </h4>
+          <p class="text-slate-600 text-xs leading-relaxed">
+            Bir LTI sistemin nedensel olması için <strong>tüm negatif zaman indekslerinde dürtü yanıtının kesin olarak sıfır olması</strong> şarttır:
+          </p>
+          <div class="p-2 bg-white rounded border border-slate-200 font-mono text-[11px] text-purple-900">
+            $$h[n] = 0 \quad (orall n < 0)$$
+          </div>
+          <p class="text-xs text-slate-700 font-medium pt-1">
+            <strong>Bu Şık İçin Durum:</strong> $$u[n] = 0 \ (n < 0) \implies \text{tüm } n < 0 \text{ için } h[n] = 0\text{’dır.}$$
+            <br><span class="font-bold text-emerald-700">Sonuç: Nedensel (Causal)</span>
+          </p>
+        </div>
+
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            ⚖️ 2. BIBO Kararlılık (Stability) Kriteri
+          </h4>
+          <p class="text-slate-700 text-xs leading-relaxed">
+            Sistemin sınırlı girişe sınırlı çıkış vermesi (BIBO Stable) için dürtü yanıtının <strong>mutlak toplanabilir (absolutely summable)</strong> olması şarttır:
+          </p>
+          <div class="p-2 bg-white rounded border border-purple-200 font-mono text-[11px] text-purple-950">
+            $$S = \sum_{n=-\infty}^{\infty} |h[n]| < \infty$$
+          </div>
+          <p class="text-xs text-slate-800 font-medium pt-1">
+            <strong>Bu Şık İçin Seri Hesabı:</strong> $$\sum_{n=-\infty}^{\infty} |h[n]| = \sum_{n=0}^{\infty} \left(\frac{1}{5}\right)^n = \frac{1}{1 - 1/5} = \frac{5}{4} = 1.25 < \infty$$
+            <br><span class="font-bold text-emerald-700">Sonuç: BIBO Kararlı (Stable)</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Ayrık Kök (Stem) ve Kümülatif Toplam Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte $h[n]$ dürtü yanıtı kökleri; altta kümülatif mutlak toplam $\sum_{k=-4}^n |h[k]|$.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs font-semibold text-slate-600">n İndeksi:</label>
+          <input type="range" id="nSlider" min="-4" max="10" step="1" value="0" class="w-36 accent-purple-600 cursor-pointer">
+          <span id="nVal" class="text-xs font-mono font-bold bg-slate-100 px-2.5 py-1 rounded text-slate-800">n = 0</span>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Çizim Alanı -->
+      <div class="space-y-3">
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+            <span>Dürtü Yanıtı: <span class="text-purple-700 font-bold">■ h[n]</span></span>
+            <span class="text-slate-400 font-mono text-[11px]">Kırmızı Çizgi: n = 0 Eksen Ayrımı</span>
+          </div>
+          <canvas id="hCanvas" width="860" height="190" class="w-full h-auto block"></canvas>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+            <span>Kümülatif Mutlak Toplam: <span class="text-emerald-700 font-bold">S[n] = Σ |h[k]|</span></span>
+            <span class="font-mono text-[11px] text-emerald-700">Teorik Toplam Limiti: 1.250</span>
+          </div>
+          <canvas id="sumCanvas" width="860" height="190" class="w-full h-auto block"></canvas>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_tanim_ve_destek_a.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        1. Adım: Sinyal Desteği ve Tanım Bölgesi Analizi
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Verilen $h[n]$ sinyalinin hangi $n$ indekslerinde sıfırdan farklı olduğu belirlenir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_nedensellik_analizi_a.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        2. Adım: Nedensellik (Causality) İspatı
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $n < 0$ aralığındaki örnekler test edilir: u[n] = 0 \ (n < 0) \implies \text{tüm } n < 0 \text{ için } h[n] = 0\text{’dır.}
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_kararlilik_seri_hesabi_a.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        3. Adım: Mutlak Toplanabilirlik (BIBO Kararlılık) Seri Hesabı
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $$\sum_{n=-\infty}^{\infty} |h[n]| = \sum_{n=-\infty}^{\infty} |h[n]| = \sum_{n=0}^{\infty} \left(\frac{1}{5}\right)^n = \frac{1}{1 - 1/5} = \frac{5}{4} = 1.25 < \infty$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_sonuc_ozeti_a.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        4. Adım: Nihai Değerlendirme ve Sınıflandırma
+      </h3>
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs sm:text-sm">
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-slate-700">Nedensellik:</span>
+          <span class="px-2 py-0.5 rounded font-bold bg-emerald-100 text-emerald-800">Nedensel (Causal)</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="font-bold text-slate-700">BIBO Kararlılık:</span>
+          <span class="px-2 py-0.5 rounded font-bold bg-emerald-100 text-emerald-800">BIBO Kararlı (Stable)</span>
+        </div>
+        <p class="text-slate-600 text-xs pt-1 leading-relaxed">
+          Sağ yanlı geometrik azalan dizi. Taban 1/5 < 1 olduğundan mutlak toplanabilir.
+        </p>
+      </div>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minN, maxN, stepPx, labelX = "n", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, oy + 25); ctx.lineTo(ox, 18);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 18); ctx.lineTo(ox, 10); ctx.lineTo(ox + 4, 18); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 15);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let n = minN; n <= maxN; n++) {
+        const px = ox + n * stepPx;
+        if (px >= 28 && px <= w - 28) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          ctx.fillText(n.toString(), px - (n < 0 ? 6 : 3), oy + 15);
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 60, radius = 4, drawZeroDot = true) {
+      const py = oy - val * scaleY;
+      if (Math.abs(val) < 0.0001) {
+        if (drawZeroDot) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(px, oy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        return;
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (Math.abs(val) >= 0.01 && Math.abs(val) <= 999) {
+        ctx.font = "bold 9px sans-serif";
+        const txt = Math.abs(val) >= 10 ? val.toFixed(1) : val.toFixed(2);
+        ctx.fillText(txt, px - 8, val >= 0 ? py - 5 : py + 12);
+      }
+    }
+
+    function evalH(n) { return n >= 0 ? Math.pow(0.2, n) : 0; }
+
+    // 1. Adım Çizimi
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 190);
+      const ox = 380, oy = 140, sc = 42;
+      drawDiscreteAxis(ctx, 860, 190, ox, oy, -4, 10, sc, "n", "h[n]");
+
+      for (let n = -4; n <= 10; n++) {
+        drawStem(ctx, ox + n * sc, oy, evalH(n), "#2563eb");
+      }
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // 2. Adım Çizimi: Nedensellik odağı (n < 0 bölgesi)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 190);
+      const ox = 380, oy = 140, sc = 42;
+      drawDiscreteAxis(ctx, 860, 190, ox, oy, -4, 10, sc, "n", "h[n]");
+
+      ctx.fillStyle = "rgba(239, 68, 68, 0.08)";
+      ctx.fillRect(25, 20, ox - 25, 150);
+
+      ctx.fillStyle = "#dc2626"; ctx.font = "bold 11px sans-serif";
+      ctx.fillText("Geçmiş Zaman (n < 0 Bölgesi): Nedensel (Causal)", 35, 40);
+
+      for (let n = -4; n <= 10; n++) {
+        const col = n < 0 ? (Math.abs(evalH(n)) > 0.0001 ? "#dc2626" : "#10b981") : "#64748b";
+        drawStem(ctx, ox + n * sc, oy, evalH(n), col);
+      }
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // 3. Adım Çizimi: Kümülatif Mutlak Toplam
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 190);
+      const ox = 380, oy = 145, sc = 42;
+      drawDiscreteAxis(ctx, 860, 190, ox, oy, -4, 10, sc, "n", "Σ |h|");
+
+      let cum = 0;
+      let vals = [];
+      for (let n = -4; n <= 10; n++) {
+        cum += Math.abs(evalH(n));
+        vals.push({ n: n, cum: cum });
+      }
+      let maxCum = vals[vals.length - 1].cum;
+      let scSum = maxCum > 0 ? 100 / Math.min(maxCum, 20) : 10;
+
+      ctx.strokeStyle = "#059669"; ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      vals.forEach((v, idx) => {
+        const px = ox + v.n * sc, py = oy - Math.min(v.cum, 25) * scSum;
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+
+      vals.forEach(v => {
+        const px = ox + v.n * sc, py = oy - Math.min(v.cum, 25) * scSum;
+        ctx.fillStyle = "#059669";
+        ctx.beginPath(); ctx.arc(px, py, 4, 0, Math.PI*2); ctx.fill();
+      });
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // 4. Adım Çizimi: Özet
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 170);
+      ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, 860, 170);
+      ctx.fillStyle = "#1e1b4b"; ctx.font = "bold 14px sans-serif";
+      ctx.fillText("Problem 2.28 (a) Sonuç Özeti:", 50, 45);
+
+      ctx.font = "13px monospace"; ctx.fillStyle = "#334155";
+      ctx.fillText("Nedensellik Durumu : Nedensel (Causal)", 50, 80);
+      ctx.fillText("BIBO Kararlılık    : BIBO Kararlı (Stable) (Limit: 1.250)", 50, 110);
+      ctx.fillText("Gerekçe            : Sağ yanlı geometrik azalan dizi. Taban 1/5 < 1 olduğundan mutlak toplanabilir.", 50, 140);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const hCanvas = document.getElementById('hCanvas');
+    const sumCanvas = document.getElementById('sumCanvas');
+    const simMath = document.getElementById('simMath');
+    const hCtx = hCanvas.getContext('2d');
+    const sCtx = sumCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function updateSim() {
+      const curN = parseInt(slider.value);
+      nVal.textContent = "n = " + curN;
+
+      const w = 860, ox = 380, sc = 42;
+
+      // Üst Kanvas: h[n]
+      drawDiscreteAxis(hCtx, w, 190, ox, 140, -4, 10, sc, "n", "h[n]");
+
+      hCtx.strokeStyle = "#94a3b8"; hCtx.lineWidth = 1.2; hCtx.setLineDash([3, 3]);
+      hCtx.beginPath(); hCtx.moveTo(ox, 20); hCtx.lineTo(ox, 170); hCtx.stroke();
+      hCtx.setLineDash([]);
+
+      for (let n = -4; n <= 10; n++) {
+        const v = evalH(n);
+        const col = n === curN ? "#dc2626" : (n < 0 ? "#9333ea" : "#2563eb");
+        drawStem(hCtx, ox + n * sc, 140, v, col, 60, n === curN ? 5.5 : 4);
+      }
+
+      // Alt Kanvas: Kümülatif Toplam
+      drawDiscreteAxis(sCtx, w, 190, ox, 145, -4, 10, sc, "n", "Σ |h|");
+
+      let cum = 0, curCum = 0;
+      let pts = [];
+      for (let n = -4; n <= 10; n++) {
+        cum += Math.abs(evalH(n));
+        pts.push({ n: n, cum: cum });
+        if (n === curN) curCum = cum;
+      }
+      let maxCum = pts[pts.length - 1].cum;
+      let scSum = maxCum > 0 ? 100 / Math.min(maxCum, 25) : 10;
+
+      sCtx.strokeStyle = "#059669"; sCtx.lineWidth = 2.2;
+      sCtx.beginPath();
+      pts.forEach((p, idx) => {
+        const px = ox + p.n * sc, py = 145 - Math.min(p.cum, 30) * scSum;
+        if (idx === 0) sCtx.moveTo(px, py);
+        else sCtx.lineTo(px, py);
+      });
+      sCtx.stroke();
+
+      pts.forEach(p => {
+        const px = ox + p.n * sc, py = 145 - Math.min(p.cum, 30) * scSum;
+        sCtx.fillStyle = p.n <= curN ? "#059669" : "#cbd5e1";
+        sCtx.beginPath(); sCtx.arc(px, py, p.n === curN ? 6 : 3.5, 0, Math.PI*2); sCtx.fill();
+      });
+
+      const valAt = evalH(curN);
+      let nedenselCheck = (curN < 0 && Math.abs(valAt) > 0.0001) ? '<span class="text-rose-600 font-bold">Nedensellik İhlali (h[' + curN + '] ≠ 0)</span>' : '<span class="text-emerald-700 font-bold">Nedensellik Uyumlu</span>';
+
+      simMath.innerHTML = 'İndeks: <b>n = ' + curN + '</b> &nbsp;|&nbsp; ' +
+                          'Değer: <b>h[' + curN + '] = ' + valAt.toFixed(4) + '</b> &nbsp;|&nbsp; ' +
+                          'Kümülatif Toplam: <b>' + curCum.toFixed(4) + '</b> &nbsp;|&nbsp; ' +
+                          'Durum: ' + nedenselCheck;
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let animId = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      function step() {
+        if (!isPlaying) return;
+        let v = parseInt(slider.value) + 1;
+        if (v > parseInt(slider.max)) v = parseInt(slider.min);
+        slider.value = v;
+        updateSim();
+        setTimeout(() => {
+          if (isPlaying) animId = requestAnimationFrame(step);
+        }, 600);
+      }
+
+      if (isPlaying) animId = requestAnimationFrame(step);
+      else cancelAnimationFrame(animId);
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>

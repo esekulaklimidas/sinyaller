@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.21 (d) Konvolüsyon Görselleştirici</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.21 (d) / Şekil P2.21</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.21 (d) — Çift Bloklu Ayrık Darbe Konvolüsyonu</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x[n] = \sum_{k=0}^{4} \delta[n-k], \quad h[n] = \sum_{k=2}^{7} \delta[n-k] + \sum_{k=11}^{16} \delta[n-k] \quad \Longrightarrow \quad y[n] = x[n] * h[n]$$
+        Şekil P2.21'deki $x[n]$ 5 birim uzunluğunda tek bir darbe bloğu, $h[n]$ ise aralarında 3 sıfır bulunan iki adet 6'şar birimlik darbe bloğudur. Çıkış $y[n]$, süperpozisyon ve öteleme özellikleriyle iki yamuk şeklinde çift tepeli bir dalga formu oluşturur.
+      </p>
+    </div>
+
+        <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi & Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Ayrık darbe blokları, süperpozisyon ve sonlu uzunluklu konvolüsyon süresi</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Grafiksel Tanım:</strong> Şekil P2.21'deki $x[n]$ (genliği 1 olan 5 darbe: $n \in [0, 4]$) ve $h[n]$ (aralarında 3 sıfır bulunan iki adet 6'şarlık darbe bloğu: $n \in [2, 7]$ ve $[11, 16]$).</li>
+            <li><strong>İstenen:</strong> $y[n] = x[n] * h[n]$ konvolüsyonunu adım adım hesaplayıp çizmek.</li>
+            <li><strong>Süre Kuralı (Duration Property):</strong> Sonlu $L_1$ ve $L_2$ dizilerinin konvolüsyonu $L_1 + L_2 - 1 = 5 + 15 - 1 = 19$ örnek uzunluğundadır ($n = 2 \dots 20$).</li>
+          </ul>
+        </div>
+
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Süperpozisyon Kolaylığı:</strong> $h[n] = h_1[n] + h_1[n-9]$ yazılırsa $y[n] = y_1[n] + y_1[n-9]$ olur. Tek bloğun konvolüsyonu çözülüp 9 birim kaydırılıp toplanabilir.</li>
+            <li><strong>1. Bloğun Geçişi ($n \in [2, 10]$):</strong> Girişte $y[n] = n-1$ şeklinde tırmanır, $n=6, 7$'de tam örtüşerek $5$ değerini alır, sonra $12-n$ ile iner.</li>
+            <li><strong>Süperpozisyon Noktası ($n = 11, 12$):</strong> $n=11$'de 1. bloğun kuyruğu ($1$) ile 2. bloğun başı ($1$) toplanır: $y[11] = 2$. $n=12$'de 2. bloktan 2 darbe girer: $y[12] = 2$.</li>
+            <li><strong>2. Bloğun Geçişi ($n \in [13, 20]$):</strong> İkinci yamuk tepe oluşur ve $n=20$'de son bularak sıfırlanır.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Çift Kanvaslı Ayrık Konvolüsyon Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte $k$ uzayında $x[k]$ ve kaydırılan çift bloklu $h[n-k]$; altta tam çıkış $y[n]$ dizisi.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs font-semibold text-slate-600">n Parametresi:</label>
+          <input type="range" id="nSlider" min="-1" max="23" step="1" value="7" class="w-48 accent-purple-600 cursor-pointer">
+          <span id="nVal" class="text-xs font-mono font-bold bg-slate-100 px-2.5 py-1 rounded text-slate-800">n = 7</span>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Üst Kanvas: k uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>$k$ Uzayı: <span class="text-blue-600">■ x[k] (k=0..4)</span> &nbsp;|&nbsp; <span class="text-purple-600">■ h[n-k] (2 Blok)</span> &nbsp;|&nbsp; <span class="text-amber-600">■ Örtüşen Çarpım Terimleri</span></span>
+          <span class="text-slate-400 font-mono text-[11px]">Blok 1: [n-7, n-2] &nbsp;|&nbsp; Blok 2: [n-16, n-11]</span>
+        </div>
+        <canvas id="kCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: y[n] uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Çıkış Dizisi: <span class="text-teal-700 font-bold">y[n] = x[n] * h[n]</span></span>
+          <span class="text-rose-600 font-medium">Kırmızı dikey çizgi anlık $n$ anını gösterir</span>
+        </div>
+        <canvas id="ynCanvas" width="860" height="190" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_orijinal_sinyaller_p2_21.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Şekil P2.21 Sinyallerinin Tanımlanması ($k$ Değişkeni)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Kitaptaki Şekil P2.21 incelendiğinde sinyallerin matematiksel yapısı açıktır:
+        $$x[k] = \begin{cases} 1, & 0 \le k \le 4 \\ 0, & \text{diğer} \end{cases} \quad (\text{Uzunluk } L_1 = 5)$$
+        $$h[k] = \begin{cases} 1, & 2 \le k \le 7 \quad \text{(1. Blok, 6 örnek)} \\ 1, & 11 \le k \le 16 \quad \text{(2. Blok, 6 örnek)} \\ 0, & \text{diğer} \end{cases}$$
+        Toplam $h[k]$ genişliği $k = 2$'den $16$'ya kadar $L_2 = 15$'tir. Konvolüsyon çıkışı $y[n]$ tam olarak $L_1 + L_2 - 1 = 5 + 15 - 1 = 19$ örnek uzunluğunda olacaktır ($n = 2$'den $20$'ye).
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_katlama_h_eksi_k.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Katlama (Zaman Tersleme) $\to h[-k]$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h[k]$ dizisi $k = 0$ eksenine göre aynalanır ($k \to -k$). Her iki blok da negatif eksene geçer:
+        $$\text{1. Blok: } -7 \le k \le -2 \quad (\text{ön uç } k = -2)$$
+        $$\text{2. Blok: } -16 \le k \le -11 \quad (\text{arka blok})$$
+        $k = -1, 0, 1$ ve $k \ge 1$ noktalarında $h[-k] = 0$'dır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_oteleme_h_n_eksi_k.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Parametrik Zamanda Öteleme $\to h[n - k]$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Katlanmış sinyal zamanda $n$ kadar sağa ötelenir. İki bloklu hareketli yapı oluşur:
+        $$\text{1. Blok Aralığı: } n - 7 \le k \le n - 2$$
+        $$\text{2. Blok Aralığı: } n - 16 \le k \le n - 11$$
+        $n$ arttıkça bu iki blok soldan sağa doğru $x[k]$'nın ($k \in [0, 4]$) üzerinden sıra ile geçer.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_blok1_gecisi.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">1. Bloğun Geçişi ($2 \le n \le 10$)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        1. Blok $x[k]$ ile örtüşmeye başlar:
+        <ul class="list-disc list-inside mt-1 space-y-1 text-slate-700">
+          <li><strong>$n \in [2, 6]$ (Kısmi Giriş):</strong> $y[n] = n - 1 \implies y[2]=1, y[3]=2, y[4]=3, y[5]=4, y[6]=5$</li>
+          <li><strong>$n = 7$ (Tam Örtüşme):</strong> $x[k]$ (5 darbe) 1. bloğun (6 darbe) tamamen içindedir $\implies y[7] = 5$</li>
+          <li><strong>$n \in [8, 10]$ (Kısmi Çıkış):</strong> $y[n] = 12 - n \implies y[8]=4, y[9]=3, y[10]=2$</li>
+        </ul>
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_bloklar_arasi_superpozisyon.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Bloklar Arası Geçiş ve Süperpozisyon ($n = 11, 12$)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $n = 11$ anında 1. bloğun en son örneği ($k = 4$) $x[k]$'dan çıkarken ($y_1[11] = 1$), 2. bloğun ön ucu ($k = 0$) $x[k]$'ya giriş yapar ($y_2[11] = 1$):
+        $$y[11] = y_1[11] + y_2[11] = 1 + 1 = 2$$
+        $n = 12$'de 1. blok tamamen ayrılmıştır ($y_1[12] = 0$), 2. bloktan ise 2 örnek içeridedir ($k=0, 1$):
+        $$y[12] = 0 + 2 = 2$$
+        Böylece iki tepe arasında $y[10]=y[11]=y[12]=2$ değerinde düz bir köprü (vadi) oluşur.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_toplam_cikis_y_n_tablosu.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Toplam Çıkış $y[n]$ Dalga Formu ve Değer Tablosu</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        2. Blok geçişi ($n \in [13, 20]$), 1. bloğun $9$ birim gecikmiş kopyasıdır:
+        $$y_2[n] = y_1[n - 9]$$
+        Tam çıkış dizisi: $y[n] = 0$ ($n < 2$ veya $n > 20$), ve $n \in [2, 20]$ için değerler:
+        <span class="font-mono font-bold text-slate-900 block mt-1.5 p-2 bg-slate-100 rounded text-center">
+          [1, 2, 3, 4, 5, 5, 4, 3, 2, 2, 2, 3, 4, 5, 5, 4, 3, 2, 1]
+        </span>
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minK, maxK, stepPx, labelX = "k", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 20; y < h; y += 22) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, oy + 20); ctx.lineTo(ox, 18);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 18); ctx.lineTo(ox, 10); ctx.lineTo(ox + 4, 18); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 15);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let k = minK; k <= maxK; k++) {
+        const px = ox + k * stepPx;
+        if (px >= 30 && px <= w - 30) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          if (k % 2 === 0 || k === 0) {
+            ctx.fillText(k.toString(), px - (k < 0 ? 6 : 3), oy + 15);
+          }
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 90, radius = 3.5, drawZeroDot = true) {
+      const py = oy - val * scaleY;
+      if (Math.abs(val) < 0.001) {
+        if (drawZeroDot) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(px, oy, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        return;
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Doğru y[n] çıktısı
+    const Y_TABLE = {
+      2: 1, 3: 2, 4: 3, 5: 4, 6: 5, 7: 5, 8: 4, 9: 3, 10: 2,
+      11: 2, 12: 2, 13: 3, 14: 4, 15: 5, 16: 5, 17: 4, 18: 3, 19: 2, 20: 1
+    };
+
+    function getY(n) {
+      return Y_TABLE[n] || 0;
+    }
+
+    function isH(n) {
+      return (n >= 2 && n <= 7) || (n >= 11 && n <= 16);
+    }
+
+    function isX(n) {
+      return (n >= 0 && n <= 4);
+    }
+
+    // --- KART 1: Şekil P2.21 ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 150, oy = 160, stepPx = 28;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -3, 22, stepPx, "n", "Genlik");
+
+      for (let n = -3; n <= 22; n++) {
+        const px = ox + n * stepPx;
+        const xVal = isX(n) ? 1 : 0;
+        const hVal = isH(n) ? 1 : 0;
+        drawStem(ctx, px - 3, oy, xVal, "#2563eb", 95, 3.5);
+        drawStem(ctx, px + 3, oy, hVal, "#9333ea", 95, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x[n]: n=0..4 (5 darbe, genlik 1)", 380, 45);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[n]: n=2..7 ve n=11..16 (6'şar darbe, genlik 1)", 380, 68);
+      ctx.fillStyle = "#475569"; ctx.fillText("Şekil P2.21'deki özgün ayrık darbe katarı", 380, 92);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 2: Katlama h[-k] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 580, oy = 160, stepPx = 28;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -18, 5, stepPx, "k", "h[-k]");
+
+      for (let k = -18; k <= 5; k++) {
+        const px = ox + k * stepPx;
+        const val = isH(-k) ? 1 : 0;
+        drawStem(ctx, px, oy, val, "#9333ea", 95, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[-k]: 1. Blok [-7, -2] & 2. Blok [-16, -11]", 100, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("Aynalama sonucu sinyalin ön ucu k = -2'ye yerleşir", 100, 70);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 3: Öteleme h[n-k] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 360, oy = 160, stepPx = 28;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -11, 14, stepPx, "k", "h[n-k]");
+
+      const n = 6;
+      for (let k = -11; k <= 14; k++) {
+        const px = ox + k * stepPx;
+        const val = isH(n - k) ? 1 : 0;
+        drawStem(ctx, px, oy, val, "#9333ea", 95, 3.5);
+      }
+
+      const pPos = ox + (n - 2) * stepPx; // k = 4
+      ctx.strokeStyle = "#dc2626"; ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(pPos, oy + 25); ctx.lineTo(pPos, 35); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#dc2626"; ctx.fillText(`Ön Uç: k = n - 2 = ${n - 2}`, pPos - 45, 30);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[n-k]: Bloklar zamanda sağa ötelenir", 80, 50);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 4: 1. Blok Geçişi ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 320, oy = 160, stepPx = 28;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -8, 16, stepPx, "k", "Genlik");
+
+      const n = 6; // Tam örtüşme: k in [0, 4]
+      ctx.fillStyle = "rgba(251, 191, 36, 0.25)";
+      ctx.fillRect(ox - stepPx * 0.4, 30, (4 + 0.8) * stepPx, 130);
+      ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 1;
+      ctx.strokeRect(ox - stepPx * 0.4, 30, (4 + 0.8) * stepPx, 130);
+
+      for (let k = -8; k <= 16; k++) {
+        const px = ox + k * stepPx;
+        const xVal = isX(k) ? 1 : 0;
+        const hVal = isH(n - k) ? 1 : 0;
+        const prod = xVal * hVal;
+
+        drawStem(ctx, px - 3, oy, xVal, "#2563eb", 90, 3);
+        drawStem(ctx, px + 3, oy, hVal, "#9333ea", 90, 3);
+        if (prod > 0) drawStem(ctx, px, oy, prod, "#d97706", 90, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#d97706"; ctx.fillText("1. Blok Tam Örtüşme (n = 6): 5 darbenin tümü örtüşür ⟹ y[6] = 5", 80, 45);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#0f172a"; ctx.fillText("n=2..6 arasında y[n] = n - 1 (doğrusal artış)", 80, 70);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 5: Süperpozisyon (n = 11) ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 260, oy = 160, stepPx = 28;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -6, 18, stepPx, "k", "Genlik");
+
+      const n = 11;
+      // 1. blok k=4'te (n-7=4..n-2=9 -> k=4 kesişir)
+      // 2. blok k=0'da (n-16=-5..n-11=0 -> k=0 kesişir)
+      for (let k = -6; k <= 18; k++) {
+        const px = ox + k * stepPx;
+        const xVal = isX(k) ? 1 : 0;
+        const hVal = isH(n - k) ? 1 : 0;
+        const prod = xVal * hVal;
+
+        drawStem(ctx, px - 3, oy, xVal, "#2563eb", 90, 3);
+        drawStem(ctx, px + 3, oy, hVal, "#9333ea", 90, 3);
+        if (prod > 0) drawStem(ctx, px, oy, prod, "#d97706", 90, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#d97706"; ctx.fillText("n = 11: 1. Bloğun Çıkışı (k=4) + 2. Bloğun Girişi (k=0)", 360, 45);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText("y[11] = y_1[11] + y_2[11] = 1 + 1 = 2", 360, 70);
+      ctx.fillText("İki bloğun katkısı süperpozisyonla toplanır", 360, 92);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 6: Toplam Çıkış y[n] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 90, oy = 165, stepPx = 30;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -1, 23, stepPx, "n", "y[n]");
+
+      for (let n = -1; n <= 23; n++) {
+        const px = ox + n * stepPx;
+        const val = getY(n);
+        drawStem(ctx, px, oy, val, "#0d9488", 24, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("y[n] = x[n] * h[n] — İki Yamuk Biçimli Tepe ve Vadi", 250, 35);
+      ctx.fillStyle = "#475569"; ctx.fillText("Maksimum Genlik: y[6] = y[7] = 5 ve y[15] = y[16] = 5", 250, 58);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("n = 10, 11, 12 anlarında vadi değeri y = 2'dir", 250, 80);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const simMath = document.getElementById('simMath');
+    const kCtx = kCanvas.getContext('2d');
+    const yCtx = ynCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function updateSim() {
+      const n = parseInt(slider.value);
+      nVal.textContent = "n = " + n;
+
+      const w = 860, hK = 230, oxK = 280, oyK = 165, stepK = 26;
+      drawDiscreteAxis(kCtx, w, hK, oxK, oyK, -9, 21, stepK, "k", "Genlik");
+
+      let sum = 0;
+      let activeIndices = [];
+
+      for (let k = -9; k <= 21; k++) {
+        const px = oxK + k * stepK;
+        const xVal = isX(k) ? 1 : 0;
+        const hVal = isH(n - k) ? 1 : 0;
+        const prod = xVal * hVal;
+
+        drawStem(kCtx, px - 3, oyK, xVal, "#2563eb", 90, 2.8, false);
+        drawStem(kCtx, px + 3, oyK, hVal, "#9333ea", 90, 2.8, false);
+        if (prod > 0) {
+          drawStem(kCtx, px, oyK, prod, "#d97706", 90, 4, false);
+          sum += prod;
+          activeIndices.push(k);
+        }
+      }
+
+      // Ön uç k = n - 2
+      const pPos = oxK + (n - 2) * stepK;
+      kCtx.strokeStyle = "#dc2626"; kCtx.lineWidth = 1.4; kCtx.setLineDash([3, 3]);
+      kCtx.beginPath(); kCtx.moveTo(pPos, oyK + 20); kCtx.lineTo(pPos, 30); kCtx.stroke();
+      kCtx.setLineDash([]);
+      kCtx.fillStyle = "#dc2626"; kCtx.font = "bold 10px sans-serif";
+      kCtx.fillText(`k = n-2 = ${n-2}`, pPos - 25, 25);
+
+      // Alt Kanvas
+      const hY = 190, oxY = 90, oyY = 145, stepY = 30;
+      drawDiscreteAxis(yCtx, w, hY, oxY, oyY, -1, 23, stepY, "n", "y[n]");
+
+      for (let i = -1; i <= 23; i++) {
+        const px = oxY + i * stepY;
+        const yVal = getY(i);
+        drawStem(yCtx, px, oyY, yVal, "#0d9488", 22, 3.5);
+      }
+
+      const curY = getY(n);
+      const curPx = oxY + n * stepY, curPy = oyY - curY * 22;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.5; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oyY); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5.5, 0, Math.PI * 2); yCtx.fill();
+
+      let statusHtml = "";
+      if (curY === 0) {
+        statusHtml = `Durum: <b class="text-slate-600">n = ${n} (Örtüşme Yok)</b> &nbsp;|&nbsp; <b>y[${n}] = 0</b>`;
+      } else {
+        statusHtml = `Durum: <b class="text-indigo-600">n = ${n} (Örtüşen k indeksleri: [${activeIndices.join(', ')}])</b> &nbsp;|&nbsp; ` +
+                     `Örtüşen Darbe Sayısı: <b>${activeIndices.length}</b> &nbsp;|&nbsp; ` +
+                     `Sonuç: <b>y[${n}] = ${curY}</b>`;
+      }
+      simMath.innerHTML = statusHtml;
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let playInterval = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      if (isPlaying) {
+        playInterval = setInterval(() => {
+          let v = parseInt(slider.value) + 1;
+          if (v > parseInt(slider.max)) v = parseInt(slider.min);
+          slider.value = v;
+          updateSim();
+        }, 650);
+      } else {
+        clearInterval(playInterval);
+      }
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>

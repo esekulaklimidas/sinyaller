@@ -1,0 +1,9 @@
+# Sadece HTML dosyalarini tut, digerlerini yoksay
+*.py
+*.bat
+*.zip
+*.pdf
+*.png
+*.log
+__pycache__/
+.system_generated/

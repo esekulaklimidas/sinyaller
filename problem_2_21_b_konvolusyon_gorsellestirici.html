@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.21 (b) Konvolüsyon Görselleştirici</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.21 (b)</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.21 (b) — Aynı Üstel Sinyalin Kendisiyle Konvolüsyonu ($\alpha = \beta$)</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x[n] = h[n] = \alpha^n u[n] \quad \Longrightarrow \quad y[n] = x[n] * h[n] = \sum_{k=-\infty}^{\infty} x[k]h[n-k]$$
+        Bu durum iki özdeş birinci dereceden sistemin ardışık (kaskat) bağlanmasına karşılık gelir. Çarpım terimleri $k$'dan bağımsız $\alpha^n$ sabitine eşit olur ve $(n+1)$ çarpanı ortaya çıkar.
+      </p>
+    </div>
+
+        <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi & Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Katlı kök / rezonans durumu: Özdeş iki üstel dizinin konvolüsyonu</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Fiziksel Model:</strong> Dürtü yanıtı $h[n] = lpha^n u[n]$ olan bir sisteme, tam olarak sistemin özdeş kutbuna karşılık gelen $x[n] = lpha^n u[n]$ girişi veriliyor.</li>
+            <li><strong>İstenen:</strong> (a) şıkkındaki formülde $eta 	o lpha$ yazıldığında oluşan belirsizliği aşarak $y[n]$'i hesaplamak.</li>
+            <li><strong>Kritik Sezgi:</strong> Çarpım terimleri $lpha^k lpha^{n-k} = lpha^n$ olup $k$'dan bağımsızdır; dolayısıyla terimler doğrudan sayılır ve $(n+1)$ çarpanı doğar.</li>
+          </ul>
+        </div>
+
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Örtüşme Aralığı:</strong> Yine $k \in [0, n]$ aralığında örtüşme vardır ($n \ge 0$).</li>
+            <li><strong>Sabit Terim Çıkarması:</strong> $\sum_{k=0}^n lpha^k lpha^{n-k} = \sum_{k=0}^n lpha^n = lpha^n \sum_{k=0}^n 1$.</li>
+            <li><strong>Terim Sayısı:</strong> $k = 0$'dan $n$'e kadar toplam $(n - 0 + 1) = (n + 1)$ adet terim vardır.</li>
+            <li><strong>L'Hôpital / Limit Teyidi:</strong> $\lim_{eta 	o lpha} rac{eta^{n+1} - lpha^{n+1}}{eta - lpha} = (n+1)lpha^n$ ile (a) şıkkıyla mükemmel uyum sağlanır.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Ayrık Zamanlı Konvolüsyon Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte $k$ uzayında özdeş sinyallerin örtüşmesi ve terimler; altta $(n+1)\alpha^n u[n]$ çıkış dizisi.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-semibold text-slate-600">α Parametresi:</label>
+            <input type="number" id="alphaInput" min="0.1" max="0.95" step="0.05" value="0.7" class="w-16 px-2 py-1 text-xs border border-slate-300 rounded font-mono font-bold">
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-semibold text-slate-600">n:</label>
+            <input type="range" id="nSlider" min="-4" max="15" step="1" value="3" class="w-36 accent-purple-600 cursor-pointer">
+            <span id="nVal" class="text-xs font-mono font-bold bg-slate-100 px-2 py-1 rounded text-slate-800">n = 3</span>
+          </div>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Üst Kanvas: k uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>$k$ Uzayı: <span class="text-blue-600">■ x[k] = α^k u[k]</span> &nbsp;|&nbsp; <span class="text-purple-600">■ h[n-k] = α^(n-k) u[n-k]</span> &nbsp;|&nbsp; <span class="text-amber-600">■ x[k]h[n-k] = α^n</span></span>
+          <span class="text-slate-400">Her k için çarpım değeri sabittir ($\alpha^n$)</span>
+        </div>
+        <canvas id="kCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: y[n] uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Çıkış Dizisi: <span class="text-teal-700 font-bold">y[n] = (n + 1) α^n u[n]</span></span>
+          <span class="text-rose-600 font-medium">Kırmızı imleç anlık $n$ konumunu gösterir</span>
+        </div>
+        <canvas id="ynCanvas" width="860" height="180" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_ozdes_sinyaller_k.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Özdeş Sinyallerin $k$ Değişkeninde Tanımlanması</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Giriş $x[k]$ ve birim dürtü yanıtı $h[k]$ birbirinin aynısıdır:
+        $$x[k] = \alpha^k u[k], \quad h[k] = \alpha^k u[k]$$
+        Her iki dizi de $k \ge 0$ için aktiftir ve $k=0$'da $1$ genliğine sahiptir. $0 < \alpha < 1$ kabulünde sağa doğru geometrik olarak sönümlenirler.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_katlama_h_eksi_k.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Katlama (Zaman Tersleme) $\to h[-k]$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h[k]$ dizisi $k = 0$ eksenine göre katlanır:
+        $$h[-k] = \alpha^{-k} u[-k]$$
+        Sinyal $k \le 0$ bölgesine taşınır. En sağdaki tepe noktası $k = 0$'dadır ($h[0]=1$) ve sola ($k \to -\infty$) doğru değerler $\alpha^{-k}$ şeklinde azalır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_oteleme_h_n_eksi_k.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Parametrik Zamanda Öteleme $\to h[n - k]$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Katlanmış sinyal $n$ kadar ötelenir:
+        $$h[n - k] = \alpha^{n-k} u[n - k]$$
+        $u[n - k] = 1 \iff k \le n$ olduğundan sinyalin ön ucu tam olarak <strong>$k = n$</strong> koordinatına oturur ve sola doğru uzanır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_n_kucuk_0_ortusme_yok.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Durum 1: $n < 0$ (Örtüşme Yok $\implies y[n] = 0$)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $n < 0$ durumunda $h[n-k]$'nın ön ucu $k = n < 0$ negatif bölgededir. $x[k]$ ise $k \ge 0$'da başlar. İki sinyalin aynı anda sıfırdan farklı olduğu bir $k$ tamsayısı bulunmaz:
+        $$x[k]h[n-k] = 0 \quad (\forall k) \quad \Longrightarrow \quad y[n] = 0$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_n_buyuk_esit_0_sabit_carpim.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Durum 2: $n \ge 0$ (Örtüşme ve Sabit Çarpım Terimi)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $n \ge 0$ için sinyaller $k \in [0, n]$ aralığında örtüşür. Çarpılan genel terim olağanüstü sade bir biçim alır:
+        $$x[k]h[n-k] = \alpha^k \cdot \alpha^{n-k} = \alpha^{k + n - k} = \alpha^n$$
+        Çarpım değeri $k$'dan tamamen bağımsızdır! Bu aralıkta tam $(n - 0 + 1) = (n + 1)$ adet terim vardır:
+        $$y[n] = \sum_{k=0}^{n} \alpha^n = \alpha^n \sum_{k=0}^{n} 1 = (n + 1)\alpha^n$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_toplam_cikis_ve_limit_iliskisi.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Toplam Çıkış $y[n] = (n+1)\alpha^n u[n]$ ve Limit İlişkisi</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Genel çözüm:
+        $$y[n] = (n + 1)\alpha^n u[n]$$
+        <strong>Teorik Kontrol (L'Hôpital / Limit İlişkisi):</strong> 
+        Problem 2.21(a)'daki sonuçta $\beta \to \alpha$ limiti alındığında:
+        $$\lim_{\beta \to \alpha} \frac{\beta^{n+1} - \alpha^{n+1}}{\beta - \alpha} = \left. \frac{d}{d\beta} (\beta^{n+1}) \right|_{\beta = \alpha} = (n + 1)\alpha^n$$
+        Sonuç kusursuz bir şekilde doğrulanır! $(n+1)$ rampası sinyali önce yükseltir, ardından $\alpha^n$ üsteli baskın gelerek diziyi söndürür.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minK, maxK, stepPx, labelX = "k", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, oy + 15); ctx.lineTo(ox, 20);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 20); ctx.lineTo(ox, 12); ctx.lineTo(ox + 4, 20); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 16);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let k = minK; k <= maxK; k++) {
+        const px = ox + k * stepPx;
+        if (px >= 30 && px <= w - 30) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          if (k % 2 === 0 || k === 0) {
+            ctx.fillText(k.toString(), px - (k < 0 ? 6 : 3), oy + 15);
+          }
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 60, radius = 3.5, drawZeroDot = true) {
+      const py = oy - val * scaleY;
+      if (Math.abs(val) < 0.001) {
+        if (drawZeroDot) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(px, oy, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        return;
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // --- KART 1: Özdeş Sinyaller ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 200, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -4, 16, stepPx, "k", "Genlik");
+
+      const a = 0.7;
+      for (let k = -4; k <= 16; k++) {
+        const px = ox + k * stepPx;
+        const val = k >= 0 ? Math.pow(a, k) : 0;
+        drawStem(ctx, px - 3, oy, val, "#2563eb", 100, 3.5);
+        drawStem(ctx, px + 3, oy, val, "#9333ea", 100, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x[k] = (0.7)^k u[k]", 400, 45);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[k] = (0.7)^k u[k]", 400, 68);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("İki sinyal tamamen özdeştir (α = 0.7)", 400, 95);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 2: Katlama h[-k] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 620, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -15, 5, stepPx, "k", "h[-k]");
+
+      const a = 0.7;
+      for (let k = -15; k <= 5; k++) {
+        const px = ox + k * stepPx;
+        const val = -k >= 0 ? Math.pow(a, -k) : 0;
+        drawStem(ctx, px, oy, val, "#9333ea", 100, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[-k] = α^(-k) u[-k]", 100, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("Aynalama sonucu k ≤ 0'a yerleşir, sola doğru sönümlenir", 100, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("Ön uç k = 0'dadır", 100, 95);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 3: Öteleme h[n-k] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 380, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -9, 12, stepPx, "k", "h[n-k]");
+
+      const n = 4, a = 0.7;
+      for (let k = -9; k <= 12; k++) {
+        const px = ox + k * stepPx;
+        const val = (n - k >= 0) ? Math.pow(a, n - k) : 0;
+        drawStem(ctx, px, oy, val, "#9333ea", 100, 3.5);
+      }
+
+      const pPos = ox + n * stepPx;
+      ctx.strokeStyle = "#dc2626"; ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(pPos, oy + 25); ctx.lineTo(pPos, 35); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#dc2626"; ctx.fillText("Ön Uç: k = n = 4", pPos - 40, 30);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[n-k] = α^(n-k) u[n-k]", 100, 45);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 4: Durum 1: n < 0 ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 450, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -11, 10, stepPx, "k", "Genlik");
+
+      const n = -2, a = 0.7;
+      for (let k = -11; k <= 10; k++) {
+        const px = ox + k * stepPx;
+        const xVal = k >= 0 ? Math.pow(a, k) : 0;
+        const hVal = (n - k >= 0) ? Math.pow(a, n - k) : 0;
+        if (xVal > 0) drawStem(ctx, px, oy, xVal, "#2563eb", 90, 3.5);
+        if (hVal > 0) drawStem(ctx, px, oy, hVal, "#9333ea", 90, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#dc2626"; ctx.fillText("h[n-k] (k ≤ -2)", ox - 200, 55);
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x[k] (k ≥ 0)", ox + 50, 55);
+      ctx.fillStyle = "#b91c1c"; ctx.fillText("ÖRTÜŞME YOK ⟹ y[n] = 0", ox - 80, 115);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 5: Durum 2: n >= 0 (Sabit Çarpım) ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 250, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -5, 15, stepPx, "k", "Genlik");
+
+      const n = 4, a = 0.7;
+      ctx.fillStyle = "rgba(251, 191, 36, 0.25)";
+      ctx.fillRect(ox - stepPx * 0.4, 30, (n + 0.8) * stepPx, 135);
+      ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 1; ctx.strokeRect(ox - stepPx * 0.4, 30, (n + 0.8) * stepPx, 135);
+
+      for (let k = -5; k <= 15; k++) {
+        const px = ox + k * stepPx;
+        const xVal = k >= 0 ? Math.pow(a, k) : 0;
+        const hVal = (n - k >= 0) ? Math.pow(a, n - k) : 0;
+        const prod = (k >= 0 && k <= n) ? xVal * hVal : 0;
+
+        drawStem(ctx, px - 3, oy, xVal, "#2563eb", 90, 3);
+        drawStem(ctx, px + 3, oy, hVal, "#9333ea", 90, 3);
+        if (prod > 0) {
+          drawStem(ctx, px, oy, prod, "#d97706", 90, 4);
+        }
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#d97706"; ctx.fillText(`Örtüşen Aralık: 0 ≤ k ≤ ${n} (${n+1} adet terim)`, ox + 15, 50);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(`Her k için: x[k]h[n-k] = α^k · α^(${n}-k) = α^${n} = ${(Math.pow(a, n)).toFixed(4)}`, ox + 15, 75);
+      ctx.fillText(`y[${n}] = (${n} + 1) · α^${n} = ${( (n+1)*Math.pow(a, n) ).toFixed(4)}`, ox + 15, 95);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 6: Çıkış Sinyali y[n] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 180, oy = 165, stepPx = 38;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -3, 16, stepPx, "n", "y[n]");
+
+      const a = 0.7;
+      for (let n = -3; n <= 16; n++) {
+        const px = ox + n * stepPx;
+        let yVal = (n >= 0) ? (n + 1) * Math.pow(a, n) : 0;
+        drawStem(ctx, px, oy, yVal, "#0d9488", 75, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("y[n] = (n + 1) α^n u[n]", 320, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("n = 0'da y[0] = 1'dir. n = 2 ve n = 3 civarında maksimuma ulaşır", 320, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("Tepe noktasından sonra α^n üssü baskın gelerek hızla sıfıra söner", 320, 95);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const alphaInput = document.getElementById('alphaInput');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const simMath = document.getElementById('simMath');
+    const kCtx = kCanvas.getContext('2d');
+    const yCtx = ynCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function evalY(n, a) {
+      if (n < 0) return 0;
+      return (n + 1) * Math.pow(a, n);
+    }
+
+    function updateSim() {
+      const n = parseInt(slider.value);
+      let a = parseFloat(alphaInput.value);
+      if (isNaN(a) || a <= 0 || a >= 1) a = 0.7;
+
+      nVal.textContent = "n = " + n;
+
+      const w = 860, hK = 230, oxK = 260, oyK = 175, stepK = 32;
+      drawDiscreteAxis(kCtx, w, hK, oxK, oyK, -7, 18, stepK, "k", "Genlik");
+
+      if (n >= 0) {
+        kCtx.fillStyle = "rgba(251, 191, 36, 0.25)";
+        kCtx.fillRect(oxK - stepK * 0.4, 25, (n + 0.8) * stepK, 150);
+        kCtx.strokeStyle = "#f59e0b"; kCtx.lineWidth = 1;
+        kCtx.strokeRect(oxK - stepK * 0.4, 25, (n + 0.8) * stepK, 150);
+      }
+
+      let sum = 0;
+      for (let k = -7; k <= 18; k++) {
+        const px = oxK + k * stepK;
+        const xVal = k >= 0 ? Math.pow(a, k) : 0;
+        const hVal = (n - k >= 0) ? Math.pow(a, n - k) : 0;
+        const prod = (k >= 0 && k <= n) ? xVal * hVal : 0;
+
+        drawStem(kCtx, px - 3, oyK, xVal, "#2563eb", 90, 2.8, false);
+        drawStem(kCtx, px + 3, oyK, hVal, "#9333ea", 90, 2.8, false);
+        if (prod > 0) {
+          drawStem(kCtx, px, oyK, prod, "#d97706", 90, 4, false);
+          sum += prod;
+        }
+      }
+
+      const pPos = oxK + n * stepK;
+      kCtx.strokeStyle = "#dc2626"; kCtx.lineWidth = 1.4; kCtx.setLineDash([3, 3]);
+      kCtx.beginPath(); kCtx.moveTo(pPos, oyK + 20); kCtx.lineTo(pPos, 30); kCtx.stroke();
+      kCtx.setLineDash([]);
+      kCtx.fillStyle = "#dc2626"; kCtx.font = "bold 10px sans-serif";
+      kCtx.fillText("k = n", pPos - 12, 24);
+
+      // Alt Kanvas
+      const hY = 180, oxY = 180, oyY = 145, stepY = 38;
+      drawDiscreteAxis(yCtx, w, hY, oxY, oyY, -4, 16, stepY, "n", "y[n]");
+
+      for (let i = -4; i <= 16; i++) {
+        const px = oxY + i * stepY;
+        const yVal = evalY(i, a);
+        drawStem(yCtx, px, oyY, yVal, "#0d9488", 55, 3.5);
+      }
+
+      const curY = evalY(n, a);
+      const curPx = oxY + n * stepY, curPy = oyY - curY * 55;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.5; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oyY); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5.5, 0, Math.PI * 2); yCtx.fill();
+
+      let statusHtml = "";
+      if (n < 0) {
+        statusHtml = `Durum: <b class="text-slate-600">n = ${n} &lt; 0 (Örtüşme Yok)</b> &nbsp;|&nbsp; <b>y[${n}] = 0.000</b>`;
+      } else {
+        const termVal = Math.pow(a, n);
+        statusHtml = `Durum: <b class="text-indigo-600">n = ${n} ≥ 0 (${n+1} adet terim örtüşüyor)</b> &nbsp;|&nbsp; ` +
+                     `Her terim: $\\alpha^n = ${a.toFixed(2)}^${n} \\approx ${termVal.toFixed(4)}$ &nbsp;|&nbsp; ` +
+                     `Analitik Sonuç: <b>y[${n}] = (${n} + 1) · ${termVal.toFixed(4)} = ${curY.toFixed(4)}</b>`;
+      }
+      simMath.innerHTML = statusHtml;
+    }
+
+    slider.addEventListener('input', updateSim);
+    alphaInput.addEventListener('change', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let playInterval = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      if (isPlaying) {
+        playInterval = setInterval(() => {
+          let v = parseInt(slider.value) + 1;
+          if (v > parseInt(slider.max)) v = parseInt(slider.min);
+          slider.value = v;
+          updateSim();
+        }, 650);
+      } else {
+        clearInterval(playInterval);
+      }
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.23 (c) Konvolüsyon Görselleştirici (T = 1.5)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-text { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold uppercase tracking-wider">Sürekli Zaman (Continuous-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.23 (c) / Şekil P2.23</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.23 (c) — Dürtü Katarı ve Üçgen Darbe ($T = 3/2 = 1.5$)</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$h(t) = \begin{cases} 1 - |t|, & |t| \le 1 \\ 0, & |t| > 1 \end{cases}, \quad x(t) = \sum_{k=-\infty}^{\infty} \delta(t - 1.5k) \quad \Longrightarrow \quad y(t) = \sum_{k=-\infty}^{\infty} h(t - 1.5k)$$
+        Darbe periyodu ($T = 1.5$), üçgen darbenin taban genişliğinden ($2$) küçüktür ($T < 2$). Bu durum komşu üçgenlerin kısmen üst üste binmesine (örtüşme / overlap) yol açar. Örtüşme aralığında zıt eğimler birbirini götürür ve $0.5$ yüksekliğinde düz bir plato oluşur!
+      </p>
+    </div>
+
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-amber-50 text-amber-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Kısmi örtüşme (overlap) ve zıt eğimlerin süperpozisyonu ile plato oluşumu</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-amber-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Fiziksel Model:</strong> $T = 1.5$ periyotlu bir dürtü katarı, taban genişliği $2$ olan üçgen darbe $h(t)$ ile konvole ediliyor.</li>
+            <li><strong>Örtüşme Sebebi:</strong> $T = 1.5 < 2$ olduğundan ardışık darbeler $0.5$ birimlik zaman aralıklarında çakışır.</li>
+            <li><strong>İstenen:</strong> $y(t)$ dalga formunun analitik denklemini (temel periyot boyunca) bulmak ve periyodik trapez/kesik üçgen dalgasını çizmek.</li>
+          </ul>
+        </div>
+
+        <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-100 space-y-2">
+          <h4 class="font-bold text-amber-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Aralık Seçimi:</strong> Temel periyot olarak $[0, 1.5]$ aralığını ele alalım.</li>
+            <li><strong>Bölge 1 ($0 \le t < 0.5$):</strong> Yalnızca $k=0$ darbesi aktiftir: $y(t) = 1 - t$ ($1.0$'dan $0.5$'e lineer iniş).</li>
+            <li><strong>Bölge 2 ($0.5 \le t \le 1.0$):</strong> $k=0$ ve $k=1$ darbeleri örtüşür:
+              $$(1 - t) + (t - 0.5) = \mathbf{0.5} \quad (\text{Sabit Plato!})$$</li>
+            <li><strong>Bölge 3 ($1.0 < t \le 1.5$):</strong> Yalnızca $k=1$ darbesi aktiftir: $y(t) = t - 0.5$ ($0.5$'ten $1.0$'a lineer çıkış).</li>
+            <li><strong>Sonuç:</strong> $T = 1.5$ periyotlu, minimumu $0.5$, maksimumu $1.0$ olan kesik üçgen dalga.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Çift Kanvaslı Konvolüsyon Simülatörü ($T = 1.5$)</h2>
+          <p class="text-xs text-slate-500">Üstte $\tau$ uzayında $T=1.5$ aralıklı dürtü katarı ve kayan $h(t-\tau)$; altta trapezoidal $y(t)$ çıkışı.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs font-semibold text-slate-600">t Parametresi:</label>
+          <input type="range" id="tSlider" min="-2.0" max="6.0" step="0.02" value="0.0" class="w-48 accent-amber-600 cursor-pointer">
+          <span id="tVal" class="text-xs font-mono font-bold bg-slate-100 px-2.5 py-1 rounded text-slate-800">t = 0.00</span>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Çizim Alanı -->
+      <div class="space-y-3">
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+            <span>$\tau$ Uzayı: <span class="text-blue-600 font-bold">↑ x(τ) = Σ δ(τ - 1.5k)</span> &nbsp;|&nbsp; <span class="text-purple-600 font-bold">▲ h(t-τ)</span></span>
+            <span class="text-amber-700 font-mono text-[11px] font-bold">Darbe Aralığı: T = 1.5 (0.5 Örtüşme)</span>
+          </div>
+          <canvas id="tauCanvas" width="860" height="200" class="w-full h-auto block"></canvas>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+            <span>$t$ Uzayı: <span class="text-amber-700 font-bold">y(t) = Σ h(t - 1.5k)</span> (Periyot T = 1.5)</span>
+            <span class="text-rose-600 font-medium">Kırmızı imleç anlık t konumunu gösterir</span>
+          </div>
+          <canvas id="ytCanvas" width="860" height="170" class="w-full h-auto block"></canvas>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_sinyaller_T1_5.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        1. Adım: Sinyallerin Tanımı ve Aralık Karşılaştırması ($T = 1.5$)
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h(t)$ üçgen darbesi $[-1, 1]$ aralığında aktiftir (taban genişliği $2$ birim).<br>
+        $x(t)$ dürtü katarı ise her $1.5$ birimde bir tekrarlanır: $\dots, \delta(t+1.5), \delta(t), \delta(t-1.5), \delta(t-3), \dots$<br>
+        Darbe periyodu taban genişliğinden küçüktür ($T = 1.5 < 2$), bu da komşu üçgenlerin birbirinin içine girmesine neden olur.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_superpozisyon_ve_ortusme_T1_5.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        2. Adım: Komşu Üçgenlerin Örtüşmesi ($k=0$ ve $k=1$)
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $k=0$ üçgeni $[-1, 1]$ aralığındadır. $k=1$ üçgeni ise $[1.5 - 1, 1.5 + 1] = [0.5, 2.5]$ aralığındadır.<br>
+        Bu iki darbe $[0.5, 1.0]$ ortak zaman diliminde aynı anda pozitiftir (örtüşme genişliği $= 0.5$ birim).
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_plato_ispat_T1_5.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        3. Adım: Sabit Plato İspatı ($(1 - t) + (t - 0.5) = 0.5$)
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Örtüşme aralığı olan $t \in [0.5, 1.0]$ için her iki darbenin analitik denklemleri toplanır:
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+
+      <!-- Matematiksel Detay Kutusu -->
+      <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-amber-950">Örtüşme Bölgesinde Eğimlerin İptali:</div>
+        <div class="overflow-x-auto py-1 font-mono text-amber-900">
+          $$y(t) = h(t) + h(t - 1.5) = (1 - t) + \left[1 - |t - 1.5|\right] = (1 - t) + (t - 0.5) = \mathbf{0.5}$$
+        </div>
+        <div class="text-xs text-amber-800">
+          $k=0$ darbesinin negatif eğimi ($-1$) ile $k=1$ darbesinin pozitif eğimi ($+1$) birbirini tamamen sıfırlar. Bu nedenle çıkış sinyali $0.5 \le t \le 1.0$ aralığında <strong>tamamen düz (sabit $0.5$)</strong> bir plato oluşturur!
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_temel_periyot_T1_5.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        4. Adım: Temel Periyot $[0, 1.5]$ Boyunca Analitik Denklem
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Temel periyot üç farklı davranış bölgesine ayrılır:
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+
+      <!-- Matematik Kutusu -->
+      <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-indigo-950">Temel Periyotta ($0 \le t \le 1.5$) Parçalı Denklem:</div>
+        <div class="overflow-x-auto py-1 font-mono text-indigo-900">
+          $$y(t) = \begin{cases} 
+          1 - t, & 0 \le t < 0.5 \quad (\text{Lineer İniş: } 1.0 \to 0.5) \\ 
+          0.5, & 0.5 \le t \le 1.0 \quad (\text{Sabit Plato}) \\ 
+          t - 0.5, & 1.0 < t \le 1.5 \quad (\text{Lineer Çıkış: } 0.5 \to 1.0) 
+          \end{cases}$$
+        </div>
+        <div class="text-xs text-indigo-800">
+          Periyodiklik özelliği: $\mathbf{y(t + 1.5) = y(t)}$. Tepe değeri $1.0$ ($t = 1.5k$), taban platosu $0.5$ ($t \in [1.5k + 0.5, 1.5k + 1.0]$).
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_tam_cikis_y_t_T1_5.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        5. Adım: Tam Çıkış Dalgası $y(t)$ (Periyodik Trapez Dalgası)
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Çıkış sinyali $0.5$ ile $1.0$ arasında salınan, dipleri düzleştirilmiş periyodik bir kesik üçgen (trapez) dalgadır. Asla $0$'a inmez!
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawAxis(ctx, w, h, originX, originY, labelX = "τ", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(25, originY); ctx.lineTo(w - 25, originY);
+      ctx.moveTo(originX, originY + 20); ctx.lineTo(originX, 18);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, originY - 4); ctx.lineTo(w - 15, originY); ctx.lineTo(w - 25, originY + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(originX - 4, 18); ctx.lineTo(originX, 10); ctx.lineTo(originX + 4, 18); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, originY + 4);
+      ctx.fillText(labelY, originX - 35, 15);
+    }
+
+    function drawImpulse(ctx, px, oy, h = 70, color = "#2563eb") {
+      ctx.strokeStyle = color; ctx.lineWidth = 2.4;
+      ctx.beginPath(); ctx.moveTo(px, oy); ctx.lineTo(px, oy - h); ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(px - 4, oy - h + 6); ctx.lineTo(px, oy - h); ctx.lineTo(px + 4, oy - h + 6); ctx.fill();
+    }
+
+    function hTri(t) {
+      const a = Math.abs(t);
+      return a <= 1.0 ? 1.0 - a : 0.0;
+    }
+
+    function evalY15(t) {
+      let sum = 0;
+      for (let k = -8; k <= 8; k++) {
+        sum += hTri(t - 1.5 * k);
+      }
+      return sum;
+    }
+
+    // 1. Adım Çizimi
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const ox = 260, oy = 145, sc = 65;
+      drawAxis(ctx, 860, 200, ox, oy);
+
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(ox - sc, oy); ctx.lineTo(ox, oy - 70); ctx.lineTo(ox + sc, oy);
+      ctx.stroke();
+
+      for (let k = -2; k <= 5; k++) {
+        drawImpulse(ctx, ox + k * 1.5 * sc, oy, 70, "#2563eb");
+      }
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("1.5", ox + 1.5 * sc - 8, oy + 18);
+      ctx.fillText("3.0", ox + 3.0 * sc - 8, oy + 18);
+      ctx.fillText("4.5", ox + 4.5 * sc - 8, oy + 18);
+
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h(τ): Üçgen Darbe (Genişlik 2)", ox + 15, 55);
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x(τ): Dirac Dürtü Katarı (T = 1.5)", ox + 1.5 * sc + 15, 55);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // 2. Adım Çizimi: İki komşu üçgen ve örtüşme alanı
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const ox = 260, oy = 145, sc = 75;
+      drawAxis(ctx, 860, 200, ox, oy, "t", "Genlik");
+
+      // Örtüşme bölgesini tarayalım [0.5, 1.0]
+      const pStart = ox + 0.5 * sc;
+      const pEnd = ox + 1.0 * sc;
+      ctx.fillStyle = "rgba(245, 158, 11, 0.18)";
+      ctx.fillRect(pStart, oy - 75, pEnd - pStart, 75);
+
+      // k = 0 darbesi
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(ox - sc, oy); ctx.lineTo(ox, oy - 70); ctx.lineTo(ox + sc, oy);
+      ctx.stroke();
+
+      // k = 1 darbesi (merkezi 1.5)
+      const cx1 = ox + 1.5 * sc;
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(cx1 - sc, oy); ctx.lineTo(cx1, oy - 70); ctx.lineTo(cx1 + sc, oy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("0.5", pStart - 8, oy + 18);
+      ctx.fillText("1.0", pEnd - 8, oy + 18);
+      ctx.fillText("1.5", cx1 - 8, oy + 18);
+
+      ctx.fillStyle = "#d97706"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("Örtüşme Bölgesi: [0.5, 1.0]", pStart - 10, 45);
+
+      ctx.fillStyle = "#9333ea"; ctx.fillText("k = 0 Darbesi (1 - t)", ox - 80, oy - 75);
+      ctx.fillStyle = "#2563eb"; ctx.fillText("k = 1 Darbesi (t - 0.5)", cx1 + 10, oy - 75);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // 3. Adım Çizimi: Eğimlerin toplamı ve plato oluşumu
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const ox = 260, oy = 145, sc = 85;
+      drawAxis(ctx, 860, 200, ox, oy, "t", "y(t)");
+
+      // Bireysel eğriler (kesik çizgili)
+      ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      // k = 0
+      ctx.beginPath(); ctx.moveTo(ox, oy - 70); ctx.lineTo(ox + sc, oy); ctx.stroke();
+      // k = 1
+      ctx.beginPath(); ctx.moveTo(ox + 0.5 * sc, oy); ctx.lineTo(ox + 1.5 * sc, oy - 70); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Toplam sinyal: 0 -> 0.5 iniş, 0.5 -> 1.0 plato, 1.0 -> 1.5 çıkış
+      ctx.strokeStyle = "#d97706"; ctx.lineWidth = 3.2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - 70);
+      ctx.lineTo(ox + 0.5 * sc, oy - 35);
+      ctx.lineTo(ox + 1.0 * sc, oy - 35);
+      ctx.lineTo(ox + 1.5 * sc, oy - 70);
+      ctx.stroke();
+
+      // Plato etiketleri
+      ctx.fillStyle = "#d97706"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("Sabit Plato y(t) = 0.5", ox + 0.55 * sc, oy - 48);
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px sans-serif";
+      ctx.fillText("1.0", ox - 28, oy - 70);
+      ctx.fillText("0.5", ox - 28, oy - 35);
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("0.5", ox + 0.5 * sc - 8, oy + 18);
+      ctx.fillText("1.0", ox + 1.0 * sc - 8, oy + 18);
+      ctx.fillText("1.5", ox + 1.5 * sc - 8, oy + 18);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // 4. Adım Çizimi: Temel periyot
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const ox = 380, oy = 145, sc = 100;
+      drawAxis(ctx, 860, 200, ox, oy, "t", "y(t)");
+
+      ctx.strokeStyle = "#4f46e5"; ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - 80);
+      ctx.lineTo(ox + 0.5 * sc, oy - 40);
+      ctx.lineTo(ox + 1.0 * sc, oy - 40);
+      ctx.lineTo(ox + 1.5 * sc, oy - 80);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("0.5", ox + 0.5 * sc - 8, oy + 18);
+      ctx.fillText("1.0", ox + 1.0 * sc - 8, oy + 18);
+      ctx.fillText("1.5", ox + 1.5 * sc - 8, oy + 18);
+      ctx.fillText("1.0", ox - 28, oy - 80);
+      ctx.fillText("0.5", ox - 28, oy - 40);
+
+      ctx.fillStyle = "#4f46e5";
+      ctx.fillText("1 - t (Eğim -1)", ox + 0.1 * sc, oy - 65);
+      ctx.fillText("0.5 (Plato)", ox + 0.65 * sc, oy - 25);
+      ctx.fillText("t - 0.5 (Eğim +1)", ox + 1.05 * sc, oy - 65);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // 5. Adım Çizimi: Tam Çıkış Dalgası
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const ox = 180, oy = 145, sc = 45;
+      drawAxis(ctx, 860, 200, ox, oy, "t", "y(t)");
+
+      ctx.strokeStyle = "#059669"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(30, oy - evalY15((30 - ox) / sc) * 75);
+      for (let px = 30; px <= 830; px++) {
+        const t = (px - ox) / sc;
+        ctx.lineTo(px, oy - evalY15(t) * 75);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = "#059669"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("Tam Çıkış y(t): T = 1.5 Periyotlu Sürekli Kesik Üçgen (Trapez) Dalgası", 260, 40);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('tSlider');
+    const tVal = document.getElementById('tVal');
+    const tauCanvas = document.getElementById('tauCanvas');
+    const ytCanvas = document.getElementById('ytCanvas');
+    const simMath = document.getElementById('simMath');
+    const tCtx = tauCanvas.getContext('2d');
+    const yCtx = ytCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function updateSim() {
+      const t = parseFloat(slider.value);
+      tVal.textContent = "t = " + t.toFixed(2);
+
+      const w = 860, h1 = 200, ox = 260, oy1 = 145, sc = 55;
+      drawAxis(tCtx, w, h1, ox, oy1, "τ", "Genlik");
+
+      // x(tau) dürtüleri (T = 1.5)
+      for (let k = -3; k <= 7; k++) {
+        const px = ox + k * 1.5 * sc;
+        if (px >= 30 && px <= w - 30) {
+          drawImpulse(tCtx, px, oy1, 65, "#2563eb");
+          tCtx.fillStyle = "#2563eb"; tCtx.font = "10px monospace";
+          tCtx.fillText(`k=${k}`, px - 8, oy1 + 16);
+        }
+      }
+
+      // h(t - tau) üçgeni
+      const tPos = ox + t * sc;
+      tCtx.strokeStyle = "#9333ea"; tCtx.lineWidth = 2.4;
+      tCtx.beginPath();
+      tCtx.moveTo(tPos - sc, oy1);
+      tCtx.lineTo(tPos, oy1 - 65);
+      tCtx.lineTo(tPos + sc, oy1);
+      tCtx.stroke();
+
+      const curY = evalY15(t);
+      tCtx.fillStyle = "#f59e0b";
+      tCtx.beginPath(); tCtx.arc(tPos, oy1 - curY * 65, 5, 0, Math.PI * 2); tCtx.fill();
+
+      // Alt Kanvas
+      const h2 = 170, oy2 = 125;
+      drawAxis(yCtx, w, h2, ox, oy2, "t", "y(t)");
+
+      yCtx.strokeStyle = "#059669"; yCtx.lineWidth = 2.4;
+      yCtx.beginPath();
+      for (let px = 30; px <= w - 30; px++) {
+        const curT = (px - ox) / sc;
+        const val = evalY15(curT);
+        if (px === 30) yCtx.moveTo(px, oy2 - val * 70);
+        else yCtx.lineTo(px, oy2 - val * 70);
+      }
+      yCtx.stroke();
+
+      const curPx = ox + t * sc, curPy = oy2 - curY * 70;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.4; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oy2); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 4.5, 0, Math.PI * 2); yCtx.fill();
+
+      let m = t % 1.5; if (m < 0) m += 1.5;
+      let durum = "";
+      if (m < 0.5) durum = `<b class="text-indigo-600">Lineer İniş (1 - t)</b>`;
+      else if (m <= 1.0) durum = `<b class="text-amber-600 font-bold">Sabit Plato (y = 0.50)</b>`;
+      else durum = `<b class="text-emerald-600">Lineer Çıkış (t - 0.5)</b>`;
+
+      simMath.innerHTML = `t = ${t.toFixed(2)} &nbsp;|&nbsp; Periyot İçi t<sub>mod 1.5</sub> = ${m.toFixed(2)} &nbsp;|&nbsp; ` +
+                          `Değer: <b>y(${t.toFixed(2)}) = ${curY.toFixed(3)}</b> &nbsp;|&nbsp; Rejim: ${durum}`;
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let animId = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      function step() {
+        if (!isPlaying) return;
+        let v = parseFloat(slider.value) + 0.02;
+        if (v > parseFloat(slider.max)) v = parseFloat(slider.min);
+        slider.value = v;
+        updateSim();
+        animId = requestAnimationFrame(step);
+      }
+
+      if (isPlaying) animId = requestAnimationFrame(step);
+      else cancelAnimationFrame(animId);
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>

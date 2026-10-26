@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.24 (b) Konvolüsyon Görselleştirici (Ayrık Fark Girişine Yanıt)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-text { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.24 (b) / Şekil P2.24</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.24 (b) — Sistemin $x[n] = \delta[n] - \delta[n-1]$ Girişine Cevabı</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x[n] = \delta[n] - \delta[n-1] \quad \Longrightarrow \quad y[n] = x[n] * h[n] = h[n] - h[n-1]$$
+        Giriş sinyali $x[n]$, ayrık zamanlı birinci derece geri fark (first backward difference / sayısal türev) operatörüdür. LTI sistemin doğrusallık ve zamanla değişmezlik özellikleri sayesinde, çıkış doğrudan toplam dürtü yanıtının ardışık farkı ($y[n] = h[n] - h[n-1]$) olur: $y[n] = \{1, 4, 5, 1, -3, -4, -3, -1\}$ ($0 \le n \le 7$).
+      </p>
+    </div>
+
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-rose-50 text-rose-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Ayrık Türev Operatörü, Konvolüsyon Dağılma Özelliği ve Sıfır DC Kazancı</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-rose-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Sistem Dürtü Yanıtı:</strong> $h[n] = \{1, 5, 10, 11, 8, 4, 1\}$ ($n = 0 \dots 6$).</li>
+            <li><strong>Uygulanan Giriş:</strong> $x[n] = \delta[n] - \delta[n-1]$ (Birim dürtü ve 1 adım gecikmeli negatif dürtü).</li>
+            <li><strong>İstenen:</strong> $y[n] = x[n] * h[n]$ çıkış dizisinin tüm örneklerini hesaplamak ve stem grafiğini çizmek.</li>
+            <li><strong>Uzunluk Kuralı:</strong> $L_x = 2$, $L_h = 7 \implies L_y = 2 + 7 - 1 = 8$ örnek ($n = 0 \dots 7$).</li>
+          </ul>
+        </div>
+
+        <div class="bg-rose-50/50 p-4 rounded-xl border border-rose-100 space-y-2">
+          <h4 class="font-bold text-rose-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Dağılma Özelliği:</strong> $y[n] = (\delta[n] - \delta[n-1]) * h[n] = \delta[n]*h[n] - \delta[n-1]*h[n]$.</li>
+            <li><strong>Zaman Kaydırma:</strong> $\delta[n] * h[n] = h[n]$ ve $\delta[n-1] * h[n] = h[n-1]$.</li>
+            <li><strong>Fark Bağıntısı:</strong> $y[n] = h[n] - h[n-1]$. Her örnek bir öncekinden çıkarılır.</li>
+            <li><strong>Toplam Alan / Kütle Korunumu:</strong> Girişin toplamı $\sum x[n] = 1 - 1 = 0$ olduğundan, çıkışın toplamı da mutlaka $\sum y[n] = 0$ olmalıdır!</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Ayrık Konvolüsyon ve Fark Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte $h[n]$ ve gecikmeli $h[n-1]$ dizileri; altta bunların farkı olan $y[n]$ çıkış dizisi.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs font-semibold text-slate-600">Zaman İndeksi (n):</label>
+          <input type="range" id="nSlider" min="-1" max="8" step="1" value="2" class="w-36 accent-rose-600 cursor-pointer">
+          <span id="nVal" class="text-xs font-mono font-bold bg-slate-100 px-2.5 py-1 rounded text-slate-800">n = 2</span>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Çizim Alanı -->
+      <div class="space-y-3">
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+            <span>Bileşenler: <span class="text-blue-600 font-bold">■ h[n]</span> &nbsp;|&nbsp; <span class="text-purple-600 font-bold">■ h[n-1]</span></span>
+            <span class="text-slate-500 font-mono text-[11px]">y[n] = h[n] - h[n-1]</span>
+          </div>
+          <canvas id="compCanvas" width="860" height="200" class="w-full h-auto block"></canvas>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+            <span>Çıkış Dizisi: <span class="text-rose-700 font-bold">y[n] = x[n] * h[n]</span> (İki Kutuplu Stem Çizimi)</span>
+            <span class="text-rose-600 font-medium">Kırmızı dikey imleç anlık n konumunu gösterir</span>
+          </div>
+          <canvas id="ynCanvas" width="860" height="220" class="w-full h-auto block"></canvas>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_giris_x_n.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        1. Adım: Giriş Sinyali $x[n] = \delta[n] - \delta[n-1]$ ve Ayrık Geri Fark
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Giriş sinyali iki örnekten oluşur: $n=0$'da $+1$ genliğinde birim dürtü, $n=1$'de $-1$ genliğinde negatif birim dürtü. Bu sinyal sayısal sinyal işlemede türevin ayrık zaman karşılığıdır (first backward difference filter).
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_dagilma_ve_zaman_kaydirma.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        2. Adım: LTI Özellikleri: Dağılma ve Zaman Kaydırma
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Doğrusal zamanla değişmez sistemlerin konvolüsyon dağılma ve birim dürtü eleme özelliğinden:
+        $$y[n] = (\delta[n] - \delta[n-1]) * h[n] = \delta[n]*h[n] - \delta[n-1]*h[n] = h[n] - h[n-1]$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_ornek_ornek_cikarma_tablosu.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        3. Adım: Adım Adım Örnek Örnek Çıkarma Tablosu ($n = 0 \dots 7$)
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h[n] = \{1, 5, 10, 11, 8, 4, 1\}$ dizisi için $y[n] = h[n] - h[n-1]$ tek tek hesaplanır:
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+
+      <!-- Matematiksel Detay Tablosu -->
+      <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-amber-950">Ayrık Zaman Fark Tablosu:</div>
+        <div class="overflow-x-auto py-1 font-mono text-amber-900 leading-relaxed text-xs">
+          • $n = 0: \quad y[0] = h[0] - h[-1] = 1 - 0 = \mathbf{1}$<br>
+          • $n = 1: \quad y[1] = h[1] - h[0] = 5 - 1 = \mathbf{4}$<br>
+          • $n = 2: \quad y[2] = h[2] - h[1] = 10 - 5 = \mathbf{5}$<br>
+          • $n = 3: \quad y[3] = h[3] - h[2] = 11 - 10 = \mathbf{1}$<br>
+          • $n = 4: \quad y[4] = h[4] - h[3] = 8 - 11 = \mathbf{-3}$<br>
+          • $n = 5: \quad y[5] = h[5] - h[4] = 4 - 8 = \mathbf{-4}$<br>
+          • $n = 6: \quad y[6] = h[6] - h[5] = 1 - 4 = \mathbf{-3}$<br>
+          • $n = 7: \quad y[7] = h[7] - h[6] = 0 - 1 = \mathbf{-1}$
+        </div>
+        <div class="text-xs text-amber-800">
+          $n < 0$ ve $n \ge 8$ için her iki dizi de sıfır olduğundan $y[n] = 0$'dır.
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_tam_cikis_y_n.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        4. Adım: $y[n]$ Çıkışının Ayrık Kök (Stem) Grafiği (Pozitif ve Negatif Loblar)
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h[n]$ dizisi yükselirken ($n = 0 \dots 2$) çıkış pozitiftir; $h[n]$ zirve yaptıktan sonra düşüşe geçtiğinde ($n = 4 \dots 7$) çıkış negatife geçer.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_dc_sifirlama_analizi.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">
+        5. Adım: Frekans Bölgesi ve Toplam Alan / DC Sıfırlama Analizi
+      </h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Ayrık zaman Fourier dönüşümünde (DTFT) $\omega = 0$ frekansı (DC bileşen), dizinin tüm elemanlarının doğrudan cebirsel toplamına eşittir:
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+
+      <!-- Fiziksel Yorum Kutusu -->
+      <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-indigo-950">Toplam Alan Korunumu ve DC Engelleme:</div>
+        <div class="overflow-x-auto py-1 font-mono text-indigo-900 text-xs">
+          $$\sum_{n=-\infty}^{\infty} y[n] = 1 + 4 + 5 + 1 + (-3) + (-4) + (-3) + (-1) = \mathbf{0}$$
+          $$Y(e^{j0}) = X(e^{j0}) \cdot H(e^{j0}) = (1 - 1) \cdot H(e^{j0}) = 0 \cdot 40 = \mathbf{0}$$
+        </div>
+        <div class="text-xs text-indigo-800">
+          Giriş sinyali $x[n] = \delta[n] - \delta[n-1]$ net bir DC bileşene sahip değildir (sıfır frekansta kazanç $0$'dır). Bu nedenle LTI çıkışı daima toplamı sıfır olan dengeli bir AC dalga formudur.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minN, maxN, stepPx, labelX = "n", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, oy + 40); ctx.lineTo(ox, 18);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 18); ctx.lineTo(ox, 10); ctx.lineTo(ox + 4, 18); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 15);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let n = minN; n <= maxN; n++) {
+        const px = ox + n * stepPx;
+        if (px >= 28 && px <= w - 28) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          ctx.fillText(n.toString(), px - (n < 0 ? 6 : 3), oy + 15);
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 18, radius = 4, drawZeroDot = true) {
+      const py = oy - val * scaleY;
+      if (Math.abs(val) < 0.001) {
+        if (drawZeroDot) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(px, oy, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        return;
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Değer etiketi
+      ctx.font = "bold 10px sans-serif";
+      const txtY = val > 0 ? py - 6 : py + 14;
+      ctx.fillText(val.toString(), px - 4, txtY);
+    }
+
+    const H_GIVEN = [1, 5, 10, 11, 8, 4, 1]; // n = 0..6
+    const Y_SOL   = [1, 4, 5, 1, -3, -4, -3, -1]; // n = 0..7
+
+    function getH(n) {
+      if (n >= 0 && n <= 6) return H_GIVEN[n];
+      return 0;
+    }
+
+    function getY(n) {
+      if (n >= 0 && n <= 7) return Y_SOL[n];
+      return 0;
+    }
+
+    // 1. Adım Çizimi: x[n] = delta[n] - delta[n-1]
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 190);
+      const ox = 300, oy = 100, sc = 75;
+      drawDiscreteAxis(ctx, 860, 190, ox, oy, -2, 5, sc, "n", "x[n]");
+
+      drawStem(ctx, ox + 0 * sc, oy, 1, "#2563eb", 50);
+      drawStem(ctx, ox + 1 * sc, oy, -1, "#e11d48", 50);
+      drawStem(ctx, ox - 1 * sc, oy, 0, "#64748b", 50);
+      drawStem(ctx, ox + 2 * sc, oy, 0, "#64748b", 50);
+
+      ctx.fillStyle = "#2563eb"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("x[n] = δ[n] - δ[n-1] (İki Kutuplu Darbe Çifti)", ox + 50, 40);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // 2. Adım Çizimi: h[n] ve h[n-1]
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 200);
+      const ox = 180, oy = 150, sc = 60;
+      drawDiscreteAxis(ctx, 860, 200, ox, oy, -1, 8, sc, "n", "Genlik");
+
+      for (let n = 0; n <= 6; n++) {
+        drawStem(ctx, ox + n * sc - 6, oy, H_GIVEN[n], "#2563eb", 10, 3.5);
+      }
+      for (let n = 1; n <= 7; n++) {
+        drawStem(ctx, ox + n * sc + 6, oy, H_GIVEN[n - 1], "#9333ea", 10, 3.5);
+      }
+
+      ctx.fillStyle = "#2563eb"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("■ h[n]", 280, 35);
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("■ 1 Adım Gecikmeli h[n-1]", 360, 35);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // 3. Adım Çizimi: Fark Tablosu Çizimi
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 210);
+      const ox = 180, oy = 110, sc = 60;
+      drawDiscreteAxis(ctx, 860, 210, ox, oy, -1, 8, sc, "n", "y[n]");
+
+      for (let n = 0; n <= 7; n++) {
+        const val = Y_SOL[n];
+        const col = val >= 0 ? "#059669" : "#e11d48";
+        drawStem(ctx, ox + n * sc, oy, val, col, 16, 4.5);
+      }
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("Noktasal Çıkarma: y[n] = h[n] - h[n-1]", 240, 35);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // 4. Adım Çizimi: Tam Stem Çizimi
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 210);
+      const ox = 180, oy = 110, sc = 60;
+      drawDiscreteAxis(ctx, 860, 210, ox, oy, -2, 9, sc, "n", "y[n]");
+
+      for (let n = -2; n <= 9; n++) {
+        const val = getY(n);
+        const col = val >= 0 ? "#059669" : "#e11d48";
+        drawStem(ctx, ox + n * sc, oy, val, col, 16, 4.5);
+      }
+
+      ctx.fillStyle = "#059669"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("Pozitif Bölge: h[n] Yükselirken (+)", 240, 30);
+      ctx.fillStyle = "#e11d48";
+      ctx.fillText("Negatif Bölge: h[n] Azalırken (-)", 500, 30);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // 5. Adım Çizimi: Toplam Alan / DC Sıfırlama
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 180);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 860, 180);
+
+      ctx.fillStyle = "#1e1b4b"; ctx.font = "bold 13px monospace";
+      ctx.fillText("DC Bileşen & Alan Sağlaması (Area Property):", 60, 45);
+
+      ctx.font = "12px monospace"; ctx.fillStyle = "#334155";
+      ctx.fillText("Pozitif Örnekler Toplamı: (+1) + (+4) + (+5) + (+1)  = +11", 60, 80);
+      ctx.fillText("Negatif Örnekler Toplamı: (-3) + (-4) + (-3) + (-1)  = -11", 60, 110);
+
+      ctx.fillStyle = "#059669"; ctx.font = "bold 14px monospace";
+      ctx.fillText("Net Toplam (DC Kazancı) : (+11) + (-11) = 0   [Kusursuz Doğrulama!]", 60, 145);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const compCanvas = document.getElementById('compCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const simMath = document.getElementById('simMath');
+    const cCtx = compCanvas.getContext('2d');
+    const yCtx = ynCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function updateSim() {
+      const curN = parseInt(slider.value);
+      nVal.textContent = "n = " + curN;
+
+      const w = 860, ox = 200, sc = 55;
+
+      // Üst Kanvas: h[n] ve h[n-1]
+      drawDiscreteAxis(cCtx, w, 200, ox, 150, -2, 9, sc, "n", "Genlik");
+      for (let n = -1; n <= 8; n++) {
+        drawStem(cCtx, ox + n * sc - 5, 150, getH(n), "#2563eb", 10, 3.5);
+        drawStem(cCtx, ox + n * sc + 5, 150, getH(n - 1), "#9333ea", 10, 3.5);
+      }
+
+      // Kırmızı imleç üst kanvas
+      const curPx = ox + curN * sc;
+      cCtx.strokeStyle = "#dc2626"; cCtx.lineWidth = 1.4; cCtx.setLineDash([3, 3]);
+      cCtx.beginPath(); cCtx.moveTo(curPx, 150); cCtx.lineTo(curPx, 20); cCtx.stroke();
+      cCtx.setLineDash([]);
+
+      // Alt Kanvas: y[n]
+      drawDiscreteAxis(yCtx, w, 220, ox, 120, -2, 9, sc, "n", "y[n]");
+      for (let n = -2; n <= 9; n++) {
+        const val = getY(n);
+        const col = val >= 0 ? "#059669" : "#e11d48";
+        drawStem(yCtx, ox + n * sc, 120, val, col, 16, 4.5);
+      }
+
+      // Kırmızı imleç alt kanvas
+      const curVal = getY(curN);
+      const curPy = 120 - curVal * 16;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.4; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, 120); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5.5, 0, Math.PI * 2); yCtx.fill();
+
+      const hN = getH(curN);
+      const hN1 = getH(curN - 1);
+
+      simMath.innerHTML = `Zaman İndeksi: <b>n = ${curN}</b> &nbsp;|&nbsp; ` +
+                          `h[${curN}] = <b>${hN}</b> &nbsp;|&nbsp; ` +
+                          `h[${curN}-1] = <b>${hN1}</b> &nbsp;|&nbsp; ` +
+                          `Çıkış: <b>y[${curN}] = h[${curN}] - h[${curN}-1] = ${hN} - ${hN1} = <span class="${curVal >= 0 ? 'text-emerald-700' : 'text-rose-700'} font-bold">${curVal}</span></b>`;
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let animId = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      function step() {
+        if (!isPlaying) return;
+        let v = parseInt(slider.value) + 1;
+        if (v > parseInt(slider.max)) v = parseInt(slider.min);
+        slider.value = v;
+        updateSim();
+        setTimeout(() => {
+          if (isPlaying) animId = requestAnimationFrame(step);
+        }, 800);
+      }
+
+      if (isPlaying) animId = requestAnimationFrame(step);
+      else cancelAnimationFrame(animId);
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>

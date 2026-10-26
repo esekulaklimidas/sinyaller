@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.22 (c) Konvolüsyon Görselleştirici</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold uppercase tracking-wider">Sürekli Zaman (Continuous-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.22 (c) / Şekil P2.22</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.22 (c) — Dikdörtgen ve Üçgen Darbe Konvolüsyonu</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x(t) = u(t) - u(t-2), \quad h(t) = \text{Üçgen}(0, 1, 2) \quad \Longrightarrow \quad y(t) = x(t) * h(t)$$
+        Eksenlerde keyfi sayılar kullanılmamış; sınır geçişleri doğrudan <strong>$\tau = t - 2$</strong>, <strong>$\tau = t - 1$</strong> ve <strong>$\tau = t$</strong> parametrik koordinatlarıyla incelenmiştir.
+      </p>
+    </div>
+
+        <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-emerald-50 text-emerald-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi & Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Dikdörtgen darbe ile simetrik üçgen darbenin konvolüsyonu ve parabolik geçişler</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-emerald-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Sinyaller:</strong> $x(t) = u(t) - u(t-2)$ (genişliği 2, yüksekliği 1 dikdörtgen) ve $h(t) = 	ext{Üçgen}(0, 1, 2)$ (tepe genliği 1).</li>
+            <li><strong>İstenen:</strong> $y(t) = x(t) * h(t)$ çıkışını parçalı parabolik denklemlerle belirlemek ve çizmek.</li>
+            <li><strong>Kritik Sezgi:</strong> Sabit bir darbenin (derece 0) doğrusal bir üçgenle (derece 1) konvolüsyonu kuadratik (derece 2) paraboller üretir. Toplam süre $2 + 2 = 4$ birimdir.</li>
+          </ul>
+        </div>
+
+        <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
+          <h4 class="font-bold text-emerald-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Bölge Analizi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Bölge 1 ($t \le 0$):</strong> Üçgen henüz dikdörtgene ulaşmamıştır $\implies y(t) = 0$.</li>
+            <li><strong>Bölge 2 ($0 \le t \le 1$):</strong> Üçgenin ön ucu içeri girer $\implies y(t) = rac{1}{2}t^2$ (kuadratik tırmanış).</li>
+            <li><strong>Bölge 3 ($1 \le t \le 3$):</strong> Üçgenin tepe noktası pencere içindedir. $t = 2$'de üçgen tamamen dikdörtgen içindedir $\implies y(2) = 1.0$ (maksimum tepe). $y(t) = 1 - rac{1}{2}(t-2)^2$.</li>
+            <li><strong>Bölge 4 ($3 \le t \le 4$):</strong> Arka kuyruk dışarı çıkar $\implies y(t) = rac{1}{2}(4-t)^2$. $t > 4$ için $y(t) = 0$.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Çift Kanvaslı Konvolüsyon Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte $\tau$ uzayında $h(t-\tau)$ üçgeninin kayması ve sarı örtüşme alanı; altta anlık $y(t)$ dalga formu çizimi.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <label class="text-xs font-semibold text-slate-600">t Parametresi:</label>
+          <input type="range" id="tSlider" min="-1.0" max="5.0" step="0.05" value="1.8" class="w-44 accent-emerald-600 cursor-pointer">
+          <span id="tVal" class="text-xs font-mono font-bold bg-slate-100 px-2.5 py-1 rounded text-slate-800">t = 1.80</span>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Üst Kanvas: tau uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <canvas id="tauCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: y(t) uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <canvas id="ytCanvas" width="860" height="170" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_orijinal_sinyaller.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Sinyalleri $\tau$ Değişkenine Dönüştürme</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $x(\tau) = u(\tau) - u(\tau-2)$ (Mavi dikdörtgen darbe, $\tau \in [0, 2]$, genlik $1$) ve $h(\tau)$ (Mor simetrik üçgen darbe, $\tau \in [0, 2]$, tepe $\tau=1$'de $1$).
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_katlama_h_eksi_tau.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Katlama (Flipping) $\to h(-\tau)$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h(\tau)$ üçgeni dikey eksene göre aynalanır ($\tau \to -\tau$). Üçgen $[-2, 0]$ aralığına geçer; tepe noktası $\tau = -1$'dedir. Ön uç $\tau = 0$'da, arka uç $\tau = -2$'dedir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_parametrik_oteleme.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Parametrik Zamanda Öteleme $\to h(t - \tau)$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Ters çevrilmiş üçgen zamanda $t$ kadar kaydırılır. Eksen üzerine hiçbir keyfi sayı konulmaz:
+        <strong>Ön Uç: $\tau = t$</strong>, <strong>Tepe Noktası: $\tau = t - 1$</strong>, <strong>Arka Uç: $\tau = t - 2$</strong>. Sinyal genişliği $2$ birimdir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_bolge2_giris.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Bölge 2 ($0 \le t \le 1$): Kısmi Giriş $\to y(t) = \frac{1}{2} t^2$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Ön uç $[0, 1]$ aralığında içeri girer; tepe ($t-1 \le 0$) henüz girmemiştir. Sarı alan: $y(t) = \int_0^t (t-\tau) d\tau = \frac{1}{2}t^2$. 
+        $y(0) = 0$, $y(1) = 0.5$. Kuadratik (parabolik) tırmanış.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+      <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-indigo-950">Bölge 2 Analitik İntegral Hesabı ($0 \le t \le 1$):</div>
+        <div class="overflow-x-auto py-1 font-mono text-indigo-900">
+          $$y(t) = \int_{0}^{t} x(\tau) h(t - \tau) d\tau = \int_{0}^{t} (1) \cdot (t - \tau) d\tau = \left[ t\tau - \frac{\tau^2}{2} \right]_0^t = \mathbf{\frac{1}{2} t^2}$$
+        </div>
+        <div class="text-xs text-indigo-800">
+          $y(0) = 0$, $y(1) = 0.5$. Türev $y'(t) = t \implies y'(1) = 1$. Parabolik tırmanış.
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_bolge3_tepe.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Bölge 3 ($1 \le t \le 3$): Tepe Geçişi $\to y(t) = 1 - \frac{1}{2}(t-2)^2$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Üçgen pencerenin merkezinden geçer. $t=2$'de üçgen tamamen dikdörtgenin içine girer ve maksimum tepe değeri $y(2) = 1.0$'a ulaşır. 
+        Tüm aralık boyunca $y(t) = 1 - \frac{1}{2}(t-2)^2 = -\frac{1}{2}t^2 + 2t - 1$ parabolü geçerlidir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+      <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-emerald-950">Bölge 3 Analitik İntegral Hesabı ($1 \le t \le 3$):</div>
+        <p class="text-xs text-emerald-800">$1 \le t \le 2$ alt aralığında tepe içeri girerken ($x=1$ ile iki parçalı kesişim):</p>
+        <div class="overflow-x-auto py-1 font-mono text-emerald-900">
+          $$y(t) = \int_0^{t-1} (2 - t + \tau) d\tau + \int_{t-1}^t (t - \tau) d\tau = \left[ 2(t-1) - t(t-1) + \frac{(t-1)^2}{2} \right] + \frac{1}{2} = \mathbf{1 - \frac{1}{2}(t-2)^2}$$
+        </div>
+        <p class="text-xs text-emerald-800">$2 \le t \le 3$ alt aralığında tepe dışarı çıkarken ($x=1$ ile iki parçalı kesişim):</p>
+        <div class="overflow-x-auto py-1 font-mono text-emerald-900">
+          $$y(t) = \int_{t-2}^{t-1} (2 - t + \tau) d\tau + \int_{t-1}^2 (t - \tau) d\tau = \mathbf{1 - \frac{1}{2}(t-2)^2}$$
+        </div>
+        <div class="text-xs text-emerald-800 font-bold">
+          $t = 2$'de üçgen tamamen dikdörtgenin içindedir: $y(2) = 1.0$ maksimum tepe noktasıdır.
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_bolge4_cikis.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Bölge 4 ($3 \le t \le 4$): Kısmi Çıkış $\to y(t) = \frac{1}{2}(4-t)^2$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Tepe noktası ($t-1 \ge 2$) dışarı çıkmıştır; yalnızca arka kuyruk $[t-2, 2]$ aralığında içeridedir. 
+        Sarı alan: $y(t) = \int_{t-2}^2 (2-t+\tau) d\tau = \frac{1}{2}(4-t)^2$. $y(3) = 0.5$, $y(4) = 0$. $t > 4$ için $y(t) = 0$.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+      <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs sm:text-sm space-y-2">
+        <div class="font-bold text-rose-950">Bölge 4 Analitik İntegral Hesabı ($3 \le t \le 4$):</div>
+        <div class="overflow-x-auto py-1 font-mono text-rose-900">
+          $$y(t) = \int_{t-2}^{2} (1) \cdot (2 - t + \tau) d\tau = \left[ (2-t)\tau + \frac{\tau^2}{2} \right]_{t-2}^2 = \mathbf{\frac{1}{2}(4 - t)^2}$$
+        </div>
+        <div class="text-xs text-rose-800">
+          Sınır değerleri: $y(3) = 0.5$, $y(4) = 0$. $t > 4$ için $y(t) = 0$.
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-xs font-semibold">7. Adım</span>
+        <button onclick="downloadCard('img7', '7_adim_nihai_cikis_y_t.png')" class="px-3 py-1.5 bg-teal-600 hover:bg-teal-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Sistemin Toplam Çıkış Dalgası $y(t)$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $t=2$ eksenine göre simetrik, $C^1$ mertebesinde türevlenebilir ve pürüzsüz dalga şekli. 
+        Toplam integral alanı $\int_0^4 y(t) dt = 2$ olup $\text{Alan}(x) \times \text{Alan}(h) = 2 \times 1 = 2$ teoremine kusursuz uyar.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img7" class="w-full h-auto block" alt="7. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawBaseAxis(ctx, w, h, ox, oy, lx = "τ", ly = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 30; y < h; y += 30) { ctx.moveTo(30, y); ctx.lineTo(w - 30, y); }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(30, oy); ctx.lineTo(w - 30, oy);
+      ctx.moveTo(ox, oy + 15); ctx.lineTo(ox, 25);
+      ctx.stroke();
+
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 30, oy - 4); ctx.lineTo(w - 20, oy); ctx.lineTo(w - 30, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 25); ctx.lineTo(ox, 17); ctx.lineTo(ox + 4, 25); ctx.fill();
+
+      ctx.font = "bold 13px sans-serif";
+      ctx.fillText(lx, w - 18, oy + 4);
+      ctx.fillText(ly, ox - 40, 20);
+    }
+
+    // 1. Adım Çizimi
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 150, oy = 170, sc = 80;
+      drawBaseAxis(ctx, 860, 220, ox, oy);
+
+      // x(tau)
+      ctx.fillStyle = "rgba(37, 99, 235, 0.08)";
+      ctx.fillRect(ox, oy - 100, 2 * sc, 100);
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - 100); ctx.lineTo(ox + 2 * sc, oy - 100); ctx.lineTo(ox + 2 * sc, oy);
+      ctx.stroke();
+
+      // h(tau)
+      const hx = ox + 3.5 * sc;
+      ctx.fillStyle = "rgba(147, 51, 234, 0.08)";
+      ctx.beginPath();
+      ctx.moveTo(hx, oy); ctx.lineTo(hx + sc, oy - 100); ctx.lineTo(hx + 2 * sc, oy); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(hx, oy); ctx.lineTo(hx + sc, oy - 100); ctx.lineTo(hx + 2 * sc, oy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("2", ox + 2 * sc - 4, oy + 18);
+      ctx.fillText("1", ox - 14, oy - 100);
+
+      ctx.fillText("0", hx - 4, oy + 18);
+      ctx.fillText("1", hx + sc - 4, oy + 18);
+      ctx.fillText("2", hx + 2 * sc - 4, oy + 18);
+
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x(τ) = u(τ) - u(τ-2)", ox + 20, 50);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h(τ) (Üçgen Darbe)", hx + 20, 50);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // 2. Adım Çizimi (Katlama)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 520, oy = 170, sc = 80;
+      drawBaseAxis(ctx, 860, 220, ox, oy);
+
+      ctx.fillStyle = "rgba(147, 51, 234, 0.1)";
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox - sc, oy - 100); ctx.lineTo(ox - 2 * sc, oy); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox - sc, oy - 100); ctx.lineTo(ox - 2 * sc, oy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("-1", ox - sc - 8, oy + 18);
+      ctx.fillText("-2", ox - 2 * sc - 8, oy + 18);
+      ctx.fillText("1", ox + 8, oy - 100);
+
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("h(-τ) (Katlanmış Üçgen: [-2, 0] Aralığında)", 180, 50);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // 3. Adım Çizimi (Parametrik Öteleme)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 260, oy = 170, sc = 85;
+      drawBaseAxis(ctx, 860, 220, ox, oy);
+
+      const tPos = 580;
+      const tPeak = tPos - sc;
+      const tTail = tPos - 2 * sc;
+
+      ctx.fillStyle = "rgba(147, 51, 234, 0.1)";
+      ctx.beginPath();
+      ctx.moveTo(tTail, oy); ctx.lineTo(tPeak, oy - 100); ctx.lineTo(tPos, oy); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(tTail, oy); ctx.lineTo(tPeak, oy - 100); ctx.lineTo(tPos, oy);
+      ctx.stroke();
+
+      // Tepe kesikli çizgi
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(tPeak, oy); ctx.lineTo(tPeak, oy - 100); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = "#9333ea"; ctx.beginPath(); ctx.arc(tPeak, oy - 100, 4.5, 0, Math.PI * 2); ctx.fill();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("τ = 0", ox - 14, oy + 20);
+
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("τ = t - 2 (Arka Uç)", tTail - 40, oy + 20);
+      ctx.fillText("τ = t - 1 (Tepe)", tPeak - 30, oy + 35);
+      ctx.fillText("τ = t (Ön Uç)", tPos - 20, oy + 20);
+      ctx.fillText("1", tPeak - 15, oy - 105);
+
+      ctx.fillText("h(t - τ) = Genel Parametrik Kaydırma (Genişlik = 2)", 240, 45);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // 4. Adım Çizimi (Bölge 2: 0 <= t <= 1)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 230);
+      const ox = 240, oy = 175, sc = 80;
+      drawBaseAxis(ctx, 860, 230, ox, oy);
+
+      const t = 0.75;
+      const tPos = ox + t * sc;
+      const tPeak = tPos - sc;
+      const tTail = tPos - 2 * sc;
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.2;
+      ctx.strokeRect(ox, oy - 100, 2 * sc, 100);
+
+      // Sarı taralı örtüşme [ox, tPos]
+      ctx.fillStyle = "rgba(251, 191, 36, 0.35)";
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ox, oy - t * 100);
+      ctx.lineTo(tPos, oy);
+      ctx.closePath();
+      ctx.fill();
+
+      // h(t-tau)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(tTail, oy); ctx.lineTo(tPeak, oy - 100); ctx.lineTo(tPos, oy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("2", ox + 2 * sc - 4, oy + 18);
+
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("t-2", tTail - 8, oy + 18);
+      ctx.fillText("t", tPos - 4, oy + 18);
+
+      ctx.fillStyle = "#b45309"; ctx.font = "bold 13px sans-serif";
+      ctx.fillText("0 ≤ t ≤ 1: y(t) = ∫₀ᵗ (t - τ) dτ = (1/2) t²", 260, 45);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // 5. Adım Çizimi (Bölge 3: 1 <= t <= 3)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 230);
+      const ox = 240, oy = 175, sc = 80;
+      drawBaseAxis(ctx, 860, 230, ox, oy);
+
+      const t = 1.8;
+      const tPos = ox + t * sc;
+      const tPeak = tPos - sc;
+      const tTail = tPos - 2 * sc;
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.2;
+      ctx.strokeRect(ox, oy - 100, 2 * sc, 100);
+
+      // Sarı taralı alan
+      ctx.fillStyle = "rgba(251, 191, 36, 0.35)";
+      ctx.beginPath();
+      ctx.moveTo(ox, oy);
+      ctx.lineTo(ox, oy - (1 - (ox - tPeak)/sc) * 100);
+      ctx.lineTo(tPeak, oy - 100);
+      ctx.lineTo(tPos, oy);
+      ctx.closePath();
+      ctx.fill();
+
+      // h(t-tau)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(tTail, oy); ctx.lineTo(tPeak, oy - 100); ctx.lineTo(tPos, oy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("2", ox + 2 * sc - 4, oy + 18);
+
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("t-2", tTail - 8, oy + 18);
+      ctx.fillText("t-1 (Tepe)", tPeak - 24, oy + 18);
+      ctx.fillText("t", tPos - 4, oy + 18);
+
+      ctx.fillStyle = "#059669"; ctx.font = "bold 13px sans-serif";
+      ctx.fillText("1 ≤ t ≤ 3: y(t) = 1 - (1/2)(t - 2)² ⟹ y(2) = 1.0 (Zirve)", 250, 45);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // 6. Adım Çizimi (Bölge 4: 3 <= t <= 4)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 230);
+      const ox = 240, oy = 175, sc = 80;
+      drawBaseAxis(ctx, 860, 230, ox, oy);
+
+      const t = 3.3;
+      const tPos = ox + t * sc;
+      const tPeak = tPos - sc;
+      const tTail = tPos - 2 * sc;
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.2;
+      ctx.strokeRect(ox, oy - 100, 2 * sc, 100);
+
+      // Sarı taralı alan [tTail, ox + 2*sc]
+      ctx.fillStyle = "rgba(251, 191, 36, 0.35)";
+      ctx.beginPath();
+      ctx.moveTo(tTail, oy);
+      ctx.lineTo(ox + 2 * sc, oy - (2 - (ox + 2*sc - tTail)/sc) * 100);
+      ctx.lineTo(ox + 2 * sc, oy);
+      ctx.closePath();
+      ctx.fill();
+
+      // h(t-tau)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(tTail, oy); ctx.lineTo(tPeak, oy - 100); ctx.lineTo(tPos, oy);
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 12px sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("2", ox + 2 * sc - 4, oy + 18);
+
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("t-2", tTail - 8, oy + 18);
+      ctx.fillText("t", tPos - 4, oy + 18);
+
+      ctx.fillStyle = "#e11d48"; ctx.font = "bold 13px sans-serif";
+      ctx.fillText("3 ≤ t ≤ 4: y(t) = (1/2)(4 - t)² ⟹ y(4) = 0", 260, 45);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // 7. Adım Çizimi (y(t) Çıkış Eğrisi)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 180, oy = 170, sc = 110;
+      drawBaseAxis(ctx, 860, 220, ox, oy, "t", "y(t)");
+
+      ctx.strokeStyle = "#0d9488"; ctx.lineWidth = 2.8; ctx.beginPath();
+      ctx.moveTo(50, oy); ctx.lineTo(ox, oy);
+
+      for (let px = ox; px <= ox + 4 * sc; px++) {
+        const t = (px - ox) / sc;
+        let y = 0;
+        if (t >= 0 && t <= 1) y = 0.5 * t * t;
+        else if (t > 1 && t <= 3) y = 1 - 0.5 * (t - 2) * (t - 2);
+        else if (t > 3 && t <= 4) y = 0.5 * (4 - t) * (4 - t);
+        const py = oy - y * 120;
+        ctx.lineTo(px, py);
+      }
+      ctx.lineTo(820, oy);
+      ctx.stroke();
+
+      // Kritik noktalar
+      const pts = [
+        {t: 0, y: 0, l: "y(0)=0"},
+        {t: 1, y: 0.5, l: "y(1)=0.5"},
+        {t: 2, y: 1.0, l: "y(2)=1.0 (Tepe)"},
+        {t: 3, y: 0.5, l: "y(3)=0.5"},
+        {t: 4, y: 0, l: "y(4)=0"}
+      ];
+      pts.forEach(p => {
+        const px = ox + p.t * sc, py = oy - p.y * 120;
+        ctx.fillStyle = "#0f766e"; ctx.beginPath(); ctx.arc(px, py, 4.5, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px sans-serif";
+        ctx.fillText(p.t, px - 3, oy + 18);
+        if (p.t > 0 && p.t < 4) ctx.fillText(p.l, px - 25, py - 10);
+      });
+
+      ctx.fillStyle = "#0d9488"; ctx.font = "bold 13px sans-serif";
+      ctx.fillText("y(t) = Parçalı Kuadratik Simetrik Fonksiyon", 260, 45);
+
+      document.getElementById('img7').src = canvas.toDataURL('image/png');
+    })();
+
+    // Canlı Simülatör
+    const slider = document.getElementById('tSlider');
+    const tVal = document.getElementById('tVal');
+    const tauCanvas = document.getElementById('tauCanvas');
+    const ytCanvas = document.getElementById('ytCanvas');
+    const simMath = document.getElementById('simMath');
+    const tCtx = tauCanvas.getContext('2d');
+    const yCtx = ytCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function evalY(t) {
+      if (t < 0 || t > 4) return 0;
+      if (t <= 1) return 0.5 * t * t;
+      if (t <= 3) return 1 - 0.5 * (t - 2) * (t - 2);
+      return 0.5 * (4 - t) * (4 - t);
+    }
+
+    function updateSim() {
+      const t = parseFloat(slider.value);
+      tVal.textContent = "t = " + t.toFixed(2);
+
+      // Üst Kanvas: Tau uzayı
+      const w = 860, h1 = 230, ox = 260, oy1 = 175, sc = 80;
+      tCtx.fillStyle = "#ffffff"; tCtx.fillRect(0, 0, w, h1);
+
+      tCtx.strokeStyle = "#e2e8f0"; tCtx.lineWidth = 1; tCtx.beginPath();
+      for (let y = 30; y < h1; y += 35) { tCtx.moveTo(30, y); tCtx.lineTo(w - 30, y); }
+      tCtx.stroke();
+
+      tCtx.strokeStyle = "#334155"; tCtx.lineWidth = 1.8; tCtx.beginPath();
+      tCtx.moveTo(30, oy1); tCtx.lineTo(w - 30, oy1);
+      tCtx.moveTo(ox, oy1 + 15); tCtx.lineTo(ox, 25);
+      tCtx.stroke();
+      tCtx.fillStyle = "#334155"; tCtx.font = "bold 13px sans-serif";
+      tCtx.fillText("τ", w - 20, oy1 + 4);
+
+      // x(tau)
+      tCtx.fillStyle = "rgba(37, 99, 235, 0.08)";
+      tCtx.fillRect(ox, oy1 - 100, 2 * sc, 100);
+      tCtx.strokeStyle = "#2563eb"; tCtx.lineWidth = 2.2;
+      tCtx.strokeRect(ox, oy1 - 100, 2 * sc, 100);
+
+      const tPos = ox + t * sc;
+      const tPeak = tPos - sc;
+      const tTail = tPos - 2 * sc;
+
+      // Örtüşme Alanı (Sarı)
+      tCtx.fillStyle = "rgba(251, 191, 36, 0.4)";
+      tCtx.beginPath();
+      let started = false;
+      for (let px = ox; px <= ox + 2 * sc; px++) {
+        if (px >= tTail && px <= tPos) {
+          const tau = (px - ox) / sc;
+          let triH = 0;
+          if (px <= tPeak) triH = (px - tTail) / sc;
+          else triH = (tPos - px) / sc;
+          const py = oy1 - triH * 100;
+          if (!started) { tCtx.moveTo(px, oy1); tCtx.lineTo(px, py); started = true; }
+          else tCtx.lineTo(px, py);
+        }
+      }
+      if (started) {
+        tCtx.lineTo(Math.min(tPos, ox + 2 * sc), oy1);
+        tCtx.closePath();
+        tCtx.fill();
+      }
+
+      // h(t-tau)
+      tCtx.strokeStyle = "#9333ea"; tCtx.lineWidth = 2.4;
+      tCtx.beginPath();
+      tCtx.moveTo(tTail, oy1); tCtx.lineTo(tPeak, oy1 - 100); tCtx.lineTo(tPos, oy1);
+      tCtx.stroke();
+
+      tCtx.fillStyle = "#0f172a"; tCtx.font = "bold 12px sans-serif";
+      tCtx.fillText("0", ox - 4, oy1 + 18);
+      tCtx.fillText("2", ox + 2 * sc - 4, oy1 + 18);
+
+      tCtx.fillStyle = "#9333ea";
+      tCtx.fillText("t-2", tTail - 8, oy1 + 18);
+      tCtx.fillText("t", tPos - 4, oy1 + 18);
+
+      // Alt Kanvas: y(t) uzayı
+      const h2 = 170, oy2 = 135;
+      yCtx.fillStyle = "#ffffff"; yCtx.fillRect(0, 0, w, h2);
+
+      yCtx.strokeStyle = "#e2e8f0"; yCtx.lineWidth = 1; yCtx.beginPath();
+      for (let y = 25; y < h2; y += 30) { yCtx.moveTo(30, y); yCtx.lineTo(w - 30, y); }
+      yCtx.stroke();
+
+      yCtx.strokeStyle = "#334155"; yCtx.lineWidth = 1.8; yCtx.beginPath();
+      yCtx.moveTo(30, oy2); yCtx.lineTo(w - 30, oy2);
+      yCtx.moveTo(ox, oy2 + 15); yCtx.lineTo(ox, 20);
+      yCtx.stroke();
+      yCtx.fillStyle = "#334155"; yCtx.font = "bold 13px sans-serif";
+      yCtx.fillText("t", w - 20, oy2 + 4);
+
+      // y(t) eğrisi
+      yCtx.strokeStyle = "#0d9488"; yCtx.lineWidth = 2.6;
+      yCtx.beginPath();
+      yCtx.moveTo(ox - sc, oy2);
+      for (let px = ox - sc; px <= ox + 5 * sc; px++) {
+        const curT = (px - ox) / sc;
+        const curY = evalY(curT);
+        yCtx.lineTo(px, oy2 - curY * 85);
+      }
+      yCtx.stroke();
+
+      // Anlık t imleci
+      const curYVal = evalY(t);
+      const curPx = ox + t * sc, curPy = oy2 - curYVal * 85;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.4; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oy2); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 4.5, 0, Math.PI * 2); yCtx.fill();
+
+      // Durum paneli
+      let regionDesc = "";
+      if (t < 0) regionDesc = `Durum: <b class="text-slate-600">t < 0 (Örtüşme Yok)</b> &nbsp;|&nbsp; <b>y(${t.toFixed(2)}) = 0.000</b>`;
+      else if (t <= 1) regionDesc = `Durum: <b class="text-blue-600">0 ≤ t ≤ 1 (Kısmi Giriş)</b> &nbsp;|&nbsp; Formül: <b>y(t) = 0.5 t²</b> &nbsp;|&nbsp; <b>y(${t.toFixed(2)}) ≈ ${curYVal.toFixed(3)}</b>`;
+      else if (t <= 3) regionDesc = `Durum: <b class="text-emerald-700">1 ≤ t ≤ 3 (Tepe Geçişi)</b> &nbsp;|&nbsp; Formül: <b>y(t) = 1 - 0.5(t-2)²</b> &nbsp;|&nbsp; <b>y(${t.toFixed(2)}) ≈ ${curYVal.toFixed(3)}</b>`;
+      else if (t <= 4) regionDesc = `Durum: <b class="text-rose-600">3 ≤ t ≤ 4 (Kısmi Çıkış)</b> &nbsp;|&nbsp; Formül: <b>y(t) = 0.5(4-t)²</b> &nbsp;|&nbsp; <b>y(${t.toFixed(2)}) ≈ ${curYVal.toFixed(3)}</b>`;
+      else regionDesc = `Durum: <b class="text-slate-600">t > 4 (Tamamen Ayrıldı)</b> &nbsp;|&nbsp; <b>y(${t.toFixed(2)}) = 0.000</b>`;
+
+      simMath.innerHTML = regionDesc;
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let animId = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      function step() {
+        if (!isPlaying) return;
+        let v = parseFloat(slider.value) + 0.025;
+        if (v > parseFloat(slider.max)) v = parseFloat(slider.min);
+        slider.value = v;
+        updateSim();
+        animId = requestAnimationFrame(step);
+      }
+
+      if (isPlaying) animId = requestAnimationFrame(step);
+      else cancelAnimationFrame(animId);
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.22 (b) Sürekli Zamanlı Konvolüsyon Görselleştirici</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-serif { font-family: "Cambria Math", "Times New Roman", serif; font-style: italic; }
+    .code-box { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-3 sm:px-6 lg:px-8">
+
+  <div class="max-w-5xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+
+    <!-- ÜST BAŞLIK KARTI -->
+    <header class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold uppercase tracking-wider mb-2">
+            <span>Sürekli Zamanlı LTI Sistemler</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+            <span>Problem 2.22 (b)</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+            Sürekli Zamanlı Konvolüsyon: $y(t) = x(t) * h(t)$
+          </h1>
+          <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+            Sinyaller: <strong class="text-blue-600 font-mono">x(t) = u(t) - 2u(t-2) + u(t-5)</strong> ve 
+            <strong class="text-purple-600 font-mono">h(t) = e^{2t} u(1 - t)</strong>
+          </p>
+        </div>
+
+        <!-- Sekme Geçişi -->
+        <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200 self-start md:self-auto">
+          <button id="btn-tab-steps" onclick="switchView('steps')" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-sm">
+            🖼️ 8 Adım Görsel Analiz
+          </button>
+          <button id="btn-tab-sim" onclick="switchView('sim')" class="px-4 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900">
+            🕹️ Canlı Simülatör (t Kaydırıcı)
+          </button>
+        </div>
+      </div>
+
+      <!-- Sinyal Karakteristikleri Özeti -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs sm:text-sm">
+        <div class="border-l-4 border-blue-500 bg-blue-50/50 p-3 rounded-r-xl border border-blue-100">
+          <span class="font-bold text-blue-950 block">Giriş Sinyali x(t)</span>
+          <span class="font-mono text-blue-900 block mt-0.5">+1 ($0 \le t < 2$), &nbsp; -1 ($2 \le t < 5$)</span>
+          <span class="text-xs text-blue-700 block mt-1">Sonlu süreli dikdörtgen çift basamak darbesi.</span>
+        </div>
+
+        <div class="border-l-4 border-purple-500 bg-purple-50/50 p-3 rounded-r-xl border border-purple-100">
+          <span class="font-bold text-purple-950 block">Dürtü Tepkisi h(t)</span>
+          <span class="font-mono text-purple-900 block mt-0.5">h(t) = e^{2t} &nbsp; ($t \le 1$)</span>
+          <span class="text-xs text-purple-700 block mt-1">Nedensel olmayan (non-causal), sol yanlı üstel sinyal.</span>
+        </div>
+
+        <div class="border-l-4 border-emerald-500 bg-emerald-50/50 p-3 rounded-r-xl border border-emerald-100">
+          <span class="font-bold text-emerald-950 block">Örtüşme Sınırı: τ ≥ t - 1</span>
+          <span class="font-mono text-emerald-900 block mt-0.5">h(t - τ) sol ucu τ = t - 1'dedir</span>
+          <span class="text-xs text-emerald-700 block mt-1">t büyüdükçe sınır sağa kayar; 4 parçalı bölge üretir.</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- GÖRÜNÜM 1: 8 ADIMLI ZENGİNLEŞTİRİLMİŞ ANALİTİK KARTLAR -->
+        <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-emerald-50 text-emerald-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi & Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Parçalı sabit giriş ile nedensel olmayan (sol yanlı) üstel sinyalin integrasyonu</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-emerald-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Sinyaller:</strong> $x(t) = u(t) - 2u(t-2) + u(t-5)$ (pozitif ve negatif bloklar) ve $h(t) = e^{2t} u(1-t)$ (sol yanlı, $t \le 1$ için aktif).</li>
+            <li><strong>İstenen:</strong> $y(t) = x(t) * h(t)$ fonksiyonunu parçalı zaman bölgelerine ayırarak analitik olarak türetmek.</li>
+            <li><strong>Kritik Sezgi:</strong> Katlama $h(t-\tau) = e^{2(t-\tau)} u(1 - t + \tau)$ olduğundan alt sınır $\tau \ge t - 1$'dir. $t$ büyüdükçe bu sol sınır sağa kayarak $x(\tau)$ bloklarını tek tek tarar.</li>
+          </ul>
+        </div>
+
+        <div class="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100 space-y-2">
+          <h4 class="font-bold text-emerald-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 4 Farklı Bölgenin Tespiti
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Bölge 1 ($t \le 1 \iff t-1 \le 0$):</strong> Sol uç sıfırın solundadır; $[0, 2]$ ve $[2, 5]$ bloklarının tamamı örtüşür.</li>
+            <li><strong>Bölge 2 ($1 < t \le 3 \iff 0 < t-1 \le 2$):</strong> Sol uç pozitif bloğun içindedir; $[t-1, 2]$ ve $[2, 5]$ örtüşür.</li>
+            <li><strong>Bölge 3 ($3 < t \le 6 \iff 2 < t-1 \le 5$):</strong> Pozitif blok bitmiştir; sol uç negatif blok içinde $[t-1, 5]$ aralığını tarar.</li>
+            <li><strong>Bölge 4 ($t > 6 \iff t-1 > 5$):</strong> Sol uç $5$'i aşmıştır; ortak bölge kalmaz $\implies y(t) = 0$.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <main id="view-steps" class="space-y-8">
+
+      <!-- ADIM 1: Sinyallerin Tanımı -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-blue-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">1</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                1. Adım: Sinyallerin Yapısı ve $\tau$ Ekseni Dönüşümü
+              </h2>
+              <span class="text-xs font-mono text-blue-600 font-semibold">$x(\tau) = u(\tau) - 2u(\tau - 2) + u(\tau - 5)$ ve $h(\tau) = e^{2\tau} u(1 - \tau)$</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img1', '1_adim_sinyaller_x_h.png')" class="text-xs font-medium text-slate-700 hover:text-blue-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          Konvolüsyon integrali $y(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau$ ifadesinde ilk işlem, bağımsız değişkeni entegrasyon kukla değişkeni olan $\tau$'ya çevirmektir.<br>
+          &bull; <strong>$x(\tau)$ (Mavi):</strong> $[0, 2)$ aralığında $+1$, $[2, 5)$ aralığında $-1$ genliğine sahip iki bitişik dikdörtgen darbedir. Diğer her yerde sıfırdır.<br>
+          &bull; <strong>$h(\tau)$ (Mor):</strong> $u(1 - \tau) \implies \tau \le 1$ için tanımlıdır. $\tau = 1$ anında tepe genliği $e^2 \approx 7.389$'a ulaşır ve sola doğru gittikçe hızla azalarak sıfıra yaklaşır.
+        </p>
+        <img id="img1" class="w-full h-auto rounded-xl border border-slate-200 bg-white" alt="1. Adım">
+      </section>
+
+      <!-- ADIM 2: Katlama (Flipping) -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-purple-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">2</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                2. Adım: Katlama (Flipping) $\to h(-\tau)$
+              </h2>
+              <span class="text-xs font-mono text-purple-600 font-semibold">$h(-\tau) = e^{-2\tau} u(1 - (-\tau)) = e^{-2\tau} u(\tau + 1)$</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img2', '2_adim_katlama_h_eksi_tau.png')" class="text-xs font-medium text-slate-700 hover:text-purple-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          $h(\tau)$ dikey eksene ($\tau = 0$) göre aynalanır ($\tau \to -\tau$). Orijinalde sol yanlı ($\tau \le 1$) olan sinyal, katlanınca sağ yanlı hale gelir:<br>
+          Tanım şartı $1 - (-\tau) \ge 0 \implies \mathbf{\tau \ge -1}$ olur. Sinyal en solda $\tau = -1$ noktasında $e^2$ tepe değeriyle başlar ve sağa ($+\infty$'a) doğru $e^{-2\tau}$ üstel sönümüyle azalarak uzanır.
+        </p>
+        <img id="img2" class="w-full h-auto rounded-xl border border-slate-200 bg-white" alt="2. Adım">
+      </section>
+
+      <!-- ADIM 3: Parametrik Zamanda Öteleme -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 ring-2 ring-purple-100">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-violet-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">3</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                3. Adım: Parametrik Zamanda Öteleme $\to h(t - \tau)$
+              </h2>
+              <span class="text-xs font-mono text-violet-600 font-semibold">$h(t - \tau) = e^{2(t - \tau)} u(1 - (t - \tau))$ &bull; Sol Başlangıç Sınırı: $\tau \ge t - 1$</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img3', '3_adim_oteleme_h_t_eksi_tau.png')" class="text-xs font-medium text-slate-700 hover:text-violet-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          Katlanmış sinyal $t$ kadar kaydırılır. Birim basamağın argümanı incelendiğinde:<br>
+          $$1 - (t - \tau) \ge 0 \implies 1 - t + \tau \ge 0 \implies \mathbf{\tau \ge t - 1}$$
+          Eksene keyfi sayılar yazılmaksızın genel cebirsel kural: <strong>Mor sinyalin sol başlangıç noktası daima $\tau = t - 1$ sınırıdır</strong> ve sağa ($+\infty$'a) doğru uzanır. $\tau = t - 1$ noktasında genlik $e^{2(t - (t - 1))} = e^2 \approx 7.389$'dur.
+        </p>
+        <img id="img3" class="w-full h-auto rounded-xl border border-slate-200 bg-white" alt="3. Adım">
+      </section>
+
+      <!-- ADIM 4: BÖLGE 1 (t <= 1) -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-amber-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">4</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                4. Adım: Bölge 1 ($t \le 1 \iff t - 1 \le 0$) $\to$ $x(\tau)$'nun Tamamı Örtüşür
+              </h2>
+              <span class="text-xs font-mono text-amber-600 font-semibold">$t - 1 \le 0$ &bull; İntegrasyon: $[0, 2]$ aralığında $+1$ ve $[2, 5]$ aralığında $-1$</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img4', '4_adim_bolge1_t_le_1.png')" class="text-xs font-medium text-slate-700 hover:text-amber-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          $t - 1 \le 0$ olduğunda, $h(t - \tau)$ sinyalinin sol başlangıç ucu $x(\tau)$'nun başladığı $\tau = 0$ noktasının solundadır. Dolayısıyla $x(\tau)$'nun hem pozitif bloğu $[0, 2]$ hem de negatif bloğu $[2, 5]$ mor sinyalin kapsama alanı içindedir:
+        </p>
+
+        <img id="img4" class="w-full h-auto rounded-xl border border-slate-200 bg-white mb-4" alt="4. Adım">
+
+        <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs sm:text-sm space-y-2">
+          <div class="font-bold text-amber-950">Bölge 1 Analitik İntegral Hesabı ($t \le 1$):</div>
+          <div class="overflow-x-auto py-1 font-mono text-amber-900">
+            $$y(t) = \int_{0}^{2} (+1) e^{2(t - \tau)} d\tau + \int_{2}^{5} (-1) e^{2(t - \tau)} d\tau = e^{2t} \left[ \int_{0}^{2} e^{-2\tau} d\tau - \int_{2}^{5} e^{-2\tau} d\tau \right]$$
+          </div>
+          <div class="overflow-x-auto py-1 font-mono text-amber-900">
+            $$\int_{0}^{2} e^{-2\tau} d\tau = \left[ -\frac{1}{2} e^{-2\tau} \right]_{0}^{2} = \frac{1 - e^{-4}}{2}, \qquad \int_{2}^{5} e^{-2\tau} d\tau = \left[ -\frac{1}{2} e^{-2\tau} \right]_{2}^{5} = \frac{e^{-4} - e^{-10}}{2}$$
+          </div>
+          <div class="overflow-x-auto py-1 font-mono text-amber-950 font-bold">
+            $$y(t) = e^{2t} \cdot \frac{1 - e^{-4} - (e^{-4} - e^{-10})}{2} = \mathbf{\frac{1 - 2e^{-4} + e^{-10}}{2} e^{2t}} \approx 0.4817 \cdot e^{2t} \quad (t \le 1)$$
+          </div>
+        </div>
+      </section>
+
+      <!-- ADIM 5: BÖLGE 2 (1 < t <= 3) -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-indigo-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">5</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                5. Adım: Bölge 2 ($1 < t \le 3 \iff 0 < t - 1 \le 2$) $\to$ Sol Uç Pozitif Bloğu Tarar
+              </h2>
+              <span class="text-xs font-mono text-indigo-600 font-semibold">Örtüşme: $[t - 1, 2]$ aralığında $+1$ ve $[2, 5]$ aralığında $-1$</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img5', '5_adim_bolge2_1_lt_t_le_3.png')" class="text-xs font-medium text-slate-700 hover:text-indigo-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          $1 < t \le 3$ aralığında mor sinyalin sol ucu $\tau = t - 1$, pozitif blok olan $[0, 2]$ aralığı boyunca kayar. $\tau < t - 1$ için $h(t - \tau) = 0$ olduğundan pozitif bloğun sol kısmı artık örtüşmez. İntegralin alt sınırı $t - 1$'dir:
+        </p>
+
+        <img id="img5" class="w-full h-auto rounded-xl border border-slate-200 bg-white mb-4" alt="5. Adım">
+
+        <div class="p-4 rounded-xl bg-indigo-50 border border-indigo-200 text-xs sm:text-sm space-y-2">
+          <div class="font-bold text-indigo-950">Bölge 2 Analitik İntegral Hesabı ($1 < t \le 3$):</div>
+          <div class="overflow-x-auto py-1 font-mono text-indigo-900">
+            $$y(t) = \int_{t-1}^{2} (+1) e^{2(t - \tau)} d\tau - \int_{2}^{5} (+1) e^{2(t - \tau)} d\tau = e^{2t} \left[ \int_{t-1}^{2} e^{-2\tau} d\tau - \int_{2}^{5} e^{-2\tau} d\tau \right]$$
+          </div>
+          <div class="overflow-x-auto py-1 font-mono text-indigo-900">
+            $$\int_{t-1}^{2} e^{-2\tau} d\tau = \left[ -\frac{1}{2} e^{-2\tau} \right]_{t-1}^{2} = \frac{e^{-2(t-1)} - e^{-4}}{2} = \frac{e^2 e^{-2t} - e^{-4}}{2}$$
+          </div>
+          <div class="overflow-x-auto py-1 font-mono text-indigo-950 font-bold">
+            $$y(t) = e^{2t} \cdot \left[ \frac{e^2 e^{-2t} - e^{-4} - e^{-4} + e^{-10}}{2} \right] = \mathbf{\frac{e^2 - (2e^{-4} - e^{-10})e^{2t}}{2}} \quad (1 < t \le 3)$$
+          </div>
+        </div>
+      </section>
+
+      <!-- ADIM 6: BÖLGE 3 (3 < t <= 6) -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-rose-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">6</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                6. Adım: Bölge 3 ($3 < t \le 6 \iff 2 < t - 1 \le 5$) $\to$ Sol Uç Negatif Bloğu Tarar
+              </h2>
+              <span class="text-xs font-mono text-rose-600 font-semibold">Pozitif blok tamamen bitti &bull; Yalnızca $[t - 1, 5]$ aralığında $-1$ ile örtüşür</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img6', '6_adim_bolge3_3_lt_t_le_6.png')" class="text-xs font-medium text-slate-700 hover:text-rose-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          $3 < t \le 6$ olduğunda $t - 1 > 2$ olur; yani pozitif blok ($[0, 2]$) tamamen geride kalmıştır. Mor sinyalin sol ucu yalnızca negatif blok ($[2, 5]$) üzerinde yer alır. Örtüşme yalnızca $[t - 1, 5]$ aralığındadır:
+        </p>
+
+        <img id="img6" class="w-full h-auto rounded-xl border border-slate-200 bg-white mb-4" alt="6. Adım">
+
+        <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-xs sm:text-sm space-y-2">
+          <div class="font-bold text-rose-950">Bölge 3 Analitik İntegral Hesabı ($3 < t \le 6$):</div>
+          <div class="overflow-x-auto py-1 font-mono text-rose-900">
+            $$y(t) = \int_{t-1}^{5} (-1) e^{2(t - \tau)} d\tau = -e^{2t} \left[ -\frac{1}{2} e^{-2\tau} \right]_{t-1}^{5} = \frac{e^{2t}}{2} \left[ e^{-10} - e^{-2(t-1)} \right]$$
+          </div>
+          <div class="overflow-x-auto py-1 font-mono text-rose-950 font-bold">
+            $$y(t) = \mathbf{\frac{e^{-10} e^{2t} - e^2}{2}} \quad (3 < t \le 6)$$
+          </div>
+        </div>
+      </section>
+
+      <!-- ADIM 7: BÖLGE 4 (t >= 6) -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-slate-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">7</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                7. Adım: Bölge 4 ($t \ge 6 \iff t - 1 \ge 5$) $\to$ Örtüşme Tamamen Biter ($y(t) = 0$)
+              </h2>
+              <span class="text-xs font-mono text-slate-600 font-semibold">$t - 1 \ge 5$ &bull; $x(\tau)$ ve $h(t - \tau)$ arasında kesişim yoktur</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img7', '7_adim_bolge4_t_ge_6.png')" class="text-xs font-medium text-slate-700 hover:text-slate-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          $t \ge 6$ anında sol uç $t - 1 \ge 5$ noktasına ulaşır veya geçer. $x(\tau)$ sinyali $\tau = 5$'ten sonra sıfır olduğundan iki sinyal artık hiçbir noktada ortak olarak sıfırdan farklı değildir:
+          $$\mathbf{y(t) = 0 \quad (t \ge 6)}$$
+        </p>
+        <img id="img7" class="w-full h-auto rounded-xl border border-slate-200 bg-white" alt="7. Adım">
+      </section>
+
+      <!-- ADIM 8: SONUÇ, SÜREKLİLİK VE BASAMAK TEPKİSİ YÖNTEMİ -->
+      <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white font-extrabold text-sm flex items-center justify-center shadow-sm">8</span>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-slate-900">
+                8. Adım: Nihai Çıkış $y(t)$, Sınır Sürekliliği ve $s(t)$ Basamak Tepkisi Yöntemi
+              </h2>
+              <span class="text-xs font-mono text-emerald-600 font-semibold">Tüm $t$ değerleri için kapalı form &bull; $t = 1, 3, 6$ sınır kontrolleri</span>
+            </div>
+          </div>
+          <button onclick="downloadCard('img8', '8_adim_cikis_sinyali_y_t.png')" class="text-xs font-medium text-slate-700 hover:text-emerald-600 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Resmi İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 mb-4 leading-relaxed">
+          Sistemin toplam konvolüsyon çıkışı 4 parçalı sürekli bir fonksiyondur:
+        </p>
+
+        <div class="p-4 rounded-xl bg-slate-900 text-white font-mono text-xs sm:text-sm overflow-x-auto mb-4">
+          $$y(t) = \begin{cases} 
+          \dfrac{1 - 2e^{-4} + e^{-10}}{2} e^{2t}, & t \le 1 \\[10pt]
+          \dfrac{e^2 - (2e^{-4} - e^{-10})e^{2t}}{2}, & 1 < t \le 3 \\[10pt]
+          \dfrac{e^{-10}e^{2t} - e^2}{2}, & 3 < t \le 6 \\[10pt]
+          0, & t \ge 6 
+          \end{cases}$$
+        </div>
+
+        <img id="img8" class="w-full h-auto rounded-xl border border-slate-200 bg-white mb-4" alt="8. Adım">
+
+        <!-- Kritik Sınır Sürekliliği Tablosu -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+          <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl space-y-1.5">
+            <span class="font-bold text-emerald-950 block">Sınır Sürekliliği Doğrulaması:</span>
+            <div class="font-mono text-emerald-900 text-xs leading-relaxed">
+              &bull; <strong>t = 1:</strong> 1. ve 2. dallar eşitlenir:<br>
+              $y(1) = \frac{1 - 2e^{-4} + e^{-10}}{2} e^2 = \frac{e^2 - 2e^{-2} + e^{-8}}{2} \approx 3.558$<br>
+              &bull; <strong>t = 3:</strong> 2. ve 3. dallar eşitlenir:<br>
+              $y(3) = \frac{e^2 - 2e^2 + e^{-4}}{2} = \frac{e^{-4} - e^2}{2} \approx -3.685$<br>
+              &bull; <strong>t = 6:</strong> 3. dal ve 4. dal (0) eşitlenir:<br>
+              $y(6) = \frac{e^{-10} e^{12} - e^2}{2} = \frac{e^2 - e^2}{2} = \mathbf{0}$
+            </div>
+          </div>
+
+          <div class="bg-blue-50 border border-blue-200 p-4 rounded-xl space-y-1.5">
+            <span class="font-bold text-blue-950 block">Alternatif Yol: LTI Basamak Tepkisi $s(t)$</span>
+            <p class="text-xs text-blue-900 leading-relaxed font-mono">
+              $x(t) = u(t) - 2u(t-2) + u(t-5)$ olduğundan,<br>
+              $s(t) = h(t) * u(t)$ basamak tepkisi bulunursa:<br>
+              $s(t) = \int_{-\infty}^{t} h(\tau) d\tau = \begin{cases} \frac{1}{2} e^{2t}, & t \le 1 \\ \frac{1}{2} e^2, & t > 1 \end{cases}$<br>
+              Doğrusallık ve Zamanla Değişmezlik gereği:<br>
+              $\mathbf{y(t) = s(t) - 2s(t-2) + s(t-5)}$<br>
+              Bu alternatif yol da parçalı fonksiyonların birebir aynısını üretir!
+            </p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- GÖRÜNÜM 2: CANLI DİNAMİK SİMÜLATÖR -->
+    <main id="view-sim" class="space-y-6 hidden">
+      <div class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+        
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <div>
+            <h2 class="text-xl font-bold text-slate-900">Dinamik Konvolüsyon Simülatörü</h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">
+              $t$ kaydırıcısını hareket ettirerek $\tau = t - 1$ sınırının dikdörtgen darbeler üzerinden geçişini ve $y(t)$ integrasyonunu eş zamanlı izleyin.
+            </p>
+          </div>
+
+          <!-- Oynat / Adım Butonları -->
+          <div class="flex items-center gap-2 self-start md:self-auto">
+            <button onclick="stepSim(-0.1)" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700">
+              ◀ -0.1
+            </button>
+            <button id="sim-play-btn" onclick="togglePlaySim()" class="px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white shadow-sm flex items-center gap-1.5">
+              <span id="sim-play-icon">▶</span> <span id="sim-play-text">Oynat</span>
+            </button>
+            <button onclick="stepSim(0.1)" class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700">
+              +0.1 ▶
+            </button>
+          </div>
+        </div>
+
+        <!-- Slider Kontrol Paneli -->
+        <div class="mb-6 p-4 rounded-xl bg-slate-50 border border-slate-200">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Zaman Kaydırması ($t$ Parametresi)</label>
+            <span id="sim-label-t" class="font-mono font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-lg text-sm">t = 1.00</span>
+          </div>
+          <input type="range" id="sim-slider-t" min="-1.0" max="7.5" value="1.0" step="0.05" 
+                 class="w-full h-2.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+          <div class="flex justify-between text-xs text-slate-400 font-mono mt-1">
+            <span>-1.0</span><span class="text-amber-600 font-bold">1.0 (Sınır 1)</span><span class="text-indigo-600 font-bold">3.0 (Sınır 2)</span><span class="text-rose-600 font-bold">6.0 (Sınır 3)</span><span>7.5</span>
+          </div>
+        </div>
+
+        <!-- Canlı Durum Kartı -->
+        <div id="sim-status-box" class="p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs mb-5">
+          <div class="flex items-center gap-2">
+            <span id="sim-dot" class="w-3 h-3 rounded-full animate-ping"></span>
+            <div>
+              <span id="sim-region-title" class="font-bold text-sm block"></span>
+              <span id="sim-region-desc" class="text-slate-500"></span>
+            </div>
+          </div>
+          <div id="sim-exact-math" class="font-mono bg-white px-3 py-1.5 rounded-lg border shadow-sm text-xs sm:text-sm font-bold"></div>
+        </div>
+
+        <!-- 2 Canlı Çizim Alanı -->
+        <div class="space-y-6">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">1. Konvolüsyon Uzayı ($\tau$ Ekseni)</span>
+              <span class="text-[11px] text-slate-500">Mavi: $x(\tau)$, Mor: $h(t - \tau)$ (Sol Uç: $\tau = t - 1$), Taralı: Çarpım Alanı</span>
+            </div>
+            <canvas id="canvas-sim-tau" width="960" height="260" class="w-full h-auto rounded-xl border border-slate-200 bg-white block"></canvas>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">2. Çıkış Uzayı: $y(t) = x(t) * h(t)$ ($t$ Ekseni)</span>
+              <span class="text-[11px] text-slate-400">Yeşil gösterge anlık $t$ noktasındaki çıkış genliğini izler</span>
+            </div>
+            <canvas id="canvas-sim-yt" width="960" height="260" class="w-full h-auto rounded-xl border border-slate-200 bg-white block"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="text-center text-xs text-slate-400 pb-8">
+      Ayrık ve Sürekli Zamanlı Sinyaller &bull; Oppenheim &amp; Willsky Problem 2.22 (b)
+    </footer>
+
+  </div>
+
+  <script>
+    // Matematiksel fonksiyonlar
+    function evalY(t) {
+      if (t <= 1) {
+        return 0.5 * (1 - 2 * Math.exp(-4) + Math.exp(-10)) * Math.exp(2 * t);
+      } else if (t <= 3) {
+        return 0.5 * (Math.exp(2) - (2 * Math.exp(-4) - Math.exp(-10)) * Math.exp(2 * t));
+      } else if (t <= 6) {
+        return 0.5 * (Math.exp(-10) * Math.exp(2 * t) - Math.exp(2));
+      } else {
+        return 0;
+      }
+    }
+
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawBaseAxis(ctx, w, h, ox, oy, labelX = "τ", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      // Izgara
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 30) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      for (let x = 30; x < w; x += 50) { ctx.moveTo(x, 25); ctx.lineTo(x, h - 20); }
+      ctx.stroke();
+
+      // Ana Eksenler
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, oy + 20); ctx.lineTo(ox, 25);
+      ctx.stroke();
+
+      // Yön okları
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 25); ctx.lineTo(ox, 17); ctx.lineTo(ox + 4, 25); ctx.fill();
+
+      ctx.font = "bold 13px Inter, sans-serif";
+      ctx.fillText(labelX, w - 18, oy + 4);
+      ctx.fillText(labelY, ox - 45, 20);
+    }
+
+    // 1. Adım Çizimi
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 260);
+      const ox = 260, oy = 160, scale = 70;
+      drawBaseAxis(ctx, 960, 260, ox, oy);
+
+      // x(tau): [0, 2) -> +1, [2, 5) -> -1
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(ox - 50, oy);
+      ctx.lineTo(ox, oy);
+      ctx.lineTo(ox, oy - 50); // 0 anında +1
+      ctx.lineTo(ox + 2 * scale, oy - 50); // 2'ye kadar +1
+      ctx.lineTo(ox + 2 * scale, oy + 50); // 2 anında -1'e iniş
+      ctx.lineTo(ox + 5 * scale, oy + 50); // 5'e kadar -1
+      ctx.lineTo(ox + 5 * scale, oy); // 5'te 0'a dönüş
+      ctx.lineTo(ox + 7 * scale, oy);
+      ctx.stroke();
+
+      // h(tau) = e^(2tau) (tau <= 1)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      for (let px = 40; px <= ox + 1 * scale; px++) {
+        const tau = (px - ox) / scale;
+        const val = Math.exp(2 * tau);
+        const py = oy - val * 12;
+        if (px === 40) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.lineTo(ox + 1 * scale, oy); // tau = 1'de 0'a iner
+      ctx.lineTo(ox + 7 * scale, oy);
+      ctx.stroke();
+
+      // Etiketler
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.fillText("0", ox - 4, oy + 18);
+      ctx.fillText("1", ox + 1 * scale - 4, oy + 18);
+      ctx.fillText("2", ox + 2 * scale - 4, oy + 18);
+      ctx.fillText("5", ox + 5 * scale - 4, oy + 18);
+      ctx.fillText("+1", ox - 20, oy - 46);
+      ctx.fillText("-1", ox - 20, oy + 54);
+
+      ctx.fillStyle = "#2563eb"; ctx.font = "bold 12px Inter, sans-serif";
+      ctx.fillText("x(τ) = u(τ) - 2u(τ-2) + u(τ-5)", 480, 50);
+      ctx.fillStyle = "#9333ea";
+      ctx.fillText("h(τ) = e^(2τ) u(1 - τ)", 160, 50);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // 2. Adım Çizimi (Katlama)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 260);
+      const ox = 350, oy = 160, scale = 70;
+      drawBaseAxis(ctx, 960, 260, ox, oy);
+
+      // h(-tau) = e^(-2tau) (tau >= -1)
+      const startX = ox - 1 * scale; // tau = -1
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(50, oy);
+      ctx.lineTo(startX, oy);
+      ctx.lineTo(startX, oy - Math.exp(2) * 12); // Tepe e^2
+
+      for (let px = startX; px <= 900; px++) {
+        const tau = (px - ox) / scale;
+        const val = Math.exp(-2 * tau);
+        const py = oy - val * 12;
+        ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.fillText("τ = -1 (Tepe: e²)", startX - 35, oy + 18);
+      ctx.fillText("0", ox - 4, oy + 18);
+
+      ctx.fillStyle = "#9333ea"; ctx.font = "bold 12px Inter, sans-serif";
+      ctx.fillText("h(-τ) = e^(-2τ) u(τ + 1)  ⟹  (τ ≥ -1 için aktiftir, sağa uzanır)", 320, 50);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // 3. Adım Çizimi (Parametrik Öteleme: tau = t - 1)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 260);
+      const ox = 260, oy = 160, scale = 70;
+      drawBaseAxis(ctx, 960, 260, ox, oy);
+
+      const edgeX = 420; // Parametrik t - 1 konumu
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(50, oy);
+      ctx.lineTo(edgeX, oy);
+      ctx.lineTo(edgeX, oy - Math.exp(2) * 12);
+
+      for (let px = edgeX; px <= 920; px++) {
+        const dTau = (px - edgeX) / scale;
+        const val = Math.exp(2) * Math.exp(-2 * dTau);
+        ctx.lineTo(px, oy - val * 12);
+      }
+      ctx.stroke();
+
+      // Kesikli dikey kılavuz
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(edgeX, oy); ctx.lineTo(edgeX, oy - 100); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = "#9333ea";
+      ctx.font = "bold 12px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("τ = t - 1 (Sol Başlangıç Ucu: e²)", edgeX, oy + 20);
+
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText("h(t - τ) = e^(2(t - τ)) u(1 - (t - τ)) ⟹ τ ≥ t - 1", 520, 50);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // 4. Adım Çizimi (Bölge 1: t <= 1)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 270);
+      const ox = 280, oy = 165, scale = 65;
+      drawBaseAxis(ctx, 960, 270, ox, oy);
+
+      const edgeX = ox - 0.8 * scale; // t - 1 = -0.8 < 0
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - 45);
+      ctx.lineTo(ox + 2 * scale, oy - 45); ctx.lineTo(ox + 2 * scale, oy + 45);
+      ctx.lineTo(ox + 5 * scale, oy + 45); ctx.lineTo(ox + 5 * scale, oy);
+      ctx.stroke();
+
+      // h(t - tau)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(50, oy); ctx.lineTo(edgeX, oy); ctx.lineTo(edgeX, oy - 85);
+      for (let px = edgeX; px <= 900; px++) {
+        const d = (px - edgeX) / scale;
+        ctx.lineTo(px, oy - 85 * Math.exp(-2 * d));
+      }
+      ctx.stroke();
+
+      // Taralı Alanlar: [0, 2] sarı (+), [2, 5] açık mavi (-)
+      ctx.fillStyle = "rgba(251, 191, 36, 0.35)";
+      ctx.fillRect(ox, oy - 45, 2 * scale, 45);
+      ctx.fillStyle = "rgba(239, 68, 68, 0.25)";
+      ctx.fillRect(ox + 2 * scale, oy, 3 * scale, 45);
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("τ = t - 1", edgeX, oy + 18);
+      ctx.fillText("0", ox, oy + 18);
+      ctx.fillText("2", ox + 2 * scale, oy + 18);
+      ctx.fillText("5", ox + 5 * scale, oy + 18);
+
+      ctx.fillStyle = "#b45309"; ctx.font = "bold 12px Inter, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("Bölge 1: t ≤ 1 (t - 1 ≤ 0) ⟹ x(τ)'nun tamamı taranır: [0, 2] ve [2, 5]", 120, 45);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // 5. Adım Çizimi (Bölge 2: 1 < t <= 3)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 270);
+      const ox = 260, oy = 165, scale = 65;
+      drawBaseAxis(ctx, 960, 270, ox, oy);
+
+      const edgeX = ox + 1.2 * scale; // t - 1 = 1.2 in (0, 2)
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - 45);
+      ctx.lineTo(ox + 2 * scale, oy - 45); ctx.lineTo(ox + 2 * scale, oy + 45);
+      ctx.lineTo(ox + 5 * scale, oy + 45); ctx.lineTo(ox + 5 * scale, oy);
+      ctx.stroke();
+
+      // h(t - tau)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(50, oy); ctx.lineTo(edgeX, oy); ctx.lineTo(edgeX, oy - 85);
+      for (let px = edgeX; px <= 900; px++) {
+        const d = (px - edgeX) / scale;
+        ctx.lineTo(px, oy - 85 * Math.exp(-2 * d));
+      }
+      ctx.stroke();
+
+      // Taralı Alanlar: [edgeX, 2] sarı (+), [2, 5] kırmızı (-)
+      ctx.fillStyle = "rgba(251, 191, 36, 0.4)";
+      ctx.fillRect(edgeX, oy - 45, (ox + 2 * scale) - edgeX, 45);
+      ctx.fillStyle = "rgba(239, 68, 68, 0.25)";
+      ctx.fillRect(ox + 2 * scale, oy, 3 * scale, 45);
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("0", ox, oy + 18);
+      ctx.fillText("τ = t - 1", edgeX, oy + 18);
+      ctx.fillText("2", ox + 2 * scale, oy + 18);
+      ctx.fillText("5", ox + 5 * scale, oy + 18);
+
+      ctx.fillStyle = "#4338ca"; ctx.font = "bold 12px Inter, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("Bölge 2: 1 < t ≤ 3 (0 < t - 1 ≤ 2) ⟹ Pozitif blok kısmi taranır: [t - 1, 2]", 120, 45);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // 6. Adım Çizimi (Bölge 3: 3 < t <= 6)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 270);
+      const ox = 240, oy = 165, scale = 65;
+      drawBaseAxis(ctx, 960, 270, ox, oy);
+
+      const edgeX = ox + 3.4 * scale; // t - 1 = 3.4 in (2, 5)
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - 45);
+      ctx.lineTo(ox + 2 * scale, oy - 45); ctx.lineTo(ox + 2 * scale, oy + 45);
+      ctx.lineTo(ox + 5 * scale, oy + 45); ctx.lineTo(ox + 5 * scale, oy);
+      ctx.stroke();
+
+      // h(t - tau)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(50, oy); ctx.lineTo(edgeX, oy); ctx.lineTo(edgeX, oy - 85);
+      for (let px = edgeX; px <= 900; px++) {
+        const d = (px - edgeX) / scale;
+        ctx.lineTo(px, oy - 85 * Math.exp(-2 * d));
+      }
+      ctx.stroke();
+
+      // Taralı Alan: Yalnızca [edgeX, 5] negatif blok kırmızı (-)
+      ctx.fillStyle = "rgba(239, 68, 68, 0.35)";
+      ctx.fillRect(edgeX, oy, (ox + 5 * scale) - edgeX, 45);
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("0", ox, oy + 18);
+      ctx.fillText("2", ox + 2 * scale, oy + 18);
+      ctx.fillText("τ = t - 1", edgeX, oy + 18);
+      ctx.fillText("5", ox + 5 * scale, oy + 18);
+
+      ctx.fillStyle = "#be123c"; ctx.font = "bold 12px Inter, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("Bölge 3: 3 < t ≤ 6 (2 < t - 1 ≤ 5) ⟹ Pozitif blok bitti; yalnızca negatif blok: [t - 1, 5]", 120, 45);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // 7. Adım Çizimi (Bölge 4: t >= 6)
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 270);
+      const ox = 220, oy = 165, scale = 65;
+      drawBaseAxis(ctx, 960, 270, ox, oy);
+
+      const edgeX = ox + 5.8 * scale; // t - 1 = 5.8 >= 5
+
+      // x(tau)
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy); ctx.lineTo(ox, oy - 45);
+      ctx.lineTo(ox + 2 * scale, oy - 45); ctx.lineTo(ox + 2 * scale, oy + 45);
+      ctx.lineTo(ox + 5 * scale, oy + 45); ctx.lineTo(ox + 5 * scale, oy);
+      ctx.stroke();
+
+      // h(t - tau) tamamen sağda
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.moveTo(50, oy); ctx.lineTo(edgeX, oy); ctx.lineTo(edgeX, oy - 85);
+      for (let px = edgeX; px <= 920; px++) {
+        const d = (px - edgeX) / scale;
+        ctx.lineTo(px, oy - 85 * Math.exp(-2 * d));
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillText("0", ox, oy + 18);
+      ctx.fillText("2", ox + 2 * scale, oy + 18);
+      ctx.fillText("5", ox + 5 * scale, oy + 18);
+      ctx.fillText("τ = t - 1", edgeX, oy + 18);
+
+      ctx.fillStyle = "#475569"; ctx.font = "bold 12px Inter, sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText("Bölge 4: t ≥ 6 (t - 1 ≥ 5) ⟹ Sıfır Örtüşme ⟹ y(t) = 0", 120, 45);
+
+      document.getElementById('img7').src = canvas.toDataURL('image/png');
+    })();
+
+    // 8. Adım Çizimi (y(t))
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(960, 280);
+      const ox = 180, oy = 140, scale = 75;
+      drawBaseAxis(ctx, 960, 280, ox, oy, "t", "y(t)");
+
+      ctx.strokeStyle = "#059669"; ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      for (let px = 50; px <= 900; px++) {
+        const t = (px - ox) / scale;
+        const val = evalY(t);
+        const py = oy - val * 22;
+        if (px === 50) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Sınır çizgileri kesikli
+      [1, 3, 6].forEach(boundT => {
+        const bx = ox + boundT * scale;
+        ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1.2; ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(bx, 30); ctx.lineTo(bx, 250); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#0f172a"; ctx.font = "bold 11px Inter, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("t = " + boundT, bx, oy + 22);
+      });
+
+      // Tepe değerleri
+      ctx.fillStyle = "#047857"; ctx.font = "bold 11px Inter, sans-serif";
+      ctx.fillText("y(1) ≈ +3.56", ox + 1 * scale, oy - evalY(1) * 22 - 8);
+      ctx.fillText("y(3) ≈ -3.69", ox + 3 * scale, oy - evalY(3) * 22 + 16);
+      ctx.fillText("y(6) = 0", ox + 6 * scale + 15, oy - 8);
+
+      document.getElementById('img8').src = canvas.toDataURL('image/png');
+    })();
+
+    // =========================================================
+    // CANLI SİMÜLATÖR MOTORU (Çift Kanvas)
+    // =========================================================
+    const simSlider = document.getElementById('sim-slider-t');
+    const simLabel = document.getElementById('sim-label-t');
+    const canvasTau = document.getElementById('canvas-sim-tau');
+    const canvasYt = document.getElementById('canvas-sim-yt');
+    const ctxTau = canvasTau.getContext('2d');
+    const ctxYt = canvasYt.getContext('2d');
+
+    const statusBox = document.getElementById('sim-status-box');
+    const simDot = document.getElementById('sim-dot');
+    const regTitle = document.getElementById('sim-region-title');
+    const regDesc = document.getElementById('sim-region-desc');
+    const exactMath = document.getElementById('sim-exact-math');
+
+    let simPlaying = false;
+    let simAnimId = null;
+
+    function renderDynamicSimulator() {
+      const t = parseFloat(simSlider.value);
+      simLabel.textContent = `t = ${t.toFixed(2)}`;
+
+      const curY = evalY(t);
+
+      // Durum Kutusu Güncelleme
+      if (t <= 1) {
+        statusBox.className = "p-4 rounded-xl border border-amber-200 bg-amber-50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs mb-5";
+        simDot.className = "w-3 h-3 rounded-full bg-amber-600 animate-ping";
+        regTitle.className = "font-bold text-amber-950 text-sm";
+        regTitle.innerText = `Bölge 1: t ≤ 1 (t = ${t.toFixed(2)}) ⟹ t - 1 = ${(t-1).toFixed(2)} ≤ 0`;
+        regDesc.innerText = "h(t - τ) sinyalinin sol ucu x(τ)'nun solundadır; pozitif ve negatif blokların ikisi de tam örtüşür.";
+        exactMath.innerText = `y(${t.toFixed(2)}) = ${(0.5 * (1 - 2*Math.exp(-4) + Math.exp(-10))).toFixed(4)} · e^(2·${t.toFixed(2)}) = ${curY.toFixed(4)}`;
+      } else if (t <= 3) {
+        statusBox.className = "p-4 rounded-xl border border-indigo-200 bg-indigo-50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs mb-5";
+        simDot.className = "w-3 h-3 rounded-full bg-indigo-600 animate-ping";
+        regTitle.className = "font-bold text-indigo-950 text-sm";
+        regTitle.innerText = `Bölge 2: 1 < t ≤ 3 (t = ${t.toFixed(2)}) ⟹ 0 < t - 1 = ${(t-1).toFixed(2)} ≤ 2`;
+        regDesc.innerText = "Sol uç [0, 2] pozitif bloğunun içinde kaymaktadır. Örtüşme [t-1, 2] aralığında pozitif, [2, 5] aralığında negatiftir.";
+        exactMath.innerText = `y(${t.toFixed(2)}) = 0.5 · [ e² - (2e⁻⁴ - e⁻¹⁰)e^(2t) ] = ${curY.toFixed(4)}`;
+      } else if (t <= 6) {
+        statusBox.className = "p-4 rounded-xl border border-rose-200 bg-rose-50 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs mb-5";
+        simDot.className = "w-3 h-3 rounded-full bg-rose-600 animate-ping";
+        regTitle.className = "font-bold text-rose-950 text-sm";
+        regTitle.innerText = `Bölge 3: 3 < t ≤ 6 (t = ${t.toFixed(2)}) ⟹ 2 < t - 1 = ${(t-1).toFixed(2)} ≤ 5`;
+        regDesc.innerText = "Pozitif blok geride kalmıştır. Sol uç [2, 5] negatif bloğu üzerindedir; yalnızca [t-1, 5] örtüşür.";
+        exactMath.innerText = `y(${t.toFixed(2)}) = 0.5 · [ e⁻¹⁰ e^(2t) - e² ] = ${curY.toFixed(4)}`;
+      } else {
+        statusBox.className = "p-4 rounded-xl border border-slate-300 bg-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs mb-5";
+        simDot.className = "w-3 h-3 rounded-full bg-slate-500";
+        regTitle.className = "font-bold text-slate-800 text-sm";
+        regTitle.innerText = `Bölge 4: t ≥ 6 (t = ${t.toFixed(2)}) ⟹ t - 1 = ${(t-1).toFixed(2)} ≥ 5`;
+        regDesc.innerText = "h(t - τ) sinyali x(τ)'yu tamamen geçmiştir. Hiçbir örtüşme yoktur.";
+        exactMath.innerText = `y(${t.toFixed(2)}) = 0.0000`;
+      }
+
+      // 1. Kanvas: Tau Ekseni
+      const w1 = 960, h1 = 260, ox1 = 260, oy1 = 160, scale1 = 65;
+      ctxTau.clearRect(0, 0, w1, h1);
+      drawBaseAxis(ctxTau, w1, h1, ox1, oy1, "τ", "Genlik");
+
+      const edgeTauX = ox1 + (t - 1) * scale1;
+
+      // x(tau) darbesi
+      ctxTau.strokeStyle = "#2563eb"; ctxTau.lineWidth = 2.4;
+      ctxTau.beginPath();
+      ctxTau.moveTo(ox1, oy1); ctxTau.lineTo(ox1, oy1 - 50);
+      ctxTau.lineTo(ox1 + 2 * scale1, oy1 - 50); ctxTau.lineTo(ox1 + 2 * scale1, oy1 + 50);
+      ctxTau.lineTo(ox1 + 5 * scale1, oy1 + 50); ctxTau.lineTo(ox1 + 5 * scale1, oy1);
+      ctxTau.stroke();
+
+      // h(t - tau)
+      ctxTau.strokeStyle = "#9333ea"; ctxTau.lineWidth = 2.4;
+      ctxTau.beginPath();
+      ctxTau.moveTo(40, oy1); ctxTau.lineTo(edgeTauX, oy1); ctxTau.lineTo(edgeTauX, oy1 - 90);
+      for (let px = edgeTauX; px <= 920; px++) {
+        const d = (px - edgeTauX) / scale1;
+        ctxTau.lineTo(px, oy1 - 90 * Math.exp(-2 * d));
+      }
+      ctxTau.stroke();
+
+      // Taralı Alanlar (Örtüşme)
+      const tMinus1 = t - 1;
+      // Pozitif Bölge [max(0, t-1), 2]
+      if (tMinus1 < 2) {
+        const sX = ox1 + Math.max(0, tMinus1) * scale1;
+        const eX = ox1 + 2 * scale1;
+        if (eX > sX) {
+          ctxTau.fillStyle = "rgba(251, 191, 36, 0.4)";
+          ctxTau.fillRect(sX, oy1 - 50, eX - sX, 50);
+        }
+      }
+      // Negatif Bölge [max(2, t-1), 5]
+      if (tMinus1 < 5) {
+        const sX = ox1 + Math.max(2, tMinus1) * scale1;
+        const eX = ox1 + 5 * scale1;
+        if (eX > sX) {
+          ctxTau.fillStyle = "rgba(239, 68, 68, 0.35)";
+          ctxTau.fillRect(sX, oy1, eX - sX, 50);
+        }
+      }
+
+      // Kılavuzlar ve Etiketler
+      ctxTau.strokeStyle = "#9333ea"; ctxTau.lineWidth = 1.4; ctxTau.setLineDash([3, 3]);
+      ctxTau.beginPath(); ctxTau.moveTo(edgeTauX, oy1 + 12); ctxTau.lineTo(edgeTauX, oy1 - 95); ctxTau.stroke();
+      ctxTau.setLineDash([]);
+
+      ctxTau.fillStyle = "#9333ea"; ctxTau.font = "bold 11px Inter, sans-serif";
+      ctxTau.textAlign = "center";
+      ctxTau.fillText(`τ = t - 1 (${(t - 1).toFixed(2)})`, edgeTauX, oy1 + 22);
+
+      ctxTau.fillStyle = "#0f172a";
+      ctxTau.fillText("0", ox1, oy1 + 18);
+      ctxTau.fillText("2", ox1 + 2 * scale1, oy1 + 18);
+      ctxTau.fillText("5", ox1 + 5 * scale1, oy1 + 18);
+
+      // 2. Kanvas: Yt Ekseni
+      const w2 = 960, h2 = 260, ox2 = 180, oy2 = 135, scale2 = 75;
+      ctxYt.clearRect(0, 0, w2, h2);
+      drawBaseAxis(ctxYt, w2, h2, ox2, oy2, "t", "y(t)");
+
+      // y(t) dalga formu
+      ctxYt.strokeStyle = "#059669"; ctxYt.lineWidth = 2.6;
+      ctxYt.beginPath();
+      for (let px = 50; px <= 900; px++) {
+        const curT = (px - ox2) / scale2;
+        const val = evalY(curT);
+        const py = oy2 - val * 22;
+        if (px === 50) ctxYt.moveTo(px, py); else ctxYt.lineTo(px, py);
+      }
+      ctxYt.stroke();
+
+      // İmleç Göstergesi (Seçili t)
+      const curCurX = ox2 + t * scale2;
+      const curCurY = oy2 - curY * 22;
+
+      ctxYt.strokeStyle = "#047857"; ctxYt.lineWidth = 1.5; ctxYt.setLineDash([3, 3]);
+      ctxYt.beginPath(); ctxYt.moveTo(curCurX, oy2); ctxYt.lineTo(curCurX, curCurY); ctxYt.stroke();
+      ctxYt.setLineDash([]);
+
+      ctxYt.fillStyle = "#047857"; ctxYt.beginPath();
+      ctxYt.arc(curCurX, curCurY, 5.5, 0, Math.PI * 2); ctxYt.fill();
+
+      ctxYt.fillStyle = "#065f46"; ctxYt.font = "bold 11px Inter, sans-serif";
+      ctxYt.textAlign = "center";
+      ctxYt.fillText(`y(${t.toFixed(2)}) = ${curY.toFixed(2)}`, curCurX, curCurY - 10);
+    }
+
+    simSlider.addEventListener('input', renderDynamicSimulator);
+
+    function stepSim(delta) {
+      let v = parseFloat(simSlider.value) + delta;
+      if (v < parseFloat(simSlider.min)) v = parseFloat(simSlider.min);
+      if (v > parseFloat(simSlider.max)) v = parseFloat(simSlider.max);
+      simSlider.value = v;
+      renderDynamicSimulator();
+    }
+
+    function togglePlaySim() {
+      simPlaying = !simPlaying;
+      const playIcon = document.getElementById('sim-play-icon');
+      const playText = document.getElementById('sim-play-text');
+      const playBtn = document.getElementById('sim-play-btn');
+
+      if (simPlaying) {
+        playIcon.innerText = "⏸";
+        playText.innerText = "Durdur";
+        playBtn.className = "px-4 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-xs font-bold text-white shadow-sm flex items-center gap-1.5";
+
+        function runStep() {
+          if (!simPlaying) return;
+          let v = parseFloat(simSlider.value) + 0.03;
+          if (v > parseFloat(simSlider.max)) v = parseFloat(simSlider.min);
+          simSlider.value = v;
+          renderDynamicSimulator();
+          simAnimId = requestAnimationFrame(runStep);
+        }
+        simAnimId = requestAnimationFrame(runStep);
+      } else {
+        playIcon.innerText = "▶";
+        playText.innerText = "Oynat";
+        playBtn.className = "px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-xs font-bold text-white shadow-sm flex items-center gap-1.5";
+        if (simAnimId) cancelAnimationFrame(simAnimId);
+      }
+    }
+
+    function switchView(tab) {
+      const viewSteps = document.getElementById('view-steps');
+      const viewSim = document.getElementById('view-sim');
+      const btnSteps = document.getElementById('btn-tab-steps');
+      const btnSim = document.getElementById('btn-tab-sim');
+
+      if (tab === 'steps') {
+        viewSteps.classList.remove('hidden');
+        viewSim.classList.add('hidden');
+        btnSteps.className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-sm";
+        btnSim.className = "px-4 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+      } else {
+        viewSteps.classList.add('hidden');
+        viewSim.classList.remove('hidden');
+        btnSim.className = "px-4 py-2 rounded-lg text-xs font-bold transition bg-white text-slate-900 shadow-sm";
+        btnSteps.className = "px-4 py-2 rounded-lg text-xs font-bold transition text-slate-600 hover:text-slate-900";
+        renderDynamicSimulator();
+      }
+    }
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderDynamicSimulator();
+    });
+  </script>
+</body>
+</html>

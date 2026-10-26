@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.39 — Sürekli Zaman Diferansiyel Denklemlerinin Blok Diyagram Temsilleri</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Portal
+        </a>
+        <a href="problem_2_38_blok_diyagram_gosterimleri.html" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 transition">
+          ← Problem 2.38
+        </a>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-1 bg-amber-50 text-amber-800 text-[11px] font-extrabold rounded-md border border-amber-200">
+          Oppenheim 2.39
+        </span>
+        <span class="text-xs text-slate-400 font-mono hidden sm:inline">Bölüm 2 &bull; Sayfa 178</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Başlık & Teorem Kartı -->
+    <div class="bg-gradient-to-br from-white to-amber-50/50 p-6 sm:p-8 rounded-3xl border border-amber-100 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          Sürekli Zaman (CT) Sistem Mimarisi
+        </span>
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          İntegratör Tabanlı Blok Diyagramı
+        </span>
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          Türev Yerine İntegratör Kuralı
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        Problem 2.39: Sürekli Zaman Diferansiyel Denklemlerinin Blok Diyagram Temsilleri
+      </h1>
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        Sürekli zaman sistemlerinde fiziksel gerçeklenebilirlik ve gürültü bağışıklığı nedeniyle diferansiyel bloklar ($\frac{d}{dt}$) yerine daima <strong>İntegratör blokları ($\int$)</strong> kullanılır. Bu problemde: (a) $y(t) = -\frac{1}{2}\frac{dy(t)}{dt} + 4x(t)$ ve (b) $\frac{dy(t)}{dt} + 3y(t) = x(t)$ diferansiyel denklemlerini en yüksek türev terimini yalnız bırakacak şekilde cebirsel olarak düzenliyor; toplayıcı ($\oplus$), kazanç katsayısı ($\times a$) ve integratör ($\int$) bloklarıyla mimarilerini inşa ediyoruz.
+      </p>
+    </div>
+
+    <!-- Soru Bizden Ne İstiyor? & Mini Konu Anlatımı -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Sol: Soru Özeti -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Soru Bizden Ne İstiyor?
+        </div>
+        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
+          <p>
+            Aşağıdaki diferansiyel denklemlerle verilen nedensel LTI sistemlerin blok diyagramlarını çiziniz:
+          </p>
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 font-mono text-slate-800">
+            <div><strong>(a)</strong> $$y(t) = -\frac{1}{2}\frac{dy(t)}{dt} + 4x(t)$$</div>
+            <div><strong>(b)</strong> $$\frac{dy(t)}{dt} + 3y(t) = x(t)$$</div>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            Kullanılacak yapı taşları: Toplayıcı ($\oplus$), Katsayı Çarpanı ($\times a$), İntegratör ($\int$).
+          </p>
+        </div>
+      </div>
+
+      <!-- Sağ: Mini Konu Anlatımı -->
+      <div class="bg-amber-50/60 p-6 rounded-2xl border border-amber-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-amber-800 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Altın Kural: Neden Türev ($\frac{d}{dt}$) Değil de İntegratör ($\int$)?
+        </div>
+        <div class="text-xs text-slate-700 space-y-2 leading-relaxed">
+          <p>
+            <strong>1. Gürültü Büyütme Problemi:</strong> Türev alma operatörü yüksek frekansları frekansla orantılı olarak büyütür ($\frac{d}{dt}\sin(\omega t) = \omega \cos(\omega t)$). Bu durum yüksek frekanslı gürültüyü patlatır.
+          </p>
+          <p>
+            <strong>2. İntegratörün Filtreleme Etkisi:</strong> İntegratör ise alçak geçiren filtredir ($\int \sin(\omega t)dt = -\frac{1}{\omega}\cos(\omega t)$); gürültüyü bastırır ve analog Op-Amp devrelerinde (RC geribeslemesiyle) son derece kararlı çalışır.
+          </p>
+          <p class="font-semibold text-amber-900 text-[11px]">
+            Bu yüzden diferansiyel denklem daima en yüksek türev ($\frac{dy}{dt}$) yalnız bırakılarak toplayıcı çıkışına, integratörün girişine bağlanır!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- İNTERAKTİF BLOK DİYAGRAM VE YANIT SİMÜLATÖRÜ -->
+    <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-black text-slate-900">İnteraktif Sürekli Zaman Mimari Tuvali</h2>
+          <p class="text-xs text-slate-500">Şıklar arasında geçiş yapınız; uyarım türünü seçip zaman imlecini kaydırarak dinamik yanıtı izleyiniz.</p>
+        </div>
+        <!-- Şık Seçim Butonları -->
+        <div class="flex flex-wrap gap-2">
+          <button id="btnPartA" class="px-3.5 py-1.5 bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm transition">
+            Şık (a): $\frac{dy}{dt} = 8x(t) - 2y(t)$
+          </button>
+          <button id="btnPartB" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+            Şık (b): $\frac{dy}{dt} = x(t) - 3y(t)$
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Panel: Sol Blok Diyagramı, Sağ Canlı Sürekli Zaman Yanıtı -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Sol: Blok Diyagramı Tuvali -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span id="txtDiagramTitle">Şık (a) Blok Diyagramı: $\frac{dy}{dt} = 8x(t) - 2y(t)$</span>
+            <span class="text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 text-[10px]">
+              1 İntegratörlü Yapı
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner aspect-[4/3]">
+            <canvas id="canvasDiagram" class="w-full h-full block"></canvas>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500">
+            <span><span class="inline-block w-2.5 h-2.5 rounded bg-blue-100 border border-blue-400 mr-1"></span>&int; = İntegratör</span>
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-100 border border-emerald-500 mr-1"></span>&oplus; = Toplayıcı</span>
+            <span><span class="inline-block w-2.5 h-2.5 bg-purple-100 border border-purple-400 mr-1"></span>&blacktriangleright; = Kazanç</span>
+          </div>
+        </div>
+
+        <!-- Sağ: Sürekli Zaman Yanıt Eğrisi -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span id="txtResponseTitle">Birim Dürtü Yanıtı: $h(t) = 8e^{-2t}u(t)$</span>
+            <div class="flex gap-1">
+              <button id="btnInputImpulse" class="px-2 py-0.5 bg-indigo-600 text-white rounded text-[10px] font-bold">Dürtü ($x=\delta$)</button>
+              <button id="btnInputStep" class="px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-[10px] font-bold">Basamak ($x=u$)</button>
+            </div>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner aspect-[4/3]">
+            <canvas id="canvasResponse" class="w-full h-full block"></canvas>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span id="txtAsymptote">t &rarr; &infin; için y(t) &rarr; 0</span>
+            <span id="txtStability" class="text-emerald-600 font-bold">Kutup: s = -2 (Kararlı)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zaman Kaydırıcı (Scrubber) -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-700">Zaman Değişkeni İncelemesi:</span>
+          <span class="font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md border border-indigo-200">
+            t = <span id="lblT">0.50</span> s
+          </span>
+        </div>
+        <input type="range" id="sliderT" min="0.0" max="3.0" step="0.02" value="0.50"
+          class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+        <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+          <span>t = 0.0 s</span>
+          <span>t = 1.0 s</span>
+          <span>t = 2.0 s</span>
+          <span>t = 3.0 s</span>
+        </div>
+      </div>
+
+      <!-- Dinamik Sayısal Değer Tablosu -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">Giriş $x(t)$</div>
+          <div id="hudX" class="text-sm font-mono font-black text-blue-700">0.000</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">İntegratör Girişi: $dy/dt$</div>
+          <div id="hudDeriv" class="text-sm font-mono font-black text-rose-700">-5.886</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div id="hudFeedbackLabel" class="text-[10px] text-slate-500 font-bold">Geri Besleme Terimi: $-2y(t)$</div>
+          <div id="hudFeedback" class="text-sm font-mono font-black text-emerald-700">-5.886</div>
+        </div>
+        <div class="p-3 bg-purple-50/50 rounded-xl border border-purple-200">
+          <div class="text-[10px] text-purple-700 font-bold">İntegratör Çıkışı: $y(t)$</div>
+          <div id="hudY" class="text-sm font-mono font-black text-purple-700">2.943</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADIM ADIM MATEMATİKSEL VE MİMARİ İSPAT KARTLARI -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-amber-600 rounded-full inline-block"></span>
+        Adım Adım Mimari Tasarım ve Blok Analizi
+      </h2>
+
+      <!-- Kart 1: Sürekli Zamanın 3 Yapı Taşı -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">1</span>
+            Sürekli Zaman Sistemlerinin 3 Temel Elemanı &amp; İntegratör İlkesi
+          </div>
+          <button onclick="downloadCard('card1')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+              <span class="font-bold text-slate-800 block text-xs">1. Toplayıcı (Adder) $\oplus$</span>
+              <p class="text-[11px] text-slate-600">Sürekli zaman sinyallerini cebirsel olarak toplar:</p>
+              <p class="font-mono text-center text-indigo-700 bg-white p-1.5 rounded border border-slate-200">
+                $$v(t) = v_1(t) + v_2(t)$$
+              </p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+              <span class="font-bold text-slate-800 block text-xs">2. Katsayı Çarpanı $\times a$</span>
+              <p class="text-[11px] text-slate-600">Sinyali sabit bir kazançla çarpar:</p>
+              <p class="font-mono text-center text-indigo-700 bg-white p-1.5 rounded border border-slate-200">
+                $$v(t) = a \cdot u(t)$$
+              </p>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+              <span class="font-bold text-slate-800 block text-xs">3. İntegratör ($\int$)</span>
+              <p class="text-[11px] text-slate-600">Girişteki türevi entegre ederek durum değişkenini üretir:</p>
+              <p class="font-mono text-center text-indigo-700 bg-white p-1.5 rounded border border-slate-200">
+                $$y(t) = \int_{-\infty}^t v(\tau) d\tau \iff \frac{dy}{dt} = v(t)$$
+              </p>
+            </div>
+          </div>
+        </div>
+        <canvas id="card1Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 2: Şık (a) Cebirsel Düzenleme -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">2</span>
+            Şık (a) Cebirsel Dönüşümü: İntegratör Girişinin İzolasyonu
+          </div>
+          <button onclick="downloadCard('card2')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <p>
+            Verilen diferansiyel denklem:
+          </p>
+          <p class="font-mono text-center text-xs text-slate-800 bg-slate-50 p-2 rounded-lg border border-slate-200">
+            $$y(t) = -\frac{1}{2}\frac{dy(t)}{dt} + 4x(t)$$
+          </p>
+          <p>
+            Blok diyagramı integratör ile kurmak için en yüksek mertebeden türev terimi $\frac{dy(t)}{dt}$ yalnız bırakılır:
+          </p>
+          <div class="font-mono text-xs bg-indigo-50/50 p-3 rounded-xl border border-indigo-100 space-y-1.5 text-center text-indigo-900">
+            <div>Her iki taraf 2 ile çarpılır: $\quad 2y(t) = -\frac{dy(t)}{dt} + 8x(t)$</div>
+            <div>Türev terimi sol tarafa alınır: $\quad \frac{dy(t)}{dt} = -2y(t) + 8x(t)$</div>
+          </div>
+          <p class="text-[11px] text-slate-600">
+            Bu ifade doğrudan toplayıcının çıkışını verir. Toplayıcı $8x(t)$ ve $-2y(t)$ sinyallerini toplayarak $\frac{dy}{dt}$ üretir; bu sinyal $\int$ integratörüne girerek $y(t)$ çıktısına dönüşür!
+          </p>
+        </div>
+        <canvas id="card2Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 3: Şık (a) Blok Diyagramı & Çözüm -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">3</span>
+            Şık (a) Blok Diyagram Mimarisi ve Dürtü Yanıtı ($h(t)$)
+          </div>
+          <button onclick="downloadCard('card3')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-700">
+            <li><strong>İleri Yol:</strong> $x(t) \xrightarrow{\times 8} 8x(t) \to \oplus \xrightarrow{\frac{dy}{dt}} \boxed{\int} \to y(t)$</li>
+            <li><strong>Geri Besleme Yolu:</strong> $y(t) \xrightarrow{\times (-2)} -2y(t) \to \oplus$</li>
+          </ul>
+          <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 space-y-1 font-mono text-xs text-emerald-900">
+            <div>Diferansiyel Form: $\frac{dy(t)}{dt} + 2y(t) = 8x(t)$</div>
+            <div>Birim Dürtü Yanıtı: $h(t) = 8 e^{-2t} u(t)$</div>
+            <div>Birim Basamak Yanıtı: $s(t) = 4(1 - e^{-2t}) u(t)$</div>
+          </div>
+          <p class="text-[10px] text-emerald-800">
+            Kutup $s = -2$ sol yarı düzlemde olduğundan sistem BIBO kararlıdır.
+          </p>
+        </div>
+        <canvas id="card3Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 4: Şık (b) Blok Diyagramı & Çözüm -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">4</span>
+            Şık (b) Blok Diyagram Mimarisi: $\frac{dy(t)}{dt} + 3y(t) = x(t)$
+          </div>
+          <button onclick="downloadCard('card4')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <p>
+            Türev terimini yalnız bırakalım:
+          </p>
+          <p class="font-mono text-center text-xs text-slate-800 bg-slate-50 p-2 rounded-lg border border-slate-200">
+            $$\frac{dy(t)}{dt} = -3y(t) + x(t)$$
+          </p>
+          <ul class="list-disc list-inside space-y-1 text-[11px] text-slate-700">
+            <li><strong>İleri Yol:</strong> $x(t) \to \oplus \xrightarrow{\frac{dy}{dt}} \boxed{\int} \to y(t)$</li>
+            <li><strong>Geri Besleme Yolu:</strong> $y(t) \xrightarrow{\times (-3)} -3y(t) \to \oplus$</li>
+          </ul>
+          <div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200 space-y-1 font-mono text-xs text-indigo-900">
+            <div>Birim Dürtü Yanıtı: $h(t) = e^{-3t} u(t)$</div>
+            <div>Birim Basamak Yanıtı: $s(t) = \frac{1}{3}(1 - e^{-3t}) u(t)$</div>
+          </div>
+          <p class="text-[10px] text-indigo-800">
+            Kutup $s = -3$ sol yarı düzlemde olduğundan sistem BIBO kararlıdır.
+          </p>
+        </div>
+        <canvas id="card4Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 5: DT (2.38) vs CT (2.39) Karşılaştırması -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">5</span>
+            Büyük Mimari Özeti: Ayrık Zaman (2.38) vs. Sürekli Zaman (2.39)
+          </div>
+          <button onclick="downloadCard('card5')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+              <thead class="bg-slate-100 text-slate-700 font-bold">
+                <tr>
+                  <th class="p-2.5 border-b border-slate-200">Alan / Problem</th>
+                  <th class="p-2.5 border-b border-slate-200">Hafıza / Durum Elemanı</th>
+                  <th class="p-2.5 border-b border-slate-200">Giriş / Çıkış İlişkisi</th>
+                  <th class="p-2.5 border-b border-slate-200">Fiziksel Neden</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-[11px]">
+                <tr>
+                  <td class="p-2.5 font-bold text-indigo-900">Ayrık Zaman (DT, 2.38)</td>
+                  <td class="p-2.5 font-mono">Birim Gecikme ($D$ / $z^{-1}$)</td>
+                  <td class="p-2.5 font-mono">$v[n] = u[n-1]$</td>
+                  <td class="p-2.5 text-slate-600">Saat çevrimi tabanlı dijital register</td>
+                </tr>
+                <tr class="bg-amber-50/50">
+                  <td class="p-2.5 font-bold text-amber-900">Sürekli Zaman (CT, 2.39)</td>
+                  <td class="p-2.5 font-mono">İntegratör ($\int$ / $1/s$)</td>
+                  <td class="p-2.5 font-mono">$y(t) = \int_{-\infty}^t v(\tau)d\tau$</td>
+                  <td class="p-2.5 text-slate-600">Gürültü bağışıklığı &amp; Op-Amp kararlılığı</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            <strong>Kritik Kural:</strong> Hem DT'de hem CT'de nedensel sistemlerin geri besleme döngülerinde anlık cebirsel döngü (algebraic loop) oluşmaması için en az bir hafıza elemanı ($D$ veya $\int$) bulunmak zorundadır!
+          </p>
+        </div>
+        <canvas id="card5Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+    </div>
+
+    <!-- Alt Navigasyon Butonları -->
+    <div class="flex items-center justify-between border-t border-slate-200 pt-6">
+      <a href="problem_2_38_blok_diyagram_gosterimleri.html" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-indigo-600 transition">
+        ← Önceki Soru: Problem 2.38
+      </a>
+      <a href="index.html" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+        Ana Sayfa (Portal)
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Temel Bölüm 2 Soruları Tamamlandı</span>
+    </div>
+
+  </main>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    let currentPart = 'a'; // 'a' veya 'b'
+    let currentInputType = 'impulse'; // 'impulse' veya 'step'
+    let curT = 0.5;
+
+    // Matematiksel Modeller
+    function evalY(t) {
+      if (t < 0) return 0;
+      if (currentPart === 'a') {
+        return (currentInputType === 'impulse')
+          ? 8.0 * Math.exp(-2.0 * t)
+          : 4.0 * (1.0 - Math.exp(-2.0 * t));
+      } else {
+        return (currentInputType === 'impulse')
+          ? Math.exp(-3.0 * t)
+          : (1.0 / 3.0) * (1.0 - Math.exp(-3.0 * t));
+      }
+    }
+
+    function evalDeriv(t) {
+      if (t < 0) return 0;
+      const yVal = evalY(t);
+      if (currentPart === 'a') {
+        const xVal = (currentInputType === 'step' && t >= 0) ? 1.0 : 0.0;
+        return 8.0 * xVal - 2.0 * yVal;
+      } else {
+        const xVal = (currentInputType === 'step' && t >= 0) ? 1.0 : 0.0;
+        return xVal - 3.0 * yVal;
+      }
+    }
+
+    // HiDPI Canvas Desteği
+    function setupHiDPI(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      return { ctx, width: rect.width, height: rect.height };
+    }
+
+    const canvasDiagram = document.getElementById('canvasDiagram');
+    const canvasResponse = document.getElementById('canvasResponse');
+
+    const btnPartA = document.getElementById('btnPartA');
+    const btnPartB = document.getElementById('btnPartB');
+    const btnInputImpulse = document.getElementById('btnInputImpulse');
+    const btnInputStep = document.getElementById('btnInputStep');
+
+    const txtDiagramTitle = document.getElementById('txtDiagramTitle');
+    const txtResponseTitle = document.getElementById('txtResponseTitle');
+    const txtAsymptote = document.getElementById('txtAsymptote');
+    const txtStability = document.getElementById('txtStability');
+
+    const sliderT = document.getElementById('sliderT');
+    const lblT = document.getElementById('lblT');
+    const hudX = document.getElementById('hudX');
+    const hudDeriv = document.getElementById('hudDeriv');
+    const hudFeedbackLabel = document.getElementById('hudFeedbackLabel');
+    const hudFeedback = document.getElementById('hudFeedback');
+    const hudY = document.getElementById('hudY');
+
+    // Ok Çizim Fonksiyonu
+    function drawArrow(ctx, x1, y1, x2, y2, color = '#64748b', lineWidth = 2) {
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = lineWidth;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      const headlen = 7;
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI / 6), y2 - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI / 6), y2 - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    function drawAdder(ctx, cx, cy, label = '+') {
+      ctx.fillStyle = '#ecfdf5';
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#065f46';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, cx, cy);
+    }
+
+    function drawIntegratorBlock(ctx, cx, cy) {
+      ctx.fillStyle = '#eff6ff';
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(cx - 20, cy - 20, 40, 40, 6);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 18px serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('∫', cx, cy - 1);
+    }
+
+    function drawGainTriangle(ctx, cx, cy, dir = 'right', label = 'a') {
+      ctx.fillStyle = '#f5f3ff';
+      ctx.strokeStyle = '#7c3aed';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (dir === 'right') {
+        ctx.moveTo(cx - 16, cy - 14);
+        ctx.lineTo(cx + 16, cy);
+        ctx.lineTo(cx - 16, cy + 14);
+      } else if (dir === 'left') {
+        ctx.moveTo(cx + 16, cy - 14);
+        ctx.lineTo(cx - 16, cy);
+        ctx.lineTo(cx + 16, cy + 14);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#5b21b6';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, cx, cy);
+    }
+
+    // 1. Blok Diyagramı Çizimi
+    function drawDiagram() {
+      const setup = setupHiDPI(canvasDiagram);
+      const ctx = setup.ctx;
+      const w = setup.width;
+      const h = setup.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const yLine = h * 0.35;
+      const yFeedback = h * 0.75;
+
+      const xIn = 35;
+      const xGainIn = (currentPart === 'a') ? 105 : 0;
+      const xAdd = (currentPart === 'a') ? 175 : 120;
+      const xInteg = (currentPart === 'a') ? 260 : 210;
+      const xBranch = w - 90;
+      const xOut = w - 30;
+      const xGainFB = (currentPart === 'a') ? 215 : 165;
+
+      // Giriş Sinyali
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = 'bold 12px monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('x(t)', xIn, yLine - 10);
+
+      if (currentPart === 'a') {
+        // x(t) -> [8] -> Adder
+        drawArrow(ctx, xIn, yLine, xGainIn - 16, yLine, '#2563eb');
+        drawGainTriangle(ctx, xGainIn, yLine, 'right', '8');
+        drawArrow(ctx, xGainIn + 16, yLine, xAdd - 14, yLine, '#2563eb');
+      } else {
+        // x(t) -> Adder (Doğrudan)
+        drawArrow(ctx, xIn, yLine, xAdd - 14, yLine, '#2563eb');
+      }
+
+      drawAdder(ctx, xAdd, yLine, '+');
+
+      // Toplayıcı çıkışı: dy/dt
+      drawArrow(ctx, xAdd + 14, yLine, xInteg - 20, yLine, '#dc2626');
+      ctx.fillStyle = '#b91c1c';
+      ctx.font = 'bold 10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('dy/dt', (xAdd + xInteg) / 2, yLine - 10);
+
+      // İntegratör
+      drawIntegratorBlock(ctx, xInteg, yLine);
+
+      // İntegratör çıkışı: y(t)
+      drawArrow(ctx, xInteg + 20, yLine, xOut, yLine, '#9333ea');
+      ctx.fillStyle = '#581c87';
+      ctx.font = 'bold 12px monospace';
+      ctx.textAlign = 'right';
+      ctx.fillText('y(t)', xOut, yLine - 10);
+
+      // Dal Noktası
+      ctx.fillStyle = '#9333ea';
+      ctx.beginPath();
+      ctx.arc(xBranch, yLine, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Geri Besleme Yolu: Branch -> Down -> [x -2 veya x -3] -> Left -> Up -> Adder
+      ctx.strokeStyle = '#64748b';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(xBranch, yLine);
+      ctx.lineTo(xBranch, yFeedback);
+      ctx.stroke();
+
+      drawArrow(ctx, xBranch, yFeedback, xGainFB + 16, yFeedback, '#64748b');
+
+      const fbLabel = (currentPart === 'a') ? '-2' : '-3';
+      drawGainTriangle(ctx, xGainFB, yFeedback, 'left', fbLabel);
+
+      ctx.strokeStyle = '#64748b';
+      ctx.beginPath();
+      ctx.moveTo(xGainFB - 16, yFeedback);
+      ctx.lineTo(xAdd, yFeedback);
+      ctx.stroke();
+
+      drawArrow(ctx, xAdd, yFeedback, xAdd, yLine + 14, '#059669');
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText((currentPart === 'a') ? '-2 y(t)' : '-3 y(t)', xAdd - 30, (yLine + yFeedback) / 2);
+    }
+
+    // 2. Sürekli Zaman Yanıt Eğrisi Çizimi
+    function drawResponse() {
+      const setup = setupHiDPI(canvasResponse);
+      const ctx = setup.ctx;
+      const w = setup.width;
+      const h = setup.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      const tMinPlot = 0.0, tMaxPlot = 3.0;
+      const xToPixel = (t) => ((t - tMinPlot) / (tMaxPlot - tMinPlot)) * (w - 70) + 45;
+
+      const yMaxVal = (currentPart === 'a')
+        ? (currentInputType === 'impulse' ? 8.5 : 4.5)
+        : (currentInputType === 'impulse' ? 1.2 : 0.45);
+
+      const yToPixel = (v) => h - 35 - (v / yMaxVal) * (h - 60);
+
+      // Eksenler
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(35, h - 35);
+      ctx.lineTo(w - 15, h - 35);
+      ctx.moveTo(xToPixel(0), 15);
+      ctx.lineTo(xToPixel(0), h - 25);
+      ctx.stroke();
+
+      // Izgara ve Etiketler
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '10px monospace';
+      ctx.textAlign = 'center';
+      [0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0].forEach(tv => {
+        const px = xToPixel(tv);
+        ctx.fillText(tv.toFixed(1) + 's', px, h - 15);
+        ctx.strokeStyle = '#f1f5f9';
+        ctx.beginPath();
+        ctx.moveTo(px, 15); ctx.lineTo(px, h - 35);
+        ctx.stroke();
+      });
+
+      // Yanıt Eğrisi
+      ctx.strokeStyle = '#4f46e5';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      let first = true;
+      for (let tv = 0.0; tv <= 3.0; tv += 0.02) {
+        const v = evalY(tv);
+        const px = xToPixel(tv);
+        const py = yToPixel(v);
+        if (first) {
+          ctx.moveTo(px, py);
+          first = false;
+        } else {
+          ctx.lineTo(px, py);
+        }
+      }
+      ctx.stroke();
+
+      // İmleç Dikey Çizgisi
+      const pCurX = xToPixel(curT);
+      ctx.strokeStyle = '#9333ea';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(pCurX, 15); ctx.lineTo(pCurX, h - 35);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // İmleç Noktası
+      const curVal = evalY(curT);
+      const pCurY = yToPixel(curVal);
+      ctx.fillStyle = '#9333ea';
+      ctx.beginPath();
+      ctx.arc(pCurX, pCurY, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#4338ca';
+      ctx.font = 'bold 10px monospace';
+      ctx.fillText(curVal.toFixed(3), pCurX, pCurY - 10);
+    }
+
+    // HUD Güncellemeleri
+    function updateHUD() {
+      lblT.textContent = curT.toFixed(2);
+      const xVal = (currentInputType === 'step' && curT >= 0) ? 1.0 : 0.0;
+      hudX.textContent = (currentInputType === 'impulse' && curT === 0) ? 'δ(0)' : xVal.toFixed(3);
+
+      const yVal = evalY(curT);
+      hudY.textContent = yVal.toFixed(3);
+
+      const derivVal = evalDeriv(curT);
+      hudDeriv.textContent = derivVal.toFixed(3);
+
+      if (currentPart === 'a') {
+        hudFeedbackLabel.textContent = 'Geri Besleme Terimi: -2 y(t)';
+        hudFeedback.textContent = (-2.0 * yVal).toFixed(3);
+        txtStability.textContent = 'Kutup: s = -2 (BIBO Kararlı)';
+        txtAsymptote.textContent = (currentInputType === 'impulse')
+          ? 't → ∞ için y(t) → 0.000'
+          : 't → ∞ için y(t) → 4.000 (Denge)';
+        txtResponseTitle.textContent = (currentInputType === 'impulse')
+          ? 'Birim Dürtü Yanıtı: h(t) = 8 e^{-2t} u(t)'
+          : 'Birim Basamak Yanıtı: s(t) = 4 (1 - e^{-2t}) u(t)';
+      } else {
+        hudFeedbackLabel.textContent = 'Geri Besleme Terimi: -3 y(t)';
+        hudFeedback.textContent = (-3.0 * yVal).toFixed(3);
+        txtStability.textContent = 'Kutup: s = -3 (BIBO Kararlı)';
+        txtAsymptote.textContent = (currentInputType === 'impulse')
+          ? 't → ∞ için y(t) → 0.000'
+          : 't → ∞ için y(t) → 0.333 (1/3)';
+        txtResponseTitle.textContent = (currentInputType === 'impulse')
+          ? 'Birim Dürtü Yanıtı: h(t) = e^{-3t} u(t)'
+          : 'Birim Basamak Yanıtı: s(t) = 1/3 (1 - e^{-3t}) u(t)';
+      }
+    }
+
+    function renderAll() {
+      drawDiagram();
+      drawResponse();
+      updateHUD();
+    }
+
+    // Olay Dinleyicileri
+    btnPartA.addEventListener('click', () => {
+      currentPart = 'a';
+      btnPartA.className = 'px-3.5 py-1.5 bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm transition';
+      btnPartB.className = 'px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition';
+      txtDiagramTitle.textContent = 'Şık (a) Blok Diyagramı: dy/dt = 8x(t) - 2y(t)';
+      renderAll();
+    });
+
+    btnPartB.addEventListener('click', () => {
+      currentPart = 'b';
+      btnPartA.className = 'px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition';
+      btnPartB.className = 'px-3.5 py-1.5 bg-amber-600 text-white text-xs font-bold rounded-lg shadow-sm transition';
+      txtDiagramTitle.textContent = 'Şık (b) Blok Diyagramı: dy/dt = x(t) - 3y(t)';
+      renderAll();
+    });
+
+    btnInputImpulse.addEventListener('click', () => {
+      currentInputType = 'impulse';
+      btnInputImpulse.className = 'px-2 py-0.5 bg-indigo-600 text-white rounded text-[10px] font-bold';
+      btnInputStep.className = 'px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-[10px] font-bold';
+      renderAll();
+    });
+
+    btnInputStep.addEventListener('click', () => {
+      currentInputType = 'step';
+      btnInputImpulse.className = 'px-2 py-0.5 bg-slate-200 text-slate-700 rounded text-[10px] font-bold';
+      btnInputStep.className = 'px-2 py-0.5 bg-indigo-600 text-white rounded text-[10px] font-bold';
+      renderAll();
+    });
+
+    sliderT.addEventListener('input', (e) => {
+      curT = parseFloat(e.target.value);
+      renderAll();
+    });
+
+    window.addEventListener('resize', renderAll);
+    window.addEventListener('load', renderAll);
+
+    // HiDPI İndirilebilir Kartlar
+    function drawStepCard(canvasId, title, equations, description) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      // Başlık Bandı
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, w, 70);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.strokeRect(0, 0, w, 70);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('Oppenheim Problem 2.39 — ' + title, 30, 42);
+
+      // Denklem Kutusu
+      ctx.fillStyle = '#f1f5f9';
+      ctx.fillRect(30, 95, w - 60, 140);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.strokeRect(30, 95, w - 60, 140);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 16px monospace';
+      let eqY = 135;
+      equations.forEach(eq => {
+        ctx.fillText(eq, 50, eqY);
+        eqY += 35;
+      });
+
+      // Açıklama Metni
+      ctx.fillStyle = '#475569';
+      ctx.font = '14px sans-serif';
+      let descY = 275;
+      description.forEach(line => {
+        ctx.fillText(line, 35, descY);
+        descY += 26;
+      });
+
+      // Alt Bilgi
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('Sinyaller ve Sistemler • Oppenheim & Willsky 2. Baskı • Bölüm 2', 35, h - 25);
+    }
+
+    function initAllStepCards() {
+      drawStepCard('card1Canvas', 'Sürekli Zamanın 3 Yapı Taşı',
+        [
+          'Toplayici:   v(t) = v_1(t) + v_2(t)',
+          'Carpici:     v(t) = a * u(t)',
+          'Integrator:  y(t) = integral_{-inf}^t v(tau) dtau  <==>  dy/dt = v(t)'
+        ],
+        [
+          '• Türev alma işlemi yüksek frekans gürültüsünü büyüttüğü için KULLANILMAZ.',
+          '• İntegratör alçak geçiren filtre özelliğiyle gürültüyü süzer ve kararlıdır.',
+          '• Diferansiyel denklem en yüksek türev yalnız bırakılarak integratöre bağlanır.'
+        ]
+      );
+
+      drawStepCard('card2Canvas', 'Şık (a) Türev İzolasyonu',
+        [
+          'y(t) = -(1/2) dy/dt + 4 x(t)',
+          '2 y(t) = - dy/dt + 8 x(t)',
+          'dy(t)/dt = 8 x(t) - 2 y(t)'
+        ],
+        [
+          '• Her iki taraf 2 ile çarpılarak türev katsayısı -1 yapılır.',
+          '• dy/dt terimi sol tarafa yalnız bırakılır.',
+          '• İntegratör girişi toplayıcı çıkışı olan 8x(t) - 2y(t) sinyaline bağlanır.'
+        ]
+      );
+
+      drawStepCard('card3Canvas', 'Şık (a) Blok Diyagramı & Çözüm',
+        [
+          'Ileri Yol:      x(t) -> [* 8] -> (+)',
+          'Integrator:     (+) -> [dy/dt] -> [ integral ] -> y(t)',
+          'Geri Besleme:   y(t) -> [* (-2)] -> (+)'
+        ],
+        [
+          '• Birim dürtü yanıtı: h(t) = 8 e^{-2t} u(t) dir.',
+          '• Birim basamak yanıtı: s(t) = 4 (1 - e^{-2t}) u(t) dir.',
+          '• Kutup s = -2 sol yarı düzlemdedir; sistem BIBO kararlıdır.'
+        ]
+      );
+
+      drawStepCard('card4Canvas', 'Şık (b) Blok Diyagramı & Çözüm',
+        [
+          'dy(t)/dt + 3 y(t) = x(t)  ===>  dy/dt = x(t) - 3 y(t)',
+          'Ileri Yol:      x(t) -> (+)',
+          'Geri Besleme:   y(t) -> [* (-3)] -> (+)'
+        ],
+        [
+          '• Türev terimi doğrudan x(t) - 3y(t) olarak izole edilir.',
+          '• Birim dürtü yanıtı: h(t) = e^{-3t} u(t) dir.',
+          '• Basamak yanıtı: s(t) = (1/3) (1 - e^{-3t}) u(t) olup denge 1/3 e oturur.'
+        ]
+      );
+
+      drawStepCard('card5Canvas', 'Büyük Mimari Özeti: DT vs. CT',
+        [
+          'Ayrik Zaman (2.38):   Birim Gecikme [D]  <==>  Durum Register i',
+          'Surekli Zaman (2.39): Integrator [integral] <==>  Op-Amp RC Devresi',
+          'Kural: Geri beslemede en az 1 integrator veya gecikme bulunmalidir!'
+        ],
+        [
+          '• DT de register hafızadır; CT de kondansatör gerilimi hafızadır.',
+          '• Cebirsel kilitlenmeyi (algebraic loop) engellemek için hafıza şarttır.',
+          '• Oppenheim Bölüm 2 temel sistem mimarilerinin son taşları tamamlanmıştır.'
+        ]
+      );
+    }
+
+    function downloadCard(cardId) {
+      const canvas = document.getElementById(cardId + 'Canvas');
+      const link = document.createElement('a');
+      link.download = 'Oppenheim_Problem_2_39_' + cardId + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    window.addEventListener('load', () => {
+      initAllStepCards();
+    });
+  </script>
+</body>
+</html>

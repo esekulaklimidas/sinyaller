@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.46 — LTI Sistemlerde Türev Özelliği ve h(t) Sentezi (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 2.46</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">İleri Düzey (Advanced)</span>
+            <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold">Sürekli Zaman (CT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 183</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html#sec-ileri-duzey" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanımı Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; İleri Düzey Problemler</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            LTI Türev Özelliği, Dirac Ayrışımı ve Dürtü Yanıtı $h(t)$ Çıkarımı
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-rose-50 text-rose-700 border border-rose-200 rounded-xl text-xs font-bold">
+            Anti-Nedensel (Non-Causal)
+          </span>
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+            BIBO Kararlı
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni Orijinal Kutu -->
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Problem 2.46 Soru Metni (Oppenheim &amp; Willsky, Sh. 183)
+        </div>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          Bir $\mathcal{S}$ LTI sistemini ve $x(t) = 2e^{-3t} u(t-1)$ işaretini ele alınız. Eğer:
+          $$x(t) \longrightarrow y(t)$$
+          ve
+          $$\frac{dx(t)}{dt} \longrightarrow -3y(t) + e^{-2t} u(t)$$
+          ise, sistemin dürtü yanıtı <strong>$h(t)$</strong>'yi belirleyiniz.
+        </p>
+      </div>
+    </section>
+
+    <!-- ETKİLEŞİMLİ SİMÜLATÖR (DUAL CANVAS) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">İnteraktif Dalga ve Yanıt Simülatörü</span>
+          <h2 class="text-xl font-black text-slate-900">Giriş Türevi, Çıkarılan $h(t)$ ve Canlı Çıkış $y(t)$</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Zaman imlecini hareket ettirerek türevin Dirac bileşenini, $h(t)$'nin nedensel olmayan kuyruğunu ve oluşan $y(t)$ dalgasını inceleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnExportPNG" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG Olarak İndir
+          </button>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <!-- Zaman Kaydırıcı -->
+        <div class="md:col-span-7 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Zaman Konumu: <span class="font-mono text-indigo-600 text-sm" id="lblTVal">t = 0.41 sn</span></span>
+            <span class="text-[11px] px-2 py-0.5 rounded font-mono bg-indigo-100 text-indigo-800" id="lblPeakBadge">Maksimum Tepe Noktası Yakını</span>
+          </div>
+          <input type="range" id="sliderT" min="-1.5" max="4.0" step="0.02" value="0.41"
+            class="w-full accent-indigo-600 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+            <span>t = -1.5 (Sıfır Çıkış)</span>
+            <span>t = -1.0 (h(t) Başlangıcı)</span>
+            <span>t = 0.0 (y(t) Başlangıcı)</span>
+            <span>t = ln(1.5) ≈ 0.41 (Zirve)</span>
+            <span>t = 4.0</span>
+          </div>
+        </div>
+
+        <!-- Hızlı Atlama Butonları -->
+        <div class="md:col-span-5 flex flex-wrap gap-1.5 justify-end">
+          <button onclick="setT(-0.5)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">t = -0.5 (Non-Causal)</button>
+          <button onclick="setT(0.0)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">t = 0.0 (Başlama)</button>
+          <button onclick="setT(0.4055)" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition">t = 0.41 (Maks Zirve)</button>
+          <button onclick="setT(1.0)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">t = 1.0 (x Darbesi)</button>
+          <button id="btnPlayPause" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1">
+            <span id="playIcon">&#9658;</span> Oynat
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-4">
+        <!-- Tuval 1: Sinyaller x(t), dx/dt ve Dürtü Yanıtı h(t) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">1. Sistem Çekirdeği: $h(t) = \frac{e}{2} e^{-2t} u(t+1)$ ve Giriş $x(t) = 2e^{-3t}u(t-1)$</span>
+            <span class="text-[11px] font-mono text-rose-500 font-bold">$t \in [-1, 0)$ aralığında $h(t) > 0$ (Non-Causal)</span>
+          </div>
+          <canvas id="canvasSignals" width="900" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-sky-400 inline-block"></span> $x(t)$ Giriş Sinyali ($t \ge 1$)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-400 inline-block"></span> $h(t)$ Dürtü Yanıtı ($t \ge -1$)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-400 inline-block"></span> $dx/dt$ içindeki Dirac Darbesi ($2e^{-3}\delta(t-1)$)</span>
+            </div>
+            <span class="font-mono text-amber-500 font-bold" id="lblHVal">h(-1) = e^3 / 2 ≈ 10.04</span>
+          </div>
+        </div>
+
+        <!-- Tuval 2: Çıkış Dalgası y(t) ve Diferansiyel Denklem Sağlaması -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">2. Çıkış Yanıtı: $y(t) = (e^{-2t} - e^{-3t})u(t)$ ve Anlık Doğrulama</span>
+            <span class="text-[11px] font-mono text-indigo-400 font-bold" id="lblDiffCheck">dy/dt + 3y = e^{-2t}u(t)</span>
+          </div>
+          <canvas id="canvasOutput" width="900" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-indigo-400 inline-block"></span> $y(t)$ Çıkış Eğrisi</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-red-400 inline-block"></span> Güncel Zaman $t$</span>
+              <span class="flex items-center gap-1.5 text-slate-400">Tepe: $t = \ln(1.5) \approx 0.405$ sn, $y_{maks} \approx 0.1481$</span>
+            </div>
+            <span class="font-mono text-indigo-600 font-bold" id="lblYVal">y(t) = 0.1481</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAYLI TEORİK ÇÖZÜM VE KANIT KARTLARI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Yöntem 1: Cebirsel Türev ve Dirac Ayrışımı -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-xs font-black uppercase">1. Yöntem (En Zarif)</span>
+          <span class="text-xs font-mono text-slate-500">Dirac Ayrışımı ile İzolasyon</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">Giriş Türevinin Doğrudan Açılımı</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Verilen $x(t) = 2e^{-3t} u(t-1)$ işaretinin genel türevini çarpım kuralı ve genelleştirilmiş fonksiyonlar (distribüsyon) kuramıyla alalım:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-500">Türev hesabı:</div>
+          <div>$$\frac{dx(t)}{dt} = -6e^{-3t} u(t-1) + 2e^{-3t} \frac{d}{dt}[u(t-1)]$$</div>
+          <div class="text-slate-600 text-[11px]">
+            $\frac{d}{dt}[u(t-1)] = \delta(t-1)$'dir ve $\delta(t-1)$ ile çarpılan $2e^{-3t}$ terimi $t=1$'de değerlendirilir:
+            $$2e^{-3t}\delta(t-1) = 2e^{-3}\delta(t-1)$$
+          </div>
+          <div class="text-slate-600 text-[11px]">
+            Ayrıca $-6e^{-3t}u(t-1) = -3 \cdot [2e^{-3t}u(t-1)] = -3x(t)$'dir. Böylece:
+          </div>
+          <div class="text-indigo-900 font-bold">
+            $$\frac{dx(t)}{dt} = -3x(t) + 2e^{-3}\delta(t-1)$$
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Şimdi $\mathcal{S}$ LTI sisteminin <strong>Doğrusallık (Linearity)</strong> ve <strong>Zamanla Değişmezlik (Time-Invariance)</strong> özelliklerini uygulayalım:
+        </p>
+
+        <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 font-mono text-xs space-y-2">
+          <div class="text-indigo-900 font-bold">
+            $$\mathcal{S}\left\{ \frac{dx(t)}{dt} \right\} = -3\mathcal{S}\{x(t)\} + 2e^{-3}\mathcal{S}\{\delta(t-1)\}$$
+          </div>
+          <div class="text-slate-700 text-[11px]">
+            $\mathcal{S}\{x(t)\} = y(t)$ ve $\mathcal{S}\{\delta(t-1)\} = h(t-1)$ olduğundan:
+            $$\mathcal{S}\left\{ \frac{dx(t)}{dt} \right\} = -3y(t) + 2e^{-3}h(t-1)$$
+          </div>
+        </div>
+
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-2">
+          <div class="font-bold text-emerald-900">Verilen Çıkış ile Eşitleme:</div>
+          <div class="text-[11px] text-emerald-800">
+            Soru metninde çıkış $-3y(t) + e^{-2t}u(t)$ olarak verilmişti:
+            $$-3y(t) + 2e^{-3}h(t-1) = -3y(t) + e^{-2t}u(t)$$
+            $$-3y(t) \text{ terimleri birbirini sadeleştirir!}$$
+            $$2e^{-3}h(t-1) = e^{-2t}u(t) \implies h(t-1) = \frac{1}{2} e^3 e^{-2t}u(t)$$
+          </div>
+          <div class="text-base font-bold text-emerald-700 font-mono pt-1">
+            $$\mathbf{h(t) = \frac{1}{2} e^{1-2t} u(t+1) = \frac{e}{2} e^{-2t} u(t+1)}$$
+          </div>
+        </div>
+      </div>
+
+      <!-- Yöntem 2: Diferansiyel Denklem ve Konvolüsyon Doğrulaması -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-md text-xs font-black uppercase">2. Yöntem &bull; Doğrulama</span>
+          <span class="text-xs font-mono text-slate-500">Diferansiyel Denklem Çözümü</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">LTI Türev Eşitliği ve Çıkış $y(t)$</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Herhangi bir LTI sistemde $\frac{dx}{dt} * h = \frac{d}{dt}[x * h] = \frac{dy}{dt}$'dir. Dolayısıyla soru metnindeki ifade doğrudan bir diferansiyel denklemdir:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-800 font-bold">$$\frac{dy(t)}{dt} + 3y(t) = e^{-2t} u(t)$$</div>
+          <div class="text-slate-600 text-[11px]">
+            İntegrasyon çarpanı $e^{3t}$ ile çarpıp integrallersek:
+            $$\frac{d}{dt}[e^{3t}y(t)] = e^t u(t) \implies e^{3t}y(t) = (e^t - 1)u(t)$$
+          </div>
+          <div class="text-purple-900 font-bold">
+            $$y(t) = (e^{-2t} - e^{-3t}) u(t)$$
+          </div>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Şimdi bulduğumuz $h(t) = \frac{e}{2} e^{-2t} u(t+1)$ ile $x(t) = 2e^{-3t} u(t-1)$'i konvolüsyona sokup $y(t)$'yi tam olarak üretip üretmediğini test edelim:
+        </p>
+
+        <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 font-mono text-xs space-y-2">
+          <div class="text-purple-950 font-bold">$$y(t) = \int_{-\infty}^\infty x(\tau) h(t-\tau) d\tau$$</div>
+          <div class="text-[11px] text-purple-800 leading-relaxed">
+            $x(\tau) \neq 0 \implies \tau \ge 1$<br>
+            $h(t-\tau) \neq 0 \implies t-\tau+1 \ge 0 \implies \tau \le t+1$<br>
+            İntegrasyon aralığı $1 \le \tau \le t+1$'dir. Bu aralığın var olması için $t+1 \ge 1 \implies t \ge 0$ olmalıdır.
+          </div>
+          <div class="text-[11px] text-purple-900 font-bold">
+            $$y(t) = e \cdot e^{-2t} \int_1^{t+1} e^{-\tau} d\tau = e \cdot e^{-2t} \left[ e^{-1} - e^{-(t+1)} \right] = (e^{-2t} - e^{-3t}) u(t)$$
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-100 rounded-xl border border-slate-200 text-xs">
+          <span class="font-bold text-slate-800">Kusursuz Sağlama:</span> Her iki yöntem de birbirini tam %100 matematiksel hassasiyetle doğrular!
+        </div>
+      </div>
+    </section>
+
+    <!-- SİSTEM ÖZELLİKLERİ VE TEKNİK ANALİZ -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        <h3 class="text-lg font-bold text-slate-900">Sistem $\mathcal{S}$'in Karakteristik Özellikleri</h3>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-4 bg-rose-50 border border-rose-200 rounded-2xl space-y-2">
+          <div class="flex items-center gap-2 text-rose-800 font-bold text-sm">
+            <svg class="w-4 h-4 text-rose-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+            1. Nedensellik (Causality): NEDENSEL DEĞİL (Non-Causal)
+          </div>
+          <p class="text-slate-700 leading-relaxed">
+            Dürtü yanıtı $h(t) = \frac{e}{2} e^{-2t} u(t+1)$ fonksiyonu, basamak ötelenmesinden ötürü 
+            <strong>$-1 \le t < 0$ zaman aralığında sıfırdan farklıdır</strong>.
+            Örneğin $t = -1$'de $h(-1) = \frac{e^3}{2} \approx 10.04 > 0$'dır.
+            Bir LTI sistemin nedensel olması için $t < 0$ anında $h(t) = 0$ olması şarttır. Bu şart sağlanmadığından sistem 
+            <strong>1 saniye geleceği öngören (anticipative) anti-nedensel bir sistemdir</strong>.
+          </p>
+        </div>
+
+        <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-2">
+          <div class="flex items-center gap-2 text-emerald-800 font-bold text-sm">
+            <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            2. Kararlılık (BIBO Stability): KARARLI (Stable)
+          </div>
+          <p class="text-slate-700 leading-relaxed">
+            Dürtü yanıtının mutlak integrali:
+            $$I = \int_{-\infty}^\infty |h(t)| \, dt = \int_{-1}^\infty \frac{e}{2} e^{-2t} \, dt = \frac{e}{2} \left[ \frac{e^{-2t}}{-2} \right]_{-1}^\infty = \frac{e^3}{4} \approx 5.0214 < \infty$$
+            Mutlak integral sonlu bir reel sayıya yakınsadığı için sistem <strong>BIBO Kararlıdır</strong>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <p>Oppenheim &amp; Willsky &bull; Signals and Systems 2. Baskı Çözümleri &bull; Hazırlayan: ENI for Tris ❤️</p>
+  </footer>
+
+  <!-- SİMÜLASYON MOTORU VE JAVASCRIPT KODLARI -->
+  <script>
+    const canvasSignals = document.getElementById('canvasSignals');
+    const ctxSignals = canvasSignals.getContext('2d');
+    const canvasOutput = document.getElementById('canvasOutput');
+    const ctxOutput = canvasOutput.getContext('2d');
+
+    const sliderT = document.getElementById('sliderT');
+    const lblTVal = document.getElementById('lblTVal');
+    const lblPeakBadge = document.getElementById('lblPeakBadge');
+    const lblHVal = document.getElementById('lblHVal');
+    const lblYVal = document.getElementById('lblYVal');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const playIcon = document.getElementById('playIcon');
+
+    let currentT = 0.41;
+    let isPlaying = false;
+    let animId = null;
+
+    // Fonksiyonlar
+    function funcX(t) {
+      if (t < 1.0) return 0.0;
+      return 2.0 * Math.exp(-3.0 * t);
+    }
+
+    function funcH(t) {
+      if (t < -1.0) return 0.0;
+      return 0.5 * Math.exp(1.0 - 2.0 * t);
+    }
+
+    function funcY(t) {
+      if (t < 0.0) return 0.0;
+      return Math.exp(-2.0 * t) - Math.exp(-3.0 * t);
+    }
+
+    function funcDyDt(t) {
+      if (t < 0.0) return 0.0;
+      return -2.0 * Math.exp(-2.0 * t) + 3.0 * Math.exp(-3.0 * t);
+    }
+
+    // Koordinat Dönüşümleri (t ekseni [-1.5, 4.0])
+    function tToX(t, w) {
+      const minT = -1.5, maxT = 4.0;
+      return 55 + ((t - minT) / (maxT - minT)) * (w - 90);
+    }
+
+    // Tuval 1: Sinyaller ve h(t)
+    function drawSignalsCanvas() {
+      const w = canvasSignals.width;
+      const h = canvasSignals.height;
+      ctxSignals.clearRect(0, 0, w, h);
+
+      const minVal = -0.5, maxVal = 5.0; // h(-1) ≈ 10 olduğu için görselde tepeyi ölçekleyelim
+      function vToY(v) {
+        return h - 35 - ((v - minVal) / (maxVal - minVal)) * (h - 60);
+      }
+
+      const y0 = vToY(0);
+      const x0 = tToX(0, w);
+
+      // Eksenler
+      ctxSignals.strokeStyle = '#334155';
+      ctxSignals.lineWidth = 1;
+      ctxSignals.beginPath();
+      ctxSignals.moveTo(35, y0);
+      ctxSignals.lineTo(w - 20, y0);
+      ctxSignals.stroke();
+
+      ctxSignals.beginPath();
+      ctxSignals.moveTo(x0, 15);
+      ctxSignals.lineTo(x0, h - 20);
+      ctxSignals.stroke();
+
+      // Izgara ve Etiketler
+      ctxSignals.fillStyle = '#64748b';
+      ctxSignals.font = '10px monospace';
+      ctxSignals.textAlign = 'center';
+      for (let t = -1; t <= 4; t++) {
+        const x = tToX(t, w);
+        ctxSignals.beginPath();
+        ctxSignals.moveTo(x, y0 - 3);
+        ctxSignals.lineTo(x, y0 + 3);
+        ctxSignals.stroke();
+        ctxSignals.fillText(t, x, y0 + 14);
+      }
+      ctxSignals.fillText('t (sn)', w - 25, y0 - 8);
+
+      // 1. h(t) Çizimi (Sarı)
+      ctxSignals.strokeStyle = '#fbbf24';
+      ctxSignals.lineWidth = 2.5;
+      ctxSignals.beginPath();
+      let first = true;
+      for (let t = -1.0; t <= 4.0; t += 0.02) {
+        const val = Math.min(maxVal, funcH(t));
+        const px = tToX(t, w);
+        const py = vToY(val);
+        if (first) { ctxSignals.moveTo(px, py); first = false; }
+        else { ctxSignals.lineTo(px, py); }
+      }
+      ctxSignals.stroke();
+
+      // h(t) Non-Causal Alan Vurgusu ([-1, 0] aralığı kırmızımsı gölge)
+      ctxSignals.fillStyle = 'rgba(244, 63, 94, 0.2)';
+      ctxSignals.beginPath();
+      ctxSignals.moveTo(tToX(-1.0, w), y0);
+      for (let t = -1.0; t <= 0.0; t += 0.02) {
+        ctxSignals.lineTo(tToX(t, w), vToY(Math.min(maxVal, funcH(t))));
+      }
+      ctxSignals.lineTo(tToX(0.0, w), y0);
+      ctxSignals.closePath();
+      ctxSignals.fill();
+
+      // 2. x(t) Çizimi (Açık Mavi)
+      ctxSignals.strokeStyle = '#38bdf8';
+      ctxSignals.lineWidth = 2.5;
+      ctxSignals.beginPath();
+      first = true;
+      for (let t = 1.0; t <= 4.0; t += 0.02) {
+        const val = funcX(t);
+        const px = tToX(t, w);
+        const py = vToY(val);
+        if (first) { ctxSignals.moveTo(px, vToY(0)); ctxSignals.lineTo(px, py); first = false; }
+        else { ctxSignals.lineTo(px, py); }
+      }
+      ctxSignals.stroke();
+
+      // 3. dx/dt içindeki Dirac Darbesi Vurgusu (t=1'de yukarı ok)
+      const xDirac = tToX(1.0, w);
+      ctxSignals.strokeStyle = '#c084fc';
+      ctxSignals.lineWidth = 2;
+      ctxSignals.beginPath();
+      ctxSignals.moveTo(xDirac, y0);
+      ctxSignals.lineTo(xDirac, vToY(2.0));
+      ctxSignals.stroke();
+
+      // Ok Başı
+      ctxSignals.fillStyle = '#c084fc';
+      ctxSignals.beginPath();
+      ctxSignals.moveTo(xDirac, vToY(2.1));
+      ctxSignals.lineTo(xDirac - 4, vToY(1.9));
+      ctxSignals.lineTo(xDirac + 4, vToY(1.9));
+      ctxSignals.closePath();
+      ctxSignals.fill();
+      ctxSignals.font = 'bold 9px monospace';
+      ctxSignals.fillText('2e⁻³ δ(t-1)', xDirac + 35, vToY(2.0));
+
+      // Etiketler
+      ctxSignals.fillStyle = '#fbbf24';
+      ctxSignals.font = 'bold 11px sans-serif';
+      ctxSignals.textAlign = 'left';
+      ctxSignals.fillText('h(t) = ½ e¹⁻²ᵗ u(t+1)', tToX(-0.8, w), vToY(3.5));
+
+      ctxSignals.fillStyle = '#38bdf8';
+      ctxSignals.fillText('x(t) = 2e⁻³ᵗ u(t-1)', tToX(1.3, w), vToY(0.6));
+    }
+
+    // Tuval 2: Çıkış y(t)
+    function drawOutputCanvas() {
+      const w = canvasOutput.width;
+      const h = canvasOutput.height;
+      ctxOutput.clearRect(0, 0, w, h);
+
+      const minVal = -0.05, maxVal = 0.20;
+      function vToY(v) {
+        return h - 35 - ((v - minVal) / (maxVal - minVal)) * (h - 60);
+      }
+
+      const y0 = vToY(0);
+      const x0 = tToX(0, w);
+
+      // Eksenler
+      ctxOutput.strokeStyle = '#334155';
+      ctxOutput.lineWidth = 1;
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(35, y0);
+      ctxOutput.lineTo(w - 20, y0);
+      ctxOutput.stroke();
+
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(x0, 15);
+      ctxOutput.lineTo(x0, h - 20);
+      ctxOutput.stroke();
+
+      // Izgara ve Etiketler
+      ctxOutput.fillStyle = '#64748b';
+      ctxOutput.font = '10px monospace';
+      ctxOutput.textAlign = 'center';
+      for (let t = -1; t <= 4; t++) {
+        const x = tToX(t, w);
+        ctxOutput.beginPath();
+        ctxOutput.moveTo(x, y0 - 3);
+        ctxOutput.lineTo(x, y0 + 3);
+        ctxOutput.stroke();
+        ctxOutput.fillText(t, x, y0 + 14);
+      }
+      ctxOutput.fillText('t (sn)', w - 25, y0 - 8);
+
+      // Y ekseni ölçeği
+      ctxOutput.textAlign = 'right';
+      [0.05, 0.10, 0.15].forEach(val => {
+        const y = vToY(val);
+        ctxOutput.fillText(val.toFixed(2), x0 - 8, y + 3);
+      });
+
+      // y(t) Tam Eğrisi
+      ctxOutput.strokeStyle = '#6366f1';
+      ctxOutput.lineWidth = 2.5;
+      ctxOutput.beginPath();
+      let first = true;
+      for (let t = -1.5; t <= 4.0; t += 0.02) {
+        const val = funcY(t);
+        const px = tToX(t, w);
+        const py = vToY(val);
+        if (first) { ctxOutput.moveTo(px, py); first = false; }
+        else { ctxOutput.lineTo(px, py); }
+      }
+      ctxOutput.stroke();
+
+      // Mevcut t Anına Kadar Alanın Doldurulması
+      ctxOutput.fillStyle = 'rgba(99, 102, 241, 0.2)';
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(tToX(0, w), y0);
+      for (let t = 0.0; t <= Math.max(0, currentT); t += 0.02) {
+        ctxOutput.lineTo(tToX(t, w), vToY(funcY(t)));
+      }
+      ctxOutput.lineTo(tToX(Math.max(0, currentT), w), y0);
+      ctxOutput.closePath();
+      ctxOutput.fill();
+
+      // Zirve Noktası İşareti (t = ln(1.5) ≈ 0.4055)
+      const tPeak = Math.log(1.5);
+      const yPeak = funcY(tPeak);
+      const pxPeak = tToX(tPeak, w);
+      const pyPeak = vToY(yPeak);
+
+      ctxOutput.strokeStyle = '#a855f7';
+      ctxOutput.setLineDash([3, 3]);
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(pxPeak, 25);
+      ctxOutput.lineTo(pxPeak, y0);
+      ctxOutput.stroke();
+      ctxOutput.setLineDash([]);
+
+      ctxOutput.fillStyle = '#a855f7';
+      ctxOutput.beginPath();
+      ctxOutput.arc(pxPeak, pyPeak, 4, 0, Math.PI * 2);
+      ctxOutput.fill();
+      ctxOutput.font = '9px monospace';
+      ctxOutput.textAlign = 'center';
+      ctxOutput.fillText('Zirve (t≈0.41, y≈0.148)', pxPeak, pyPeak - 10);
+
+      // Güncel t Konum Noktası
+      const curX = tToX(currentT, w);
+      const curVal = funcY(currentT);
+      const curY = vToY(curVal);
+
+      ctxOutput.strokeStyle = '#f87171';
+      ctxOutput.lineWidth = 1.5;
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(curX, 20);
+      ctxOutput.lineTo(curX, y0);
+      ctxOutput.stroke();
+
+      ctxOutput.fillStyle = '#ef4444';
+      ctxOutput.beginPath();
+      ctxOutput.arc(curX, curY, 5, 0, Math.PI * 2);
+      ctxOutput.fill();
+      ctxOutput.strokeStyle = '#ffffff';
+      ctxOutput.lineWidth = 1.5;
+      ctxOutput.stroke();
+
+      ctxOutput.fillStyle = '#f87171';
+      ctxOutput.font = 'bold 10px monospace';
+      ctxOutput.textAlign = currentT > 2.5 ? 'right' : 'left';
+      ctxOutput.fillText(`y(${currentT.toFixed(2)}) = ${curVal.toFixed(4)}`, curX + (currentT > 2.5 ? -10 : 10), curY - 6);
+    }
+
+    function update() {
+      currentT = parseFloat(sliderT.value);
+      lblTVal.textContent = `t = ${currentT.toFixed(2)} sn`;
+
+      const yVal = funcY(currentT);
+      lblYVal.textContent = `y(${currentT.toFixed(2)}) = ${yVal.toFixed(4)}`;
+
+      const dyVal = funcDyDt(currentT);
+      const leftSide = dyVal + 3.0 * yVal;
+      const rightSide = currentT >= 0 ? Math.exp(-2.0 * currentT) : 0.0;
+      lblDiffCheck.textContent = `dy/dt + 3y = ${leftSide.toFixed(4)} | e⁻²ᵗ = ${rightSide.toFixed(4)}`;
+
+      if (Math.abs(currentT - Math.log(1.5)) < 0.05) {
+        lblPeakBadge.textContent = 'Maksimum Zirve Anı (t = ln(1.5))';
+        lblPeakBadge.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-purple-100 text-purple-800 font-bold';
+      } else if (currentT < 0.0) {
+        lblPeakBadge.textContent = 'Çıkış Sıfır (Giriş Henüz Etki Etmedi)';
+        lblPeakBadge.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-slate-200 text-slate-700';
+      } else {
+        lblPeakBadge.textContent = 'Aktif Çıkış Yanıtı';
+        lblPeakBadge.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-indigo-100 text-indigo-800';
+      }
+
+      drawSignalsCanvas();
+      drawOutputCanvas();
+    }
+
+    function setT(val) {
+      sliderT.value = val;
+      if (isPlaying) togglePlay();
+      update();
+    }
+
+    sliderT.addEventListener('input', update);
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playIcon.innerHTML = '&#10074;&#10074;';
+        btnPlayPause.classList.replace('bg-indigo-600', 'bg-amber-600');
+        btnPlayPause.classList.replace('hover:bg-indigo-700', 'hover:bg-amber-700');
+        playLoop();
+      } else {
+        playIcon.innerHTML = '&#9658;';
+        btnPlayPause.classList.replace('bg-amber-600', 'bg-indigo-600');
+        btnPlayPause.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+        cancelAnimationFrame(animId);
+      }
+    }
+
+    function playLoop() {
+      if (!isPlaying) return;
+      let val = parseFloat(sliderT.value) + 0.02;
+      if (val > 4.0) val = -1.5;
+      sliderT.value = val;
+      update();
+      animId = requestAnimationFrame(playLoop);
+    }
+
+    btnPlayPause.addEventListener('click', togglePlay);
+
+    // PNG İndirme
+    document.getElementById('btnExportPNG').addEventListener('click', () => {
+      const exp = document.createElement('canvas');
+      exp.width = 1000;
+      exp.height = 700;
+      const expCtx = exp.getContext('2d');
+
+      expCtx.fillStyle = '#0f172a';
+      expCtx.fillRect(0, 0, 1000, 700);
+
+      expCtx.fillStyle = '#ffffff';
+      expCtx.font = 'bold 20px sans-serif';
+      expCtx.fillText('Oppenheim & Willsky — Problem 2.46 Çözüm Kartı', 50, 45);
+      expCtx.fillStyle = '#94a3b8';
+      expCtx.font = '12px sans-serif';
+      expCtx.fillText('h(t) = ½ e¹⁻²ᵗ u(t+1)  |  y(t) = (e⁻²ᵗ - e⁻³ᵗ) u(t)  |  Non-Causal, BIBO Stable', 50, 70);
+
+      expCtx.drawImage(canvasSignals, 50, 95, 900, 260);
+      expCtx.drawImage(canvasOutput, 50, 385, 900, 260);
+
+      const link = document.createElement('a');
+      link.download = `Problem_2_46_Cozum_t_${currentT.toFixed(2)}.png`;
+      link.href = exp.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Çizim
+    update();
+  </script>
+</body>
+</html>

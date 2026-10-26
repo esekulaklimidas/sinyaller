@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.40 — LTI İntegral Bağıntısı ve Dürtü Yanıtı (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 2.40</span>
+            <span class="text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full font-bold">İleri Düzey (Advanced)</span>
+            <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold">Sürekli Zaman (CT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 179</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html#sec-ileri-duzey" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanımı Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; İleri Düzey Problemler</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            LTI İntegral Bağıntısı, Dürtü Yanıtı $h(t)$ ve Dikdörtgen Darbe Cevabı
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+            Nedensel &amp; BIBO Kararlı
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni Orijinal Kutu -->
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Problem 2.40 Soru Metni (Oppenheim &amp; Willsky, Sh. 179)
+        </div>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          <strong>(a)</strong> Giriş ve çıkışı aşağıdaki integral bağıntısı ile ilişkili bir LTI sistemi ele alınız:
+          $$y(t) = \int_{-\infty}^{t} e^{-(t-\tau)} x(\tau - 2) \, d\tau$$
+          Bu sistemin dürtü yanıtı <strong>$h(t)$</strong> nedir?
+        </p>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          <strong>(b)</strong> Sistemin girişi <strong>Şekil P2.40</strong>'ta gösterilen $x(t)$ dikdörtgen darbesi olduğunda sistemin çıkışını $y(t)$ belirleyiniz.
+        </p>
+        <div class="pt-2 text-xs text-slate-600 bg-white p-3 rounded-xl border border-slate-200 flex flex-wrap items-center justify-between">
+          <span><strong>Şekil P2.40:</strong> $x(t) = 1, \quad -1 \le t \le 2 \implies x(t) = u(t+1) - u(t-2)$</span>
+          <span class="font-mono text-indigo-600 font-bold">Genişlik: $T = 3$ sn &bull; Genlik: $A = 1$</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETKİLEŞİMLİ SİMÜLATÖR (DUAL CANVAS) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">İnteraktif Simülasyon</span>
+          <h2 class="text-xl font-black text-slate-900">Konvolüsyon &amp; İntegral Dinamiği Görselleştirici</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Zaman kaydırıcısını hareket ettirerek integrasyon alanını ve oluşan $y(t)$ çıkışını canlı izleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnExportPNG" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG Olarak İndir
+          </button>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+        <!-- Zaman Kaydırıcı -->
+        <div class="md:col-span-7 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Zaman Konumu: <span class="font-mono text-indigo-600 text-sm" id="lblTVal">t = 2.50 sn</span></span>
+            <span class="text-[11px] px-2 py-0.5 rounded font-mono" id="lblRegion">Bölge II: Yükselme ($1 \le t < 4$)</span>
+          </div>
+          <input type="range" id="sliderT" min="-1" max="8" step="0.05" value="2.5"
+            class="w-full accent-indigo-600 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+            <span>t = -1.0</span>
+            <span>t = 1.0 (Başlama)</span>
+            <span>t = 4.0 (Zirve)</span>
+            <span>t = 8.0</span>
+          </div>
+        </div>
+
+        <!-- Hızlı Atlama Butonları -->
+        <div class="md:col-span-5 flex flex-wrap gap-1.5 justify-end">
+          <button onclick="setT(0.0)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">t=0 (Öncesi)</button>
+          <button onclick="setT(2.5)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">t=2.5 (Yükselme)</button>
+          <button onclick="setT(4.0)" class="px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition">t=4.0 (Maks Tepe)</button>
+          <button onclick="setT(6.0)" class="px-2.5 py-1 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-lg text-xs font-medium transition">t=6.0 (Sönümlenme)</button>
+          <button id="btnPlayPause" class="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold shadow-sm transition flex items-center gap-1">
+            <span id="playIcon">&#9658;</span> Oynat
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-4">
+        <!-- Tuval 1: Giriş ve Kaydırılmış Çekirdek (İntegrant Örtüşmesi) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">1. İntegrasyon Tuvali: $x(\tau)$ ve $h(t-\tau) = e^{-(t-\tau-2)}u(t-\tau-2)$</span>
+            <span class="text-[11px] text-slate-500 font-mono">Örtüşme Alanı $\int x(\tau)h(t-\tau)d\tau$</span>
+          </div>
+          <canvas id="canvasOverlap" width="900" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-sky-400 inline-block"></span> $x(\tau)$ Giriş Darbesi $[-1, 2]$</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-amber-400 inline-block"></span> $h(t-\tau)$ Kernel ($\tau \le t-2$)</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-400 inline-block"></span> Örtüşme Alanı</span>
+            </div>
+            <span class="font-mono text-emerald-600 font-bold" id="lblOverlapVal">Alan = 0.7769</span>
+          </div>
+        </div>
+
+        <!-- Tuval 2: Nihai Çıkış Dalga Biçimi y(t) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">2. Çıkış Yanıtı Tuvali: $y(t)$ Zaman Dalga Biçimi</span>
+            <span class="text-[11px] font-mono text-indigo-600 font-bold" id="lblYVal">y(t) = 0.7769</span>
+          </div>
+          <canvas id="canvasOutput" width="900" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-indigo-400 inline-block"></span> $y(t)$ Çıkış Eğrisi</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-red-400 inline-block"></span> Güncel Zaman İmleci $t$</span>
+              <span class="flex items-center gap-1.5 text-slate-400">Tepe Noktası: $t=4$, $y(4) = 1 - e^{-3} \approx 0.9502$</span>
+            </div>
+            <span class="font-mono text-slate-400">Sürekli &amp; Türetilebilir</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAYLI TEORİK ÇÖZÜM VE KANIT KARTLARI -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- Bölüm (a) Çözümü -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-xs font-black uppercase">Kısım (a) Analizi</span>
+          <span class="text-xs font-mono text-slate-500">Dürtü Yanıtı $h(t)$</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">Sistemin Dürtü Yanıtının Belirlenmesi</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Bir LTI sistemin dürtü yanıtı $h(t)$, sisteme uygulanan giriş Dirac delta darbesi $x(t) = \delta(t)$ olduğunda elde edilen çıkıştır:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-500">Giriş yerine $\delta(\tau-2)$ yazalım:</div>
+          <div class="text-indigo-900 font-bold">$$y(t) = h(t) = \int_{-\infty}^{t} e^{-(t-\tau)} \delta(\tau - 2) \, d\tau$$</div>
+          <div class="text-slate-600 text-[11px] leading-relaxed">
+            $\delta(\tau-2)$ darbesi sadece $\tau = 2$ noktasında sonsuz genliğe sahiptir.
+            İntegrasyon aralığı $(-\infty, t]$ olduğundan:
+          </div>
+          <ul class="list-disc list-inside text-[11px] text-slate-700 space-y-1">
+            <li>Eğer $t < 2$ ise: $\tau = 2$ noktası integral sınırlarının dışındadır $\implies h(t) = 0$.</li>
+            <li>Eğer $t \ge 2$ ise: $\tau = 2$ aralığa dahildir ve eleme (sifting) özelliği gereği:
+              $$h(t) = e^{-(t-2)}$$
+            </li>
+          </ul>
+        </div>
+
+        <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl text-xs space-y-1">
+          <div class="font-bold text-indigo-900">Nihai Kapalı Form Dürtü Yanıtı:</div>
+          <div class="text-base font-bold text-indigo-700 font-mono">
+            $$h(t) = e^{-(t-2)} u(t-2)$$
+          </div>
+          <div class="text-[11px] text-slate-600">
+            <strong>Fiziksel Anlamı:</strong> Sistem, standart 1. derece RC alçak geçiren filtre ($e^{-t}u(t)$) çekirdeğine 
+            sahiptir ancak girişteki $x(\tau-2)$ ötelenmesinden ötürü tam <strong>2 birimlik saf zaman gecikmesi</strong> (time-delay) barındırır.
+          </div>
+        </div>
+
+        <!-- Sistem Özellikleri -->
+        <div class="grid grid-cols-2 gap-2 text-xs pt-2">
+          <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <span class="font-bold text-emerald-900 block">Nedensellik:</span>
+            <span class="text-[11px] text-emerald-700">$t < 2$ için $h(t) = 0$ olduğundan sistem kesinlikle <strong>Nedenseldir</strong>.</span>
+          </div>
+          <div class="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <span class="font-bold text-emerald-900 block">BIBO Kararlılık:</span>
+            <span class="text-[11px] text-emerald-700">$\int_2^\infty e^{-(t-2)}dt = 1 < \infty$ olduğundan <strong>Kararlıdır</strong>.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bölüm (b) Çözümü -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-md text-xs font-black uppercase">Kısım (b) Analizi</span>
+          <span class="text-xs font-mono text-slate-500">Dikdörtgen Darbe Çıkışı</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900">Darbe Girişine Karşılık Çıkış $y(t)$</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Giriş sinyali $x(t) = u(t+1) - u(t-2)$ bir dikdörtgen darbedir. Çıkışı basamak yanıtı üzerinden en zarif biçimde çözelim:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-700 font-bold">1. Adım: Basamak Yanıtı $s(t) = u(t) * h(t)$</div>
+          <div class="text-[11px] text-slate-600">
+            $$s(t) = \int_{-\infty}^\infty u(\tau) e^{-(t-\tau-2)}u(t-\tau-2) d\tau = \left(1 - e^{-(t-2)}\right) u(t-2)$$
+          </div>
+
+          <div class="text-slate-700 font-bold pt-1">2. Adım: Süperpozisyon İlkesi</div>
+          <div class="text-[11px] text-slate-600">
+            $x(t) = u(t+1) - u(t-2)$ olduğundan, LTI özelliğinden ötürü çıkış:
+            $$y(t) = s(t+1) - s(t-2)$$
+          </div>
+        </div>
+
+        <!-- Parçalı Çözüm Kartı -->
+        <div class="p-3.5 bg-purple-50 border border-purple-200 rounded-xl space-y-2 text-xs">
+          <span class="font-bold text-purple-900 block">Zaman Aralıklarına Göre Kapalı Form Çözüm:</span>
+          <div class="font-mono text-xs text-purple-950 space-y-1">
+            $$y(t) = \begin{cases} 
+            0, & t < 1 \\ 
+            1 - e^{-(t-1)}, & 1 \le t < 4 \\ 
+            (1 - e^{-3}) e^{-(t-4)}, & t \ge 4 
+            \end{cases}$$
+          </div>
+          <div class="text-[11px] text-purple-800 leading-relaxed pt-1">
+            &bull; $t = 1$'de çıkış sıfırdan başlar: $y(1) = 0$.<br>
+            &bull; $t = 4$'te darbe sona erer ve maksimum genliğe ulaşılır: $y(4) = 1 - e^{-3} \approx 0.9502$.<br>
+            &bull; $t > 4$'te sistem depoladığı enerjiyi üstel olarak boşaltır (RC deşarjı).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SAYISAL DOĞRULAMA VE KRİTİK NOKTALAR TABLOSU -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        <h3 class="text-lg font-bold text-slate-900">Kritik Zaman Noktaları ve Süreklilik Doğrulaması</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+          <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">Zaman ($t$)</th>
+              <th class="p-3">Rejim / Durum</th>
+              <th class="p-3">Formül Değeri</th>
+              <th class="p-3">Sayısal Çıkış $y(t)$</th>
+              <th class="p-3">Fiziksel Yorum</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">t < 1</td>
+              <td class="p-3 text-slate-500">Sükunet / Gecikme</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-slate-800">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">Giriş $t=-1$'de başladı ancak 2 sn'lik gecikme nedeniyle çıkış henüz tepki vermedi.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-indigo-50/40">
+              <td class="p-3 font-bold text-indigo-700">t = 1.0</td>
+              <td class="p-3 font-bold text-indigo-700">Başlangıç Sınırı</td>
+              <td class="p-3">1 - e^0 = 0</td>
+              <td class="p-3 font-bold text-indigo-700">0.0000</td>
+              <td class="p-3 font-sans text-[11px]">Çıkış tepkisi tam bu anda sıfırdan yükselmeye başlar (Sürekli geçiş).</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">t = 2.0</td>
+              <td class="p-3 text-emerald-700 font-semibold">Aktif Yükselme</td>
+              <td class="p-3">1 - e^{-1}</td>
+              <td class="p-3 font-bold text-emerald-700">0.6321</td>
+              <td class="p-3 font-sans text-[11px]">Sistem 1 zaman sabiti ($\tau=1$) kadar şarj oldu (%63.2 doygunluk).</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">t = 3.0</td>
+              <td class="p-3 text-emerald-700 font-semibold">Aktif Yükselme</td>
+              <td class="p-3">1 - e^{-2}</td>
+              <td class="p-3 font-bold text-emerald-700">0.8647</td>
+              <td class="p-3 font-sans text-[11px]">2 zaman sabiti sonrası %86.5 seviyesine tırmanış.</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-amber-50/50">
+              <td class="p-3 font-bold text-amber-800">t = 4.0</td>
+              <td class="p-3 font-bold text-amber-800">Maksimum Tepe</td>
+              <td class="p-3">1 - e^{-3}</td>
+              <td class="p-3 font-bold text-amber-800">0.9502</td>
+              <td class="p-3 font-sans text-[11px]">Giriş darbesi bitti (2 + 2 = 4 sn). Sistem ulaşabileceği en yüksek tepe değerine ulaştı.</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">t = 5.0</td>
+              <td class="p-3 text-purple-700 font-semibold">Üstel Sönümlenme</td>
+              <td class="p-3">(1 - e^{-3})e^{-1}</td>
+              <td class="p-3 font-bold text-purple-700">0.3496</td>
+              <td class="p-3 font-sans text-[11px]">Deşarj fazı: Tepe değerinin %36.8'ine gerileme.</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">t = 6.0</td>
+              <td class="p-3 text-purple-700 font-semibold">Üstel Sönümlenme</td>
+              <td class="p-3">(1 - e^{-3})e^{-2}</td>
+              <td class="p-3 font-bold text-purple-700">0.1286</td>
+              <td class="p-3 font-sans text-[11px]">Deşarj devam ediyor; asimptotik olarak $t \to \infty$ iken $y(t) \to 0$.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <p>Oppenheim &amp; Willsky &bull; Signals and Systems 2. Baskı Çözümleri &bull; Hazırlayan: ENI for Tris ❤️</p>
+  </footer>
+
+  <!-- SİMÜLASYON MOTORU VE JAVASCRIPT KODLARI -->
+  <script>
+    const canvasOverlap = document.getElementById('canvasOverlap');
+    const ctxOverlap = canvasOverlap.getContext('2d');
+    const canvasOutput = document.getElementById('canvasOutput');
+    const ctxOutput = canvasOutput.getContext('2d');
+
+    const sliderT = document.getElementById('sliderT');
+    const lblTVal = document.getElementById('lblTVal');
+    const lblRegion = document.getElementById('lblRegion');
+    const lblOverlapVal = document.getElementById('lblOverlapVal');
+    const lblYVal = document.getElementById('lblYVal');
+    const btnPlayPause = document.getElementById('btnPlayPause');
+    const playIcon = document.getElementById('playIcon');
+
+    let currentT = 2.5;
+    let isPlaying = false;
+    let animId = null;
+
+    // Matematiksel kapalı form çıkış
+    function calculateY(t) {
+      if (t < 1.0) return 0.0;
+      if (t < 4.0) return 1.0 - Math.exp(-(t - 1.0));
+      return (1.0 - Math.exp(-3.0)) * Math.exp(-(t - 4.0));
+    }
+
+    // Koordinat Dönüşüm Fonksiyonları (Tuval 1: tau ekseni [-3, 6], genlik [-0.2, 1.3])
+    function tauToX(tau, w) {
+      const minTau = -3.0, maxTau = 6.0;
+      return 60 + ((tau - minTau) / (maxTau - minTau)) * (w - 100);
+    }
+    function ampToY(amp, h) {
+      const minAmp = -0.2, maxAmp = 1.3;
+      return h - 40 - ((amp - minAmp) / (maxAmp - minAmp)) * (h - 70);
+    }
+
+    // Koordinat Dönüşüm Fonksiyonları (Tuval 2: t ekseni [-1.5, 8.5], genlik [-0.2, 1.3])
+    function tToX(t, w) {
+      const minT = -1.5, maxT = 8.5;
+      return 60 + ((t - minT) / (maxT - minT)) * (w - 100);
+    }
+
+    // 1. Tuval Çizimi (İntegrant ve Örtüşme)
+    function drawOverlapCanvas() {
+      const w = canvasOverlap.width;
+      const h = canvasOverlap.height;
+      ctxOverlap.clearRect(0, 0, w, h);
+
+      // Eksenler ve Izgara
+      ctxOverlap.strokeStyle = '#334155';
+      ctxOverlap.lineWidth = 1;
+
+      // Yatay Eksen (tau)
+      const y0 = ampToY(0, h);
+      ctxOverlap.beginPath();
+      ctxOverlap.moveTo(40, y0);
+      ctxOverlap.lineTo(w - 30, y0);
+      ctxOverlap.stroke();
+
+      // Dikey Eksen
+      const x0 = tauToX(0, w);
+      ctxOverlap.beginPath();
+      ctxOverlap.moveTo(x0, 20);
+      ctxOverlap.lineTo(x0, h - 25);
+      ctxOverlap.stroke();
+
+      // Izgara ve Etiketler
+      ctxOverlap.fillStyle = '#64748b';
+      ctxOverlap.font = '10px monospace';
+      ctxOverlap.textAlign = 'center';
+      for (let tau = -2; tau <= 5; tau++) {
+        const x = tauToX(tau, w);
+        ctxOverlap.beginPath();
+        ctxOverlap.moveTo(x, y0 - 3);
+        ctxOverlap.lineTo(x, y0 + 3);
+        ctxOverlap.stroke();
+        ctxOverlap.fillText(tau, x, y0 + 15);
+      }
+      ctxOverlap.fillText('τ (tau)', w - 40, y0 - 8);
+
+      // Y-ekseni etiketleri (0, 0.5, 1.0)
+      ctxOverlap.textAlign = 'right';
+      [0, 0.5, 1.0].forEach(val => {
+        const y = ampToY(val, h);
+        ctxOverlap.fillText(val.toFixed(1), x0 - 8, y + 3);
+      });
+
+      // 1. Sinyal: x(tau) dikdörtgen darbe [-1, 2]
+      ctxOverlap.strokeStyle = '#38bdf8';
+      ctxOverlap.lineWidth = 2.5;
+      ctxOverlap.fillStyle = 'rgba(56, 189, 248, 0.15)';
+
+      const xL = tauToX(-1, w);
+      const xR = tauToX(2, w);
+      const yTop = ampToY(1, h);
+
+      ctxOverlap.beginPath();
+      ctxOverlap.moveTo(tauToX(-3, w), y0);
+      ctxOverlap.lineTo(xL, y0);
+      ctxOverlap.lineTo(xL, yTop);
+      ctxOverlap.lineTo(xR, yTop);
+      ctxOverlap.lineTo(xR, y0);
+      ctxOverlap.lineTo(tauToX(6, w), y0);
+      ctxOverlap.stroke();
+      ctxOverlap.fill();
+
+      // Etiket: x(tau)
+      ctxOverlap.fillStyle = '#38bdf8';
+      ctxOverlap.font = 'bold 11px sans-serif';
+      ctxOverlap.textAlign = 'left';
+      ctxOverlap.fillText('x(τ)', xL + 10, yTop - 8);
+
+      // 2. Sinyal: h(t - tau) = e^{-(t - tau - 2)} u(t - tau - 2)
+      // Bu fonksiyon tau <= t - 2 bölgesinde sıfırdan farklıdır!
+      const tauCut = currentT - 2.0;
+      ctxOverlap.strokeStyle = '#fbbf24';
+      ctxOverlap.lineWidth = 2.5;
+
+      ctxOverlap.beginPath();
+      let first = true;
+      for (let tau = -3.0; tau <= Math.min(6.0, tauCut); tau += 0.05) {
+        const val = Math.exp(-(currentT - tau - 2.0));
+        const px = tauToX(tau, w);
+        const py = ampToY(val, h);
+        if (first) { ctxOverlap.moveTo(px, py); first = false; }
+        else { ctxOverlap.lineTo(px, py); }
+      }
+      if (tauCut >= -3.0 && tauCut <= 6.0) {
+        const pxCut = tauToX(tauCut, w);
+        ctxOverlap.lineTo(pxCut, ampToY(1.0, h));
+        ctxOverlap.lineTo(pxCut, y0);
+        ctxOverlap.lineTo(tauToX(6.0, w), y0);
+      }
+      ctxOverlap.stroke();
+
+      // Etiket: h(t - tau)
+      ctxOverlap.fillStyle = '#fbbf24';
+      ctxOverlap.textAlign = 'right';
+      const labelTauPos = Math.min(5.5, Math.max(-2.5, tauCut - 0.5));
+      ctxOverlap.fillText(`h(${currentT.toFixed(2)} - τ)`, tauToX(labelTauPos, w), ampToY(Math.exp(-(currentT - labelTauPos - 2.0)), h) - 10);
+
+      // 3. Örtüşme (Çarpım) Alanı Taraması
+      // Örtüşme aralığı: [-1, min(2, tauCut)]
+      const overlapStart = -1.0;
+      const overlapEnd = Math.min(2.0, tauCut);
+
+      if (overlapEnd > overlapStart) {
+        ctxOverlap.fillStyle = 'rgba(52, 211, 153, 0.45)';
+        ctxOverlap.beginPath();
+        ctxOverlap.moveTo(tauToX(overlapStart, w), y0);
+
+        for (let tau = overlapStart; tau <= overlapEnd; tau += 0.05) {
+          const val = Math.exp(-(currentT - tau - 2.0));
+          ctxOverlap.lineTo(tauToX(tau, w), ampToY(val, h));
+        }
+        ctxOverlap.lineTo(tauToX(overlapEnd, w), ampToY(Math.exp(-(currentT - overlapEnd - 2.0)), h));
+        ctxOverlap.lineTo(tauToX(overlapEnd, w), y0);
+        ctxOverlap.closePath();
+        ctxOverlap.fill();
+
+        // Örtüşme Sınırı Çizgisi
+        ctxOverlap.strokeStyle = '#34d399';
+        ctxOverlap.setLineDash([3, 3]);
+        ctxOverlap.beginPath();
+        ctxOverlap.moveTo(tauToX(overlapEnd, w), y0);
+        ctxOverlap.lineTo(tauToX(overlapEnd, w), ampToY(1.1, h));
+        ctxOverlap.stroke();
+        ctxOverlap.setLineDash([]);
+
+        ctxOverlap.fillStyle = '#34d399';
+        ctxOverlap.font = 'bold 10px monospace';
+        ctxOverlap.textAlign = 'center';
+        ctxOverlap.fillText(`τ = t-2 = ${tauCut.toFixed(2)}`, tauToX(overlapEnd, w), ampToY(1.15, h));
+      }
+    }
+
+    // 2. Tuval Çizimi (Çıkış y(t))
+    function drawOutputCanvas() {
+      const w = canvasOutput.width;
+      const h = canvasOutput.height;
+      ctxOutput.clearRect(0, 0, w, h);
+
+      const y0 = ampToY(0, h);
+      const x0 = tToX(0, w);
+
+      // Eksenler ve Izgara
+      ctxOutput.strokeStyle = '#334155';
+      ctxOutput.lineWidth = 1;
+
+      // Yatay Eksen (t)
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(40, y0);
+      ctxOutput.lineTo(w - 30, y0);
+      ctxOutput.stroke();
+
+      // Dikey Eksen
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(x0, 20);
+      ctxOutput.lineTo(x0, h - 25);
+      ctxOutput.stroke();
+
+      // Izgara ve Etiketler
+      ctxOutput.fillStyle = '#64748b';
+      ctxOutput.font = '10px monospace';
+      ctxOutput.textAlign = 'center';
+      for (let t = -1; t <= 8; t++) {
+        const x = tToX(t, w);
+        ctxOutput.beginPath();
+        ctxOutput.moveTo(x, y0 - 3);
+        ctxOutput.lineTo(x, y0 + 3);
+        ctxOutput.stroke();
+        ctxOutput.fillText(t, x, y0 + 15);
+      }
+      ctxOutput.fillText('t (saniye)', w - 40, y0 - 8);
+
+      // Y-ekseni etiketleri
+      ctxOutput.textAlign = 'right';
+      [0, 0.5, 1.0].forEach(val => {
+        const y = ampToY(val, h);
+        ctxOutput.fillText(val.toFixed(1), x0 - 8, y + 3);
+      });
+
+      // Bölge Çizgileri (t=1 ve t=4)
+      ctxOutput.strokeStyle = '#475569';
+      ctxOutput.setLineDash([4, 4]);
+
+      // t=1 çizgisi
+      const x1 = tToX(1.0, w);
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(x1, 25);
+      ctxOutput.lineTo(x1, y0);
+      ctxOutput.stroke();
+
+      // t=4 çizgisi
+      const x4 = tToX(4.0, w);
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(x4, 25);
+      ctxOutput.lineTo(x4, y0);
+      ctxOutput.stroke();
+      ctxOutput.setLineDash([]);
+
+      // Bölge Başlıkları
+      ctxOutput.font = '9px sans-serif';
+      ctxOutput.fillStyle = '#64748b';
+      ctxOutput.textAlign = 'center';
+      ctxOutput.fillText('Bölge I (y=0)', tToX(0.0, w), 35);
+      ctxOutput.fillText('Bölge II: Yükselme (1 - e^{-(t-1)})', tToX(2.5, w), 35);
+      ctxOutput.fillText('Bölge III: Sönümlenme ((1-e^{-3})e^{-(t-4)})', tToX(6.0, w), 35);
+
+      // Tüm y(t) eğrisi (arkada açık renk)
+      ctxOutput.strokeStyle = '#6366f1';
+      ctxOutput.lineWidth = 2.5;
+      ctxOutput.beginPath();
+      let first = true;
+      for (let t = -1.5; t <= 8.5; t += 0.05) {
+        const val = calculateY(t);
+        const px = tToX(t, w);
+        const py = ampToY(val, h);
+        if (first) { ctxOutput.moveTo(px, py); first = false; }
+        else { ctxOutput.lineTo(px, py); }
+      }
+      ctxOutput.stroke();
+
+      // Mevcut t anına kadar olan alanın boyanması
+      ctxOutput.fillStyle = 'rgba(99, 102, 241, 0.2)';
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(tToX(-1.5, w), y0);
+      for (let t = -1.5; t <= currentT; t += 0.05) {
+        const val = calculateY(t);
+        ctxOutput.lineTo(tToX(t, w), ampToY(val, h));
+      }
+      ctxOutput.lineTo(tToX(currentT, w), ampToY(calculateY(currentT), h));
+      ctxOutput.lineTo(tToX(currentT, w), y0);
+      ctxOutput.closePath();
+      ctxOutput.fill();
+
+      // Güncel t İmleci
+      const curX = tToX(currentT, w);
+      const curVal = calculateY(currentT);
+      const curY = ampToY(curVal, h);
+
+      ctxOutput.strokeStyle = '#f87171';
+      ctxOutput.lineWidth = 1.5;
+      ctxOutput.setLineDash([2, 2]);
+      ctxOutput.beginPath();
+      ctxOutput.moveTo(curX, 20);
+      ctxOutput.lineTo(curX, y0);
+      ctxOutput.stroke();
+      ctxOutput.setLineDash([]);
+
+      // Güncel Nokta Halkası
+      ctxOutput.fillStyle = '#ef4444';
+      ctxOutput.beginPath();
+      ctxOutput.arc(curX, curY, 5, 0, Math.PI * 2);
+      ctxOutput.fill();
+      ctxOutput.strokeStyle = '#ffffff';
+      ctxOutput.lineWidth = 2;
+      ctxOutput.stroke();
+
+      // Değer Etiketi
+      ctxOutput.fillStyle = '#f87171';
+      ctxOutput.font = 'bold 11px monospace';
+      ctxOutput.textAlign = currentT > 6 ? 'right' : 'left';
+      ctxOutput.fillText(`y(${currentT.toFixed(2)}) = ${curVal.toFixed(4)}`, curX + (currentT > 6 ? -10 : 10), curY - 8);
+    }
+
+    function update() {
+      currentT = parseFloat(sliderT.value);
+      lblTVal.textContent = `t = ${currentT.toFixed(2)} sn`;
+
+      const yVal = calculateY(currentT);
+      lblYVal.textContent = `y(${currentT.toFixed(2)}) = ${yVal.toFixed(4)}`;
+      lblOverlapVal.textContent = `İntegral Alanı = ${yVal.toFixed(4)}`;
+
+      if (currentT < 1.0) {
+        lblRegion.textContent = 'Bölge I: Başlangıç Öncesi (t < 1)';
+        lblRegion.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-slate-200 text-slate-700';
+      } else if (currentT < 4.0) {
+        lblRegion.textContent = 'Bölge II: Yükselme / Şarj (1 ≤ t < 4)';
+        lblRegion.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-indigo-100 text-indigo-800 font-bold';
+      } else {
+        lblRegion.textContent = 'Bölge III: Üstel Sönümlenme (t ≥ 4)';
+        lblRegion.className = 'text-[11px] px-2 py-0.5 rounded font-mono bg-purple-100 text-purple-800 font-bold';
+      }
+
+      drawOverlapCanvas();
+      drawOutputCanvas();
+    }
+
+    function setT(val) {
+      sliderT.value = val;
+      if (isPlaying) togglePlay();
+      update();
+    }
+
+    sliderT.addEventListener('input', update);
+
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playIcon.innerHTML = '&#10074;&#10074;';
+        btnPlayPause.classList.replace('bg-indigo-600', 'bg-amber-600');
+        btnPlayPause.classList.replace('hover:bg-indigo-700', 'hover:bg-amber-700');
+        playLoop();
+      } else {
+        playIcon.innerHTML = '&#9658;';
+        btnPlayPause.classList.replace('bg-amber-600', 'bg-indigo-600');
+        btnPlayPause.classList.replace('hover:bg-amber-700', 'hover:bg-indigo-700');
+        cancelAnimationFrame(animId);
+      }
+    }
+
+    function playLoop() {
+      if (!isPlaying) return;
+      let val = parseFloat(sliderT.value) + 0.03;
+      if (val > 8.0) val = -1.0;
+      sliderT.value = val;
+      update();
+      animId = requestAnimationFrame(playLoop);
+    }
+
+    btnPlayPause.addEventListener('click', togglePlay);
+
+    // PNG Dışa Aktarma
+    document.getElementById('btnExportPNG').addEventListener('click', () => {
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = 1000;
+      exportCanvas.height = 700;
+      const expCtx = exportCanvas.getContext('2d');
+
+      // Arka plan
+      expCtx.fillStyle = '#0f172a';
+      expCtx.fillRect(0, 0, 1000, 700);
+
+      // Başlık
+      expCtx.fillStyle = '#ffffff';
+      expCtx.font = 'bold 20px sans-serif';
+      expCtx.fillText('Oppenheim & Willsky — Problem 2.40 Çözüm Kartı', 50, 45);
+      expCtx.fillStyle = '#94a3b8';
+      expCtx.font = '12px sans-serif';
+      expCtx.fillText('y(t) = ∫ e^{-(t-τ)} x(τ-2) dτ  |  h(t) = e^{-(t-2)} u(t-2)', 50, 70);
+
+      // Çizimler
+      expCtx.drawImage(canvasOverlap, 50, 95, 900, 260);
+      expCtx.drawImage(canvasOutput, 50, 385, 900, 260);
+
+      // İndirme
+      const link = document.createElement('a');
+      link.download = `Problem_2_40_Cozum_t_${currentT.toFixed(2)}.png`;
+      link.href = exportCanvas.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Çizim
+    update();
+  </script>
+</body>
+</html>

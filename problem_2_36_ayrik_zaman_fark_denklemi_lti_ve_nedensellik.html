@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.36 — Ayrık Zaman Fark Denklemlerinde LTI ve Nedensellik İspatı</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          Portal
+        </a>
+        <a href="problem_2_35_ek_kosullar_ve_nedensellik.html" class="text-xs font-semibold text-slate-600 hover:text-indigo-600 transition">
+          ← Problem 2.35
+        </a>
+        <span class="text-slate-300">|</span>
+        <a href="problem_2_37_sonda_dinginlik_ve_nedensellik.html" class="text-xs font-semibold text-slate-600 hover:text-amber-600 transition">
+          Problem 2.37 →
+        </a>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2.5 py-1 bg-indigo-50 text-indigo-800 text-[11px] font-extrabold rounded-md border border-indigo-200">
+          Oppenheim 2.36
+        </span>
+        <span class="text-xs text-slate-400 font-mono hidden sm:inline">Bölüm 2 &bull; Sayfa 177</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+
+    <!-- Başlık & Teorem Kartı -->
+    <div class="bg-gradient-to-br from-white to-indigo-50/50 p-6 sm:p-8 rounded-3xl border border-indigo-100 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          Ayrık Zaman (DT) Fark Denklemi
+        </span>
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          (a) Initial Rest $\implies$ LTI
+        </span>
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-extrabold uppercase tracking-wider">
+          (b) $y[0]=0 \implies$ Nedensel Değil
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        Problem 2.36: Ayrık Zaman Fark Denklemlerinde LTI ve Nedensellik İspatı
+      </h1>
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        Bu problem, sürekli zamanda incelediğimiz Problem 2.33 ve 2.35'in <strong>ayrık zamandaki (Discrete-Time)</strong> kusursuz ikizidir.
+        $y[n] = \frac{1}{2}y[n-1] + x[n]$ fark denkleminde: (a) Başlangıçta dinginlik koşulunun sistemi nasıl doğrusal ve zamanla değişmez (LTI) bir konvolüsyon operatörüne ($h[n]=(1/2)^n u[n]$) dönüştürdüğünü; (b) Sabit $y[0]=0$ ek koşulunun ise geriye doğru rekürsiyon nedeniyle sistemi nasıl <strong>nedensellikten kopardığını</strong> karşı örnekle ispatlıyoruz.
+      </p>
+    </div>
+
+    <!-- Soru Bizden Ne İstiyor? & Mini Konu Anlatımı -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Sol: Soru Özeti -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-indigo-700 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          Soru Bizden Ne İstiyor?
+        </div>
+        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
+          <p>
+            Girdi $x[n]$ ve çıktı $y[n]$ ilişkisi:
+            $$y[n] = \frac{1}{2}y[n - 1] + x[n]$$
+          </p>
+          <ul class="list-disc list-inside space-y-1.5 text-slate-800">
+            <li>
+              <strong>(a) Şıkkı:</strong> Eğer sistem <em>başlangıçta dinginlik</em> (initial rest: $x[n]=0, \forall n < n_0 \implies y[n]=0, \forall n < n_0$) koşulunu sağlarsa, <strong>doğrusal (linear)</strong> ve <strong>zamanla değişmez (time-invariant)</strong> olduğunu gösteriniz.
+            </li>
+            <li>
+              <strong>(b) Şıkkı:</strong> Eğer sistem başlangıçta dinginlik yerine sabit $y[0] = 0$ koşulunu kullanırsa, <strong>nedensel olmadığını</strong> gösteriniz (Problem 2.35'tekine benzer bir yöntem kullanınız).
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Sağ: Mini Konu Anlatımı -->
+      <div class="bg-indigo-50/60 p-6 rounded-2xl border border-indigo-200 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-indigo-800 font-bold text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          Mini Konu Anlatımı: İleri vs. Geriye Rekürsiyon
+        </div>
+        <div class="text-xs text-slate-700 space-y-2 leading-relaxed">
+          <p>
+            <strong>İleri Rekürsiyon ($n \ge 0$):</strong> $y[n] = \frac{1}{2}y[n-1] + x[n]$. Girdi geçmişten günümüze doğru akar; nedensellik korunur.
+          </p>
+          <p>
+            <strong>Geriye Rekürsiyon ($n < 0$):</strong> $y[0]=0$ sabit çapası verildiğinde, $n < 0$ değerleri geriye doğru çözülmek zorundadır:
+            $$y[n-1] = 2y[n] - 2x[n] \iff y[n] = 2y[n+1] - 2x[n+1]$$
+            Burada $y[n]$'i hesaplamak için $n+1$ anındaki <em>gelecek</em> girdiler kullanılır! Bu durum nedenselliği tamamen çökertir.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- İNTERAKTİF DUAL SİMÜLATÖR (STEM PLOT) -->
+    <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-black text-slate-900">İnteraktif Ayrık Zaman Görselleştirici (Stem Plot)</h2>
+          <p class="text-xs text-slate-500">Ayrık zaman indeksini ($n$) kaydırarak girdileri ($x_1, x_2$) ve çıktıları ($y_1, y_2$) anlık kıyaslayınız.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnFocusViolation" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-lg border border-rose-200 transition">
+            İhlal Noktasına Git ($n = -2$)
+          </button>
+          <button id="btnResetN" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg transition">
+            Orijine Git ($n = 0$)
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Canvas Alanı -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Canvas 1: Girdiler (Stem Plot) -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Girdi Sinyalleri: $x_1[n]$ vs. $x_2[n]$</span>
+            <span class="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 text-[10px]">
+              $n < -1$ için $x_1[n] \equiv x_2[n] = 0$
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner aspect-[16/9]">
+            <canvas id="canvasInputs" class="w-full h-full block"></canvas>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-400 mr-1"></span>$x_1[n] = 0$</span>
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-600 mr-1"></span>$x_2[n] = u[n+1]$</span>
+          </div>
+        </div>
+
+        <!-- Canvas 2: Çıktılar (Stem Plot) -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-700">
+            <span>Çıktı Yanıtları: $y_1[n]$ vs. $y_2[n]$ ($y[0]=0$ Çapası)</span>
+            <span id="badgeStatus" class="text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-[10px] font-bold">
+              NEDENSELLİK İHLALİ: $y_1 \neq y_2$
+            </span>
+          </div>
+          <div class="relative bg-white rounded-xl border border-slate-200 overflow-hidden shadow-inner aspect-[16/9]">
+            <canvas id="canvasOutputs" class="w-full h-full block"></canvas>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500 font-mono">
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-slate-400 mr-1"></span>$y_1[n] = 0$</span>
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-purple-600 mr-1"></span>$y_2[n]$</span>
+            <span><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-500 mr-1"></span>$y[0]=0$</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ayrık İndeks Kaydırıcı (Scrubber) -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-700">Ayrık Zaman Örneği Seçimi:</span>
+          <span class="font-mono font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-md border border-indigo-200">
+            n = <span id="lblN">-2</span>
+          </span>
+        </div>
+        <input type="range" id="sliderN" min="-5" max="5" step="1" value="-2"
+          class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-indigo-600">
+        <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+          <span>n = -5</span>
+          <span class="text-rose-600 font-bold">n = -2 (İhlal Noktası)</span>
+          <span class="text-blue-600 font-bold">n = -1 ($x_2$ Zıplaması)</span>
+          <span class="text-amber-600 font-bold">n = 0 ($y[0]=0$ Çapası)</span>
+          <span>n = +5</span>
+        </div>
+      </div>
+
+      <!-- Dinamik Sayısal Değer Tablosu -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">Girdi $x_1[n]$</div>
+          <div id="hudX1" class="text-sm font-mono font-black text-slate-700">0</div>
+        </div>
+        <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-200">
+          <div class="text-[10px] text-blue-700 font-bold">Girdi $x_2[n]$</div>
+          <div id="hudX2" class="text-sm font-mono font-black text-blue-700">0</div>
+        </div>
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[10px] text-slate-500 font-bold">Çıktı $y_1[n]$</div>
+          <div id="hudY1" class="text-sm font-mono font-black text-slate-700">0</div>
+        </div>
+        <div class="p-3 bg-purple-50/50 rounded-xl border border-purple-200">
+          <div class="text-[10px] text-purple-700 font-bold">Çıktı $y_2[n]$</div>
+          <div id="hudY2" class="text-sm font-mono font-black text-purple-700">-6</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADIM ADIM DETAYLI MATEMATİKSEL İSPAT KARTLARI -->
+    <div class="space-y-6">
+      <h2 class="text-xl font-black text-slate-900 flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        Adım Adım Matematiksel İspatlar ve Analiz
+      </h2>
+
+      <!-- Kart 1: (a) Şıkkı Rekürsiyon Açılımı -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">1</span>
+            (a) Şıkkı: Başlangıçta Dinginlik ve Konvolüsyon Açılımı
+          </div>
+          <button onclick="downloadCard('card1')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-2 leading-relaxed">
+          <p>
+            Başlangıçta dinginlik koşulu: $x[n] = 0 \quad (n < n_0) \implies y[n] = 0 \quad (n < n_0)$.
+            $n_0 - 1 < n_0$ olduğundan $y[n_0 - 1] = 0$'dır. $n = n_0$'dan itibaren rekürsiyonu açalım:
+          </p>
+          <div class="font-mono text-xs bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-1">
+            <div>$$y[n_0] = \frac{1}{2}y[n_0 - 1] + x[n_0] = x[n_0]$$</div>
+            <div>$$y[n_0 + 1] = \frac{1}{2}y[n_0] + x[n_0 + 1] = \frac{1}{2}x[n_0] + x[n_0 + 1]$$</div>
+            <div>$$y[n_0 + 2] = \frac{1}{2}y[n_0 + 1] + x[n_0 + 2] = \left(\frac{1}{2}\right)^2 x[n_0] + \frac{1}{2}x[n_0 + 1] + x[n_0 + 2]$$</div>
+          </div>
+          <p>
+            Tümevarımla herhangi bir $n \ge n_0$ için kapalı form elde edilir:
+          </p>
+          <p class="font-mono text-center font-bold text-indigo-700 bg-indigo-50/50 py-2.5 rounded-lg border border-indigo-100">
+            $$y[n] = \sum_{k = -\infty}^n \left(\frac{1}{2}\right)^{n - k} x[k] = \sum_{k = -\infty}^{\infty} \underbrace{\left(\frac{1}{2}\right)^{n - k} u[n - k]}_{h[n - k]} x[k] = x[n] * h[n]$$
+          </p>
+          <p class="text-[11px] text-slate-500">
+            Sistem birim dürtü yanıtı $h[n] = \left(\frac{1}{2}\right)^n u[n]$ olan bir konvolüsyon toplamına dönüşür.
+          </p>
+        </div>
+        <canvas id="card1Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 2: Doğrusallık ve Zamanla Değişmezlik İspatı -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">2</span>
+            (a) Şıkkı: Doğrusallık (Linearity) ve Zamanla Değişmezlik (TI) İspatı
+          </div>
+          <button onclick="downloadCard('card2')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 space-y-1.5">
+              <span class="font-bold text-emerald-900 text-xs">1. Doğrusallık (Linearity)</span>
+              <p class="text-[11px] text-emerald-800">
+                Girdi $x_3[n] = a x_1[n] + b x_2[n]$ olsun. Konvolüsyon toplamının lineerliği:
+              </p>
+              <p class="font-mono text-[11px] bg-white p-2 rounded border border-emerald-200">
+                $$y_3[n] = \sum_k h[n-k] (a x_1[k] + b x_2[k]) = a y_1[n] + b y_2[n]$$
+              </p>
+              <p class="text-[10px] text-emerald-700 font-bold">Süperpozisyon tam sağlanır $\implies$ DOĞRUSAL.</p>
+            </div>
+
+            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 space-y-1.5">
+              <span class="font-bold text-purple-900 text-xs">2. Zamanla Değişmezlik (Time-Invariance)</span>
+              <p class="text-[11px] text-purple-800">
+                Girdiyi $n_d$ kadar öteleyelim: $x_2[n] = x_1[n - n_d]$. $m = k - n_d$ dönüşümü ile:
+              </p>
+              <p class="font-mono text-[11px] bg-white p-2 rounded border border-purple-200">
+                $$y_2[n] = \sum_k h[n-k] x_1[k - n_d] = \sum_m h[(n - n_d) - m] x_1[m] = y_1[n - n_d]$$
+              </p>
+              <p class="text-[10px] text-purple-700 font-bold">Çıktı da aynı miktarda ötelenir $\implies$ ZAMANLA DEĞİŞMEZ.</p>
+            </div>
+          </div>
+          <div class="p-2.5 bg-slate-50 rounded-lg text-center text-slate-700 font-bold text-xs border border-slate-200">
+            Sonuç (a): Başlangıçta dinginlik koşulu altında sistem bir LTI (Linear Time-Invariant) sistemdir.
+          </div>
+        </div>
+        <canvas id="card2Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 3: (b) Şıkkı Geriye Doğru Rekürsiyon -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">3</span>
+            (b) Şıkkı: Sabit $y[0]=0$ Ek Koşulu ve Geriye Doğru Rekürsiyon
+          </div>
+          <button onclick="downloadCard('card3')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <p>
+            $y[0] = 0$ koşulundan geriye ($n < 0$) doğru gitmek için denklemi $y[n-1]$ için çözeriz:
+          </p>
+          <p class="font-mono text-center text-indigo-700 bg-slate-50 py-2 rounded-lg border border-slate-200">
+            $$\frac{1}{2}y[n - 1] = y[n] - x[n] \iff y[n - 1] = 2y[n] - 2x[n] \iff y[n] = 2y[n + 1] - 2x[n + 1]$$
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-center font-mono text-[11px]">
+            <div class="p-2 bg-slate-50 rounded border border-slate-200">
+              $y[-1] = 2y[0] - 2x[0]$<br>
+              <strong class="text-slate-800">$y[-1] = -2x[0]$</strong>
+            </div>
+            <div class="p-2 bg-slate-50 rounded border border-slate-200">
+              $y[-2] = 2y[-1] - 2x[-1]$<br>
+              <strong class="text-slate-800">$y[-2] = -4x[0] - 2x[-1]$</strong>
+            </div>
+            <div class="p-2 bg-slate-50 rounded border border-slate-200">
+              $y[-3] = 2y[-2] - 2x[-2]$<br>
+              <strong class="text-slate-800">$y[-3] = -8x[0] - 4x[-1] - 2x[-2]$</strong>
+            </div>
+          </div>
+          <p class="font-mono text-center text-rose-700 bg-rose-50/50 py-2 rounded-lg border border-rose-100">
+            $$y[n] = - \sum_{k = n + 1}^0 2^{k - n} x[k] \quad (n < 0 \text{ için})$$
+          </p>
+          <p class="text-[11px] text-slate-500">
+            $n < 0$ anındaki çıktı, $k > n$ olan <em>gelecekteki</em> girdi değerlerine ($x[n+1], \dots, x[0]$) doğrudan bağımlıdır!
+          </p>
+        </div>
+        <canvas id="card3Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 4: Nedensellik İspatı (Karşı Örnek) -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">4</span>
+            (b) Şıkkı: Nedensellik İspatı ve Karşı Örnek (Counterexample)
+          </div>
+          <button onclick="downloadCard('card4')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <p>
+            Problem 2.35'teki stratejiyi uygulayarak iki farklı girdi seçelim:
+          </p>
+          <div class="grid grid-cols-2 gap-3 text-center font-mono">
+            <div class="p-3 bg-slate-50 rounded-xl border border-slate-200">
+              <span class="text-slate-500 text-[10px] block">Girdi 1</span>
+              <strong class="text-xs text-slate-800">$x_1[n] = 0 \quad (\forall n)$</strong>
+              <span class="text-[11px] text-slate-600 block pt-1">$y_1[n] = 0 \quad (\forall n)$</span>
+            </div>
+            <div class="p-3 bg-blue-50/50 rounded-xl border border-blue-200">
+              <span class="text-blue-600 text-[10px] block">Girdi 2</span>
+              <strong class="text-xs text-blue-800">$x_2[n] = u[n+1]$</strong>
+              <span class="text-[11px] text-blue-700 block pt-1">$x_2[-1]=1, x_2[0]=1$</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-amber-50 rounded-xl border border-amber-200 text-slate-700 text-xs space-y-1.5">
+            <p class="font-bold text-amber-900">$n \le -2$ Bölgesinde Kıyaslama:</p>
+            <p>
+              $n \le -2$ için her iki girdi de sıfırdır: $x_1[n] = 0$ ve $x_2[n] = 0 \implies \mathbf{x_1[n] = x_2[n]}$.
+            </p>
+            <p>
+              Ancak $n = -2$ anındaki çıktılara bakalım:
+              $$y_1[-2] = 0$$
+              $$y_2[-2] = -4 x_2[0] - 2 x_2[-1] = -4(1) - 2(1) = \mathbf{-6 \neq 0}$$
+            </p>
+            <p class="font-bold text-rose-700 pt-1">
+              $n \le -2$ için $x_1[n] = x_2[n]$ olmasına rağmen $y_1[-2] \neq y_2[-2]$ olduğundan sistem <strong>NEDENSEL DEĞİLDİR (NOT CAUSAL)</strong>.
+            </p>
+          </div>
+        </div>
+        <canvas id="card4Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+
+      <!-- Kart 5: Sınav Özeti & Karşılaştırma -->
+      <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2 font-bold text-slate-800">
+            <span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs">5</span>
+            Özet Tablo: DT (2.36) ile CT (2.33-2.35) Karşılaştırması
+          </div>
+          <button onclick="downloadCard('card5')" class="text-xs text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG İndir
+          </button>
+        </div>
+        <div class="text-xs text-slate-600 space-y-3 leading-relaxed">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+              <thead class="bg-slate-100 text-slate-700 font-bold">
+                <tr>
+                  <th class="p-2.5 border-b border-slate-200">Sistem Tipi</th>
+                  <th class="p-2.5 border-b border-slate-200">Denklem</th>
+                  <th class="p-2.5 border-b border-slate-200">Initial Rest Durumu</th>
+                  <th class="p-2.5 border-b border-slate-200">Sabit $y=0$ Durumu</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 text-[11px]">
+                <tr>
+                  <td class="p-2.5 font-bold text-indigo-900">Ayrık Zaman (DT, 2.36)</td>
+                  <td class="p-2.5 font-mono">$y[n] - \frac{1}{2}y[n-1] = x[n]$</td>
+                  <td class="p-2.5 text-emerald-700 font-bold">LTI &amp; Nedensel ($h[n]=(1/2)^n u[n]$)</td>
+                  <td class="p-2.5 text-rose-700 font-bold">Nedensel Değil ($y[-2]=-6$)</td>
+                </tr>
+                <tr>
+                  <td class="p-2.5 font-bold text-amber-900">Sürekli Zaman (CT, 2.33-2.35)</td>
+                  <td class="p-2.5 font-mono">$\frac{dy}{dt} + 2y = x(t)$</td>
+                  <td class="p-2.5 text-emerald-700 font-bold">LTI &amp; Nedensel ($h(t)=e^{-2t}u(t)$)</td>
+                  <td class="p-2.5 text-rose-700 font-bold">Nedensel Değil ($y(-2)=-23.6$)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="text-[11px] text-slate-500">
+            <strong>Kritik Ders Çıkarımı:</strong> İster sürekli zamanda diferansiyel denklem olsun, ister ayrık zamanda fark denklemi; bir sisteme LTI ve Nedensel diyebilmemizin <em>tek geçerli koşulu</em> <strong>Başlangıçta Dinginlik (Initial Rest)</strong> varsayımıdır!
+          </p>
+        </div>
+        <canvas id="card5Canvas" class="hidden" width="800" height="400"></canvas>
+      </div>
+    </div>
+
+    <!-- Alt Navigasyon Butonları -->
+    <div class="flex items-center justify-between border-t border-slate-200 pt-6">
+      <a href="problem_2_35_ek_kosullar_ve_nedensellik.html" class="inline-flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-indigo-600 transition">
+        ← Önceki Soru: Problem 2.35
+      </a>
+      <a href="index.html" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+        Ana Sayfa (Portal)
+      </a>
+      <a href="problem_2_37_sonda_dinginlik_ve_nedensellik.html" class="inline-flex items-center gap-2 text-sm font-bold text-amber-600 hover:text-amber-800 transition">
+        Sonraki Soru: Problem 2.37 →
+      </a>
+    </div>
+
+  </main>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    // Matematiksel Model
+    function evalX1(n) {
+      return 0;
+    }
+
+    function evalX2(n) {
+      return n >= -1 ? 1 : 0;
+    }
+
+    function evalY1(n) {
+      return 0;
+    }
+
+    // y[0]=0, y[n] = 2*y[n+1] - 2*x2[n+1] (n < 0)
+    // y[n] = 0.5*y[n-1] + x2[n] (n > 0)
+    const y2Values = {
+      "-5": -48,
+      "-4": -24,
+      "-3": -12,
+      "-2": -6,
+      "-1": -2,
+      "0": 0,
+      "1": 1.0,
+      "2": 1.5,
+      "3": 1.75,
+      "4": 1.875,
+      "5": 1.9375
+    };
+
+    function evalY2(n) {
+      if (y2Values[n] !== undefined) return y2Values[n];
+      if (n < -5) return -48 * Math.pow(2, -5 - n);
+      return 2.0;
+    }
+
+    // HiDPI Canvas Desteği
+    function setupHiDPI(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(dpr, dpr);
+      return { ctx, width: rect.width, height: rect.height };
+    }
+
+    const canvasInputs = document.getElementById('canvasInputs');
+    const canvasOutputs = document.getElementById('canvasOutputs');
+    const sliderN = document.getElementById('sliderN');
+    const lblN = document.getElementById('lblN');
+    const hudX1 = document.getElementById('hudX1');
+    const hudX2 = document.getElementById('hudX2');
+    const hudY1 = document.getElementById('hudY1');
+    const hudY2 = document.getElementById('hudY2');
+    const badgeStatus = document.getElementById('badgeStatus');
+
+    let curN = -2;
+    const nMin = -5, nMax = 5;
+
+    function drawSimulations() {
+      // 1. Girdi Canvas Çizimi (Stem Plot)
+      const inSetup = setupHiDPI(canvasInputs);
+      const ctxIn = inSetup.ctx;
+      const wIn = inSetup.width;
+      const hIn = inSetup.height;
+
+      ctxIn.clearRect(0, 0, wIn, hIn);
+
+      const xToPixel = (n) => ((n - nMin) / (nMax - nMin)) * (wIn - 70) + 40;
+      const yToPixelIn = (v) => hIn - 35 - ((v - (-0.2)) / (1.5 - (-0.2))) * (hIn - 55);
+
+      // Yeşil Vurgu: n < -1 için girdiler özdeş
+      const pNeg1 = xToPixel(-1);
+      const pMin = xToPixel(nMin);
+      ctxIn.fillStyle = 'rgba(16, 185, 129, 0.08)';
+      ctxIn.fillRect(pMin - 15, 15, (pNeg1 - pMin), hIn - 45);
+
+      ctxIn.fillStyle = '#059669';
+      ctxIn.font = 'bold 9px sans-serif';
+      ctxIn.fillText('Girdiler Özdeş: x₁[n] = x₂[n] = 0', pMin - 5, 28);
+
+      // Eksenler
+      ctxIn.strokeStyle = '#e2e8f0';
+      ctxIn.lineWidth = 1;
+      ctxIn.beginPath();
+      // Y ekseni (n=0)
+      const pZero = xToPixel(0);
+      ctxIn.moveTo(pZero, 15); ctxIn.lineTo(pZero, hIn - 25);
+      // X ekseni (y=0)
+      const pYZeroIn = yToPixelIn(0);
+      ctxIn.moveTo(25, pYZeroIn); ctxIn.lineTo(wIn - 15, pYZeroIn);
+      ctxIn.stroke();
+
+      // Stem Plot Çizimi
+      for (let n = nMin; n <= nMax; n++) {
+        const px = xToPixel(n);
+        const v2 = evalX2(n);
+        const py2 = yToPixelIn(v2);
+
+        // n etiketleri
+        ctxIn.fillStyle = '#94a3b8';
+        ctxIn.font = '10px monospace';
+        ctxIn.textAlign = 'center';
+        ctxIn.fillText(n.toString(), px, hIn - 12);
+
+        // x1[n] = 0 gri çubuk (küçük halka)
+        ctxIn.strokeStyle = '#cbd5e1';
+        ctxIn.lineWidth = 1.5;
+        ctxIn.beginPath();
+        ctxIn.arc(px, pYZeroIn, 3, 0, Math.PI * 2);
+        ctxIn.stroke();
+
+        // x2[n] mavi stem çubuğu
+        ctxIn.strokeStyle = '#2563eb';
+        ctxIn.lineWidth = 2;
+        ctxIn.beginPath();
+        ctxIn.moveTo(px, pYZeroIn);
+        ctxIn.lineTo(px, py2);
+        ctxIn.stroke();
+
+        ctxIn.fillStyle = '#2563eb';
+        ctxIn.beginPath();
+        ctxIn.arc(px, py2, 4, 0, Math.PI * 2);
+        ctxIn.fill();
+      }
+
+      // Seçili n imleci
+      const pCurIn = xToPixel(curN);
+      ctxIn.strokeStyle = '#6366f1';
+      ctxIn.lineWidth = 1.5;
+      ctxIn.setLineDash([3, 3]);
+      ctxIn.beginPath();
+      ctxIn.moveTo(pCurIn, 15); ctxIn.lineTo(pCurIn, hIn - 25);
+      ctxIn.stroke();
+      ctxIn.setLineDash([]);
+
+      // ------------------------------------------------------------------
+      // 2. Çıktı Canvas Çizimi (Stem Plot)
+      const outSetup = setupHiDPI(canvasOutputs);
+      const ctxOut = outSetup.ctx;
+      const wOut = outSetup.width;
+      const hOut = outSetup.height;
+
+      ctxOut.clearRect(0, 0, wOut, hOut);
+
+      // Y ekseni ölçeği: -25 ile +3 arası
+      const yMinOut = -25.0, yMaxOut = 3.0;
+      const yToPixelOut = (v) => hOut - 35 - ((v - yMinOut) / (yMaxOut - yMinOut)) * (hOut - 55);
+
+      // Kırmızı Vurgu: n < -1 Nedensellik İhlal Bölgesi
+      ctxOut.fillStyle = 'rgba(244, 63, 94, 0.08)';
+      ctxOut.fillRect(pMin - 15, 15, (pNeg1 - pMin), hOut - 45);
+
+      ctxOut.fillStyle = '#e11d48';
+      ctxOut.font = 'bold 9px sans-serif';
+      ctxOut.fillText('NEDENSELLİK İHLAL BÖLGESİ (y₁ ≠ y₂)', pMin - 5, 28);
+
+      // Eksenler
+      ctxOut.strokeStyle = '#e2e8f0';
+      ctxOut.lineWidth = 1;
+      ctxOut.beginPath();
+      ctxOut.moveTo(pZero, 15); ctxOut.lineTo(pZero, hOut - 25);
+      const pYZeroOut = yToPixelOut(0);
+      ctxOut.moveTo(25, pYZeroOut); ctxOut.lineTo(wOut - 15, pYZeroOut);
+      ctxOut.stroke();
+
+      // Stem Plot Çizimi
+      for (let n = nMin; n <= nMax; n++) {
+        const px = xToPixel(n);
+        const v2 = evalY2(n);
+        const py2 = Math.max(15, Math.min(hOut - 15, yToPixelOut(v2)));
+
+        // n etiketleri
+        ctxOut.fillStyle = '#94a3b8';
+        ctxOut.font = '10px monospace';
+        ctxOut.textAlign = 'center';
+        ctxOut.fillText(n.toString(), px, hOut - 12);
+
+        // y1[n] = 0 gri çember
+        ctxOut.strokeStyle = '#cbd5e1';
+        ctxOut.lineWidth = 1.5;
+        ctxOut.beginPath();
+        ctxOut.arc(px, pYZeroOut, 3, 0, Math.PI * 2);
+        ctxOut.stroke();
+
+        // y2[n] mor stem çubuğu
+        ctxOut.strokeStyle = '#9333ea';
+        ctxOut.lineWidth = 2;
+        ctxOut.beginPath();
+        ctxOut.moveTo(px, pYZeroOut);
+        ctxOut.lineTo(px, py2);
+        ctxOut.stroke();
+
+        ctxOut.fillStyle = (n === 0) ? '#f59e0b' : '#9333ea';
+        ctxOut.beginPath();
+        ctxOut.arc(px, py2, (n === 0) ? 5 : 4, 0, Math.PI * 2);
+        ctxOut.fill();
+
+        // Değer etiketleri
+        if (n >= -3 && n <= 2) {
+          ctxOut.fillStyle = '#64748b';
+          ctxOut.font = '9px monospace';
+          const labelY = (v2 < 0) ? py2 - 8 : py2 - 8;
+          ctxOut.fillText(v2.toString(), px, labelY);
+        }
+      }
+
+      // y[0]=0 Çapa Noktası Etiketi
+      ctxOut.fillStyle = '#b45309';
+      ctxOut.font = 'bold 9px sans-serif';
+      ctxOut.fillText('y[0]=0', pZero + 22, pYZeroOut - 8);
+
+      // Seçili n imleci
+      const pCurOut = xToPixel(curN);
+      ctxOut.strokeStyle = '#6366f1';
+      ctxOut.lineWidth = 1.5;
+      ctxOut.setLineDash([3, 3]);
+      ctxOut.beginPath();
+      ctxOut.moveTo(pCurOut, 15); ctxOut.lineTo(pCurOut, hOut - 25);
+      ctxOut.stroke();
+      ctxOut.setLineDash([]);
+
+      // HUD Güncellemeleri
+      lblN.textContent = curN.toString();
+      hudX1.textContent = evalX1(curN).toString();
+      hudX2.textContent = evalX2(curN).toString();
+      hudY1.textContent = evalY1(curN).toString();
+      hudY2.textContent = evalY2(curN).toString();
+
+      if (curN < -1) {
+        badgeStatus.textContent = 'NEDENSELLİK İHLALİ: y₁ ≠ y₂ (x₁=x₂=0 iken)';
+        badgeStatus.className = 'text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200 text-[10px] font-bold';
+      } else {
+        badgeStatus.textContent = 'Normal Bölge (n ≥ -1)';
+        badgeStatus.className = 'text-slate-600 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-[10px] font-semibold';
+      }
+    }
+
+    sliderN.addEventListener('input', (e) => {
+      curN = parseInt(e.target.value);
+      drawSimulations();
+    });
+
+    document.getElementById('btnFocusViolation').addEventListener('click', () => {
+      sliderN.value = -2;
+      curN = -2;
+      drawSimulations();
+    });
+
+    document.getElementById('btnResetN').addEventListener('click', () => {
+      sliderN.value = 0;
+      curN = 0;
+      drawSimulations();
+    });
+
+    window.addEventListener('resize', drawSimulations);
+    window.addEventListener('load', drawSimulations);
+
+    // HiDPI İndirilebilir Kartlar
+    function drawStepCard(canvasId, title, equations, description) {
+      const canvas = document.getElementById(canvasId);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, w, h);
+
+      // Başlık Bandı
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, w, 70);
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.strokeRect(0, 0, w, 70);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('Oppenheim Problem 2.36 — ' + title, 30, 42);
+
+      // Denklem Kutusu
+      ctx.fillStyle = '#f1f5f9';
+      ctx.fillRect(30, 95, w - 60, 140);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.strokeRect(30, 95, w - 60, 140);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 16px monospace';
+      let eqY = 135;
+      equations.forEach(eq => {
+        ctx.fillText(eq, 50, eqY);
+        eqY += 35;
+      });
+
+      // Açıklama Metni
+      ctx.fillStyle = '#475569';
+      ctx.font = '14px sans-serif';
+      let descY = 275;
+      description.forEach(line => {
+        ctx.fillText(line, 35, descY);
+        descY += 26;
+      });
+
+      // Alt Bilgi
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px sans-serif';
+      ctx.fillText('Sinyaller ve Sistemler • Oppenheim & Willsky 2. Baskı • Bölüm 2', 35, h - 25);
+    }
+
+    function initAllStepCards() {
+      drawStepCard('card1Canvas', 'Başlangıçta Dinginlik & Konvolüsyon',
+        [
+          'y[n] - 0.5 y[n-1] = x[n]',
+          'Initial Rest: x[n]=0 (n < n_0) ==> y[n]=0 (n < n_0)',
+          'y[n] = sum_{k=n_0}^n (1/2)^{n-k} x[k] = x[n] * [(1/2)^n u[n]]'
+        ],
+        [
+          '• n = n_0 anından itibaren ardışık açılım yapılır.',
+          '• y[n_0 - 1] = 0 olduğu için sistem hafızası sıfırdan başlar.',
+          '• Dürtü yanıtı h[n] = (1/2)^n u[n] olan konvolüsyon toplamı elde edilir.'
+        ]
+      );
+
+      drawStepCard('card2Canvas', '(a) Şıkkı: Doğrusallık ve TI İspatı',
+        [
+          'Linearity: T{a x_1 + b x_2} = a (x_1 * h) + b (x_2 * h) = a y_1 + b y_2',
+          'Time-Invariance: x[n - n_d] * h[n] = y[n - n_d]',
+          'Sonuc: Initial rest altinda sistem kesinlikle LTI dir.'
+        ],
+        [
+          '• Konvolüsyon operatörü süperpozisyon ilkesini kusursuz sağlar.',
+          '• Giriş ötelenince çıkış da tıpatıp aynı miktarda ötelenir.',
+          '• Sistem kararlı (|1/2| < 1) ve nedensel bir LTI filtredir.'
+        ]
+      );
+
+      drawStepCard('card3Canvas', '(b) Şıkkı: Geriye Doğru Rekürsiyon',
+        [
+          'y[n-1] = 2 y[n] - 2 x[n]  <==>  y[n] = 2 y[n+1] - 2 x[n+1]',
+          'y[-1] = -2 x[0]',
+          'y[-2] = -4 x[0] - 2 x[-1]'
+        ],
+        [
+          '• y[0] = 0 ek koşulu verildiğinde n < 0 değerleri geriye doğru çözülür.',
+          '• y[n] çıktısı k > n olan gelecekteki girdi değerlerine bağlıdır.',
+          '• Geleceğe bağımlılık nedensellik ilkesinin temel ihlalidir.'
+        ]
+      );
+
+      drawStepCard('card4Canvas', 'Nedensellik İspatı (Karşı Örnek)',
+        [
+          'x_1[n] = 0 (tum n)  ==>  y_1[n] = 0 (tum n)',
+          'x_2[n] = u[n+1]     ==>  x_1[n] = x_2[n] = 0  (n <= -2)',
+          'Fakat: y_1[-2] = 0  iken  y_2[-2] = -6  ==>  y_1 != y_2!'
+        ],
+        [
+          '• n <= -2 için girdiler tamamen özdeştir (ikisi de 0).',
+          '• Çıktılar ise n = -2 anında farklıdır (0 != -6).',
+          '• Sistem n = -1 ve 0 daki geleceği önceden sezmiştir ==> NEDENSEL DEĞİL!'
+        ]
+      );
+
+      drawStepCard('card5Canvas', 'Özet Tablo: DT ve CT Kardeşliği',
+        [
+          'Problem 2.33 & 2.35 (CT): dy/dt + 2y = x(t)',
+          'Problem 2.36 (DT): y[n] - 0.5 y[n-1] = x[n]',
+          'Kural: Diferansiyel/fark denklemleri ANCAK Initial Rest ile LTI olur!'
+        ],
+        [
+          '• Sabit ek koşul (y=0) hem DT hem CT de nedenselliği yok eder.',
+          '• Başlangıçta dinginlik koşulu ise sistemi nedensel LTI yapar.',
+          '• Oppenheim Bölüm 2 nin en önemli birleşik sonucudur.'
+        ]
+      );
+    }
+
+    function downloadCard(cardId) {
+      const canvas = document.getElementById(cardId + 'Canvas');
+      const link = document.createElement('a');
+      link.download = 'Oppenheim_Problem_2_36_' + cardId + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    window.addEventListener('load', () => {
+      initAllStepCards();
+    });
+  </script>
+</body>
+</html>
