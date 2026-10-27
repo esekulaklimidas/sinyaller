@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sınav Sorusu 2 — 2. Derece Fark Denklemi ve LTI Sistem Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(12px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Soru 2 (26 Puan)</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">Sınav Sorusu Çözümü</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman (DT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">2. Derece LCCDE &bull; Dürtü Yanıtı &bull; Konvolüsyon &bull; Sistem Özellikleri</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanımı Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Sınav &bull; 2. Soru Tam Analizi</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Fark Denklemi Çözümü, Dürtü Yanıtı $h[n]$, Konvolüsyon ve Sistem Özellikleri
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold">
+            Doğrusal &bull; Nedensel &bull; BIBO Kararlı
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni Orijinal Kutu -->
+      <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
+        <div class="flex items-center gap-2 text-xs font-bold text-slate-700 uppercase tracking-wider">
+          <svg class="w-4 h-4 text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/></svg>
+          Soru Metni (26 Puan)
+        </div>
+        <p class="text-sm text-slate-800 leading-relaxed font-serif">
+          Aşağıdaki fark denklemi ile tanımlanan LTI sistemi ele alınız:
+          $$y[n] - 0.25y[n - 2] = x[n] + x[n - 1]$$
+          <em>Bu soru için sistemin başlangıçta dinginlikte (initially at rest) olduğunu varsayınız ($y[-1]=0, y[-2]=0$).</em>
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 text-xs text-slate-700">
+          <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+            <strong>a) (7p)</strong> Sistemin dürtü yanıtı <strong>$h[n]$</strong>'yi bulunuz.
+          </div>
+          <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+            <strong>b) (7p)</strong> Sisteme uygulanan giriş $x[n] = \delta[n - 1] + 2\delta[n - 2]$ olduğunda, yukarıdaki fark denklemini doğrudan değerlendirerek çıkışı $y[n]$ bulunuz.
+          </div>
+          <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+            <strong>c) (7p)</strong> Konvolüsyon toplamı ve (a) şıkkındaki sonucu kullanarak sistemin çıkışını bulunuz. (b) şıkkındaki sonuçla karşılaştırınız.
+          </div>
+          <div class="p-2.5 bg-white rounded-xl border border-slate-200">
+            <strong>d) (5p)</strong> Sistemin <strong>bellekli (memory)</strong>, <strong>doğrusal (linear)</strong>, <strong>nedensel (causal)</strong> ve <strong>kararlı (stable)</strong> olup olmadığını belirleyiniz. Yanıtınızı gerekçelendiriniz.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ETKİLEŞİMLİ SİMÜLATÖR (CANLI STEM GRAFİKLERİ) -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">İnteraktif Doğrulama Laboratuvarı</span>
+          <h2 class="text-xl font-black text-slate-900">Dürtü Yanıtı $h[n]$ ve İteratif vs. Konvolüsyon Karşılaştırması</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Doğrudan iteratif fark denklemi çözümü ile konvolüsyon toplamının her örnekte (%100 özdeş) çakıştığını canlı izleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnExportPNG" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            PNG Olarak İndir
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-4">
+        <!-- Tuval 1: Dürtü Yanıtı h[n] -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">1. Dürtü Yanıtı: $h[n] = [\frac{3}{2}(0.5)^n - \frac{1}{2}(-0.5)^n] u[n]$</span>
+            <span class="text-[11px] font-mono text-indigo-600 font-bold">h[0]=1, h[1]=1, h[2]=0.25, h[3]=0.25...</span>
+          </div>
+          <canvas id="canvasH" width="900" height="200" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-sky-400 inline-block"></span> $h[n]$ Dürtü Yanıtı Stemleri</span>
+            <span class="font-mono text-slate-400">Çift Katlı Kökler: r = &plusmn;0.5</span>
+          </div>
+        </div>
+
+        <!-- Tuval 2: Çıkış y[n] (İteratif vs Konvolüsyon) -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-4 space-y-2">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-bold text-slate-700">2. Çıkış $y[n]$: (b) İteratif Değerlendirme vs. (c) Konvolüsyon $h[n-1] + 2h[n-2]$</span>
+            <span class="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2.5 py-0.5 rounded border border-emerald-500/40 font-bold">
+              Maksimum Hata = 0.000000 (%100 Tam Uyuşum)
+            </span>
+          </div>
+          <canvas id="canvasY" width="900" height="230" class="w-full bg-slate-900 rounded-xl shadow-inner"></canvas>
+          <div class="flex flex-wrap items-center justify-between text-[11px] text-slate-500 pt-1">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded bg-emerald-400 inline-block"></span> (b) İteratif Fark Denklemi Çıkışı</span>
+              <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full border border-pink-400 inline-block"></span> (c) Konvolüsyon Toplamı $h[n-1] + 2h[n-2]$</span>
+            </div>
+            <span class="font-mono text-slate-400">Zirve: n=2 anında y[2] = 3.0</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAYLI TEORİK ÇÖZÜMLER (A, B, C, D) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- a) Şıkkı Çözümü -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-xs font-black uppercase">a) Şıkkı (7 Puan)</span>
+          <span class="text-xs font-mono text-slate-500">Dürtü Yanıtı $h[n]$</span>
+        </div>
+        <h3 class="text-base font-bold text-slate-900">Sistemin Dürtü Yanıtının Bulunması</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          Dürtü yanıtı $h[n]$, sisteme $x[n] = \delta[n]$ uygulandığında başlangıçta dinginlik koşulu ($h[-1]=h[-2]=0$) altında oluşan çıkıştır:
+          $$h[n] - 0.25h[n-2] = \delta[n] + \delta[n-1]$$
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-slate-700 font-bold">1. Karakteristik Denklem ve Kökler:</div>
+          <div class="text-slate-600">
+            $$r^2 - 0.25 = 0 \implies r^2 = \frac{1}{4} \implies r_1 = \frac{1}{2}, \quad r_2 = -\frac{1}{2}$$
+            Homojen çözüm formu:
+            $$h_h[n] = C_1 \left(\frac{1}{2}\right)^n + C_2 \left(-\frac{1}{2}\right)^n, \quad (n \ge 0)$$
+          </div>
+          <div class="text-slate-700 font-bold pt-1">2. Başlangıç Değerlerinin İterasyonla Hesabı:</div>
+          <div class="text-[11px] text-slate-600">
+            &bull; $n=0$: $h[0] = 0.25 h[-2] + \delta[0] + \delta[-1] = 0 + 1 + 0 = \mathbf{1}$<br>
+            &bull; $n=1$: $h[1] = 0.25 h[-1] + \delta[1] + \delta[0] = 0 + 0 + 1 = \mathbf{1}$
+          </div>
+          <div class="text-slate-700 font-bold pt-1">3. Katsayıların Belirlenmesi:</div>
+          <div class="text-[11px] text-slate-600">
+            $$C_1 + C_2 = 1$$
+            $$\frac{1}{2} C_1 - \frac{1}{2} C_2 = 1 \implies C_1 - C_2 = 2$$
+            Taraf tarafa toplanırsa: $2C_1 = 3 \implies C_1 = \frac{3}{2}$, $C_2 = -\frac{1}{2}$.
+          </div>
+        </div>
+
+        <div class="p-3 bg-indigo-50 border border-indigo-200 rounded-xl space-y-1 text-xs">
+          <span class="font-bold text-indigo-900 block">Nihai Kapalı Form Dürtü Yanıtı:</span>
+          <div class="font-mono text-sm text-indigo-700 font-bold">
+            $$\mathbf{h[n] = \left[ \frac{3}{2}\left(\frac{1}{2}\right)^n - \frac{1}{2}\left(-\frac{1}{2}\right)^n \right] u[n]}$$
+          </div>
+          <p class="text-[11px] text-slate-600">
+            Örnek değerler: $h[0]=1, h[1]=1, h[2]=1/4, h[3]=1/4, h[4]=1/16, h[5]=1/16, \dots$
+          </p>
+        </div>
+      </div>
+
+      <!-- b) Şıkkı Çözümü -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-purple-100 text-purple-800 rounded-md text-xs font-black uppercase">b) Şıkkı (7 Puan)</span>
+          <span class="text-xs font-mono text-slate-500">Doğrudan İterasyon</span>
+        </div>
+        <h3 class="text-base font-bold text-slate-900">Fark Denkleminin Doğrudan Değerlendirilmesi</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          Giriş $x[n] = \delta[n-1] + 2\delta[n-2]$'dir. Giriş sürücü terimi $v[n] = x[n] + x[n-1]$ olur:
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-2">
+          <div class="text-[11px] text-slate-700">
+            &bull; $n=0$: $v[0] = x[0] + x[-1] = 0 + 0 = 0$<br>
+            &bull; $n=1$: $v[1] = x[1] + x[0] = 1 + 0 = \mathbf{1}$<br>
+            &bull; $n=2$: $v[2] = x[2] + x[1] = 2 + 1 = \mathbf{3}$<br>
+            &bull; $n=3$: $v[3] = x[3] + x[2] = 0 + 2 = \mathbf{2}$<br>
+            &bull; $n \ge 4$: $v[n] = 0$
+          </div>
+          <div class="text-slate-800 font-bold pt-1">Fark Denklemi Adımları: $y[n] = 0.25 y[n-2] + v[n]$:</div>
+          <div class="text-[11px] text-slate-600 space-y-1">
+            <div>$y[0] = 0.25(0) + 0 = \mathbf{0}$</div>
+            <div>$y[1] = 0.25(0) + 1 = \mathbf{1}$</div>
+            <div>$y[2] = 0.25(0) + 3 = \mathbf{3}$</div>
+            <div>$y[3] = 0.25(1) + 2 = 0.25 + 2 = \mathbf{2.25} = \frac{9}{4}$</div>
+            <div>$y[4] = 0.25(3) + 0 = \mathbf{0.75} = \frac{3}{4}$</div>
+            <div>$y[5] = 0.25(2.25) + 0 = \mathbf{0.5625} = \frac{9}{16}$</div>
+            <div>$y[6] = 0.25(0.75) + 0 = \mathbf{0.1875} = \frac{3}{16}$</div>
+            <div>$y[7] = 0.25(0.5625) + 0 = \mathbf{0.140625} = \frac{9}{64}$</div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-purple-50 border border-purple-200 rounded-xl text-xs space-y-1">
+          <span class="font-bold text-purple-900 block">Doğrudan Çıkış Dizisi:</span>
+          <div class="font-mono text-purple-900 font-bold text-xs">
+            $$y[n] = \{ \dots, 0, \underset{\uparrow n=0}{0}, 1, 3, 2.25, 0.75, 0.5625, 0.1875, \dots \}$$
+          </div>
+        </div>
+      </div>
+
+      <!-- c) Şıkkı Çözümü -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-md text-xs font-black uppercase">c) Şıkkı (7 Puan)</span>
+          <span class="text-xs font-mono text-slate-500">Konvolüsyon Toplamı</span>
+        </div>
+        <h3 class="text-base font-bold text-slate-900">Konvolüsyon Toplamı ile Çıkış ve Karşılaştırma</h3>
+        <p class="text-xs text-slate-600 leading-relaxed font-serif">
+          LTI özelliğinden ötürü çıkış $y[n] = x[n] * h[n]$'dir. Girişi yerine koyalım:
+          $$y[n] = (\delta[n-1] + 2\delta[n-2]) * h[n] = \mathbf{h[n-1] + 2h[n-2]}$$
+        </p>
+
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 font-mono text-xs space-y-1.5">
+          <div class="text-[11px] text-slate-700 font-bold">Örnek Bazında Toplama:</div>
+          <div class="text-[11px] text-slate-600">
+            &bull; $n=0$: $h[-1] + 2h[-2] = 0 + 0 = \mathbf{0}$<br>
+            &bull; $n=1$: $h[0] + 2h[-1] = 1 + 2(0) = \mathbf{1}$<br>
+            &bull; $n=2$: $h[1] + 2h[0] = 1 + 2(1) = \mathbf{3}$<br>
+            &bull; $n=3$: $h[2] + 2h[1] = 0.25 + 2(1) = \mathbf{2.25}$<br>
+            &bull; $n=4$: $h[3] + 2h[2] = 0.25 + 2(0.25) = \mathbf{0.75}$<br>
+            &bull; $n=5$: $h[4] + 2h[3] = \frac{1}{16} + 2\left(\frac{1}{4}\right) = \mathbf{0.5625}$<br>
+            &bull; $n=6$: $h[5] + 2h[4] = \frac{1}{16} + 2\left(\frac{1}{16}\right) = \mathbf{0.1875}$
+          </div>
+        </div>
+
+        <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs space-y-1">
+          <span class="font-bold text-emerald-900 block">Karşılaştırma ve Sonuç:</span>
+          <p class="text-[11px] text-emerald-800 leading-relaxed">
+            Konvolüsyon toplamı ile bulunan tüm $y[n]$ değerleri, (b) şıkkında fark denkleminin doğrudan iterasyonu ile bulunan değerlerle 
+            <strong>TAMAMIYLA ÖZDEŞTİR (%100 Uyuşum)</strong>. Bu durum hem (a) şıkkındaki $h[n]$ çözümünü hem de (b) şıkkındaki yinelemeli adımları kesin olarak doğrular.
+          </p>
+        </div>
+      </div>
+
+      <!-- d) Şıkkı Çözümü -->
+      <div class="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 bg-amber-100 text-amber-800 rounded-md text-xs font-black uppercase">d) Şıkkı (5 Puan)</span>
+          <span class="text-xs font-mono text-slate-500">Sistem Özellikleri</span>
+        </div>
+        <h3 class="text-base font-bold text-slate-900">Sistem Karakteristiğinin Belirlenmesi ve Gerekçeleri</h3>
+
+        <div class="space-y-2.5 text-xs">
+          <!-- 1. Bellek -->
+          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <span class="font-bold text-slate-900 block">1. Bellek (Memory): BELLEKLİDİR (Has Memory)</span>
+            <p class="text-[11px] text-slate-600 mt-0.5">
+              Çıkış $y[n]$ sadece o anki giriş $x[n]$'e değil, geçmiş çıkış $y[n-2]$ ve geçmiş giriş $x[n-1]$ değerlerine bağlıdır. $h[n] \neq K\delta[n]$ olduğundan sistem hafızalıdır.
+            </p>
+          </div>
+
+          <!-- 2. Doğrusallık -->
+          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <span class="font-bold text-slate-900 block">2. Doğrusallık (Linearity): DOĞRUSALDIR (Linear)</span>
+            <p class="text-[11px] text-slate-600 mt-0.5">
+              Denklem sabit katsayılı lineer bir fark denklemidir (LCCDE). Sistem <strong>başlangıçta dinginlikte (initial rest)</strong> olduğundan süperpozisyon ve homojenlik ilkelerini tam sağlar.
+            </p>
+          </div>
+
+          <!-- 3. Nedensellik -->
+          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <span class="font-bold text-slate-900 block">3. Nedensellik (Causality): NEDENSELDİR (Causal)</span>
+            <p class="text-[11px] text-slate-600 mt-0.5">
+              Başlangıçta dinginlik koşulu gereği, $n < 0$ için $h[n] = 0$'dır. Çıkış hiçbir gelecekteki giriş veya çıkış değerine ($x[n+1], y[n+1]$ vb.) ihtiyaç duymaz.
+            </p>
+          </div>
+
+          <!-- 4. Kararlılık -->
+          <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+            <span class="font-bold text-slate-900 block">4. Kararlılık (Stability): BIBO KARARLIDIR (Stable)</span>
+            <p class="text-[11px] text-slate-600 mt-0.5">
+              Dürtü yanıtı mutlak toplanabilirdir:
+              $$\sum_{n=-\infty}^\infty |h[n]| \le 2 \sum_{n=0}^\infty (0.5)^n = 4 < \infty$$
+              (Karakteristik kökler $r_{1,2} = \pm 0.5$ birim çemberin içindedir: $|r_i| < 1$).
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SAYISAL KARŞILAŞTIRMA TABLOSU -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
+        <h3 class="text-lg font-bold text-slate-900">İndis Bazında Doğrulama Matrisi ($n = 0 \dots 7$)</h3>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs border border-slate-200 rounded-xl overflow-hidden">
+          <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">İndis (n)</th>
+              <th class="p-3">Giriş x[n]</th>
+              <th class="p-3">Sürücü v[n] = x[n]+x[n-1]</th>
+              <th class="p-3">Dürtü Yanıtı h[n]</th>
+              <th class="p-3 text-purple-700">(b) İteratif y[n]</th>
+              <th class="p-3 text-emerald-700">(c) Konvolüsyon y[n]</th>
+              <th class="p-3">Fark / Hata</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 0</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-indigo-700">1.0000</td>
+              <td class="p-3 font-bold text-purple-700">0.0000</td>
+              <td class="p-3 font-bold text-emerald-700">0.0000</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 1</td>
+              <td class="p-3 text-sky-600 font-bold">1</td>
+              <td class="p-3">1</td>
+              <td class="p-3 font-bold text-indigo-700">1.0000</td>
+              <td class="p-3 font-bold text-purple-700">1.0000</td>
+              <td class="p-3 font-bold text-emerald-700">1.0000</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+            <tr class="hover:bg-slate-50 bg-amber-50/50">
+              <td class="p-3 font-bold text-amber-800">n = 2</td>
+              <td class="p-3 text-sky-600 font-bold">2</td>
+              <td class="p-3">3</td>
+              <td class="p-3 font-bold text-indigo-700">0.2500</td>
+              <td class="p-3 font-bold text-purple-700">3.0000</td>
+              <td class="p-3 font-bold text-emerald-700">3.0000</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000 (Zirve)</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 3</td>
+              <td class="p-3">0</td>
+              <td class="p-3">2</td>
+              <td class="p-3 font-bold text-indigo-700">0.2500</td>
+              <td class="p-3 font-bold text-purple-700">2.2500</td>
+              <td class="p-3 font-bold text-emerald-700">2.2500</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 4</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-indigo-700">0.0625</td>
+              <td class="p-3 font-bold text-purple-700">0.7500</td>
+              <td class="p-3 font-bold text-emerald-700">0.7500</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 5</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-indigo-700">0.0625</td>
+              <td class="p-3 font-bold text-purple-700">0.5625</td>
+              <td class="p-3 font-bold text-emerald-700">0.5625</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 6</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-indigo-700">0.0156</td>
+              <td class="p-3 font-bold text-purple-700">0.1875</td>
+              <td class="p-3 font-bold text-emerald-700">0.1875</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-800">n = 7</td>
+              <td class="p-3">0</td>
+              <td class="p-3">0</td>
+              <td class="p-3 font-bold text-indigo-700">0.0156</td>
+              <td class="p-3 font-bold text-purple-700">0.1406</td>
+              <td class="p-3 font-bold text-emerald-700">0.1406</td>
+              <td class="p-3 text-emerald-600 font-bold">0.0000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-6 text-center text-xs text-slate-400 border-t border-slate-200 mt-12">
+    <p>Sinyaller ve Sistemler Sınav Çözümleri &bull; Hazırlayan: ENI for Tris ❤️</p>
+  </footer>
+
+  <!-- SİMÜLASYON MOTORU VE JAVASCRIPT ÇİZİM KODLARI -->
+  <script>
+    const canvasH = document.getElementById('canvasH');
+    const ctxH = canvasH.getContext('2d');
+    const canvasY = document.getElementById('canvasY');
+    const ctxY = canvasY.getContext('2d');
+
+    // Sayısal Dizi Hesaplamaları
+    const N = 10;
+    const hArr = [];
+    for (let n = 0; n < N; n++) {
+      hArr.push(1.5 * Math.pow(0.5, n) - 0.5 * Math.pow(-0.5, n));
+    }
+
+    // x[n] = delta[n-1] + 2 delta[n-2]
+    const xArr = new Array(N).fill(0);
+    xArr[1] = 1;
+    xArr[2] = 2;
+
+    // (b) İteratif y[n]
+    const yIter = new Array(N).fill(0);
+    for (let n = 0; n < N; n++) {
+      let prev = (n >= 2) ? yIter[n-2] : 0;
+      let vn = xArr[n] + ((n >= 1) ? xArr[n-1] : 0);
+      yIter[n] = 0.25 * prev + vn;
+    }
+
+    // (c) Konvolüsyon y[n] = h[n-1] + 2h[n-2]
+    const yConv = new Array(N).fill(0);
+    for (let n = 0; n < N; n++) {
+      let h1 = (n >= 1) ? hArr[n-1] : 0;
+      let h2 = (n >= 2) ? hArr[n-2] : 0;
+      yConv[n] = h1 + 2.0 * h2;
+    }
+
+    function drawStem(ctx, w, h, data, minN, maxN, minVal, maxVal, colorStem, colorDot, xLabel, circleData = null) {
+      ctx.clearRect(0, 0, w, h);
+
+      function nToPx(n) {
+        return 45 + ((n - minN) / (maxN - minN)) * (w - 75);
+      }
+      function vToPy(val) {
+        return h - 30 - ((val - minVal) / (maxVal - minVal)) * (h - 55);
+      }
+
+      const y0 = vToPy(0);
+
+      // Eksen
+      ctx.strokeStyle = '#334155';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      // n Eksen Çizgisi (0)
+      const x0 = nToPx(0);
+      ctx.beginPath();
+      ctx.moveTo(x0, 15);
+      ctx.lineTo(x0, h - 20);
+      ctx.stroke();
+
+      // n Etiketleri
+      ctx.fillStyle = '#64748b';
+      ctx.font = '9px monospace';
+      ctx.textAlign = 'center';
+      for (let n = minN; n <= maxN; n++) {
+        const x = nToPx(n);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 2);
+        ctx.lineTo(x, y0 + 2);
+        ctx.stroke();
+        ctx.fillText(n, x, y0 + 13);
+      }
+      ctx.fillText(xLabel, w - 25, y0 - 6);
+
+      // Stemler
+      data.forEach(pt => {
+        const x = nToPx(pt.n);
+        const y = vToPy(pt.val);
+
+        ctx.strokeStyle = colorStem;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(x, y0);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+
+        ctx.fillStyle = colorDot;
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Çember verisi varsa (Konvolüsyon sağlaması)
+        if (circleData) {
+          const cPt = circleData.find(c => c.n === pt.n);
+          if (cPt) {
+            const yC = vToPy(cPt.val);
+            ctx.strokeStyle = '#f472b6';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, yC, 6.5, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+
+        if (Math.abs(pt.val) > 0.005) {
+          ctx.fillStyle = '#f1f5f9';
+          ctx.font = 'bold 9px monospace';
+          ctx.fillText(pt.val.toFixed(2), x, y - 8);
+        }
+      });
+    }
+
+    function renderPlots() {
+      // 1. h[n] Çizimi
+      const ptsH = [];
+      for (let n = -1; n < N; n++) {
+        ptsH.push({ n: n, val: (n >= 0 ? hArr[n] : 0) });
+      }
+      drawStem(ctxH, canvasH.width, canvasH.height, ptsH, -1, 9, -0.2, 1.3, '#38bdf8', '#0ea5e9', 'n');
+
+      // 2. y[n] Çizimi
+      const ptsYIter = [];
+      const ptsYConv = [];
+      for (let n = -1; n < N; n++) {
+        let v1 = (n >= 0 ? yIter[n] : 0);
+        let v2 = (n >= 0 ? yConv[n] : 0);
+        ptsYIter.push({ n: n, val: v1 });
+        ptsYConv.push({ n: n, val: v2 });
+      }
+      drawStem(ctxY, canvasY.width, canvasY.height, ptsYIter, -1, 9, -0.3, 3.5, '#34d399', '#10b981', 'n', ptsYConv);
+    }
+
+    // PNG İndirme
+    document.getElementById('btnExportPNG').addEventListener('click', () => {
+      const exp = document.createElement('canvas');
+      exp.width = 1000;
+      exp.height = 700;
+      const expCtx = exp.getContext('2d');
+
+      expCtx.fillStyle = '#0f172a';
+      expCtx.fillRect(0, 0, 1000, 700);
+
+      expCtx.fillStyle = '#ffffff';
+      expCtx.font = 'bold 20px sans-serif';
+      expCtx.fillText('Sınav Sorusu 2 — 2. Derece Fark Denklemi Çözüm Kartı', 50, 45);
+      expCtx.fillStyle = '#94a3b8';
+      expCtx.font = '12px sans-serif';
+      expCtx.fillText('y[n] - 0.25y[n-2] = x[n] + x[n-1]  |  h[n] = [1.5(0.5)ⁿ - 0.5(-0.5)ⁿ]u[n]  |  y[n] = h[n-1] + 2h[n-2]', 50, 70);
+
+      expCtx.drawImage(canvasH, 50, 95, 900, 250);
+      expCtx.drawImage(canvasY, 50, 375, 900, 280);
+
+      const link = document.createElement('a');
+      link.download = 'Sinav_Sorusu_2_Fark_Denklemi_Cozumu.png';
+      link.href = exp.toDataURL('image/png');
+      link.click();
+    });
+
+    renderPlots();
+  </script>
+</body>
+</html>
