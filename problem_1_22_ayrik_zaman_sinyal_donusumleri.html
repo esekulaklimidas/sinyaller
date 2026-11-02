@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 1.22 – Ayrık Zaman Temel Sinyal Dönüşümleri (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); }
+    .tab-btn.active { background-color: #4f46e5; color: #ffffff; border-color: #4f46e5; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 1.22</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">Bölüm 1 • Temel Problemler</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman (DT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 60–61</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanım Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 1 &bull; Sinyaller ve Sistemler</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Ayrık Zaman Sinyal İşlemleri: Öteleme, Tersleme, Seyreltme (Decimation), Darbe ve Doğrusal Olmayan Dönüşümler
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold">
+            8 Alt Problem (a – h)
+          </span>
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold">
+            İnteraktif Stem Simülatörü
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni ve Orijinal Sinyal Bilgisi -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-7 space-y-4 text-sm text-slate-600 leading-relaxed">
+          <p class="font-medium text-slate-800">
+            <strong>Problem Tanımı (Oppenheim &amp; Willsky 1.22):</strong> Şekil P1.22'de verilen ayrık zamanlı $x[n]$ sinyali için aşağıdaki 8 sinyali dikkatlice çiziniz ve etiketleyiniz:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold text-slate-700">
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(a) $x[n - 4]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Gecikme (+4)</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(b) $x[3 - n]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Tersleme + Sağa 3</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(c) $x[3n]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">3x Seyreltme</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(d) $x[3n + 1]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Seyreltme + Faz Kayması</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(e) $x[n]u[3 - n]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Basamak Pencereleme</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(f) $x[n - 2]\delta[n - 2]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Kronecker Darbe</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(g) $\frac{1}{2}x[n] + \frac{1}{2}(-1)^n x[n]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Çift İndeks Seçici</span>
+            </div>
+            <div class="p-2 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(h) $x[(n - 1)^2]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Karesel Dönüşüm</span>
+            </div>
+          </div>
+
+          <div class="p-4 bg-indigo-50/70 border border-indigo-100 rounded-2xl text-xs space-y-2">
+            <span class="font-bold text-indigo-900 block">Orijinal $x[n]$ Sinyalinin Örnek Değerleri:</span>
+            <div class="overflow-x-auto">
+              <table class="w-full text-center border-collapse border border-indigo-200 bg-white rounded-lg">
+                <thead class="bg-indigo-100/60 font-bold text-indigo-900">
+                  <tr>
+                    <th class="p-1.5 border border-indigo-200">$n$</th>
+                    <th class="p-1.5 border border-indigo-200">&le; -5</th>
+                    <th class="p-1.5 border border-indigo-200">-4</th>
+                    <th class="p-1.5 border border-indigo-200">-3</th>
+                    <th class="p-1.5 border border-indigo-200">-2</th>
+                    <th class="p-1.5 border border-indigo-200">-1</th>
+                    <th class="p-1.5 border border-indigo-200">0</th>
+                    <th class="p-1.5 border border-indigo-200">1</th>
+                    <th class="p-1.5 border border-indigo-200">2</th>
+                    <th class="p-1.5 border border-indigo-200">3</th>
+                    <th class="p-1.5 border border-indigo-200">&ge; 4</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono text-slate-700">
+                  <tr>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-indigo-600">$x[n]$</td>
+                    <td class="p-1.5 border border-indigo-200 text-slate-400">0</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-rose-600">-1</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-rose-500">-1/2</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-emerald-600">1/2</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-emerald-600">1</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-emerald-600">1</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-emerald-600">1</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-emerald-600">1</td>
+                    <td class="p-1.5 border border-indigo-200 font-bold text-emerald-600">1/2</td>
+                    <td class="p-1.5 border border-indigo-200 text-slate-400">0</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Kitaptaki Orijinal Şekil P1.22 Kırpıntısı -->
+        <div class="lg:col-span-5 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-2">
+          <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider">Kitaptaki Orijinal Çizim (Şekil P1.22)</span>
+          <div class="bg-white p-3 rounded-xl shadow-inner border border-slate-200 max-h-56 overflow-hidden flex items-center justify-center">
+            <img src="data:image/png;base64,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" alt="Oppenheim Problem 1.22 Şekil" class="max-h-48 object-contain" />
+          </div>
+          <p class="text-[10px] text-slate-500">
+            Destek kümesi: $n \in \{-4, -3, -2, -1, 0, 1, 2, 3\}$. Diğer tüm $n$ noktalarında sıfırdır.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- İNTERAKTİF STEM GRAFİĞİ SİMÜLATÖRÜ -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-xl font-black text-slate-900">İnteraktif Ayrık Zaman (Stem) Simülatörü</h2>
+          <p class="text-xs text-slate-500">Herhangi bir alt probleme tıklayarak ayrık örneklerin nasıl konumlandığını ve dönüştüğünü inceleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer select-none bg-slate-100 px-3 py-1.5 rounded-xl hover:bg-slate-200 transition">
+            <input type="checkbox" id="chkGhost" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+            <span>Orijinal $x[n]$ Hayalet Örnekleri</span>
+          </label>
+          <button id="btnExport" class="px-3 py-1.5 bg-slate-800 hover:bg-black text-white text-xs font-bold rounded-xl transition shadow-sm">
+            PNG Kaydet
+          </button>
+        </div>
+      </div>
+
+      <!-- Alt Problem Seçim Butonları -->
+      <div class="flex flex-wrap gap-2">
+        <button class="tab-btn active px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="orig">
+          Orijinal $x[n]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="a">
+          (a) $x[n - 4]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="b">
+          (b) $x[3 - n]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="c">
+          (c) $x[3n]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="d">
+          (d) $x[3n + 1]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="e">
+          (e) $x[n]u[3 - n]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="f">
+          (f) $x[n-2]\delta[n-2]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="g">
+          (g) Çift İndeksler
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="h">
+          (h) $x[(n-1)^2]$
+        </button>
+        <button class="tab-btn px-3 py-2 text-xs font-bold rounded-xl border border-slate-200 bg-amber-50 text-amber-800 hover:bg-amber-100 transition" data-mode="all">
+          ✨ Tümünü 8'li Izgarada Gör
+        </button>
+      </div>
+
+      <!-- Tekli Canvas Alanı -->
+      <div id="singleCanvasContainer" class="space-y-3">
+        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-inner">
+          <canvas id="mainCanvas" width="1000" height="420" class="w-full h-auto block cursor-pointer"></canvas>
+          <div id="hoverTooltip" class="absolute top-4 right-4 bg-slate-800/90 backdrop-blur border border-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-mono pointer-events-none hidden">
+            n = 0 | y[n] = 0.00
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between text-xs text-slate-500 px-1">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-emerald-400 inline-block"></span> Pozitif Örnekler</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-400 inline-block"></span> Negatif Örnekler</span>
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-slate-500 inline-block"></span> Sıfır Örnekler</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-1 border-t-2 border-dashed border-slate-400 inline-block"></span> Orijinal $x[n]$ (Ghost)</span>
+          </div>
+          <span class="text-slate-400 font-mono text-[11px]">Örneklerin üzerine gelerek tam sayı değerlerini okuyabilirsiniz</span>
+        </div>
+      </div>
+
+      <!-- 8'li Izgara Görünümü (Tümü) -->
+      <div id="gridCanvasContainer" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 8 mini canvas kutucuğu JS ile inşa edilecek -->
+      </div>
+    </section>
+
+    <!-- HER BİR ALT PROBLEM İÇİN DERİNLEMESİNE ÇÖZÜM KARTLARI (a - h) -->
+    <div class="space-y-6">
+
+      <!-- (a) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">a</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_a[n] = x[n - 4]$ — Zaman Gecikmesi (+4 Sağa Öteleme)</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg">Öteleme: Sağa 4 Birim</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Dönüşüm Mantığı:</strong> $n \to n - 4$ işlemi tüm ayrık örnekleri zaman ekseninde <strong>4 birim sağa öteler</strong> (gecikme / delay).
+            </p>
+            <p>
+              Eşitleme: $n - 4 = k \implies n = k + 4$. Orijinalde $k$ anında bulunan örnek artık $n = k + 4$ anında görülür.
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse border border-slate-200 rounded-lg text-xs">
+                <thead class="bg-slate-50 font-bold text-slate-700">
+                  <tr>
+                    <th class="p-1.5 border">Orijinal $k$</th>
+                    <th class="p-1.5 border">Yeni $n = k + 4$</th>
+                    <th class="p-1.5 border">Örnek Değeri $y_a[n]$</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono">
+                  <tr><td class="p-1 border">-4</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-rose-600">-1</td></tr>
+                  <tr><td class="p-1 border">-3</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-rose-500">-1/2</td></tr>
+                  <tr><td class="p-1 border">-2</td><td class="p-1 border">2</td><td class="p-1 border font-bold text-emerald-600">1/2</td></tr>
+                  <tr><td class="p-1 border">-1</td><td class="p-1 border">3</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">0</td><td class="p-1 border">4</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">1</td><td class="p-1 border">5</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">2</td><td class="p-1 border">6</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">3</td><td class="p-1 border">7</td><td class="p-1 border font-bold text-emerald-600">1/2</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_a[n] = \{ \dots, 0, \underset{\uparrow}{-1}, -\frac{1}{2}, \frac{1}{2}, 1, 1, 1, 1, \frac{1}{2}, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Destek Kümesi:</strong> Orijinal aralık $[-4, 3]$ iken yeni aralık $[0, 7]$ olmuştur. Genlikler tamamen korunmuştur.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (b) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">b</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_b[n] = x[3 - n]$ — Zaman Tersleme ve Sağa Öteleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-amber-50 text-amber-800 rounded-lg">Yansıma + Sağa 3 Birim</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Dönüşüm Adımları ($x[3 - n] = x[-(n - 3)]$):</strong>
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Önce zaman tersleme yapılır: $x[-n]$ (dikey eksene göre ayna yansıması).</li>
+              <li>Ardından terslenmiş dizi <strong>3 birim sağa</strong> kaydırılır ($n \to n - 3$).</li>
+              <li>İndeks haritalama: $3 - n = k \implies n = 3 - k$.</li>
+            </ul>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse border border-slate-200 rounded-lg text-xs">
+                <thead class="bg-slate-50 font-bold text-slate-700">
+                  <tr>
+                    <th class="p-1.5 border">Orijinal $k$</th>
+                    <th class="p-1.5 border">Yeni $n = 3 - k$</th>
+                    <th class="p-1.5 border">Örnek Değeri $y_b[n]$</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono">
+                  <tr><td class="p-1 border">3</td><td class="p-1 border">0</td><td class="p-1 border font-bold text-emerald-600">1/2</td></tr>
+                  <tr><td class="p-1 border">2</td><td class="p-1 border">1</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">1</td><td class="p-1 border">2</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">0</td><td class="p-1 border">3</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">-1</td><td class="p-1 border">4</td><td class="p-1 border font-bold text-emerald-600">1</td></tr>
+                  <tr><td class="p-1 border">-2</td><td class="p-1 border">5</td><td class="p-1 border font-bold text-emerald-600">1/2</td></tr>
+                  <tr><td class="p-1 border">-3</td><td class="p-1 border">6</td><td class="p-1 border font-bold text-rose-500">-1/2</td></tr>
+                  <tr><td class="p-1 border">-4</td><td class="p-1 border">7</td><td class="p-1 border font-bold text-rose-600">-1</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_b[n] = \{ \dots, 0, \underset{\uparrow}{\frac{1}{2}}, 1, 1, 1, 1, \frac{1}{2}, -\frac{1}{2}, -1, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Destek Kümesi:</strong> $n \in [0, 7]$. Orijinal dizinin sağ ucu ($k=3$) $n=0$'a gelmiş, negatif kuyruk ise en sağa ($n=6, 7$) geçmiştir!
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (c) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">c</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_c[n] = x[3n]$ — Zaman Seyreltmesi (Downsampling / Decimation by 3)</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-lg">3'ün Katı İndeksler</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Ayrık Zamanda Zaman Sıkıştırması:</strong> Ayrık zamanda $n$ yalnızca tam sayı değerler alabildiğinden, $x[3n]$ işlemi yalnızca orijinal dizideki <strong>3'ün tam katı olan indeksleri ($k = 3n$)</strong> seçer; aradaki tüm örnekler elenir (decimation)!
+            </p>
+            <p>
+              Orijinal aralık $[-4, 3]$ içinde 3'ün katı olan indisler: $k \in \{-3, 0, 3\}$.
+            </p>
+            <ul class="list-disc list-inside space-y-1 font-mono">
+              <li>$n = -1 \implies 3n = -3 \implies y_c[-1] = x[-3] = \mathbf{-1/2}$</li>
+              <li>$n = 0 \implies 3n = 0 \implies y_c[0] = x[0] = \mathbf{1}$</li>
+              <li>$n = 1 \implies 3n = 3 \implies y_c[1] = x[3] = \mathbf{1/2}$</li>
+              <li>Diğer tüm $n$ değerleri için $|3n| \ge 6 > 4 \implies y_c[n] = \mathbf{0}$.</li>
+            </ul>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_c[n] = \{ \dots, 0, -\frac{1}{2}, \underset{\uparrow}{1}, \frac{1}{2}, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Önemli Ayrık Zaman Kuralı:</strong> Sürekli zamanda sinyal sıkıştırıldığında tüm bilgi korunurken, ayrık zamanda katsayı $>1$ olduğunda arada kalan örnekler tamamen yok olur! Sadece 3 örnek hayatta kalmıştır.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (d) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">d</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_d[n] = x[3n + 1]$ — Seyreltme ve Faz Kayması</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-purple-50 text-purple-800 rounded-lg">Ötelenmiş Seyreltme</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>İndeks Eşitlemesi:</strong> $k = 3n + 1$ formundaki orijinal indeksler seçilir. $x[k]$'nın sıfırdan farklı olduğu aralık $-4 \le k \le 3$ olduğundan:
+              $$-4 \le 3n + 1 \le 3 \implies -5 \le 3n \le 2 \implies -1.67 \le n \le 0.67$$
+            </p>
+            <p>
+              Bu aralıkta yer alan <strong>yegane tam sayılar</strong> $n = -1$ ve $n = 0$'dır:
+            </p>
+            <ul class="list-disc list-inside space-y-1 font-mono">
+              <li>$n = -1 \implies 3(-1) + 1 = -2 \implies y_d[-1] = x[-2] = \mathbf{1/2}$</li>
+              <li>$n = 0 \implies 3(0) + 1 = 1 \implies y_d[0] = x[1] = \mathbf{1}$</li>
+              <li>$n \le -2 \implies 3n + 1 \le -5 \implies y_d[n] = \mathbf{0}$</li>
+              <li>$n \ge 1 \implies 3n + 1 \ge 4 \implies y_d[n] = \mathbf{0}$</li>
+            </ul>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_d[n] = \{ \dots, 0, \frac{1}{2}, \underset{\uparrow}{1}, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Sonuç:</strong> Sinyal sadece $n = -1$ ve $n = 0$ anlarında sıfırdan farklıdır; toplamda yalnızca 2 örnek barındırır.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (e) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">e</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_e[n] = x[n]u[3 - n]$ — Basamak Fonksiyonu ile Pencereleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-sky-50 text-sky-800 rounded-lg">Özdeş Sinyal ($y_e = x$)</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Terslenmiş Basamak Analizi:</strong> $u[3 - n]$ fonksiyonu:
+              $$u[3 - n] = \begin{cases} 1, & 3 - n \ge 0 \iff n \le 3 \\ 0, & 3 - n < 0 \iff n \ge 4 \end{cases}$$
+            </p>
+            <p>
+              Orijinal $x[n]$ sinyali zaten $n \ge 4$ için tamamen sıfırdır!
+            </p>
+            <p>
+              Dolayısıyla $u[3 - n]$ ile çarpım $x[n]$'nin mevcut hiçbir örneğini kesmez veya sıfırlamaz:
+              $$y_e[n] = x[n]u[3 - n] = x[n], \quad \forall n$$
+            </p>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_e[n] = x[n] = \{ \dots, 0, \underbrace{-1}_{n=-4}, -\frac{1}{2}, \frac{1}{2}, 1, \underset{\uparrow}{1}, 1, 1, \frac{1}{2}, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>İlginç Sınav Tuzağı:</strong> Bu şıkta verilen işlem sinyal üzerinde hiçbir değişiklik yapmaz; çıkış orijinal sinyalin birebir kopyasıdır!
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (f) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">f</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_f[n] = x[n - 2]\delta[n - 2]$ — Kronecker Darbe Elemesi</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-rose-50 text-rose-800 rounded-lg">Tek Darbe: $\delta[n-2]$</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Kronecker Delta Özelliği:</strong> $\delta[n - 2]$ fonksiyonu yalnızca $n = 2$ anında $1$'dir, diğer tüm $n \neq 2$ anlarında $0$'dır.
+            </p>
+            <p>
+              Ayrık sifting özelliği: $f[n]\delta[n - n_0] = f[n_0]\delta[n - n_0]$.
+            </p>
+            <p>
+              Burada $f[n] = x[n - 2]$ ve $n_0 = 2$ olduğundan:
+              $$y_f[n] = x[2 - 2]\delta[n - 2] = x[0]\delta[n - 2]$$
+            </p>
+            <p>
+              Orijinal sinyalden $x[0] = 1$ olduğunu bildiğimize göre:
+              $$y_f[n] = 1 \cdot \delta[n - 2] = \delta[n - 2]$$
+            </p>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_f[n] = \delta[n - 2] = \{ \dots, 0, \underset{\uparrow}{0}, 0, \mathbf{1}, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Tek Örnek:</strong> Yalnızca $n = 2$ anında genliği $1$ olan tek bir stem mevcuttur; geri kalan tüm noktalarda sıfırdır.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (g) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">g</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_g[n] = \frac{1}{2}x[n] + \frac{1}{2}(-1)^n x[n]$ — Çift İndeks Seçici Filtre</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-teal-50 text-teal-800 rounded-lg">Sadece Çift $n$ Noktaları</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Cebirsel Sadeleştirme:</strong> İfade ortak $x[n]$ parantezine alınırsa:
+              $$y_g[n] = \frac{1 + (-1)^n}{2} \cdot x[n]$$
+            </p>
+            <p>
+              $(-1)^n$ terimi $n$ çift olduğunda $+1$, $n$ tek olduğunda $-1$ değerini alır:
+              $$\frac{1 + (-1)^n}{2} = \begin{cases} 1, & n \text{ çift (even)} \\ 0, & n \text{ tek (odd)} \end{cases}$$
+            </p>
+            <p>
+              Dolayısıyla bu işlem bir <strong>çift-indeks tarak filtresidir (even-index comb selector)</strong>:
+            </p>
+            <ul class="list-disc list-inside space-y-1 font-mono">
+              <li>$n = -4$ (çift): $y_g[-4] = x[-4] = \mathbf{-1}$</li>
+              <li>$n = -3$ (tek): $y_g[-3] = \mathbf{0}$</li>
+              <li>$n = -2$ (çift): $y_g[-2] = x[-2] = \mathbf{1/2}$</li>
+              <li>$n = -1$ (tek): $y_g[-1] = \mathbf{0}$</li>
+              <li>$n = 0$ (çift): $y_g[0] = x[0] = \mathbf{1}$</li>
+              <li>$n = 1$ (tek): $y_g[1] = \mathbf{0}$</li>
+              <li>$n = 2$ (çift): $y_g[2] = x[2] = \mathbf{1}$</li>
+              <li>$n = 3$ (tek): $y_g[3] = \mathbf{0}$</li>
+            </ul>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_g[n] = \{ \dots, 0, \underbrace{-1}_{n=-4}, 0, \frac{1}{2}, 0, \underset{\uparrow}{1}, 0, 1, 0, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Fiziksel Yorum:</strong> Tek indeksteki tüm değerler yok edilmiş, çift indeksteki değerler ise aynen korunmuştur. (Dikkat: Bu işlem çift simetrik bileşen ile karıştırılmamalıdır; burada $n$ indisi çift olanlar seçilmiştir!)
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (h) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">h</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_h[n] = x[(n - 1)^2]$ — Doğrusal Olmayan (Karesel) Zaman Dönüşümü</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-fuchsia-50 text-fuchsia-800 rounded-lg">Karesel Haritalama &bull; Simetrik</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Karesel İndeks Analizi:</strong> $k = (n - 1)^2 \ge 0$ her zaman negatif olmayan bir tam karedir!
+            </p>
+            <p>
+              Orijinal $x[k]$ sinyali yalnızca $k \in \{0, 1, 2, 3\}$ için pozitiftir ve $k \ge 4$ için $0$'dır. Tam kare olan tek olası $k$ değerleri $0$ ve $1$'dir!
+            </p>
+            <ol class="list-decimal list-inside space-y-1.5 font-mono">
+              <li>$(n - 1)^2 = 0 \implies n = 1 \implies y_h[1] = x[0] = \mathbf{1}$</li>
+              <li>$(n - 1)^2 = 1 \implies n - 1 = \pm 1$:
+                <ul class="list-disc list-inside pl-4 font-sans text-[11px]">
+                  <li>$n = 2 \implies y_h[2] = x[1] = \mathbf{1}$</li>
+                  <li>$n = 0 \implies y_h[0] = x[1] = \mathbf{1}$</li>
+                </ul>
+              </li>
+              <li>$(n - 1)^2 = 2$ veya $3$ olamaz (tam sayı kareleri değildir).</li>
+              <li>$|n - 1| \ge 2 \implies (n - 1)^2 \ge 4 \implies x[(n-1)^2] = \mathbf{0}$.</li>
+            </ol>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Dizi Gösterimi:</span>
+            $$y_h[n] = \{ \dots, 0, \underset{\uparrow}{1}, 1, 1, 0, \dots \}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Simetri Ekseni ($n = 1$):</strong> $(n-1)^2$ fonksiyonu $n = 1$ noktasına göre çift simetriye sahip olduğundan, $y_h[n]$ çıkışı da $n = 1$ eksenine göre kusursuz bir ayna simetrisindedir: $y_h[0] = y_h[2] = 1$ ve tepe noktası $y_h[1] = 1$'dir!
+            </p>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ÖZET KARŞILAŞTIRMA TABLOSU -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <h3 class="text-lg font-bold text-slate-900">Problem 1.22 — 8 Alt Problemin Karşılaştırmalı Özet Tablosu</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse border border-slate-200 rounded-xl text-xs">
+          <thead class="bg-slate-100 font-bold text-slate-700">
+            <tr>
+              <th class="p-3 border border-slate-200">Sinyal</th>
+              <th class="p-3 border border-slate-200">Dönüşüm Niteliği</th>
+              <th class="p-3 border border-slate-200">Destek İndisleri (Non-zero $n$)</th>
+              <th class="p-3 border border-slate-200">Sıfırdan Farklı Örnek Sayısı</th>
+              <th class="p-3 border border-slate-200">Değerler Kümesi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">$x[n]$</td>
+              <td class="p-3 font-sans">Orijinal Sinyal</td>
+              <td class="p-3">[-4, 3]</td>
+              <td class="p-3 font-bold text-indigo-600">8 örnek</td>
+              <td class="p-3">[-1, -0.5, 0.5, 1, 1, 1, 1, 0.5]</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(a) $x[n - 4]$</td>
+              <td class="p-3 font-sans">Zaman Gecikmesi (+4 sağa)</td>
+              <td class="p-3">[0, 7]</td>
+              <td class="p-3 font-bold text-indigo-600">8 örnek</td>
+              <td class="p-3">[-1, -0.5, 0.5, 1, 1, 1, 1, 0.5]</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(b) $x[3 - n]$</td>
+              <td class="p-3 font-sans">Tersleme + Sağa 3 birim</td>
+              <td class="p-3">[0, 7]</td>
+              <td class="p-3 font-bold text-indigo-600">8 örnek</td>
+              <td class="p-3">[0.5, 1, 1, 1, 1, 0.5, -0.5, -1]</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(c) $x[3n]$</td>
+              <td class="p-3 font-sans">3 kat Seyreltme (Decimation)</td>
+              <td class="p-3">[-1, 1]</td>
+              <td class="p-3 font-bold text-amber-600">3 örnek</td>
+              <td class="p-3">y[-1]=-0.5, y[0]=1, y[1]=0.5</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(d) $x[3n + 1]$</td>
+              <td class="p-3 font-sans">Seyreltme + İleri Faz</td>
+              <td class="p-3">[-1, 0]</td>
+              <td class="p-3 font-bold text-amber-600">2 örnek</td>
+              <td class="p-3">y[-1]=0.5, y[0]=1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(e) $x[n]u[3 - n]$</td>
+              <td class="p-3 font-sans">Pencereleme ($n \le 3$)</td>
+              <td class="p-3">[-4, 3]</td>
+              <td class="p-3 font-bold text-indigo-600">8 örnek (Özdeş)</td>
+              <td class="p-3">Orijinal $x[n]$ ile %100 aynı</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(f) $x[n-2]\delta[n-2]$</td>
+              <td class="p-3 font-sans">Kronecker Darbe Çarpımı</td>
+              <td class="p-3">{2}</td>
+              <td class="p-3 font-bold text-rose-600">1 örnek</td>
+              <td class="p-3">y[2]=1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(g) $\frac{1 + (-1)^n}{2}x[n]$</td>
+              <td class="p-3 font-sans">Çift İndeksleri Seçme</td>
+              <td class="p-3">{-4, -2, 0, 2}</td>
+              <td class="p-3 font-bold text-teal-600">4 örnek</td>
+              <td class="p-3">y[-4]=-1, y[-2]=0.5, y[0]=1, y[2]=1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(h) $x[(n-1)^2]$</td>
+              <td class="p-3 font-sans">Karesel Zaman Haritalama</td>
+              <td class="p-3">{0, 1, 2}</td>
+              <td class="p-3 font-bold text-fuchsia-600">3 örnek</td>
+              <td class="p-3">y[0]=1, y[1]=1, y[2]=1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- STEM CANVAS VE JAVASCRIPT KODLARI -->
+  <script>
+    const xOriginalMap = {
+      '-4': -1.0,
+      '-3': -0.5,
+      '-2': 0.5,
+      '-1': 1.0,
+      '0': 1.0,
+      '1': 1.0,
+      '2': 1.0,
+      '3': 0.5
+    };
+
+    function xOrig(n) {
+      return xOriginalMap[n] !== undefined ? xOriginalMap[n] : 0.0;
+    }
+
+    function computeSignal(mode, n) {
+      switch(mode) {
+        case 'orig': return xOrig(n);
+        case 'a': return xOrig(n - 4);
+        case 'b': return xOrig(3 - n);
+        case 'c': return xOrig(3 * n);
+        case 'd': return xOrig(3 * n + 1);
+        case 'e': return (n <= 3) ? xOrig(n) : 0.0;
+        case 'f': return (n === 2) ? xOrig(0) : 0.0;
+        case 'g': return (n % 2 === 0) ? xOrig(n) : 0.0;
+        case 'h': return xOrig(Math.pow(n - 1, 2));
+        default: return 0.0;
+      }
+    }
+
+    let currentMode = 'orig';
+    const mainCanvas = document.getElementById('mainCanvas');
+    const ctx = mainCanvas.getContext('2d');
+    const chkGhost = document.getElementById('chkGhost');
+    const hoverTooltip = document.getElementById('hoverTooltip');
+
+    function getDomain(mode) {
+      if (mode === 'a' || mode === 'b') return { nMin: -2, nMax: 9, yMin: -1.5, yMax: 1.8 };
+      if (mode === 'c' || mode === 'd') return { nMin: -4, nMax: 4, yMin: -1.5, yMax: 1.8 };
+      if (mode === 'h') return { nMin: -2, nMax: 4, yMin: -0.5, yMax: 1.8 };
+      return { nMin: -6, nMax: 6, yMin: -1.5, yMax: 1.8 };
+    }
+
+    function drawStemPlot(canvas, targetCtx, mode, showGhost = true) {
+      const W = canvas.width;
+      const H = canvas.height;
+      const domain = getDomain(mode);
+      const { nMin, nMax, yMin, yMax } = domain;
+
+      function toX(n) { return (n - nMin) / (nMax - nMin) * (W - 80) + 50; }
+      function toY(y) { return H - 50 - (y - yMin) / (yMax - yMin) * (H - 90); }
+
+      // Arka plan
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.fillRect(0, 0, W, H);
+
+      // Izgara
+      targetCtx.strokeStyle = '#1e293b';
+      targetCtx.lineWidth = 1;
+      for (let n = nMin; n <= nMax; n++) {
+        const x = toX(n);
+        targetCtx.beginPath();
+        targetCtx.moveTo(x, 25);
+        targetCtx.lineTo(x, H - 35);
+        targetCtx.stroke();
+      }
+      for (let y = -1.0; y <= 1.5; y += 0.5) {
+        const cy = toY(y);
+        targetCtx.beginPath();
+        targetCtx.moveTo(40, cy);
+        targetCtx.lineTo(W - 20, cy);
+        targetCtx.stroke();
+      }
+
+      // Eksenler
+      const origX = toX(0);
+      const origY = toY(0);
+
+      targetCtx.strokeStyle = '#64748b';
+      targetCtx.lineWidth = 1.5;
+
+      // Yatay n ekseni
+      targetCtx.beginPath();
+      targetCtx.moveTo(35, origY);
+      targetCtx.lineTo(W - 20, origY);
+      targetCtx.stroke();
+
+      // Dikey genlik ekseni
+      targetCtx.beginPath();
+      targetCtx.moveTo(origX, 25);
+      targetCtx.lineTo(origX, H - 30);
+      targetCtx.stroke();
+
+      // Sayı Etiketleri
+      targetCtx.fillStyle = '#94a3b8';
+      targetCtx.font = '12px monospace';
+      targetCtx.textAlign = 'center';
+      for (let n = nMin; n <= nMax; n++) {
+        targetCtx.fillText(n.toString(), toX(n), origY + 18);
+      }
+      targetCtx.fillText('n', W - 15, origY + 18);
+
+      targetCtx.textAlign = 'right';
+      for (let y = -1.0; y <= 1.5; y += 0.5) {
+        if (Math.abs(y) < 0.01) continue;
+        targetCtx.fillText(y.toFixed(1), origX - 8, toY(y) + 4);
+      }
+
+      // Hayalet Orijinal x[n] Stemleri
+      if (showGhost && mode !== 'orig') {
+        for (let n = nMin; n <= nMax; n++) {
+          const yOrig = xOrig(n);
+          if (Math.abs(yOrig) > 0.001) {
+            const sx = toX(n);
+            const sy = toY(yOrig);
+            targetCtx.save();
+            targetCtx.strokeStyle = '#475569';
+            targetCtx.setLineDash([3, 3]);
+            targetCtx.lineWidth = 1.5;
+            targetCtx.beginPath();
+            targetCtx.moveTo(sx, origY);
+            targetCtx.lineTo(sx, sy);
+            targetCtx.stroke();
+
+            targetCtx.fillStyle = '#475569';
+            targetCtx.beginPath();
+            targetCtx.arc(sx, sy, 3.5, 0, Math.PI * 2);
+            targetCtx.fill();
+            targetCtx.restore();
+          }
+        }
+      }
+
+      // Ana Stem Sinyali
+      for (let n = nMin; n <= nMax; n++) {
+        const y = computeSignal(mode, n);
+        const sx = toX(n);
+        const sy = toY(y);
+
+        if (Math.abs(y) > 0.001) {
+          // Stem Gövdesi
+          targetCtx.strokeStyle = (y > 0) ? '#34d399' : '#f87171';
+          targetCtx.lineWidth = 2.5;
+          targetCtx.beginPath();
+          targetCtx.moveTo(sx, origY);
+          targetCtx.lineTo(sx, sy);
+          targetCtx.stroke();
+
+          // Lollipop Başı
+          targetCtx.fillStyle = (y > 0) ? '#10b981' : '#ef4444';
+          targetCtx.beginPath();
+          targetCtx.arc(sx, sy, 5.5, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.strokeStyle = '#ffffff';
+          targetCtx.lineWidth = 1.5;
+          targetCtx.stroke();
+
+          // Genlik Değeri Metni
+          targetCtx.fillStyle = '#f8fafc';
+          targetCtx.font = 'bold 11px monospace';
+          targetCtx.textAlign = 'center';
+          const txtY = (y > 0) ? sy - 10 : sy + 18;
+          let txt = (y === 0.5) ? '1/2' : (y === -0.5) ? '-1/2' : y.toString();
+          targetCtx.fillText(txt, sx, txtY);
+        } else {
+          // Sıfır Noktası
+          targetCtx.fillStyle = '#64748b';
+          targetCtx.beginPath();
+          targetCtx.arc(sx, origY, 3, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+      }
+
+      // Başlık
+      targetCtx.fillStyle = '#f8fafc';
+      targetCtx.font = 'bold 14px sans-serif';
+      targetCtx.textAlign = 'left';
+      let title = "Orijinal Ayrık Zaman Sinyali x[n]";
+      if (mode === 'a') title = "(a) x[n - 4] — Sağa 4 Gecikme";
+      if (mode === 'b') title = "(b) x[3 - n] — Tersleme & Sağa 3";
+      if (mode === 'c') title = "(c) x[3n] — 3x Seyreltme (Decimation)";
+      if (mode === 'd') title = "(d) x[3n + 1] — Seyreltme & Faz Kayması";
+      if (mode === 'e') title = "(e) x[n] u[3 - n] — Pencereleme";
+      if (mode === 'f') title = "(f) x[n - 2] δ[n - 2] — Darbe Örnekleme";
+      if (mode === 'g') title = "(g) ½ x[n] + ½ (-1)ⁿ x[n] — Çift İndeks Filtresi";
+      if (mode === 'h') title = "(h) x[(n - 1)²] — Karesel Dönüşüm";
+
+      targetCtx.fillText(title, 55, 38);
+    }
+
+    function updateMainCanvas() {
+      drawStemPlot(mainCanvas, ctx, currentMode, chkGhost.checked);
+    }
+
+    // Sekmeler
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const mode = btn.dataset.mode;
+
+        if (mode === 'all') {
+          document.getElementById('singleCanvasContainer').classList.add('hidden');
+          document.getElementById('gridCanvasContainer').classList.remove('hidden');
+          buildGrid();
+        } else {
+          document.getElementById('singleCanvasContainer').classList.remove('hidden');
+          document.getElementById('gridCanvasContainer').classList.add('hidden');
+          currentMode = mode;
+          updateMainCanvas();
+        }
+      });
+    });
+
+    chkGhost.addEventListener('change', updateMainCanvas);
+
+    // Fare ile Etkileşim
+    mainCanvas.addEventListener('mousemove', (e) => {
+      const rect = mainCanvas.getBoundingClientRect();
+      const scaleX = mainCanvas.width / rect.width;
+      const mouseX = (e.clientX - rect.left) * scaleX;
+
+      const domain = getDomain(currentMode);
+      const { nMin, nMax } = domain;
+      const nEst = Math.round(nMin + (mouseX - 50) / (mainCanvas.width - 80) * (nMax - nMin));
+
+      if (nEst >= nMin && nEst <= nMax) {
+        const y = computeSignal(currentMode, nEst);
+        hoverTooltip.textContent = `n = ${nEst}  |  y[n] = ${y.toFixed(2)}`;
+        hoverTooltip.classList.remove('hidden');
+      } else {
+        hoverTooltip.classList.add('hidden');
+      }
+    });
+
+    mainCanvas.addEventListener('mouseleave', () => {
+      hoverTooltip.classList.add('hidden');
+    });
+
+    // 8'li Izgara Oluşturucu
+    function buildGrid() {
+      const container = document.getElementById('gridCanvasContainer');
+      container.innerHTML = '';
+      const modes = [
+        { id: 'a', title: '(a) x[n - 4]' },
+        { id: 'b', title: '(b) x[3 - n]' },
+        { id: 'c', title: '(c) x[3n]' },
+        { id: 'd', title: '(d) x[3n + 1]' },
+        { id: 'e', title: '(e) x[n]u[3-n]' },
+        { id: 'f', title: '(f) x[n-2]δ[n-2]' },
+        { id: 'g', title: '(g) Çift İndeks' },
+        { id: 'h', title: '(h) x[(n-1)²]' }
+      ];
+
+      modes.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'bg-slate-900 rounded-2xl p-3 border border-slate-800 space-y-2';
+        const titleEl = document.createElement('div');
+        titleEl.className = 'text-xs font-bold text-slate-300 px-1';
+        titleEl.textContent = m.title;
+        const cvs = document.createElement('canvas');
+        cvs.width = 400;
+        cvs.height = 220;
+        cvs.className = 'w-full h-auto rounded-xl';
+        card.appendChild(titleEl);
+        card.appendChild(cvs);
+        container.appendChild(card);
+
+        const subCtx = cvs.getContext('2d');
+        drawStemPlot(cvs, subCtx, m.id, true);
+      });
+    }
+
+    // PNG İndirme Butonu
+    document.getElementById('btnExport').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `Problem_1_22_${currentMode}.png`;
+      link.href = mainCanvas.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Çizim
+    updateMainCanvas();
+  </script>
+</body>
+</html>
