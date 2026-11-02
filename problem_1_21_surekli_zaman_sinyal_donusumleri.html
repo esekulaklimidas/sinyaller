@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 1.21 – Sürekli Zaman Temel Sinyal Dönüşümleri (Oppenheim & Willsky)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
+    .glass-nav { background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(12px); }
+    .tab-btn.active { background-color: #4f46e5; color: #ffffff; border-color: #4f46e5; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
+
+  <!-- Üst Gezinme Çubuğu -->
+  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black text-slate-900">Problem 1.21</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">Bölüm 1 • Temel Problemler</span>
+            <span class="text-[10px] bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full font-bold">Sürekli Zaman (CT)</span>
+          </div>
+          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 60–61</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+          Tüm Problemlere Dön &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+
+    <!-- Başlık ve Problem Tanım Kartı -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <div>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 1 &bull; Sinyaller ve Sistemler</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Sürekli Zaman Sinyal Dönüşümleri, Basamak Pencereleme ve Darbe Örnekleme
+          </h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold">
+            6 Alt Problem (a – f)
+          </span>
+          <span class="px-3 py-1 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold">
+            İnteraktif Görselleştirici
+          </span>
+        </div>
+      </div>
+
+      <!-- Problem Metni ve Orijinal Sinyal Bilgisi -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-7 space-y-4 text-sm text-slate-600 leading-relaxed">
+          <p class="font-medium text-slate-800">
+            <strong>Problem Tanımı (Oppenheim &amp; Willsky 1.21):</strong> Şekil P1.21'de verilen sürekli zamanlı $x(t)$ sinyali için aşağıdaki dönüştürülmüş sinyalleri dikkatlice çiziniz ve etiketleyiniz:
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs font-semibold text-slate-700">
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(a) $x(t - 1)$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Zaman Gecikmesi (+1)</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(b) $x(2 - t)$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Tersleme + Sağa 2</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(c) $x(2t + 1)$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">2x Sıkıştırma + Sola 0.5</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(d) $x(4 - t/2)$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">2x Genişletme + Tersleme</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(e) $[x(t) + x(-t)]u(t)$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Çift Bileşen Pencereleme</span>
+            </div>
+            <div class="p-2.5 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-between">
+              <span>(f) $x(t)[\delta(t + 1.5) - \delta(t - 1.5)]$</span>
+              <span class="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-2 py-0.5 rounded">Darbe Örnekleme (Sifting)</span>
+            </div>
+          </div>
+
+          <div class="p-4 bg-indigo-50/70 border border-indigo-100 rounded-2xl text-xs space-y-2">
+            <span class="font-bold text-indigo-900 block">Orijinal $x(t)$ Sinyalinin Analitik Parçalı Tanımı:</span>
+            $$x(t) = \begin{cases} 
+              0, & t < -2 \\
+              t + 1, & -2 < t < -1 \\
+              1, & -1 < t < 0 \\
+              2, & 0 < t < 1 \\
+              2 - t, & 1 < t < 2 \\
+              0, & t > 2
+            \end{cases}$$
+          </div>
+        </div>
+
+        <!-- Kitaptaki Orijinal Şekil P1.21 Kırpıntısı -->
+        <div class="lg:col-span-5 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex flex-col items-center justify-center text-center space-y-2">
+          <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider">Kitaptaki Orijinal Çizim (Şekil P1.21)</span>
+          <div class="bg-white p-2 rounded-xl shadow-inner border border-slate-200 max-h-56 overflow-hidden flex items-center justify-center">
+            <img src="data:image/png;base64,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" alt="Oppenheim Problem 1.21 Şekil" class="max-h-52 object-contain" />
+          </div>
+          <p class="text-[10px] text-slate-500">
+            Destek aralığı: $[-2, 2]$. Kritik noktalar: $t \in \{-2, -1, 0, 1, 2\}$.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- İNTERAKTİF GÖRSELLEŞTİRİCİ SİMÜLATÖR -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-xl font-black text-slate-900">İnteraktif Sinyal Dönüşüm Simülatörü</h2>
+          <p class="text-xs text-slate-500">İstediğiniz alt problemi seçin; dalga şeklinin nasıl dönüştüğünü dinamik olarak gözlemleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer select-none bg-slate-100 px-3 py-1.5 rounded-xl hover:bg-slate-200 transition">
+            <input type="checkbox" id="chkGhost" checked class="rounded text-indigo-600 focus:ring-indigo-500">
+            <span>Orijinal $x(t)$ Hayalet Çizgisi</span>
+          </label>
+          <button id="btnExport" class="px-3 py-1.5 bg-slate-800 hover:bg-black text-white text-xs font-bold rounded-xl transition shadow-sm">
+            PNG Kaydet
+          </button>
+        </div>
+      </div>
+
+      <!-- Alt Problem Seçim Butonları -->
+      <div class="flex flex-wrap gap-2">
+        <button class="tab-btn active px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="orig">
+          Orijinal $x(t)$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="a">
+          (a) $x(t - 1)$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="b">
+          (b) $x(2 - t)$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="c">
+          (c) $x(2t + 1)$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="d">
+          (d) $x(4 - t/2)$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="e">
+          (e) $[x(t)+x(-t)]u(t)$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 transition" data-mode="f">
+          (f) $x(t)[\delta(...) - \delta(...)]$
+        </button>
+        <button class="tab-btn px-3.5 py-2 text-xs font-bold rounded-xl border border-slate-200 bg-amber-50 text-amber-800 hover:bg-amber-100 transition" data-mode="all">
+          ✨ Tümünü 6'lı Izgarada İncele
+        </button>
+      </div>
+
+      <!-- Canvas Alanı -->
+      <div id="singleCanvasContainer" class="space-y-3">
+        <div class="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-inner">
+          <canvas id="mainCanvas" width="1000" height="420" class="w-full h-auto block cursor-crosshair"></canvas>
+          <div id="hoverTooltip" class="absolute top-4 right-4 bg-slate-800/90 backdrop-blur border border-slate-700 text-white px-3 py-1.5 rounded-lg text-xs font-mono pointer-events-none hidden">
+            t = 0.00 | y(t) = 0.00
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between text-xs text-slate-500 px-1">
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-indigo-500 inline-block"></span> Seçili Sinyal</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-1 border-t-2 border-dashed border-slate-400 inline-block"></span> Orijinal $x(t)$ (Referans)</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Dirac Darbeleri (Ok Başlı)</span>
+          </div>
+          <span class="text-slate-400 font-mono text-[11px]">Fare ile grafik üzerinde gezinerek anlık $(t, y(t))$ değerini okuyabilirsiniz</span>
+        </div>
+      </div>
+
+      <!-- 6'lı Izgara Görünümü (Gizlenebilir) -->
+      <div id="gridCanvasContainer" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- 6 mini canvas kutucuğu JS ile çizilecek -->
+      </div>
+
+      <!-- Etkileşimli Dönüşüm Laboratuvarı: x(at + b) Serbest Deney Aracı -->
+      <div class="p-5 bg-gradient-to-br from-indigo-50/50 to-slate-50 border border-indigo-100 rounded-2xl space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-extrabold text-indigo-900 uppercase tracking-wider">🔬 Canlı Dönüşüm Laboratuvarı: $x(at + b)$</span>
+          <span id="labFormulaDisplay" class="text-xs font-mono font-bold text-indigo-700 bg-white px-2.5 py-1 rounded-lg border border-indigo-200">
+            $x(1.00\,t + 0.00)$
+          </span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs font-semibold text-slate-700">
+              <label for="sliderA">Zaman Ölçekleme &amp; Tersleme ($a$ katsayısı):</label>
+              <span id="valA" class="font-mono text-indigo-600">a = 1.0</span>
+            </div>
+            <input type="range" id="sliderA" min="-3" max="3" step="0.25" value="1" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-[11px] text-slate-500">
+              $|a| > 1$: Sıkıştırma, $|a| < 1$: Genişletme, $a < 0$: Zaman Tersleme (Ayna yansıması).
+            </p>
+          </div>
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs font-semibold text-slate-700">
+              <label for="sliderB">Zaman Öteleme ($b$ katsayısı):</label>
+              <span id="valB" class="font-mono text-indigo-600">b = 0.0</span>
+            </div>
+            <input type="range" id="sliderB" min="-6" max="6" step="0.5" value="0" class="w-full accent-indigo-600 cursor-pointer">
+            <p class="text-[11px] text-slate-500">
+              Öteleme miktarı: $t_0 = -b/a$. $b > 0$: Sola kayma (İlerleme), $b < 0$: Sağa kayma (Gecikme).
+            </p>
+          </div>
+        </div>
+        <div id="labInterpretation" class="text-xs bg-white p-3 rounded-xl border border-indigo-100 text-slate-700 font-medium">
+          Orijinal sinyal durumundasınız.
+        </div>
+      </div>
+    </section>
+
+    <!-- HER BİR ALT PROBLEM İÇİN DERİNLEMESİNE ÇÖZÜM KARTLARI (a - f) -->
+    <div class="space-y-6">
+
+      <!-- (a) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">a</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_a(t) = x(t - 1)$ — Zaman Gecikmesi</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-50 text-indigo-700 rounded-lg">Öteleme: Sağa 1 Birim</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Dönüşüm Kuralı:</strong> Bağımsız değişken $t$ yerine $t - 1$ yazılmıştır. Bu işlem sinyalin zaman ekseninde <strong>1 birim sağa ötelenmesi (gecikme / delay)</strong> anlamına gelir. Orijinal sinyalin her $t_1$ anındaki değeri artık $t = t_1 + 1$ anında görülür.
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse border border-slate-200 rounded-lg">
+                <thead class="bg-slate-50 font-bold text-slate-700">
+                  <tr>
+                    <th class="p-2 border border-slate-200">Kritik Nokta</th>
+                    <th class="p-2 border border-slate-200">Orijinal $t$</th>
+                    <th class="p-2 border border-slate-200">Yeni $t' = t + 1$</th>
+                    <th class="p-2 border border-slate-200">Genlik Değeri</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono">
+                  <tr><td class="p-1.5 border">Düşüş</td><td class="p-1.5 border">-2</td><td class="p-1.5 border">-1</td><td class="p-1.5 border">0 &rarr; -1</td></tr>
+                  <tr><td class="p-1.5 border">Rampa Sonu / Sıçrama</td><td class="p-1.5 border">-1</td><td class="p-1.5 border">0</td><td class="p-1.5 border">0 &rarr; 1</td></tr>
+                  <tr><td class="p-1.5 border">Sıçrama 2</td><td class="p-1.5 border">0</td><td class="p-1.5 border">1</td><td class="p-1.5 border">1 &rarr; 2</td></tr>
+                  <tr><td class="p-1.5 border">İniş</td><td class="p-1.5 border">1</td><td class="p-1.5 border">2</td><td class="p-1.5 border">2 &rarr; 1</td></tr>
+                  <tr><td class="p-1.5 border">Sıfıra Ulaşma</td><td class="p-1.5 border">2</td><td class="p-1.5 border">3</td><td class="p-1.5 border">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Analitik Parçalı Tanım:</span>
+            $$x(t - 1) = \begin{cases}
+              0, & t < -1 \\
+              (t - 1) + 1 = t, & -1 < t < 0 \\
+              1, & 0 < t < 1 \\
+              2, & 1 < t < 2 \\
+              2 - (t - 1) = 3 - t, & 2 < t < 3 \\
+              0, & t > 3
+            \end{cases}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Destek Aralığı (Support):</strong> Orijinal aralık $[-2, 2]$ iken yeni aralık $[-1, 3]$ olur. Dalganın şekli, yüksekliği ve genişliği birebir korunur.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (b) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">b</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_b(t) = x(2 - t)$ — Zaman Tersleme ve Sağa Öteleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-amber-50 text-amber-800 rounded-lg">Yansıma + Sağa 2 Birim</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Dönüşüm Adımları ($x(2 - t) = x(-(t - 2))$):</strong>
+            </p>
+            <ol class="list-decimal list-inside space-y-1.5">
+              <li><strong>1. Yöntem (Önce Tersleme, Sonra Öteleme):</strong> İlk olarak $x(-t)$ elde edilir (dikey eksene göre ayna yansıması). Ardından $t \to t - 2$ yapılarak elde edilen yansımış dalga <strong>2 birim sağa</strong> ötelenir.</li>
+              <li><strong>2. Yöntem (Cebirsel Eşitleme):</strong> Orijinal sinyalin bir özelliği $t = \tau$ anında ise, $2 - t = \tau \implies t = 2 - \tau$ çözülür.</li>
+            </ol>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse border border-slate-200 rounded-lg">
+                <thead class="bg-slate-50 font-bold text-slate-700">
+                  <tr>
+                    <th class="p-2 border border-slate-200">Orijinal $\tau$</th>
+                    <th class="p-2 border border-slate-200">Yeni $t = 2 - \tau$</th>
+                    <th class="p-2 border border-slate-200">Orijinal Olay</th>
+                    <th class="p-2 border border-slate-200">Genlik Değeri</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono">
+                  <tr><td class="p-1.5 border">-2</td><td class="p-1.5 border">4</td><td class="p-1.5 border">Düşüş noktası</td><td class="p-1.5 border">-1</td></tr>
+                  <tr><td class="p-1.5 border">-1</td><td class="p-1.5 border">3</td><td class="p-1.5 border">1'e basamak</td><td class="p-1.5 border">1</td></tr>
+                  <tr><td class="p-1.5 border">0</td><td class="p-1.5 border">2</td><td class="p-1.5 border">2'ye basamak</td><td class="p-1.5 border">2</td></tr>
+                  <tr><td class="p-1.5 border">1</td><td class="p-1.5 border">1</td><td class="p-1.5 border">Rampa başlangıcı</td><td class="p-1.5 border">1</td></tr>
+                  <tr><td class="p-1.5 border">2</td><td class="p-1.5 border">0</td><td class="p-1.5 border">Sıfır başlangıcı</td><td class="p-1.5 border">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Analitik Parçalı Tanım:</span>
+            $$x(2 - t) = \begin{cases}
+              0, & t < 0 \\
+              t, & 0 < t < 1 \\
+              2, & 1 < t < 2 \\
+              1, & 2 < t < 3 \\
+              3 - t, & 3 < t < 4 \\
+              0, & t > 4
+            \end{cases}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Destek Aralığı:</strong> $t \in [0, 4]$. Dikkat edilirse orijinalde sağda olan pozitif rampa ($1 < t < 2$), terslemeden sonra sol tarafa ($0 < t < 1$) geçmiştir!
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (c) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">c</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_c(t) = x(2t + 1)$ — Zaman Ölçekleme ve Sola Öteleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-emerald-50 text-emerald-800 rounded-lg">2 Kat Sıkıştırma + Sola 0.5 Birim</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Hayati Kural:</strong> $x(2t + 1) = x\left(2\left(t + \frac{1}{2}\right)\right)$.
+            </p>
+            <p>
+              Öteleme miktarı $+1$ değil, <strong>$\mathbf{+1/2}$</strong> birimdir! Sıralama:
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>Önce $x(t)$ sinyali <strong>1 birim sola</strong> kaydırılarak $x(t + 1)$ bulunur.</li>
+              <li>Ardından zaman ekseni 2 katsayısı ile sıkıştırılır ($t \to 2t$). Tüm zaman koordinatları yarıya bölünür.</li>
+              <li>Veya eşitleme yoluyla: $2t + 1 = \tau \implies t = \frac{\tau - 1}{2}$.</li>
+            </ul>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse border border-slate-200 rounded-lg">
+                <thead class="bg-slate-50 font-bold text-slate-700">
+                  <tr>
+                    <th class="p-2 border border-slate-200">Orijinal $\tau$</th>
+                    <th class="p-2 border border-slate-200">Yeni $t = (\tau - 1)/2$</th>
+                    <th class="p-2 border border-slate-200">Genlik Değeri</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono">
+                  <tr><td class="p-1.5 border">-2</td><td class="p-1.5 border">-1.5</td><td class="p-1.5 border">-1</td></tr>
+                  <tr><td class="p-1.5 border">-1</td><td class="p-1.5 border">-1.0</td><td class="p-1.5 border">0 &rarr; 1</td></tr>
+                  <tr><td class="p-1.5 border">0</td><td class="p-1.5 border">-0.5</td><td class="p-1.5 border">1 &rarr; 2</td></tr>
+                  <tr><td class="p-1.5 border">1</td><td class="p-1.5 border">0.0</td><td class="p-1.5 border">2 &rarr; 1</td></tr>
+                  <tr><td class="p-1.5 border">2</td><td class="p-1.5 border">0.5</td><td class="p-1.5 border">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Analitik Parçalı Tanım:</span>
+            $$x(2t + 1) = \begin{cases}
+              0, & t < -1.5 \\
+              2t + 2, & -1.5 < t < -1 \\
+              1, & -1 < t < -0.5 \\
+              2, & -0.5 < t < 0 \\
+              1 - 2t, & 0 < t < 0.5 \\
+              0, & t > 0.5
+            \end{cases}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Destek Aralığı:</strong> $t \in [-1.5, 0.5]$. Toplam sinyal genişliği 4 birimden ($2 - (-2) = 4$) tam yarıya, yani 2 birime inmiştir ($0.5 - (-1.5) = 2$). Eğimler ise 2 katına çıkmıştır ($\pm 1 \to \pm 2$).
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (d) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">d</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_d(t) = x(4 - t/2)$ — Zaman Genişletme, Tersleme ve Öteleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-purple-50 text-purple-800 rounded-lg">2 Kat Genişletme + Yansıma + Sağa 8</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>İnceleme ve Paranteze Alma:</strong>
+              $$x\left(4 - \frac{t}{2}\right) = x\left(-\frac{1}{2}(t - 8)\right)$$
+            </p>
+            <p>
+              Burada katsayı $-\frac{1}{2}$ olduğundan sinyal <strong>2 kat yatay olarak genişler</strong>, <strong>terslenir</strong> ve <strong>8 birim sağa</strong> ötelenir.
+            </p>
+            <p>
+              Cebirsel eşitleme: $4 - \frac{t}{2} = \tau \implies \frac{t}{2} = 4 - \tau \implies t = 8 - 2\tau$.
+            </p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse border border-slate-200 rounded-lg">
+                <thead class="bg-slate-50 font-bold text-slate-700">
+                  <tr>
+                    <th class="p-2 border border-slate-200">Orijinal $\tau$</th>
+                    <th class="p-2 border border-slate-200">Yeni $t = 8 - 2\tau$</th>
+                    <th class="p-2 border border-slate-200">Genlik Değeri</th>
+                  </tr>
+                </thead>
+                <tbody class="font-mono">
+                  <tr><td class="p-1.5 border">-2</td><td class="p-1.5 border">12</td><td class="p-1.5 border">-1 &rarr; 0</td></tr>
+                  <tr><td class="p-1.5 border">-1</td><td class="p-1.5 border">10</td><td class="p-1.5 border">0 &rarr; 1</td></tr>
+                  <tr><td class="p-1.5 border">0</td><td class="p-1.5 border">8</td><td class="p-1.5 border">1 &rarr; 2</td></tr>
+                  <tr><td class="p-1.5 border">1</td><td class="p-1.5 border">6</td><td class="p-1.5 border">2 &rarr; 1</td></tr>
+                  <tr><td class="p-1.5 border">2</td><td class="p-1.5 border">4</td><td class="p-1.5 border">0</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Analitik Parçalı Tanım:</span>
+            $$x\left(4 - \frac{t}{2}\right) = \begin{cases}
+              0, & t < 4 \\
+              \frac{t}{2} - 2, & 4 < t < 6 \\
+              2, & 6 < t < 8 \\
+              1, & 8 < t < 10 \\
+              5 - \frac{t}{2}, & 10 < t < 12 \\
+              0, & t > 12
+            \end{cases}$$
+            <p class="text-[11px] text-slate-500">
+              💡 <strong>Destek Aralığı:</strong> $t \in [4, 12]$. Toplam sinyal genişliği 4 birimden tam 8 birime ($12 - 4 = 8$) çıkmıştır. Eğimler yarıya inmiştir ($\pm 1 \to \pm 0.5$).
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <!-- (e) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">e</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_e(t) = [x(t) + x(-t)]u(t)$ — Çift Bileşen ve Basamak Pencereleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-sky-50 text-sky-800 rounded-lg">2 &bull; Çift Bileşen (t &ge; 0)</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Matematiksel Yapı:</strong> $x(t) + x(-t) = 2 \cdot \mathcal{E}v\{x(t)\}$ ifadesi, sinyalin çift (even) simetrik kısmının 2 katıdır. $u(t)$ ile çarpım ise $t < 0$ bölgesini tamamen sıfırlayan bir <strong>yarı-düzlem pencereleyicidir</strong>.
+            </p>
+            <p>
+              Dolayısıyla $t < 0$ için $y_e(t) = 0$'dır. Yalnızca $t > 0$ aralığını incelemek yeterlidir:
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li><strong>$0 < t < 1$ Aralığı:</strong> $x(t) = 2$. $-t \in (-1, 0)$ olduğundan $x(-t) = 1$'dir. Toplam: $2 + 1 = \mathbf{3}$.</li>
+              <li><strong>$1 < t < 2$ Aralığı:</strong> $x(t) = 2 - t$. $-t \in (-2, -1)$ olduğundan $x(-t) = (-t) + 1 = 1 - t$. Toplam: $(2 - t) + (1 - t) = \mathbf{3 - 2t}$.</li>
+              <li><strong>$t > 2$ Aralığı:</strong> $x(t) = 0$ ve $x(-t) = 0 \implies \mathbf{0}$.</li>
+            </ul>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Analitik Parçalı Tanım:</span>
+            $$y_e(t) = \begin{cases}
+              0, & t < 0 \\
+              3, & 0 < t < 1 \\
+              3 - 2t, & 1 < t < 2 \\
+              0, & t > 2
+            \end{cases}$$
+            <div class="p-3 bg-amber-50/70 border border-amber-200 rounded-xl space-y-1">
+              <span class="font-bold text-amber-900 block">⚠️ Kritik Süreksizlikler (Jumps):</span>
+              <p class="text-[11px] text-amber-800">
+                &bull; $t = 0$'da $0$'dan $3$'e sıçrama vardır.<br>
+                &bull; $t = 1$'de $3$'ten $3 - 2(1) = 1$'e ani düşüş vardır.<br>
+                &bull; $t = 2$'de $3 - 2(2) = -1$'den $0$'a ani sıçrama vardır!
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- (f) ŞIKKI KARTI -->
+      <article class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-black flex items-center justify-center text-sm">f</span>
+            <h3 class="text-lg font-bold text-slate-900">$y_f(t) = x(t)\left[\delta(t + 1.5) - \delta(t - 1.5)\right]$ — Dirac Darbe Örnekleme</h3>
+          </div>
+          <span class="text-xs font-semibold px-2.5 py-1 bg-rose-50 text-rose-800 rounded-lg">Eleme (Sifting) Özelliği</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-600 leading-relaxed">
+          <div class="space-y-3">
+            <p>
+              <strong>Eleme / Örnekleme (Sifting Property):</strong> Dirac delta fonksiyonu sürekli bir $f(t)$ fonksiyonu ile çarpıldığında:
+              $$f(t)\delta(t - t_0) = f(t_0)\delta(t - t_0)$$
+            </p>
+            <p>
+              Bu özelliği ifademize terim terim uygulayalım:
+              $$y_f(t) = x(-1.5)\,\delta(t + 1.5) - x(1.5)\,\delta(t - 1.5)$$
+            </p>
+            <p>
+              Şimdi orijinal $x(t)$ sinyalinin $t = -1.5$ ve $t = 1.5$ anlarındaki değerlerini bulalım:
+            </p>
+            <ul class="list-disc list-inside space-y-1">
+              <li>$t = -1.5 \in (-2, -1) \implies x(-1.5) = -1.5 + 1 = \mathbf{-0.5} = -\frac{1}{2}$</li>
+              <li>$t = 1.5 \in (1, 2) \implies x(1.5) = 2 - 1.5 = \mathbf{0.5} = \frac{1}{2}$</li>
+            </ul>
+          </div>
+          <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <span class="font-bold text-slate-800 block">Nihai Sonuç:</span>
+            $$y_f(t) = -\frac{1}{2}\,\delta(t + 1.5) - \frac{1}{2}\,\delta(t - 1.5)$$
+            <div class="p-3 bg-rose-50/70 border border-rose-200 rounded-xl space-y-1.5">
+              <span class="font-bold text-rose-900 block">Grafiksel Gösterim (İki Adet Negatif Darbe):</span>
+              <p class="text-[11px] text-rose-800">
+                1. $t = -1.5$ noktasında aşağı yönlü, alanı (ağırlığı) <strong>$-1/2$</strong> olan bir Dirac oku.<br>
+                2. $t = +1.5$ noktasında aşağı yönlü, alanı (ağırlığı) <strong>$-1/2$</strong> olan bir Dirac oku.<br>
+                Sinyal bu iki nokta haricinde her yerde tam olarak sıfırdır!
+              </p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ÖZET KARŞILAŞTIRMA MATRİSİ TABLOSU -->
+    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+      <h3 class="text-lg font-bold text-slate-900">Tüm Sinyallerin Karşılaştırmalı Özet Matrisi</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse border border-slate-200 rounded-xl text-xs">
+          <thead class="bg-slate-100 font-bold text-slate-700">
+            <tr>
+              <th class="p-3 border border-slate-200">Sinyal</th>
+              <th class="p-3 border border-slate-200">Dönüşüm Tipi</th>
+              <th class="p-3 border border-slate-200">Destek Aralığı (Support)</th>
+              <th class="p-3 border border-slate-200">Genişlik ($\Delta t$)</th>
+              <th class="p-3 border border-slate-200">Maksimum Genlik</th>
+              <th class="p-3 border border-slate-200">Minimum Genlik</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 font-mono text-slate-600">
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">$x(t)$</td>
+              <td class="p-3 font-sans">Orijinal Sinyal</td>
+              <td class="p-3">[-2, 2]</td>
+              <td class="p-3">4 birim</td>
+              <td class="p-3 text-emerald-600 font-bold">+2</td>
+              <td class="p-3 text-rose-600 font-bold">-1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(a) $x(t - 1)$</td>
+              <td class="p-3 font-sans">Zaman Gecikmesi (+1 sağa)</td>
+              <td class="p-3">[-1, 3]</td>
+              <td class="p-3">4 birim</td>
+              <td class="p-3 text-emerald-600 font-bold">+2</td>
+              <td class="p-3 text-rose-600 font-bold">-1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(b) $x(2 - t)$</td>
+              <td class="p-3 font-sans">Tersleme + Sağa 2 birim</td>
+              <td class="p-3">[0, 4]</td>
+              <td class="p-3">4 birim</td>
+              <td class="p-3 text-emerald-600 font-bold">+2</td>
+              <td class="p-3 text-rose-600 font-bold">-1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(c) $x(2t + 1)$</td>
+              <td class="p-3 font-sans">2x Sıkıştırma + Sola 0.5 birim</td>
+              <td class="p-3">[-1.5, 0.5]</td>
+              <td class="p-3 text-indigo-600 font-bold">2 birim</td>
+              <td class="p-3 text-emerald-600 font-bold">+2</td>
+              <td class="p-3 text-rose-600 font-bold">-1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(d) $x(4 - t/2)$</td>
+              <td class="p-3 font-sans">2x Genişletme + Tersleme + Sağa 8</td>
+              <td class="p-3">[4, 12]</td>
+              <td class="p-3 text-purple-600 font-bold">8 birim</td>
+              <td class="p-3 text-emerald-600 font-bold">+2</td>
+              <td class="p-3 text-rose-600 font-bold">-1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(e) $[x(t)+x(-t)]u(t)$</td>
+              <td class="p-3 font-sans">Çift simetri toplamı ve $t \ge 0$ pencereleme</td>
+              <td class="p-3">[0, 2]</td>
+              <td class="p-3">2 birim</td>
+              <td class="p-3 text-emerald-600 font-bold">+3</td>
+              <td class="p-3 text-rose-600 font-bold">-1</td>
+            </tr>
+            <tr class="hover:bg-slate-50">
+              <td class="p-3 font-bold text-slate-900">(f) $x(t)[\delta(...) - \delta(...)]$</td>
+              <td class="p-3 font-sans">Darbe Örnekleme (Sifting)</td>
+              <td class="p-3">{-1.5, 1.5}</td>
+              <td class="p-3">Ayrık 2 Nokta</td>
+              <td class="p-3">Ağırlık: -0.5</td>
+              <td class="p-3">Ağırlık: -0.5</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- CANVASS VE ETKİLEŞİM JAVASCRIPT KODLARI -->
+  <script>
+    // Matematiksel x(t) tanımı
+    function xVal(t) {
+      if (t < -2) return 0;
+      if (t < -1) return t + 1;
+      if (t < 0) return 1;
+      if (t < 1) return 2;
+      if (t < 2) return 2 - t;
+      return 0;
+    }
+
+    // Alt problem fonksiyonları
+    function sigVal(mode, t, paramA = 1, paramB = 0) {
+      switch(mode) {
+        case 'orig': return xVal(t);
+        case 'a': return xVal(t - 1);
+        case 'b': return xVal(2 - t);
+        case 'c': return xVal(2 * t + 1);
+        case 'd': return xVal(4 - t / 2);
+        case 'e': return (t < 0) ? 0 : (xVal(t) + xVal(-t));
+        case 'lab': return xVal(paramA * t + paramB);
+        default: return 0;
+      }
+    }
+
+    let currentMode = 'orig';
+    let isLabMode = false;
+    let labA = 1.0;
+    let labB = 0.0;
+
+    const mainCanvas = document.getElementById('mainCanvas');
+    const ctx = mainCanvas.getContext('2d');
+    const chkGhost = document.getElementById('chkGhost');
+    const hoverTooltip = document.getElementById('hoverTooltip');
+
+    function getDomain(mode) {
+      if (mode === 'd') return { tMin: 2, tMax: 14, yMin: -2.0, yMax: 3.5 };
+      if (mode === 'b') return { tMin: -1, tMax: 5, yMin: -2.0, yMax: 3.5 };
+      if (mode === 'e') return { tMin: -1, tMax: 3, yMin: -2.0, yMax: 4.0 };
+      if (mode === 'lab') {
+        return { tMin: -6, tMax: 14, yMin: -2.5, yMax: 4.0 };
+      }
+      return { tMin: -3.5, tMax: 4.5, yMin: -2.0, yMax: 3.5 };
+    }
+
+    function renderPlot(canvas, targetCtx, mode, showGhost = true, customA = 1, customB = 0) {
+      const W = canvas.width;
+      const H = canvas.height;
+      const domain = getDomain(mode);
+      const { tMin, tMax, yMin, yMax } = domain;
+
+      function toX(t) { return (t - tMin) / (tMax - tMin) * (W - 80) + 50; }
+      function toY(y) { return H - 50 - (y - yMin) / (yMax - yMin) * (H - 90); }
+
+      // Arka plan
+      targetCtx.fillStyle = '#0f172a';
+      targetCtx.fillRect(0, 0, W, H);
+
+      // Izgara
+      targetCtx.strokeStyle = '#1e293b';
+      targetCtx.lineWidth = 1;
+      const tStep = (tMax - tMin) > 8 ? 2 : 1;
+      for (let t = Math.ceil(tMin); t <= Math.floor(tMax); t += tStep) {
+        const x = toX(t);
+        targetCtx.beginPath();
+        targetCtx.moveTo(x, 20);
+        targetCtx.lineTo(x, H - 35);
+        targetCtx.stroke();
+      }
+      for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y += 1) {
+        const cy = toY(y);
+        targetCtx.beginPath();
+        targetCtx.moveTo(40, cy);
+        targetCtx.lineTo(W - 20, cy);
+        targetCtx.stroke();
+      }
+
+      // Eksenler
+      const origX = toX(0);
+      const origY = toY(0);
+
+      targetCtx.strokeStyle = '#64748b';
+      targetCtx.lineWidth = 1.5;
+
+      // Yatay t ekseni
+      targetCtx.beginPath();
+      targetCtx.moveTo(35, origY);
+      targetCtx.lineTo(W - 20, origY);
+      targetCtx.stroke();
+
+      // Dikey genlik ekseni
+      targetCtx.beginPath();
+      targetCtx.moveTo(origX, 20);
+      targetCtx.lineTo(origX, H - 30);
+      targetCtx.stroke();
+
+      // Eksen Etiketleri
+      targetCtx.fillStyle = '#94a3b8';
+      targetCtx.font = '12px sans-serif';
+      targetCtx.textAlign = 'center';
+      for (let t = Math.ceil(tMin); t <= Math.floor(tMax); t += tStep) {
+        if (Math.abs(t) < 0.001) continue;
+        targetCtx.fillText(t.toString(), toX(t), origY + 18);
+      }
+      targetCtx.fillText('0', origX - 10, origY + 18);
+      targetCtx.fillText('t', W - 15, origY + 18);
+
+      targetCtx.textAlign = 'right';
+      for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y += 1) {
+        if (Math.abs(y) < 0.001) continue;
+        targetCtx.fillText(y.toString(), origX - 8, toY(y) + 4);
+      }
+
+      // Hayalet Orijinal x(t)
+      if (showGhost && mode !== 'orig') {
+        targetCtx.save();
+        targetCtx.strokeStyle = '#475569';
+        targetCtx.setLineDash([4, 4]);
+        targetCtx.lineWidth = 1.5;
+        targetCtx.beginPath();
+        let started = false;
+        const steps = 600;
+        for (let i = 0; i <= steps; i++) {
+          const t = tMin + (tMax - tMin) * (i / steps);
+          const y = xVal(t);
+          const px = toX(t);
+          const py = toY(y);
+          if (!started) { targetCtx.moveTo(px, py); started = true; }
+          else targetCtx.lineTo(px, py);
+        }
+        targetCtx.stroke();
+        targetCtx.restore();
+      }
+
+      // Ana Sinyal Çizimi
+      if (mode === 'f') {
+        // (f) Şıkkı: Dirac Darbeleri
+        const impulses = [
+          { t: -1.5, weight: -0.5, label: '-0.5 δ(t + 1.5)' },
+          { t: 1.5, weight: -0.5, label: '-0.5 δ(t - 1.5)' }
+        ];
+
+        // Sıfır taban çizgisi
+        targetCtx.strokeStyle = '#6366f1';
+        targetCtx.lineWidth = 2;
+        targetCtx.beginPath();
+        targetCtx.moveTo(toX(tMin), origY);
+        targetCtx.lineTo(toX(tMax), origY);
+        targetCtx.stroke();
+
+        impulses.forEach(imp => {
+          const ix = toX(imp.t);
+          const iy = toY(imp.weight);
+
+          targetCtx.strokeStyle = '#f43f5e';
+          targetCtx.lineWidth = 3;
+          targetCtx.beginPath();
+          targetCtx.moveTo(ix, origY);
+          targetCtx.lineTo(ix, iy);
+          targetCtx.stroke();
+
+          // Ok başı (aşağı yönlü)
+          targetCtx.fillStyle = '#f43f5e';
+          targetCtx.beginPath();
+          targetCtx.moveTo(ix, iy - 4);
+          targetCtx.lineTo(ix - 6, iy - 14);
+          targetCtx.lineTo(ix + 6, iy - 14);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Nokta
+          targetCtx.beginPath();
+          targetCtx.arc(ix, origY, 4, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          // Etiket
+          targetCtx.fillStyle = '#fda4af';
+          targetCtx.font = 'bold 12px monospace';
+          targetCtx.textAlign = 'center';
+          targetCtx.fillText(imp.label, ix, iy + 20);
+        });
+      } else {
+        // Sürekli Dalga Çizimi
+        targetCtx.strokeStyle = (mode === 'lab') ? '#38bdf8' : '#818cf8';
+        targetCtx.lineWidth = 3;
+        targetCtx.beginPath();
+
+        const samples = 1000;
+        let prevY = sigVal(mode, tMin, customA, customB);
+        let prevT = tMin;
+        targetCtx.moveTo(toX(tMin), toY(prevY));
+
+        for (let i = 1; i <= samples; i++) {
+          const t = tMin + (tMax - tMin) * (i / samples);
+          const y = sigVal(mode, t, customA, customB);
+          const px = toX(t);
+          const py = toY(y);
+
+          // Ani süreksizlik tespiti
+          if (Math.abs(y - prevY) > 0.4 && Math.abs(t - prevT) < 0.05) {
+            targetCtx.lineTo(toX(t), toY(prevY));
+            targetCtx.lineTo(px, py);
+          } else {
+            targetCtx.lineTo(px, py);
+          }
+          prevY = y;
+          prevT = t;
+        }
+        targetCtx.stroke();
+      }
+
+      // Grafik Başlığı
+      targetCtx.fillStyle = '#f8fafc';
+      targetCtx.font = 'bold 14px sans-serif';
+      targetCtx.textAlign = 'left';
+      let title = "Orijinal x(t)";
+      if (mode === 'a') title = "(a) x(t - 1) — Sağa 1 Gecikme";
+      if (mode === 'b') title = "(b) x(2 - t) — Tersleme & Sağa 2";
+      if (mode === 'c') title = "(c) x(2t + 1) — 2x Sıkıştırma & Sola 0.5";
+      if (mode === 'd') title = "(d) x(4 - t/2) — 2x Genişletme & Sağa 8";
+      if (mode === 'e') title = "(e) [x(t) + x(-t)] u(t) — Çift Simetri";
+      if (mode === 'f') title = "(f) x(t)[δ(t + 1.5) - δ(t - 1.5)] — Darbe Örnekleme";
+      if (mode === 'lab') title = `Laboratuvar: x(${customA.toFixed(2)} t + ${customB.toFixed(2)})`;
+
+      targetCtx.fillText(title, 55, 38);
+    }
+
+    function updateMainCanvas() {
+      renderPlot(mainCanvas, ctx, currentMode, chkGhost.checked, labA, labB);
+    }
+
+    // Sekme Butonları
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const mode = btn.dataset.mode;
+
+        if (mode === 'all') {
+          document.getElementById('singleCanvasContainer').classList.add('hidden');
+          document.getElementById('gridCanvasContainer').classList.remove('hidden');
+          buildGrid();
+        } else {
+          document.getElementById('singleCanvasContainer').classList.remove('hidden');
+          document.getElementById('gridCanvasContainer').classList.add('hidden');
+          currentMode = mode;
+          isLabMode = false;
+          updateMainCanvas();
+        }
+      });
+    });
+
+    chkGhost.addEventListener('change', updateMainCanvas);
+
+    // Fare ile Etkileşim ve Tooltip
+    mainCanvas.addEventListener('mousemove', (e) => {
+      if (currentMode === 'f') {
+        hoverTooltip.classList.add('hidden');
+        return;
+      }
+      const rect = mainCanvas.getBoundingClientRect();
+      const scaleX = mainCanvas.width / rect.width;
+      const mouseX = (e.clientX - rect.left) * scaleX;
+
+      const domain = getDomain(currentMode);
+      const { tMin, tMax } = domain;
+      const t = tMin + (mouseX - 50) / (mainCanvas.width - 80) * (tMax - tMin);
+
+      if (t >= tMin && t <= tMax) {
+        const y = sigVal(currentMode, t, labA, labB);
+        hoverTooltip.textContent = `t = ${t.toFixed(2)}  |  y(t) = ${y.toFixed(2)}`;
+        hoverTooltip.classList.remove('hidden');
+      } else {
+        hoverTooltip.classList.add('hidden');
+      }
+    });
+
+    mainCanvas.addEventListener('mouseleave', () => {
+      hoverTooltip.classList.add('hidden');
+    });
+
+    // 6'lı Izgara Oluşturucu
+    function buildGrid() {
+      const container = document.getElementById('gridCanvasContainer');
+      container.innerHTML = '';
+      const modes = [
+        { id: 'a', title: '(a) x(t - 1)' },
+        { id: 'b', title: '(b) x(2 - t)' },
+        { id: 'c', title: '(c) x(2t + 1)' },
+        { id: 'd', title: '(d) x(4 - t/2)' },
+        { id: 'e', title: '(e) [x(t)+x(-t)]u(t)' },
+        { id: 'f', title: '(f) Darbe Örnekleme' }
+      ];
+
+      modes.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'bg-slate-900 rounded-2xl p-3 border border-slate-800 space-y-2';
+        const titleEl = document.createElement('div');
+        titleEl.className = 'text-xs font-bold text-slate-300 px-1';
+        titleEl.textContent = m.title;
+        const cvs = document.createElement('canvas');
+        cvs.width = 500;
+        cvs.height = 250;
+        cvs.className = 'w-full h-auto rounded-xl';
+        card.appendChild(titleEl);
+        card.appendChild(cvs);
+        container.appendChild(card);
+
+        const subCtx = cvs.getContext('2d');
+        renderPlot(cvs, subCtx, m.id, true);
+      });
+    }
+
+    // Canlı Dönüşüm Laboratuvarı Slider Dinleyicileri
+    const sliderA = document.getElementById('sliderA');
+    const sliderB = document.getElementById('sliderB');
+    const valA = document.getElementById('valA');
+    const valB = document.getElementById('valB');
+    const labFormulaDisplay = document.getElementById('labFormulaDisplay');
+    const labInterpretation = document.getElementById('labInterpretation');
+
+    function updateLab() {
+      labA = parseFloat(sliderA.value);
+      labB = parseFloat(sliderB.value);
+      valA.textContent = `a = ${labA.toFixed(2)}`;
+      valB.textContent = `b = ${labB.toFixed(2)}`;
+
+      const sign = labB >= 0 ? '+' : '-';
+      labFormulaDisplay.textContent = `x(${labA.toFixed(2)} t ${sign} ${Math.abs(labB).toFixed(2)})`;
+
+      let note = [];
+      if (Math.abs(labA - 1) < 0.01 && Math.abs(labB) < 0.01) {
+        note.push("Orijinal sinyal durumundasınız.");
+      } else {
+        if (labA < 0) note.push("Zaman tersleme (ayna yansıması)");
+        if (Math.abs(labA) > 1) note.push(`${Math.abs(labA)}x zaman sıkıştırması (sinyal hızlandı)`);
+        else if (Math.abs(labA) < 1 && Math.abs(labA) > 0.01) note.push(`${(1/Math.abs(labA)).toFixed(1)}x zaman genişletmesi (sinyal yavaşladı)`);
+
+        const shift = -labB / (labA || 1);
+        if (shift > 0) note.push(`${shift.toFixed(2)} birim sağa ötelenmiş (gecikme)`);
+        else if (shift < 0) note.push(`${Math.abs(shift).toFixed(2)} birim sola ötelenmiş (ilerleme)`);
+      }
+      labInterpretation.textContent = note.join(" • ");
+
+      currentMode = 'lab';
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('singleCanvasContainer').classList.remove('hidden');
+      document.getElementById('gridCanvasContainer').classList.add('hidden');
+      updateMainCanvas();
+    }
+
+    sliderA.addEventListener('input', updateLab);
+    sliderB.addEventListener('input', updateLab);
+
+    // PNG İndirme Butonu
+    document.getElementById('btnExport').addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = `Problem_1_21_${currentMode}.png`;
+      link.href = mainCanvas.toDataURL('image/png');
+      link.click();
+    });
+
+    // İlk Çizim
+    updateMainCanvas();
+  </script>
+</body>
+</html>

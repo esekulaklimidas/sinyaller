@@ -78,11 +78,11 @@
       <!-- Sayaç İstatistikleri -->
       <div class="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-indigo-800/60 mt-8">
         <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
-          <div class="text-2xl sm:text-3xl font-black text-white">48</div>
+          <div class="text-2xl sm:text-3xl font-black text-white">49</div>
           <div class="text-xs text-indigo-200 font-medium">İnteraktif Web Çözümü</div>
         </div>
         <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
-          <div class="text-2xl sm:text-3xl font-black text-white">7</div>
+          <div class="text-2xl sm:text-3xl font-black text-white">8</div>
           <div class="text-xs text-indigo-200 font-medium">Ana Teori Kategorisi</div>
         </div>
         <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
@@ -112,7 +112,8 @@
 
       <!-- Kategori Filtreleme Butonları (Pills) -->
       <div class="flex flex-wrap items-center gap-1.5 pt-1 text-xs font-semibold" id="filterPills">
-        <button data-filter="all" class="filter-pill active px-3 py-1.5 bg-indigo-600 text-white rounded-lg shadow-sm transition">Tüm Problemler (48)</button>
+        <button data-filter="all" class="filter-pill active px-3 py-1.5 bg-indigo-600 text-white rounded-lg shadow-sm transition">Tüm Problemler (49)</button>
+          <button data-filter="cat-basic" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Temel Sinyaller (1)</button>
         <button data-filter="cat-conv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Konvolüsyon (17)</button>
         <button data-filter="cat-props" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Nedensellik &amp; Kararlılık (14)</button>
         <button data-filter="cat-diff" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Fark Denklemleri (4)</button>
@@ -133,6 +134,44 @@
     <!-- ========================================================================= -->
     <!-- BÖLÜM 1: KONVOLÜSYON İŞLEMLERİ VE TEMEL LTI YANITLARI (2.21 - 2.25) -->
     <!-- ========================================================================= -->
+        <!-- Bölüm 1: Temel Sinyal İşlemleri ve Dönüşümler -->
+    <section id="sec-temel-sinyaller" class="category-section space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4">
+        <div>
+          <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider">Bölüm 1 • Temel Problemler</span>
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900">
+            Temel Sinyal Dönüşümleri, Basamak Pencereleme ve Darbe Örnekleme
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-500">
+            Zaman ötelemesi, zaman terslemesi, zaman ölçeklemesi, bileşen analizi ve Dirac darbesi ile eleme (sifting) işlemleri.
+          </p>
+        </div>
+        <span class="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-xs font-bold border border-indigo-100">
+          1 İnteraktif Problem &bull; 6 Alt Çözüm
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Problem 1.21 Kartı -->
+        <a href="problem_1_21_surekli_zaman_sinyal_donusumleri.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-basic" data-domain="ct" data-keywords="1.21 temel sürekli zaman sinyal dönüşümleri zaman öteleme gecikme tersleme ölçekleme pencereleme dirac darbe sifting oppenheim">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md group-hover:bg-indigo-600 group-hover:text-white transition">Problem 1.21</span>
+            <span class="text-[10px] bg-sky-100 text-sky-700 px-2 py-0.5 rounded font-semibold">Sürekli Zaman (CT)</span>
+          </div>
+          <h3 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition">
+            Sürekli Zaman Sinyal Dönüşümleri (a &ndash; f Şıkları)
+          </h3>
+          <p class="text-xs text-slate-500 line-clamp-2">
+            $x(t-1)$, $x(2-t)$, $x(2t+1)$, $x(4-t/2)$, $[x(t)+x(-t)]u(t)$ ve $x(t)[\delta(t+1.5)-\delta(t-1.5)]$ sinyallerinin tam analitik çözümü ve etkileşimli simülatörü.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span>6 Alt Problem &bull; Canlı Simülatör</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
     <section id="sec-konvolusyon" class="category-section space-y-6">
       <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
         <div>
