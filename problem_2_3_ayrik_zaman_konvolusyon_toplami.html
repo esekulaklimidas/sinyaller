@@ -34,7 +34,10 @@
       </div>
       <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.3 — Ayrık Zaman Konvolüsyon Toplamı ve Geometrik Dizi Birikimi</h1>
       <p class="text-slate-600 text-sm leading-relaxed">
-        $$x[n] = \left(rac{1}{2}ight)^{n-2} u[n-2], \quad h[n] = u[n+2] \quad \Longrightarrow \quad y[n] = x[n] * h[n] = 2\left[1 - \left(rac{1}{2}ight)^{n+1}ight] u[n]$$
+        $$x[n] = \left(rac{1}{2}
+ight)^{n-2} u[n-2], \quad h[n] = u[n+2] \quad \Longrightarrow \quad y[n] = x[n] * h[n] = 2\left[1 - \left(rac{1}{2}
+ight)^{n+1}
+ight] u[n]$$
         Üstel girdi ile birim basamak yanıtının konvolüsyonu, sonlu geometrik seri toplam formülü kullanılarak kapalı formda elde edilir. Gecikme ve avans birbirini nötrler ($(-2) + (+2) = 0$).
       </p>
     </div>
@@ -175,7 +178,8 @@
       <h3 class="text-base font-bold text-slate-900">Durum 2: $n \ge 0$ (Örtüşme Aralığı $2 \le k \le n+2$)</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
         $n \ge 0 \implies n + 2 \ge 2$. Filtre $x[k]$ ile $k = 2$'den $k = n+2$'ye kadar örtüşür:
-        $$y[n] = \sum_{k=2}^{n+2} \left(rac{1}{2}ight)^{k-2} \cdot 1$$
+        $$y[n] = \sum_{k=2}^{n+2} \left(rac{1}{2}
+ight)^{k-2} \cdot 1$$
       </p>
       <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
         <img id="img4" class="w-full h-auto block" alt="4. Adım">
@@ -191,7 +195,10 @@
       <h3 class="text-base font-bold text-slate-900">Geometrik Seri Toplamı ve Kapalı Form</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
         $m = k - 2$ dönüşümü ile toplam $\sum_{m=0}^n (1/2)^m$ olur:
-        $$y[n] = rac{1 - (1/2)^{n+1}}{1 - 1/2} = 2\left[1 - \left(rac{1}{2}ight)^{n+1}ight] = 2 - \left(rac{1}{2}ight)^n \quad (n \ge 0)$$
+        $$y[n] = rac{1 - (1/2)^{n+1}}{1 - 1/2} = 2\left[1 - \left(rac{1}{2}
+ight)^{n+1}
+ight] = 2 - \left(rac{1}{2}
+ight)^n \quad (n \ge 0)$$
       </p>
       <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
         <img id="img5" class="w-full h-auto block" alt="5. Adım">
@@ -207,7 +214,11 @@
       <h3 class="text-base font-bold text-slate-900">Toplam Çıkış Sinyali $y[n]$ ve Asimptot</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
         İki durum birleştirildiğinde tüm zaman ekseninde tek kapalı form elde edilir:
-        $$y[n] = 2\left[1 - \left(rac{1}{2}ight)^{n+1}ight] u[n] = \left[2 - \left(rac{1}{2}ight)^night] u[n]$$
+        $$y[n] = 2\left[1 - \left(rac{1}{2}
+ight)^{n+1}
+ight] u[n] = \left[2 - \left(rac{1}{2}
+ight)^n
+ight] u[n]$$
         $n = 0 \implies y[0] = 1$. $n 	o \infty$ iken $y[n] 	o 2.0$ asimptotuna yaklaşır.
       </p>
       <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">

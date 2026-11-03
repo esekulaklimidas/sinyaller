@@ -34,7 +34,7 @@
       </div>
       <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.5 — Konvolüsyon Kısıtlarından Parametre ($N$) Belirleme</h1>
       <p class="text-slate-600 text-sm leading-relaxed">
-        $$x[n] = egin{cases} 1, & 0 \le n \le 9 \ 0, & 	ext{diğer} \end{cases}, \quad h[n] = egin{cases} 1, & 0 \le n \le N \ 0, & 	ext{diğer} \end{cases} \quad (N \le 9 	ext{ tam sayı})$$
+        $$x[n] = \begin{cases} 1, & 0 \le n \le 9 \ 0, & \text{diğer} \end{cases}, \quad h[n] = \begin{cases} 1, & 0 \le n \le N \ 0, & \text{diğer} \end{cases} \quad (N \le 9 \text{ tam sayı})$$
         Verilen $y[4] = 5$ ve $y[14] = 0$ kısıtları altında $N$ parametresinin tekil çözümü: <strong>$N = 4$</strong>.
       </p>
     </div>
@@ -138,7 +138,7 @@
       <h3 class="text-base font-bold text-slate-900">Sinyalleri $k$ İndeksinde Tanımlama ve Süreleri</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
         Giriş sinyali $x[k]$ ve birim dürtü yanıtı $h[k]$ sırasıyla $10$ ve $N+1$ uzunluğunda sonlu dikdörtgen darbelerdir:
-        $$x[k] = egin{cases} 1, & 0 \le k \le 9 \ 0, & 	ext{diğer} \end{cases}, \quad h[k] = egin{cases} 1, & 0 \le k \le N \ 0, & 	ext{diğer} \end{cases}$$
+        $$x[k] = \begin{cases} 1, & 0 \le k \le 9 \ 0, & \text{diğer} \end{cases}, \quad h[k] = \begin{cases} 1, & 0 \le k \le N \ 0, & \text{diğer} \end{cases}$$
         İki sinyalin konvolüsyonu $n = 0 + 0 = 0$'dan başlayıp $n = 9 + N$'ye kadar uzanır.
       </p>
       <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
@@ -206,7 +206,7 @@
       <h3 class="text-base font-bold text-slate-900">Kısıtların Kesişimi ve Tekil Çözüm: $N = 4$</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
         İki kısıtı birleştirdiğimizde:
-        $$egin{cases} y[4] = 5 \implies N \ge 4 \ y[14] = 0 \implies N \le 4 \end{cases} \quad \Longrightarrow \quad \mathbf{N = 4}$$
+        $$\begin{cases} y[4] = 5 \implies N \ge 4 \ y[14] = 0 \implies N \le 4 \end{cases} \quad \Longrightarrow \quad \mathbf{N = 4}$$
         $N = 4$ tam sayısı her iki koşulu da mükemmel ve tekil olarak sağlar.
       </p>
       <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
@@ -223,11 +223,11 @@
       <h3 class="text-base font-bold text-slate-900">N = 4 İçin Tam Çıkış Sinyali $y[n]$</h3>
       <p class="text-xs text-slate-600 leading-relaxed">
         $N = 4$ iken $h[n]$ uzunluğu $5$, $x[n]$ uzunluğu $10$'dur. Konvolüsyon $n = 0 \dots 13$ arasında yamuk biçimindedir:
-        $$y[n] = egin{cases}
+        $$y[n] = \begin{cases}
         n + 1, & 0 \le n \le 4 \quad (1, 2, 3, 4, 5) \
         5, & 4 \le n \le 9 \quad (5, 5, 5, 5, 5, 5) \
         14 - n, & 9 \le n \le 13 \quad (5, 4, 3, 2, 1) \
-        0, & n < 0 	ext{ veya } n \ge 14
+        0, & n < 0 \text{ veya } n \ge 14
         \end{cases}$$
         Görüldüğü gibi $y[4] = 5$ ve $y[14] = 0$ tam olarak sağlanır!
       </p>
