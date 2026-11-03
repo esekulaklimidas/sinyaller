@@ -1,315 +1,317 @@
 <!DOCTYPE html>
-<html lang="tr" class="scroll-smooth">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Problem 2.4 Görselleştirici — Sonlu Dikdörtgen Darbelerin Ayrık Konvolüsyonu (Oppenheim &amp; Willsky)</title>
+  <title>Problem 2.4 Konvolüsyon Görselleştirici — Dikdörtgen Darbeler</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
-    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
-    .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
-    .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
-
-  <!-- Üst Gezinme Çubuğu -->
-  <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
-          &larr;
-        </a>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-black text-slate-900">Problem 2.4</span>
-            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">Bölüm 2 &bull; Konvolüsyon</span>
-            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman</span>
-          </div>
-          <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 138</p>
-        </div>
-      </div>
-      <a href="index.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
-        Tüm Problemlere Dön &rarr;
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
       </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
     </div>
-  </header>
 
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.4</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.4 — Sonlu Dikdörtgen Darbelerin Konvolüsyon Toplamı ve Yamuk Yanıtı</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x[n] = \begin{cases} 1, & 3 \le n \le 8 \\ 0, & \text{diğer} \end{cases}, \quad h[n] = \begin{cases} 1, & 4 \le n \le 15 \\ 0, & \text{diğer} \end{cases} \quad \Longrightarrow \quad y[n] = x[n] * h[n] = \sum_{k=-\infty}^{\infty} x[k]h[n-k]$$
+        Farklı genişlikteki iki sonlu dikdörtgen darbenin ($L_x = 6$, $L_h = 12$) konvolüsyonu 5 parçalı bir yamuk dalga biçimi üretir. Çıkış $n \in [7, 23]$ aralığında aktiftir ve tepe genliği $\min(L_x, L_h) = 6$'dır.
+      </p>
+    </div>
 
-    <!-- Başlık ve Problem Tanım Kartı -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
         <div>
-          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; Doğrusal Zamanla Değişmeyen Sistemler</span>
-          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-            Sonlu Dikdörtgen Darbelerin Konvolüsyonu ve Yamuk Yanıt
-          </h1>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold">
-            2 Dikdörtgen Darbe
-          </span>
-          <span class="px-3 py-1 bg-indigo-50 text-indigo-800 border border-indigo-200 rounded-xl text-xs font-bold">
-            Tam Çözüm &bull; 6 Adım
-          </span>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Ayrık zamanlı dikdörtgen darbeler için konvolüsyon toplamı kuralları ve parçalı yamuk analizi</p>
         </div>
       </div>
 
-      <!-- Problem Açıklaması -->
-      <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
-        <p class="font-medium text-slate-800">
-          <strong>Problem 2.4:</strong> Aşağıdaki sonlu uzunluktaki iki ayrık-zaman dikdörtgen darbesinin konvolüsyonunu $y[n] = x[n] * h[n]$ hesaplayınız:
-        </p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
-            <span class="text-xs font-bold text-indigo-600 uppercase block font-mono">Girdi Sinyali $x[n]$</span>
-            <div class="text-center font-bold text-indigo-900 py-1">
-              $$x[n] = \begin{cases} 1, & 3 \le n \le 8 \\ 0, & \text{diğer} \end{cases}$$
-            </div>
-            <p class="text-[11px] text-slate-500 text-center">Genişlik: $L_x = 8 - 3 + 1 = 6$ örnek</p>
-          </div>
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
-            <span class="text-xs font-bold text-emerald-600 uppercase block font-mono">Dürtü Yanıtı $h[n]$</span>
-            <div class="text-center font-bold text-emerald-900 py-1">
-              $$h[n] = \begin{cases} 1, & 4 \le n \le 15 \\ 0, & \text{diğer} \end{cases}$$
-            </div>
-            <p class="text-[11px] text-slate-500 text-center">Genişlik: $L_h = 15 - 4 + 1 = 12$ örnek</p>
-          </div>
-        </div>
-
-        <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl text-xs text-indigo-950 font-medium">
-          <strong>Teorik Özellik:</strong> Farklı uzunluktaki ($L_1 \ne L_2$) iki dikdörtgen darbenin konvolüsyonu <strong>yamuk (trapezoidal)</strong> bir dalga biçimi üretir. Çıkışın toplam destek uzunluğu $L_y = L_x + L_h - 1 = 6 + 12 - 1 = 17$ örnek olup tepe genliği $\min(L_x, L_h) = 6$'dır.
-        </div>
-      </div>
-    </section>
-
-    <!-- Soru Analizi & Mini Konu Anlatımı Kartı (2.21 Formatı) -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-      <div class="border-b border-slate-100 pb-4">
-        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span>📖 Soru Analizi &amp; Mini Konu Anlatımı</span>
-        </h2>
-        <p class="text-xs text-slate-500 mt-1">Konvolüsyon toplamının adımları ve örtüşme sınırlarının sistematik analizi</p>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
-        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-            <span>📌 Soru Bizden Ne İstiyor?</span>
-          </h3>
-          <p class="text-xs leading-relaxed">
-            Ayrık-zaman konvolüsyon toplamı tanımı:
-            $$y[n] = \sum_{k=-\infty}^{\infty} x[k]\,h[n-k]$$
-          </p>
-          <ul class="text-xs space-y-1.5 list-disc list-inside text-slate-700">
-            <li>$x[k] = 1$ aralığı: $k \in [3, 8]$</li>
-            <li>$h[n-k] = 1$ koşulu: $4 \le n - k \le 15 \iff n - 15 \le k \le n - 4$</li>
-            <li>Çarpım $x[k]\cdot h[n-k]$ sadece bu iki pencerenin kesişiminde $1$, dışında $0$'dır.</li>
-            <li>$y[n]$, kesişim aralığındaki tam sayı $k$ değerlerinin sayısıdır!</li>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Fiziksel Model:</strong> $x[n]$ ($3 \le n \le 8$, $L_x = 6$) girişi, $h[n]$ ($4 \le n \le 15$, $L_h = 12$) dürtü yanıtına sahip bir LTI sisteme uygulanıyor.</li>
+            <li><strong>İstenen:</strong> $y[n] = x[n] * h[n]$ çıkış dizisini tüm $n \in \mathbb{Z}$ için kapalı parçalı formda hesaplamak ve çizmek.</li>
+            <li><strong>Kritik Nokta:</strong> Çıkış süresi $L_y = L_x + L_h - 1 = 6 + 12 - 1 = 17$ örnektir ($n \in [7, 23]$). Tepe genliği $\min(L_x, L_h) = 6$'dır.</li>
           </ul>
         </div>
 
-        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
-          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-            <span>💡 5 Parçalı Bölge Analizi</span>
-          </h3>
-          <div class="space-y-1.5 text-xs text-slate-700">
-            <p><strong>1. Bölge ($n < 7$):</strong> $n-4 < 3 \implies$ Hiç örtüşme yok, $y[n] = 0$.</p>
-            <p><strong>2. Bölge ($7 \le n \le 12$):</strong> $k \in [3, n-4] \implies y[n] = (n-4) - 3 + 1 = n - 6$. (Lineer artış: $1 \to 6$)</p>
-            <p><strong>3. Bölge ($12 \le n \le 18$):</strong> Küçük darbe tamamen içeride: $k \in [3, 8] \implies y[n] = 6$. (Sabit plato)</p>
-            <p><strong>4. Bölge ($19 \le n \le 23$):</strong> $k \in [n-15, 8] \implies y[n] = 8 - (n-15) + 1 = 24 - n$. (Lineer azalış: $5 \to 1$)</p>
-            <p><strong>5. Bölge ($n > 23$):</strong> $n-15 > 8 \implies$ Örtüşme bitti, $y[n] = 0$.</p>
-          </div>
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>İndeks Değişimi ($n \to k$):</strong> $x[k] = 1$ ($3 \le k \le 8$) ve $h[n-k] = 1$ ($n-15 \le k \le n-4$).</li>
+            <li><strong>Durum 1 ($n < 7$):</strong> $n - 4 < 3 \implies$ Kesişim yok $\implies y[n] = 0$.</li>
+            <li><strong>Durum 2 ($7 \le n \le 12$):</strong> $k \in [3, n-4] \implies y[n] = (n-4) - 3 + 1 = n - 6$. (Lineer artış: $1 \to 6$)</li>
+            <li><strong>Durum 3 ($12 \le n \le 18$):</strong> Tam örtüşme: $k \in [3, 8] \implies y[n] = 6$. (Sabit plato)</li>
+            <li><strong>Durum 4 ($19 \le n \le 23$):</strong> $k \in [n-15, 8] \implies y[n] = 8 - (n-15) + 1 = 24 - n$. (Lineer azalış: $5 \to 1$)</li>
+            <li><strong>Durum 5 ($n > 23$):</strong> $n - 15 > 8 \implies$ Örtüşme bitti $\implies y[n] = 0$.</li>
+          </ol>
         </div>
       </div>
-    </section>
-
-    <!-- Canlı Simülatör Kartı (2.21 Formatı - Çift Kanvas) -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
-        <div>
-          <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>⚡ Canlı Konvolüsyon Simülatörü</span>
-          </h2>
-          <p class="text-xs text-slate-500 mt-1">$n$ kaydırma indisini değiştirerek $k$-uzayındaki örtüşmeyi ve oluşan $y[n]$ değerini canlı izleyin</p>
-        </div>
-      </div>
-
-      <!-- Kontrol Paneli -->
-      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <button id="btnPrev" class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition shadow-sm">&larr; $n-1$</button>
-          <button id="btnPlay" class="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm">Oynat &#9658;</button>
-          <button id="btnNext" class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition shadow-sm">$n+1$ &rarr;</button>
-        </div>
-
-        <div class="flex items-center gap-3 flex-1 min-w-[240px] max-w-xs">
-          <span class="text-xs font-bold text-slate-600">Kaydırma $n$:</span>
-          <input type="range" id="sliderN" min="0" max="30" value="10" class="flex-1 accent-indigo-600 cursor-pointer">
-          <span id="labelN" class="text-xs font-black font-mono bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-lg w-8 text-center">10</span>
-        </div>
-      </div>
-
-      <!-- Çift Kanvas Alanı (2.21 Formatı) -->
-      <div class="space-y-4">
-        <!-- 1. Kanvas: k-Uzayı (Girdi, Kayan Sinyal ve Çarpım) -->
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-          <div class="flex justify-between items-center text-[11px] text-slate-400 font-mono">
-            <span>k-Uzayı: Sabit $x[k]$ (Mavi), Kayan $h[n-k]$ (Yeşil), Örtüşme $x[k]h[n-k]$ (Amber)</span>
-            <span class="text-indigo-400 font-bold" id="statusRegion">Bölge 2 (Artış)</span>
-          </div>
-          <canvas id="canvasTop" class="w-full bg-slate-900 rounded-xl block" style="height: 190px;"></canvas>
-        </div>
-
-        <!-- 2. Kanvas: n-Uzayı (Çıkış Sinyali y[n]) -->
-        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
-          <div class="flex justify-between items-center text-[11px] text-slate-400 font-mono">
-            <span>n-Uzayı: Oluşan Çıkış Sinyali $y[n] = x[n] * h[n]$ (Mor/İndigo Yamuk)</span>
-            <span class="text-amber-400 font-bold" id="statusVal">y[10] = 4</span>
-          </div>
-          <canvas id="canvasBottom" class="w-full bg-slate-900 rounded-xl block" style="height: 190px;"></canvas>
-        </div>
-      </div>
-
-      <!-- Canlı Matematiksel İfade Kutusu -->
-      <div id="simMath" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono text-slate-700 text-center">
-        <!-- Dinamik matematik ifadesi -->
-      </div>
-    </section>
-
-    <!-- 6 Adım Kartları (2.21 Formatı - Kart Başına PNG İndir Butonu ve Görsel) -->
-    <div class="space-y-8">
-
-      <!-- Adım 1 -->
-      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">1. Adım</span>
-            <h3 class="text-lg font-bold text-slate-900">Darbelerin Tanımı ve Taşıyıcı Aralıklar ($x[k]$ ve $h[k]$)</h3>
-          </div>
-          <button onclick="downloadCard('img1', 'problem_2_4_adim_1.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
-            <span>📥 PNG İndir</span>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Girdi sinyali $x[k]$, $k \in [3, 8]$ aralığında 1 değerini alan 6 örnek uzunluğunda bir darbedir. Dürtü yanıtı $h[k]$ ise $k \in [4, 15]$ aralığında 1 değerini alan 12 örnek uzunluğunda bir darbedir. Konvolüsyon integrali/toplamı için $k$ kukla değişkeni üzerinden eksen çizilir.
-        </p>
-        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
-          <img id="img1" class="max-w-full rounded-xl" alt="1. Adım">
-        </div>
-      </section>
-
-      <!-- Adım 2 -->
-      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">2. Adım</span>
-            <h3 class="text-lg font-bold text-slate-900">Çevir ve Kaydır: $h[n-k]$ Desteğinin Belirlenmesi</h3>
-          </div>
-          <button onclick="downloadCard('img2', 'problem_2_4_adim_2.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
-            <span>📥 PNG İndir</span>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          $h[k]$ zaman ekseninde ters çevrilir ($h[-k]$), desteği $[-15, -4]$ olur. Ardından $n$ birim sağa ötelenir ($h[n-k]$). Böylece $h[n-k]$'nın sıfırdan farklı olduğu pencere $[n-15, n-4]$ aralığı haline gelir. Bu pencerenin ön ucu $n-4$, arka ucu $n-15$'tir.
-        </p>
-        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
-          <img id="img2" class="max-w-full rounded-xl" alt="2. Adım">
-        </div>
-      </section>
-
-      <!-- Adım 3 -->
-      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">3. Adım</span>
-            <h3 class="text-lg font-bold text-slate-900">Bölge 1 ($n < 7$): Örtüşme Yok</h3>
-          </div>
-          <button onclick="downloadCard('img3', 'problem_2_4_adim_3.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
-            <span>📥 PNG İndir</span>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Kayan darbenin ön ucu $n-4$, sabit sinyalin başlangıç noktası olan $3$'e henüz ulaşmamıştır: $n - 4 < 3 \iff n < 7$. Kesişim kümesi boş kümedir: $[3, 8] \cap [n-15, n-4] = \emptyset$. Dolayısıyla $y[n] = 0$'dır.
-        </p>
-        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
-          <img id="img3" class="max-w-full rounded-xl" alt="3. Adım">
-        </div>
-      </section>
-
-      <!-- Adım 4 -->
-      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">4. Adım</span>
-            <h3 class="text-lg font-bold text-slate-900">Bölge 2 ($7 \le n \le 12$): Lineer Artış</h3>
-          </div>
-          <button onclick="downloadCard('img4', 'problem_2_4_adim_4.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
-            <span>📥 PNG İndir</span>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Kayan darbe içeri doğru girmektedir: $3 \le n-4 \le 8$ ve arka uç henüz $3$'ü geçmemiştir ($n-15 < 3 \iff n < 18$). Ortak aralık $k \in [3, n-4]$'tür. Örtüşen örnek sayısı:
-          $$y[n] = \sum_{k=3}^{n-4} 1 = (n-4) - 3 + 1 = n - 6$$
-          $n=7 \implies y[7]=1$, $n=12 \implies y[12]=6$.
-        </p>
-        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
-          <img id="img4" class="max-w-full rounded-xl" alt="4. Adım">
-        </div>
-      </section>
-
-      <!-- Adım 5 -->
-      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">5. Adım</span>
-            <h3 class="text-lg font-bold text-slate-900">Bölge 3 ($12 \le n \le 18$): Tam Örtüşme (Plato)</h3>
-          </div>
-          <button onclick="downloadCard('img5', 'problem_2_4_adim_5.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
-            <span>📥 PNG İndir</span>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          Kısa olan $x[k]$ darbesi ($L_x=6$), daha uzun olan $h[n-k]$ penceresinin ($L_h=12$) tamamen içine girmiştir. $n-4 \ge 8$ ve $n-15 \le 3$'tür. Kesişim aralığı $[3, 8]$ sabit kalır:
-          $$y[n] = \sum_{k=3}^{8} 1 = 8 - 3 + 1 = 6$$
-          Bu bölgede çıkış genliği sabit kalıp yamuğun üst düzlüğünü (platosunu) oluşturur.
-        </p>
-        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
-          <img id="img5" class="max-w-full rounded-xl" alt="5. Adım">
-        </div>
-      </section>
-
-      <!-- Adım 6 -->
-      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">6. Adım</span>
-            <h3 class="text-lg font-bold text-slate-900">Bölge 4 &amp; 5 ($19 \le n \le 23$ ve $n > 23$): Lineer Azalış ve Çıkış Yanıtı</h3>
-          </div>
-          <button onclick="downloadCard('img6', 'problem_2_4_adim_6.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
-            <span>📥 PNG İndir</span>
-          </button>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          $n-15 > 3$ olduğunda arka uç $x[k]$'nin içine girer. Kesişim aralığı $k \in [n-15, 8]$ olur. Örnek sayısı:
-          $$y[n] = \sum_{k=n-15}^{8} 1 = 8 - (n-15) + 1 = 24 - n$$
-          $n=19 \implies y[19]=5$, $n=23 \implies y[23]=1$. $n > 23$ için $n-15 > 8$ olur ve örtüşme tamamen biter: $y[n] = 0$.
-        </p>
-        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
-          <img id="img6" class="max-w-full rounded-xl" alt="6. Adım">
-        </div>
-      </section>
-
     </div>
 
-  </main>
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Ayrık Zamanlı Konvolüsyon Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte $k$ uzayında $x[k]$ ve $h[n-k]$ örnekleri ile örtüşen çarpım terimleri; altta $y[n]$ çıkış dizisi.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-semibold text-slate-600">n:</label>
+            <input type="range" id="nSlider" min="0" max="30" step="1" value="10" class="w-36 accent-purple-600 cursor-pointer">
+            <span id="nVal" class="text-xs font-mono font-bold bg-slate-100 px-2 py-1 rounded text-slate-800">n = 10</span>
+          </div>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Üst Kanvas: k uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>$k$ Uzayı: <span class="text-blue-600">■ x[k]</span> &nbsp;|&nbsp; <span class="text-purple-600">■ h[n-k]</span> &nbsp;|&nbsp; <span class="text-amber-600">■ x[k]h[n-k] (Örtüşen Çarpım)</span></span>
+          <span class="text-slate-400">Ayrık Zaman Örnekleri (Stems)</span>
+        </div>
+        <canvas id="kCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: y[n] uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Çıkış Dizisi: <span class="text-teal-700 font-bold">y[n] = x[n] * h[n]</span></span>
+          <span class="text-rose-600 font-medium">Kırmızı imleç anlık $n$ konumunu gösterir</span>
+        </div>
+        <canvas id="ynCanvas" width="860" height="180" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_darbelerin_tanimi_x_ve_h.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Sinyalleri $k$ İndeksine Dönüştürme</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Konvolüsyon toplamı tanımı gereği kukla indeks $n \to k$ olarak tanımlanır:
+        $$x[k] = 1, \quad 3 \le k \le 8 \quad (L_x = 6); \qquad h[k] = 1, \quad 4 \le k \le 15 \quad (L_h = 12)$$
+        $x[k]$ mavi stem'ler ($k \in [3, 8]$), $h[k]$ ise mor stem'ler ($k \in [4, 15]$) olarak çizilir. Her iki darbe de sonlu uzunluktadır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_katlama_ve_oteleme_h_n_eksi_k.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Katlama ve Parametrik Öteleme $\to h[n-k]$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h[k]$ sinyali $k = 0$ eksenine göre ters çevrildiğinde ($h[-k]$), destek aralığı $[-15, -4]$ olur. Ardından $n$ birim sağa kaydırıldığında:
+        $$h[n-k] = 1 \iff 4 \le n - k \le 15 \iff n - 15 \le k \le n - 4$$
+        Kayan pencerenin ön ucu $k = n - 4$, arka ucu ise $k = n - 15$'tir. Dizi sağa doğru hareket eder.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_durum1_n_kucuk_7.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Durum 1: $n < 7$ (Örtüşme Yok $\implies y[n] = 0$)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $n < 7$ iken $h[n-k]$ darbesinin en sağdaki ön ucu $n - 4 < 3$ olur. Ancak $x[k]$ sinyali $k \ge 3$ noktasından başlamaktadır.
+        Aralıkların kesişimi boştur: $[3, 8] \cap [n-15, n-4] = \emptyset$. Dolayısıyla çarpım her $k$ için sıfırdır:
+        $$y[n] = \sum_{k=-\infty}^{\infty} x[k]h[n-k] = 0, \quad \forall n < 7$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_durum2_7_kucuk_esit_n_12.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Durum 2: $7 \le n \le 12$ (Kısmi Örtüşme &amp; Lineer Artış)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $h[n-k]$ penceresinin ön ucu $x[k]$'nin içine girmiştir ($3 \le n-4 \le 8 \iff 7 \le n \le 12$) ve arka ucu henüz $x[k]$'ye ulaşmamıştır ($n-15 < 3 \iff n < 18$).
+        Ortak indeks kümesi $k \in [3, n-4]$ aralığıdır. Örtüşen örnek sayısı:
+        $$y[n] = \sum_{k=3}^{n-4} 1 = (n-4) - 3 + 1 = n - 6$$
+        $n=7$ için $y[7] = 1$, $n=12$ için $y[12] = 6$ değerini alarak rampa şeklinde artar.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_durum3_12_kucuk_esit_n_18.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Durum 3: $12 \le n \le 18$ (Tam Örtüşme &amp; Sabit Plato)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Kısa olan $x[k]$ darbesi ($L_x = 6$), daha geniş olan $h[n-k]$ darbesinin ($L_h = 12$) tamamen içine oturmuştur: $n-4 \ge 8$ ve $n-15 \le 3$.
+        Örtüşme aralığı $k \in [3, 8]$ olarak sabit kalır:
+        $$y[n] = \sum_{k=3}^{8} 1 = 8 - 3 + 1 = 6$$
+        Bu aralık boyunca sinyal genliği $6$ değerinde sabit kalıp yamuğun platosunu oluşturur.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_durum4_ve_cikis_y_n.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Durum 4 &amp; 5: $19 \le n \le 23$ (Lineer Azalış) ve Toplam Çıkış $y[n]$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $19 \le n \le 23$ iken kayan darbenin arka ucu $x[k]$'nin içine girer: $k \in [n-15, 8]$. Örnek sayısı:
+        $$y[n] = \sum_{k=n-15}^{8} 1 = 8 - (n-15) + 1 = 24 - n$$
+        $n=19 \implies y[19] = 5$, $n=23 \implies y[23] = 1$. $n > 23$ için $n-15 > 8$ olur ve $y[n] = 0$'a düşer.
+        Nihai parçalı fonksiyon:
+        $$y[n] = \begin{cases} n - 6, & 7 \le n \le 12 \\ 6, & 12 \le n \le 18 \\ 24 - n, & 19 \le n \le 23 \\ 0, & \text{diğer} \end{cases}$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+    </div>
+
+  </div>
 
   <script>
-    // Matematik Fonksiyonları
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minK, maxK, stepPx, labelX = "k", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      // Kılavuz çizgileri
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      // Ana Eksenler
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy); // Yatay
+      ctx.moveTo(ox, oy + 15); ctx.lineTo(ox, 20); // Düşey
+      ctx.stroke();
+
+      // Oklar
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 20); ctx.lineTo(ox, 12); ctx.lineTo(ox + 4, 20); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 16);
+
+      // Eksen Çentikleri ve Sayılar
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let k = minK; k <= maxK; k++) {
+        const px = ox + k * stepPx;
+        if (px >= 30 && px <= w - 30) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          if (k % 2 === 0 || k === 0) {
+            ctx.fillText(k.toString(), px - (k < 0 ? 6 : 3), oy + 15);
+          }
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 90, radius = 3.5, drawZeroDot = true) {
+      const py = oy - val * scaleY;
+      if (Math.abs(val) < 0.001) {
+        if (drawZeroDot) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(px, oy, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        return;
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
     function getX(k) {
       return (k >= 3 && k <= 8) ? 1 : 0;
     }
@@ -318,7 +320,7 @@
       return (k >= 4 && k <= 15) ? 1 : 0;
     }
 
-    function getY(n) {
+    function evalY(n) {
       if (n < 7) return 0;
       if (n <= 12) return n - 6;
       if (n <= 18) return 6;
@@ -326,390 +328,294 @@
       return 0;
     }
 
-    // Yüksek Çözünürlüklü Tuval Yardımcısı
-    function createHiDPICanvas(w, h) {
-      const c = document.createElement('canvas');
-      const dpr = 2; // Keskin render için 2x
-      c.width = w * dpr;
-      c.height = h * dpr;
-      c.style.width = w + 'px';
-      c.style.height = h + 'px';
-      const ctx = c.getContext('2d');
-      ctx.scale(dpr, dpr);
-      return { canvas: c, ctx: ctx, width: w, height: h };
-    }
+    // --- KART 1: Orijinal Darbeler x[k] ve h[k] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 150, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -2, 18, stepPx, "k", "Genlik");
 
-    // Ayrık Eksen Çizici
-    function drawDiscreteAxis(ctx, w, h, minX, maxX, minY, maxY, xLabel) {
-      ctx.fillStyle = '#0f172a';
-      ctx.fillRect(0, 0, w, h);
-
-      const padX = 40;
-      const padY = 28;
-      const plotW = w - 2 * padX;
-      const plotH = h - 2 * padY;
-
-      const toX = val => padX + ((val - minX) / (maxX - minX)) * plotW;
-      const toY = val => h - padY - ((val - minY) / (maxY - minY)) * plotH;
-
-      // Izgara
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineWidth = 1;
-      for (let x = Math.ceil(minX); x <= Math.floor(maxX); x += 2) {
-        ctx.beginPath();
-        ctx.moveTo(toX(x), padY);
-        ctx.lineTo(toX(x), h - padY);
-        ctx.stroke();
+      for (let k = -2; k <= 18; k++) {
+        const xVal = getX(k);
+        const hVal = getH(k);
+        if (xVal > 0) drawStem(ctx, px = ox + k * stepPx - 3, oy, xVal, "#2563eb", 95, 3.5);
+        if (hVal > 0) drawStem(ctx, px = ox + k * stepPx + 3, oy, hVal, "#9333ea", 95, 3.5);
       }
 
-      // Eksenler
-      ctx.strokeStyle = '#475569';
-      ctx.lineWidth = 1.5;
-      const y0 = toY(0);
-      ctx.beginPath();
-      ctx.moveTo(padX - 10, y0);
-      ctx.lineTo(w - padX + 15, y0);
-      ctx.stroke();
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x[k] = 1, k ∈ [3, 8] (Genişlik: 6)", 380, 45);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[k] = 1, k ∈ [4, 15] (Genişlik: 12)", 380, 68);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("Her iki darbenin genliği 1 olup sonlu sürelidir", 380, 95);
 
-      // Ok
-      ctx.fillStyle = '#475569';
-      ctx.beginPath();
-      ctx.moveTo(w - padX + 15, y0);
-      ctx.lineTo(w - padX + 8, y0 - 4);
-      ctx.lineTo(w - padX + 8, y0 + 4);
-      ctx.fill();
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
 
-      // Eksen Etiketi
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = 'bold 11px monospace';
-      ctx.fillText(xLabel, w - padX + 18, y0 + 4);
+    // --- KART 2: Katlama ve Parametrik Öteleme h[n-k] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 520, oy = 165, stepPx = 32;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -16, 10, stepPx, "k", "h[n-k]");
 
-      // Sayı İşaretleri
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
-      for (let x = Math.ceil(minX); x <= Math.floor(maxX); x += 2) {
-        ctx.fillText(x, toX(x), y0 + 5);
+      const n = 5; // n-15 = -10, n-4 = 1
+      for (let k = -16; k <= 10; k++) {
+        const px = ox + k * stepPx;
+        const val = (n - k >= 4 && n - k <= 15) ? 1 : 0;
+        if (val > 0) drawStem(ctx, px, oy, val, "#9333ea", 95, 3.5);
       }
 
-      return { toX, toY, padX, padY, plotW, plotH };
-    }
+      const pBack = ox + (n - 15) * stepPx;
+      const pFront = ox + (n - 4) * stepPx;
+      ctx.strokeStyle = "#dc2626"; ctx.lineWidth = 1.4; ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(pFront, oy + 25); ctx.lineTo(pFront, 35); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(pBack, oy + 25); ctx.lineTo(pBack, 35); ctx.stroke();
+      ctx.setLineDash([]);
 
-    // Stem (Ayrık Örnek) Çizici
-    function drawStem(ctx, xPix, yPix, y0Pix, color, radius = 3.5) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(xPix, y0Pix);
-      ctx.lineTo(xPix, yPix);
-      ctx.stroke();
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#dc2626"; ctx.fillText(`Ön Uç: k = n - 4 (Burada ${n-4})`, pFront - 65, 30);
+      ctx.fillText(`Arka Uç: k = n - 15 (Burada ${n-15})`, pBack - 65, 30);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h[n-k] penceresi: k ∈ [n-15, n-4]", 80, 55);
+      ctx.fillStyle = "#475569"; ctx.fillText("n arttıkça pencere soldan sağa doğru hareket eder", 80, 80);
 
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.arc(xPix, yPix, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
 
-    // Simülatör Tuval Çizimi
+    // --- KART 3: Durum 1: n < 7 (Örtüşme Yok) ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 420, oy = 165, stepPx = 32;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -12, 12, stepPx, "k", "Genlik");
+
+      const n = 4; // n - 4 = 0 < 3
+      for (let k = -12; k <= 12; k++) {
+        const px = ox + k * stepPx;
+        const xVal = getX(k);
+        const hVal = (n - k >= 4 && n - k <= 15) ? 1 : 0;
+        if (xVal > 0) drawStem(ctx, px, oy, xVal, "#2563eb", 90, 3.5);
+        if (hVal > 0) drawStem(ctx, px, oy, hVal, "#9333ea", 90, 3.5);
+      }
+
+      ctx.fillStyle = "rgba(239, 68, 68, 0.08)";
+      ctx.fillRect(ox + (n - 15 - 0.4) * stepPx, 35, 12 * stepPx, 130);
+      ctx.fillStyle = "rgba(37, 99, 235, 0.08)";
+      ctx.fillRect(ox + (3 - 0.4) * stepPx, 35, 6 * stepPx, 130);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#dc2626"; ctx.fillText(`h[${n}-k] Desteği: [${n-15}, ${n-4}]`, ox - 260, 55);
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x[k] Desteği: [3, 8]", ox + 110, 55);
+      ctx.fillStyle = "#b91c1c"; ctx.fillText(`n = ${n} < 7: Kesişim boştur [3, 8] ∩ [${n-15}, ${n-4}] = ∅ ⟹ y[${n}] = 0`, ox - 180, 115);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 4: Durum 2: 7 <= n <= 12 (Lineer Artış) ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 320, oy = 165, stepPx = 32;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -8, 14, stepPx, "k", "Genlik");
+
+      const n = 10; // n-4 = 6, overlap [3, 6] -> 4 samples
+      const kA = 3;
+      const kB = n - 4;
+
+      ctx.fillStyle = "rgba(251, 191, 36, 0.25)";
+      ctx.fillRect(ox + (kA - 0.4) * stepPx, 30, (kB - kA + 0.8) * stepPx, 135);
+      ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 1;
+      ctx.strokeRect(ox + (kA - 0.4) * stepPx, 30, (kB - kA + 0.8) * stepPx, 135);
+
+      for (let k = -8; k <= 14; k++) {
+        const px = ox + k * stepPx;
+        const xVal = getX(k);
+        const hVal = (n - k >= 4 && n - k <= 15) ? 1 : 0;
+        const prod = (xVal > 0 && hVal > 0) ? 1 : 0;
+
+        if (xVal > 0) drawStem(ctx, px - 3, oy, xVal, "#2563eb", 90, 3);
+        if (hVal > 0) drawStem(ctx, px + 3, oy, hVal, "#9333ea", 90, 3);
+        if (prod > 0) drawStem(ctx, px, oy, prod, "#d97706", 90, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#d97706"; ctx.fillText(`Örtüşme Aralığı: k ∈ [3, ${n-4}] (${n-6} örnek)`, ox + 20, 50);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(`y[${n}] = Σ_{k=3}^{${n-4}} 1 = (${n}-4) - 3 + 1 = ${n-6} (Lineer Artış Rampası)`, ox + 20, 75);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 5: Durum 3: 12 <= n <= 18 (Sabit Plato) ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 260, oy = 165, stepPx = 32;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -5, 17, stepPx, "k", "Genlik");
+
+      const n = 15; // n-15 = 0 <= 3, n-4 = 11 >= 8 -> full overlap [3, 8]
+      const kA = 3;
+      const kB = 8;
+
+      ctx.fillStyle = "rgba(251, 191, 36, 0.25)";
+      ctx.fillRect(ox + (kA - 0.4) * stepPx, 30, (kB - kA + 0.8) * stepPx, 135);
+      ctx.strokeStyle = "#f59e0b"; ctx.lineWidth = 1;
+      ctx.strokeRect(ox + (kA - 0.4) * stepPx, 30, (kB - kA + 0.8) * stepPx, 135);
+
+      for (let k = -5; k <= 17; k++) {
+        const px = ox + k * stepPx;
+        const xVal = getX(k);
+        const hVal = (n - k >= 4 && n - k <= 15) ? 1 : 0;
+        const prod = (xVal > 0 && hVal > 0) ? 1 : 0;
+
+        if (xVal > 0) drawStem(ctx, px - 3, oy, xVal, "#2563eb", 90, 3);
+        if (hVal > 0) drawStem(ctx, px + 3, oy, hVal, "#9333ea", 90, 3);
+        if (prod > 0) drawStem(ctx, px, oy, prod, "#d97706", 90, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#d97706"; ctx.fillText(`Tam Örtüşme (Plato): k ∈ [3, 8] (Tüm 6 örnek içeride)`, ox + 15, 50);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(`y[${n}] = Σ_{k=3}^{8} 1 = 8 - 3 + 1 = 6 (Maksimum Genlik Platosu)`, ox + 15, 75);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 6: Durum 4 & 5 ve Çıkış Sinyali y[n] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 120, oy = 165, stepPx = 25;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -2, 28, stepPx, "n", "y[n]");
+
+      for (let n = -2; n <= 28; n++) {
+        const px = ox + n * stepPx;
+        const yVal = evalY(n);
+        drawStem(ctx, px, oy, yVal, "#0d9488", 20, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("y[n] = x[n] * h[n] — 5 Parçalı Yamuk Çıkış Yanıtı", 260, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("Destek: n ∈ [7, 23] (17 örnek), Tepe Genliği: 6 (n ∈ [12, 18])", 260, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("7 ≤ n ≤ 12: y[n] = n - 6;   12 ≤ n ≤ 18: y[n] = 6;   19 ≤ n ≤ 23: y[n] = 24 - n", 260, 95);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const simMath = document.getElementById('simMath');
+    const kCtx = kCanvas.getContext('2d');
+    const yCtx = ynCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
     function updateSim() {
-      const n = parseInt(document.getElementById('sliderN').value);
-      document.getElementById('labelN').innerText = n;
+      const n = parseInt(slider.value);
+      nVal.textContent = "n = " + n;
 
-      const yVal = getY(n);
-      document.getElementById('statusVal').innerText = `y[${n}] = ${yVal}`;
-
-      // Bölge ve İfade Güncelleme
-      let regionText = "";
-      let mathHtml = "";
-      if (n < 7) {
-        regionText = "Bölge 1: Örtüşme Yok (n < 7)";
-        mathHtml = `$$n = ${n} < 7 \\implies [3, 8] \\cap [${n-15}, ${n-4}] = \\emptyset \\implies y[${n}] = 0$$`;
-      } else if (n <= 12) {
-        regionText = "Bölge 2: Lineer Artış (7 ≤ n ≤ 12)";
-        mathHtml = `$$n = ${n} \\in [7, 12] \\implies y[${n}] = \\sum_{k=3}^{${n-4}} 1 = (${n}-4) - 3 + 1 = ${yVal}$$`;
-      } else if (n <= 18) {
-        regionText = "Bölge 3: Plato / Tam Örtüşme (12 ≤ n ≤ 18)";
-        mathHtml = `$$n = ${n} \\in [12, 18] \\implies y[${n}] = \\sum_{k=3}^{8} 1 = 8 - 3 + 1 = 6$$`;
-      } else if (n <= 23) {
-        regionText = "Bölge 4: Lineer Azalış (19 ≤ n ≤ 23)";
-        mathHtml = `$$n = ${n} \\in [19, 23] \\implies y[${n}] = \\sum_{k=${n-15}}^{8} 1 = 8 - (${n}-15) + 1 = 24 - ${n} = ${yVal}$$`;
-      } else {
-        regionText = "Bölge 5: Örtüşme Bitti (n > 23)";
-        mathHtml = `$$n = ${n} > 23 \\implies [3, 8] \\cap [${n-15}, ${n-4}] = \\emptyset \\implies y[${n}] = 0$$`;
-      }
-      document.getElementById('statusRegion').innerText = regionText;
-      const mathBox = document.getElementById('simMath');
-      mathBox.innerHTML = mathHtml;
-      if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
-
-      // Canvas 1: k-Uzayı
-      const cTop = document.getElementById('canvasTop');
-      const dpr = 2;
-      const w1 = cTop.clientWidth || 700;
-      const h1 = 190;
-      cTop.width = w1 * dpr;
-      cTop.height = h1 * dpr;
-      const ctx1 = cTop.getContext('2d');
-      ctx1.scale(dpr, dpr);
-
-      const ax1 = drawDiscreteAxis(ctx1, w1, h1, -12, 26, -0.4, 1.8, 'k');
+      const w = 860, hK = 230, oxK = 280, oyK = 175, stepK = 28;
+      drawDiscreteAxis(kCtx, w, hK, oxK, oyK, -10, 20, stepK, "k", "Genlik");
 
       // Örtüşme Alanı Vurgusu
-      const kStart = Math.max(3, n - 15);
-      const kEnd = Math.min(8, n - 4);
-      if (kStart <= kEnd) {
-        const xA = ax1.toX(kStart - 0.4);
-        const xB = ax1.toX(kEnd + 0.4);
-        ctx1.fillStyle = 'rgba(245, 158, 11, 0.15)';
-        ctx1.fillRect(xA, ax1.padY, xB - xA, h1 - 2 * ax1.padY);
-        ctx1.strokeStyle = 'rgba(245, 158, 11, 0.5)';
-        ctx1.setLineDash([3, 3]);
-        ctx1.strokeRect(xA, ax1.padY, xB - xA, h1 - 2 * ax1.padY);
-        ctx1.setLineDash([]);
+      const kA = Math.max(3, n - 15);
+      const kB = Math.min(8, n - 4);
+      if (kA <= kB) {
+        kCtx.fillStyle = "rgba(251, 191, 36, 0.25)";
+        kCtx.fillRect(oxK + (kA - 0.4) * stepK, 25, (kB - kA + 0.8) * stepK, 150);
+        kCtx.strokeStyle = "#f59e0b"; kCtx.lineWidth = 1;
+        kCtx.strokeRect(oxK + (kA - 0.4) * stepK, 25, (kB - kA + 0.8) * stepK, 150);
       }
 
-      // k = -12'den 26'ya kadar çiz
-      for (let k = -12; k <= 26; k++) {
-        const xk = getX(k);
-        const h_nk = getH(n - k);
+      // Stem çizimleri
+      let sum = 0;
+      for (let k = -10; k <= 20; k++) {
+        const px = oxK + k * stepK;
+        const xVal = getX(k);
+        const hVal = (n - k >= 4 && n - k <= 15) ? 1 : 0;
+        const prod = (xVal > 0 && hVal > 0) ? 1 : 0;
 
-        // x[k] (Mavi)
-        if (xk > 0) {
-          drawStem(ctx1, ax1.toX(k) - 2.5, ax1.toY(xk), ax1.toY(0), '#38bdf8', 3);
-        }
-        // h[n-k] (Yeşil)
-        if (h_nk > 0) {
-          drawStem(ctx1, ax1.toX(k) + 2.5, ax1.toY(h_nk * 0.95), ax1.toY(0), '#34d399', 3);
-        }
-        // Çarpım x[k]*h[n-k] (Amber)
-        if (xk > 0 && h_nk > 0) {
-          drawStem(ctx1, ax1.toX(k), ax1.toY(1.3), ax1.toY(0), '#fbbf24', 4);
+        drawStem(kCtx, px - 3, oyK, xVal, "#2563eb", 90, 2.8, false);
+        drawStem(kCtx, px + 3, oyK, hVal, "#9333ea", 90, 2.8, false);
+        if (prod > 0) {
+          drawStem(kCtx, px, oyK, prod, "#d97706", 90, 4, false);
+          sum += prod;
         }
       }
 
-      // Legend
-      ctx1.fillStyle = '#38bdf8';
-      ctx1.fillRect(ax1.padX, 10, 8, 8);
-      ctx1.fillStyle = '#94a3b8';
-      ctx1.font = '10px monospace';
-      ctx1.textAlign = 'left';
-      ctx1.fillText('x[k] [3..8]', ax1.padX + 12, 17);
+      // Ön uç k = n-4 ve arka uç k = n-15 çizgileri
+      const pFront = oxK + (n - 4) * stepK;
+      kCtx.strokeStyle = "#dc2626"; kCtx.lineWidth = 1.4; kCtx.setLineDash([3, 3]);
+      kCtx.beginPath(); kCtx.moveTo(pFront, oyK + 20); kCtx.lineTo(pFront, 30); kCtx.stroke();
+      kCtx.setLineDash([]);
+      kCtx.fillStyle = "#dc2626"; kCtx.font = "bold 10px sans-serif";
+      kCtx.fillText("n - 4", pFront - 12, 24);
 
-      ctx1.fillStyle = '#34d399';
-      ctx1.fillRect(ax1.padX + 100, 10, 8, 8);
-      ctx1.fillStyle = '#94a3b8';
-      ctx1.fillText(`h[${n}-k] [${n-15}..${n-4}]`, ax1.padX + 112, 17);
+      // Alt Kanvas: y[n]
+      const hY = 180, oxY = 100, oyY = 145, stepY = 24;
+      drawDiscreteAxis(yCtx, w, hY, oxY, oyY, -2, 28, stepY, "n", "y[n]");
 
-      ctx1.fillStyle = '#fbbf24';
-      ctx1.fillRect(ax1.padX + 240, 10, 8, 8);
-      ctx1.fillStyle = '#94a3b8';
-      ctx1.fillText('x[k]·h[n-k] (Örtüşme)', ax1.padX + 252, 17);
-
-      // Canvas 2: n-Uzayı (y[n])
-      const cBot = document.getElementById('canvasBottom');
-      const w2 = cBot.clientWidth || 700;
-      const h2 = 190;
-      cBot.width = w2 * dpr;
-      cBot.height = h2 * dpr;
-      const ctx2 = cBot.getContext('2d');
-      ctx2.scale(dpr, dpr);
-
-      const ax2 = drawDiscreteAxis(ctx2, w2, h2, -2, 30, -0.8, 7.2, 'n');
-
-      // y[n] Tüm Değerler
-      for (let ni = -2; ni <= 30; ni++) {
-        const val = getY(ni);
-        const col = (ni === n) ? '#f43f5e' : (val > 0 ? '#818cf8' : '#334155');
-        const rad = (ni === n) ? 5 : (val > 0 ? 3.5 : 2);
-        drawStem(ctx2, ax2.toX(ni), ax2.toY(val), ax2.toY(0), col, rad);
+      for (let i = -2; i <= 28; i++) {
+        const px = oxY + i * stepY;
+        const yVal = evalY(i);
+        drawStem(yCtx, px, oyY, yVal, "#0d9488", 18, 3.5);
       }
 
-      // İmleç Göstergesi
-      ctx2.strokeStyle = '#f43f5e';
-      ctx2.lineWidth = 1.5;
-      ctx2.setLineDash([3, 3]);
-      ctx2.beginPath();
-      ctx2.moveTo(ax2.toX(n), ax2.padY);
-      ctx2.lineTo(ax2.toX(n), h2 - ax2.padY);
-      ctx2.stroke();
-      ctx2.setLineDash([]);
+      // Seçili n vurgusu
+      const curY = evalY(n);
+      const curPx = oxY + n * stepY, curPy = oyY - curY * 18;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.5; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oyY); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5.5, 0, Math.PI * 2); yCtx.fill();
 
-      ctx2.fillStyle = '#f43f5e';
-      ctx2.font = 'bold 11px monospace';
-      ctx2.textAlign = 'center';
-      ctx2.fillText(`n=${n}`, ax2.toX(n), ax2.padY - 4);
-    }
-
-    // 6 Adım Görsellerinin Oluşturulması
-    function renderStepCards() {
-      // Adım 1: x[k] ve h[k]
-      {
-        const hdc = createHiDPICanvas(760, 220);
-        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -2, 18, -0.4, 1.8, 'k');
-        for (let k = -2; k <= 18; k++) {
-          if (getX(k) > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(1), ax.toY(0), '#38bdf8', 3.5);
-          if (getH(k) > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1), ax.toY(0), '#34d399', 3.5);
-        }
-        hdc.ctx.fillStyle = '#38bdf8'; hdc.ctx.fillRect(ax.padX, 12, 10, 10);
-        hdc.ctx.fillStyle = '#cbd5e1'; hdc.ctx.font = '11px monospace'; hdc.ctx.textAlign = 'left';
-        hdc.ctx.fillText('x[k] = 1, k ∈ [3, 8] (L=6)', ax.padX + 15, 21);
-
-        hdc.ctx.fillStyle = '#34d399'; hdc.ctx.fillRect(ax.padX + 220, 12, 10, 10);
-        hdc.ctx.fillStyle = '#cbd5e1';
-        hdc.ctx.fillText('h[k] = 1, k ∈ [4, 15] (L=12)', ax.padX + 235, 21);
-
-        document.getElementById('img1').src = hdc.canvas.toDataURL('image/png');
+      // Durum paneli
+      let statusHtml = "";
+      if (n < 7) {
+        statusHtml = `Durum: <b class="text-slate-600">n = ${n} &lt; 7 (Örtüşme Yok)</b> &nbsp;|&nbsp; Kesişim: $[3, 8] \\cap [${n-15}, ${n-4}] = \\emptyset$ &nbsp;|&nbsp; <b>y[${n}] = 0</b>`;
+      } else if (n <= 12) {
+        statusHtml = `Durum: <b class="text-indigo-600">7 ≤ n = ${n} ≤ 12 (Lineer Artış Rampası)</b> &nbsp;|&nbsp; Kesişim: $k \\in [3, ${n-4}]$ &nbsp;|&nbsp; ` +
+                     `Formül: $y[${n}] = (${n}-4) - 3 + 1 = ${n-6}$ &nbsp;|&nbsp; <b>y[${n}] = ${curY}</b>`;
+      } else if (n <= 18) {
+        statusHtml = `Durum: <b class="text-emerald-600">12 ≤ n = ${n} ≤ 18 (Maksimum Genlik Platosu)</b> &nbsp;|&nbsp; Kesişim: $k \\in [3, 8]$ (Tam Örtüşme) &nbsp;|&nbsp; ` +
+                     `Formül: $y[${n}] = 8 - 3 + 1 = 6$ &nbsp;|&nbsp; <b>y[${n}] = 6</b>`;
+      } else if (n <= 23) {
+        statusHtml = `Durum: <b class="text-amber-600">19 ≤ n = ${n} ≤ 23 (Lineer Azalış Rampası)</b> &nbsp;|&nbsp; Kesişim: $k \\in [${n-15}, 8]$ &nbsp;|&nbsp; ` +
+                     `Formül: $y[${n}] = 8 - (${n}-15) + 1 = 24 - ${n} = ${24-n}$ &nbsp;|&nbsp; <b>y[${n}] = ${curY}</b>`;
+      } else {
+        statusHtml = `Durum: <b class="text-slate-600">n = ${n} &gt; 23 (Örtüşme Bitti)</b> &nbsp;|&nbsp; Kesişim: $\\emptyset$ &nbsp;|&nbsp; <b>y[${n}] = 0</b>`;
       }
-
-      // Adım 2: Çevir ve Kaydır: h[n-k]
-      {
-        const hdc = createHiDPICanvas(760, 220);
-        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -16, 12, -0.4, 1.8, 'k');
-        // h[-k] ve h[n-k]
-        for (let k = -16; k <= 12; k++) {
-          const h_inv = getH(-k);
-          if (h_inv > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(0.9), ax.toY(0), '#94a3b8', 3);
-          const h_shifted = getH(5 - k); // n = 5
-          if (h_shifted > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1.1), ax.toY(0), '#34d399', 3.5);
-        }
-        hdc.ctx.fillStyle = '#94a3b8'; hdc.ctx.fillRect(ax.padX, 12, 10, 10);
-        hdc.ctx.fillStyle = '#cbd5e1'; hdc.ctx.font = '11px monospace'; hdc.ctx.textAlign = 'left';
-        hdc.ctx.fillText('h[-k] (Ters Çevrilmiş, k ∈ [-15, -4])', ax.padX + 15, 21);
-
-        hdc.ctx.fillStyle = '#34d399'; hdc.ctx.fillRect(ax.padX + 300, 12, 10, 10);
-        hdc.ctx.fillStyle = '#cbd5e1';
-        hdc.ctx.fillText('h[n-k] (k ∈ [n-15, n-4])', ax.padX + 315, 21);
-
-        document.getElementById('img2').src = hdc.canvas.toDataURL('image/png');
-      }
-
-      // Adım 3: Bölge 1 (n = 4 < 7)
-      {
-        const hdc = createHiDPICanvas(760, 220);
-        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -14, 12, -0.4, 1.8, 'k');
-        const n = 4;
-        for (let k = -14; k <= 12; k++) {
-          if (getX(k) > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1), ax.toY(0), '#38bdf8', 3.5);
-          if (getH(n - k) > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1), ax.toY(0), '#34d399', 3.5);
-        }
-        hdc.ctx.fillStyle = '#f87171'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
-        hdc.ctx.fillText(`n = ${n} < 7: Kesişim Yok ⟹ y[${n}] = 0`, 380, 25);
-        document.getElementById('img3').src = hdc.canvas.toDataURL('image/png');
-      }
-
-      // Adım 4: Bölge 2 (n = 10, 7 <= n <= 12)
-      {
-        const hdc = createHiDPICanvas(760, 220);
-        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -8, 14, -0.4, 1.8, 'k');
-        const n = 10;
-        const kA = Math.max(3, n - 15);
-        const kB = Math.min(8, n - 4);
-        hdc.ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
-        hdc.ctx.fillRect(ax.toX(kA - 0.4), ax.padY, ax.toX(kB + 0.4) - ax.toX(kA - 0.4), 220 - 2 * ax.padY);
-
-        for (let k = -8; k <= 14; k++) {
-          const xk = getX(k);
-          const h_nk = getH(n - k);
-          if (xk > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(1), ax.toY(0), '#38bdf8', 3);
-          if (h_nk > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1), ax.toY(0), '#34d399', 3);
-          if (xk > 0 && h_nk > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1.3), ax.toY(0), '#fbbf24', 4);
-        }
-        hdc.ctx.fillStyle = '#fbbf24'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
-        hdc.ctx.fillText(`n = ${n} ∈ [7, 12]: Kesişim [3, ${n-4}] (${n-6} nokta) ⟹ y[${n}] = ${n-6}`, 380, 25);
-        document.getElementById('img4').src = hdc.canvas.toDataURL('image/png');
-      }
-
-      // Adım 5: Bölge 3 (n = 15, 12 <= n <= 18)
-      {
-        const hdc = createHiDPICanvas(760, 220);
-        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -4, 16, -0.4, 1.8, 'k');
-        const n = 15;
-        const kA = 3;
-        const kB = 8;
-        hdc.ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
-        hdc.ctx.fillRect(ax.toX(kA - 0.4), ax.padY, ax.toX(kB + 0.4) - ax.toX(kA - 0.4), 220 - 2 * ax.padY);
-
-        for (let k = -4; k <= 16; k++) {
-          const xk = getX(k);
-          const h_nk = getH(n - k);
-          if (xk > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(1), ax.toY(0), '#38bdf8', 3);
-          if (h_nk > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1), ax.toY(0), '#34d399', 3);
-          if (xk > 0 && h_nk > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1.3), ax.toY(0), '#fbbf24', 4);
-        }
-        hdc.ctx.fillStyle = '#fbbf24'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
-        hdc.ctx.fillText(`n = ${n} ∈ [12, 18]: Tam Örtüşme [3, 8] (6 nokta) ⟹ y[${n}] = 6 (Plato)`, 380, 25);
-        document.getElementById('img5').src = hdc.canvas.toDataURL('image/png');
-      }
-
-      // Adım 6: Bölge 4 & 5 ve Nihai Çıkış Yanıtı (n = 21, 19 <= n <= 23)
-      {
-        const hdc = createHiDPICanvas(760, 220);
-        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -2, 28, -0.5, 7.2, 'n');
-        for (let ni = -2; ni <= 28; ni++) {
-          const y = getY(ni);
-          const col = (y > 0) ? '#818cf8' : '#334155';
-          drawStem(hdc.ctx, ax.toX(ni), ax.toY(y), ax.toY(0), col, y > 0 ? 3.5 : 2);
-        }
-        hdc.ctx.fillStyle = '#a5b4fc'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
-        hdc.ctx.fillText('Nihai Çıkış y[n] = x[n] * h[n] (Yamuk Yanıt, Tepe Değeri = 6, Destek = [7, 23])', 380, 25);
-        document.getElementById('img6').src = hdc.canvas.toDataURL('image/png');
+      simMath.innerHTML = statusHtml;
+      if (window.renderMathInElement) {
+        renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
       }
     }
 
-    // PNG İndirme Fonksiyonu
-    function downloadCard(imgId, filename) {
-      const img = document.getElementById(imgId);
-      if (!img || !img.src) return;
-      const a = document.createElement('a');
-      a.href = img.src;
-      a.download = filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    }
+    slider.addEventListener('input', updateSim);
+    updateSim();
 
-    // Olay Dinleyicileri
+    let isPlaying = false;
     let playInterval = null;
-    document.addEventListener('DOMContentLoaded', () => {
-      const slider = document.getElementById('sliderN');
-      slider.addEventListener('input', updateSim);
 
-      document.getElementById('btnPrev').addEventListener('click', () => {
-        if (slider.value > 0) {
-          slider.value = parseInt(slider.value) - 1;
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      if (isPlaying) {
+        playInterval = setInterval(() => {
+          let v = parseInt(slider.value) + 1;
+          if (v > parseInt(slider.max)) v = parseInt(slider.min);
+          slider.value = v;
           updateSim();
-        }
-      });
-
-      document.getElementById('btnNext').addEventListener('click', () => {
-        if (slider.value < 30) {
-          slider.value = parseInt(slider.value) + 1;
-          updateSim();
-        }
-      });
-
-      const btnPlay = document.getElementById('btnPlay');
-      btnPlay.addEventListener('click', () => {
-        if (playInterval) {
-          clearInterval(playInterval);
-          playInterval = null;
-          btnPlay.innerText = 'Oynat ►';
-          btnPlay.className = 'px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm';
-        } else {
-          btnPlay.innerText = 'Durdur ❚❚';
-          btnPlay.className = 'px-4 py-1.5 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-700 transition shadow-sm';
-          playInterval = setInterval(() => {
-            let nextVal = parseInt(slider.value) + 1;
-            if (nextVal > 30) nextVal = 0;
-            slider.value = nextVal;
-            updateSim();
-          }, 350);
-        }
-      });
-
-      window.addEventListener('resize', updateSim);
-      updateSim();
-      renderStepCards();
+        }, 500);
+      } else {
+        clearInterval(playInterval);
+      }
     });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
   </script>
 </body>
 </html>
