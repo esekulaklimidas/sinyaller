@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Problem 2.4 — Sonlu Dikdörtgen Darbelerin Ayrık Konvolüsyonu ve Yamuk Yanıtı (Oppenheim & Willsky)</title>
+  <title>Problem 2.4 Görselleştirici — Sonlu Dikdörtgen Darbelerin Ayrık Konvolüsyonu (Oppenheim &amp; Willsky)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
@@ -11,15 +11,14 @@
     onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
   <style>
     .math-font { font-family: 'KaTeX_Math', Times New Roman, serif; }
-    .glass-nav { background: rgba(255, 255, 255, 0.94); backdrop-filter: blur(12px); }
-    .tab-btn.active { background-color: #4f46e5; color: #ffffff; border-color: #4f46e5; }
+    .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-500 selection:text-white min-h-screen pb-16">
 
   <!-- Üst Gezinme Çubuğu -->
   <header class="glass-nav border-b border-slate-200 sticky top-0 z-50">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <a href="index.html" class="w-8 h-8 rounded-lg bg-indigo-600 hover:bg-indigo-700 flex items-center justify-center text-white font-bold text-xs shadow-sm transition">
           &larr;
@@ -27,29 +26,27 @@
         <div>
           <div class="flex items-center gap-2">
             <span class="text-xs font-black text-slate-900">Problem 2.4</span>
-            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">Bölüm 2 • Konvolüsyon</span>
-            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman (DT)</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full font-bold">Bölüm 2 &bull; Konvolüsyon</span>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Ayrık Zaman</span>
           </div>
           <p class="text-[10px] text-slate-500">Oppenheim &amp; Willsky (2. Baskı) &bull; Sayfa 138</p>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <a href="index.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
-          Tüm Problemlere Dön &rarr;
-        </a>
-      </div>
+      <a href="index.html" class="text-xs font-semibold text-indigo-600 hover:text-indigo-800 transition">
+        Tüm Problemlere Dön &rarr;
+      </a>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 pt-8 space-y-8">
 
     <!-- Başlık ve Problem Tanım Kartı -->
     <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-5">
         <div>
-          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; Doğrusal Zamanla Değişmeyen (LTI) Sistemler</span>
+          <span class="text-xs font-extrabold text-indigo-600 tracking-wider uppercase">Bölüm 2 &bull; Doğrusal Zamanla Değişmeyen Sistemler</span>
           <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-1">
-            Sonlu Dikdörtgen Darbelerin Konvolüsyonu ve Yamuk Yanıtı
+            Sonlu Dikdörtgen Darbelerin Konvolüsyonu ve Yamuk Yanıt
           </h1>
         </div>
         <div class="flex items-center gap-2">
@@ -57,692 +54,661 @@
             2 Dikdörtgen Darbe
           </span>
           <span class="px-3 py-1 bg-indigo-50 text-indigo-800 border border-indigo-200 rounded-xl text-xs font-bold">
-            İnteraktif Kayan Örtüşme Simülatörü
+            Tam Çözüm &bull; 6 Adım
           </span>
         </div>
       </div>
 
-      <!-- Problem Metni ve Orijinal Kitap Kırpıntısı -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <div class="lg:col-span-7 space-y-4 text-sm text-slate-600 leading-relaxed">
-          <p class="font-medium text-slate-800">
-            <strong>Problem Tanımı (Oppenheim &amp; Willsky 2.4):</strong> Aşağıda tanımlanan $x[n]$ ve $h[n]$ sinyalleri için <strong>$y[n] = x[n] * h[n]$</strong> konvolüsyonunu hesaplayınız ve grafiğini (stem plot) çiziniz:
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm font-mono">
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-slate-900 space-y-1">
-              <span class="text-indigo-600 font-bold font-sans text-xs uppercase block">Girdi Sinyali $x[n]$:</span>
-              <div class="text-center font-bold text-sm text-indigo-800">
-                $$x[n] = \begin{cases} 1, & 3 \le n \le 8 \\ 0, & \text{diğer durumlarda} \end{cases}$$
-              </div>
-              <span class="text-[11px] text-slate-500 font-sans block text-center">Genişlik: $L_x = 8 - 3 + 1 = 6$ örnek</span>
+      <!-- Problem Açıklaması -->
+      <div class="space-y-4 text-sm text-slate-600 leading-relaxed">
+        <p class="font-medium text-slate-800">
+          <strong>Problem 2.4:</strong> Aşağıdaki sonlu uzunluktaki iki ayrık-zaman dikdörtgen darbesinin konvolüsyonunu $y[n] = x[n] * h[n]$ hesaplayınız:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
+            <span class="text-xs font-bold text-indigo-600 uppercase block font-mono">Girdi Sinyali $x[n]$</span>
+            <div class="text-center font-bold text-indigo-900 py-1">
+              $$x[n] = \begin{cases} 1, & 3 \le n \le 8 \\ 0, & \text{diğer} \end{cases}$$
             </div>
-            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-slate-900 space-y-1">
-              <span class="text-emerald-600 font-bold font-sans text-xs uppercase block">Dürtü Yanıtı $h[n]$:</span>
-              <div class="text-center font-bold text-sm text-emerald-800">
-                $$h[n] = \begin{cases} 1, & 4 \le n \le 15 \\ 0, & \text{diğer durumlarda} \end{cases}$$
-              </div>
-              <span class="text-[11px] text-slate-500 font-sans block text-center">Genişlik: $L_h = 15 - 4 + 1 = 12$ örnek</span>
-            </div>
+            <p class="text-[11px] text-slate-500 text-center">Genişlik: $L_x = 8 - 3 + 1 = 6$ örnek</p>
           </div>
-          <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl text-xs text-indigo-950 font-medium">
-            <strong>Fiziksel / Geometrik Sezgi:</strong> İki dikdörtgen darbenin konvolüsyonu daima bir <strong>yamuk (trapezoid)</strong> oluşturur. Çıkışın tepe değeri $\min(L_x, L_h) = 6$'dır; toplam süresi ise $L_x + L_h - 1 = 6 + 12 - 1 = 17$ noktadır ($n \in [7, 23]$).
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-1">
+            <span class="text-xs font-bold text-emerald-600 uppercase block font-mono">Dürtü Yanıtı $h[n]$</span>
+            <div class="text-center font-bold text-emerald-900 py-1">
+              $$h[n] = \begin{cases} 1, & 4 \le n \le 15 \\ 0, & \text{diğer} \end{cases}$$
+            </div>
+            <p class="text-[11px] text-slate-500 text-center">Genişlik: $L_h = 15 - 4 + 1 = 12$ örnek</p>
           </div>
         </div>
 
-        <!-- Kitap Kırpıntısı Kartı -->
-        <div class="lg:col-span-5 bg-slate-100/80 p-4 rounded-2xl border border-slate-200 space-y-2">
-          <div class="flex items-center justify-between text-xs font-bold text-slate-700">
-            <span>Ders Kitabı Orijinal Soru Metni</span>
-            <span class="text-[10px] text-slate-500 font-mono">Sayfa 138 • Prob. 2.4</span>
-          </div>
-          <div class="rounded-xl overflow-hidden border border-slate-300 bg-white p-2 shadow-inner">
-            <img src="data:image/png;base64,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ZxSruygQERERJSVMIYkoobh7966vr2/evHnVwKVOnTq+RgcPHnR2Aykx2bJlS9q0aTVXQaZPn17sTjaPG+zq5MmTpUqVEotQq1atMWPGxPZCbCIiIiIiIqdjCklECcWePXtczeNJkRQrx48f32Cegx86HH+nT58WLb9586az20JERERERBQXTCGJKKF4+/ZtoHmJLjYiIiIiIiIiIokpJBEREREREREREdkXU0giIiIiIiIiIiKyL6aQREREREREREREZF9MIYmIiIiIiIiIiMi+mEISERERERERERGRfTGFJCIiIiIiIiIiIvtiCklERERERERERET2xRSSiIiIiIiIiIiI7IspJBEREREREREREdkXU0giIiIiIiIiIiKyL6aQREREREREREREZF9MIYmIiIiIiIiIiMi+mEISERERERERERGRfTGFJCIiIiIiIiIiIvtiCklERERERERERET2xRSSiIiIiIiIiIiI7IspJBEREREREREREdkXU0giIiIiIiIiIiKyL6aQREREREREREREZF9MIYmIiIiIiIiIiMi+nJZChoWF3b179969e1FRUc5qAxERERERERERETmAE1LIM2fOLF682MfHx2AwJEuWbN68efjv0qVLw8PD7TfTc+fOLX5nyZIlYWFh9ptXfKxevRotvHXrlsmply9fRuNDQkIc3Cp6T+AYxJF49uxZZzeEiP6Pv79/cHCws1th1p07dxYrnj9/7uwWmXDy5MmAgADxh2zqihUrIiMjnd00IiIiIqL3i0NTyIiIiF69epUtW9ag4+rq+v3339tpvhgmlS9fXs4rWbJkCWqkNGfOnG5GXbt29fT0RAtr1qzZTbF06VIUe/ToUeXKlV1cXPCHs5tMSUpISMhXX32FPa1jx444EidOnOiUZoSFhX399ddin58yZYpT2uAYkZGRvXv37maGj4+PDecVFRXVt29fkzPq3r37q1evbDivpCcwMNDcZho8eLBt5zV8+HCTMypSpMjVq1dtOy+bWLlyJZpXu3Zt9aPc+t8wVq9ebXJ5Z8yYYdt2njt3rlSpUk2aNEHlpUuXlk11d3f/8ccfbTsvh0HLxeq6dOmSs9tCRERERBQLjkshg4ODW7Vq5erqqo8gheTJk+fLl2/fvn02n/U///yjziiBpJAY35YpUwaLnCpVKtGwdOnSZX8nc+bMssEffPABiuXMmRN/M4UkG9q7dy92rTx58mC/kvubg1PIp0+fbt68Gc3ImzevbEa1atUc2QYHe/v2LQ5qucJTp04tD3wc5pcvX7bhvCIjI4sWLSrrV+eL3hi9kA3nlfTcvn1b/ezw8vKSa7JcuXK2ndfJkyezK1KmTCnne/jwYdvOyybGjBmDdqZPn162c+TIkVZeZ4AP5bRp08o3ZsqUSS74l19+adt2vnnzZvjw4QULFrxy5cqIESOyZcsm+5natWvbdl52hS9RzZo1y2eUIkUKsQi7d+92druIiIiIiGLBQSlkQEBAy5YtzeWPKgwSbHtpNkY76nAuIaSQL168WLp0aYUKFdScsX379v7+/rLMw4cP8Uq7du3kYEPA8GnJkiVObDwlJadPn8Zu1rp1ayemkGPHjkUbSpYsqe7n708KmT59+pUrVzps1lu2bBG/ZzCFtIaaQubPn3/Pnj0Om/X8+fPTpEkjZp01a1aHzTe21q9fL1fRtGnTrHzX//73P/muMmXKYD3btZGqly9furu7J8YUcu3ategq69atq3aVTCGJiIiIKHFxRAoZERHRpk0bayJIcHNzs+E9sLZv3547d27NLJybQkZFRXXt2lUTLPr5+Zkrv2TJknbt2qnlCxUq5MgGU5IXHh4+cOBAuYM55Yrsf//9t0CBArIN708K+fHHHzt47tu2bRPnX6PnGT58uIPnnrioKWSnTp0cPPeCBQsm8BTy1atX9erVi2cK6eDLohNvCik8evSoUaNGTCGJiIiIKJFyRArZoUMHcSF2+vTpsynkiR6aSK5x48Y2mW94ePj333+vn4UTU0iM2bp27YoGyMi1T58+165di4iIsPCuFy9etG/fXl7MzhQyPkJCQh48ePD27VtnNyRh2b59u3NTSMCB4OHhYe8UMiwsDAuonnfseM5NISMjI+VVtMWLF3fw3BMXppCWBQYGyg+mWrVqWf/ByhQyPsaMGcMUkoiIiIgSKUekkOLu9RjunjlzRn193bp1GFzpU8KyZcvGf6ZRUVHTpk3TV+7EFPLFixedO3dWW9K7d28r34vFkWdEMoWMs5CQkP79+2Md2vbWe0lAQkgh37x5kzx5cnunkIcOHXL60J0pZGLBFNIyNYX09va2/o1MIeODKSQRERERJV52TyE3b96cM2fOvHnzHjlyRD91/fr1mvse2iqFnDVrljyvKoGkkBcvXlSb4eLi8uTJE+vfHhQU9MUXXzCFjI8hQ4aIlc8UUuM9SSHfvn0r7g7BFJIppDWYQlqWGFPI8PDwAQMGMIUkIiIiInIKu6eQ48aNc3Nzu3TpksmpGA/or8tOnjy5r69vfGb66tWrWrVqYb4YbNSoUSMhpJBRUVFlypRRm/Hzzz9bvhBbb86cOUwh4yYkJGTIkCHyFBimkBrvQwqJbqFVq1biOTxMIZlCWiPJpJDoAB8ZBQUF2aRtQv369UUL06ZNe+/ePevf6MQUEnbs2MEUkoiIiIjIKeyeQq5Zs+aLL77AEMjk1IiICPU+60K6dOmWLVsW5zk+f/78yy+/RD2lS5eOiopq2LBhQkghDx48KHMHwPDy8OHDsa1k+/btuXLlijGF9Pf337JlS1xb6mhv3rxZbfTq1Sv7zWXlypXqPhCrFDIhD/MePHiAVffXX39hV49PPXZNIc+fPx8QEBBjMbumkGhA69at5TKOGzcutr8B2BBTyMQiyaSQf/75p4tRq1atbNI2oUSJEqKF2KOwX1n/RqaQ8ZEwU8hnz55p7rpDRERERKTniPtCWnbs2DFNShifK7IxEMJYEZW4urouXLgQrySQFLJFixZqG/r27Ru3erZt22YhthgxYkTv3r0LFSqUNm3a3u8sX77cmpqxukaPHq2+smjRIlnJ999/rykfGBjY+79GjRploX5/f39RDNVGG8Ni8V+xvaBDhw5ik8VNUFCQqBArQTNp7NixdevWVdd/+/btReHhw4ebzO9WrVollytbtmy9evXCH8OGDYtn2CdMmDBBs+ru379v+S3r1q0TJXfu3ClfnDRpkgjxPTw8evbsiaG1NXMPCQnB7qfO/fbt2zZJIcPCwvr164cKb968if9u2rRJ1F++fHns/+LvGzdumHt7rFLI8PDw/v37q0uB/+JFk4Xfvn0r7magdgI9evQQb5w6dWrcljfO7JFC3rt3D8vSp0+f169fWy7JFNJ6SSmFFFW1bNnSJm0TEnsKmTNnzq1bt9q28s2bN/fWuX79upg6ffp0/VTQ/HB47do1C52buRQSvat8C5phZYNv3bqlacyUKVMsv2X27Nmi5IULF+QrrVu3Rm+GDxdzvzpjD/n222/FG3/44Qcrm0dERERESUxCTCFr1aoV59oCAwMxvE+ZMuXChQvFoCghpJBv3rzRnPIZ5xQy2jgw1rwSERExb968Dz/8MHny5JmMDh48iIGEyHS8vLwwSX/2H9715MkTtORDI6y3fPny4fXg4OAzZ86IV2SD3d3dBw0aJEYX+HfAgAH58+fXrFiM6FChOgLBJnhiVL169WzZsoliHTt2xCyqVKli0MEcMd+zZ8/KGrZv3161atVixYp9qFi1apUsEBAQgAKlSpUqUKCAqMTNzW3gwIHqkhYqVEg/L7lcmoAVu9Dq1aux0lxdXcXKzJAhg9xzevTogcWJ22l0UVFR69atQ/tTpEiRSeHp6Zk3b168/vPPP6sP7w4LC8O8GjRogEkyNsKI/dmzZxs2bBCbW10WVGX5BFtUOH78eKwNFxeXVKlSoXzatGnxxjx58mDbyXpilUK+evXqzp07xYsXR3tEzagBzdi2bZtcb6rChQvfv3/fZFJmZQqJ0ThGsKhHLgXgkMd/0QCsH30W2atXL3n3OnXTi/fWr1/f+uUVgoKCxI7dvn17LDjWGNatvtj+/fsxFXuv5mLV2KaQT58+xbw6d+4sD4EmTZrIqViZXbp0wS4kKixYsODkyZMt1PZepZCil+vXr5/agXz33XdqGfQh+LwQk9B1qD1YrFJI2d3BkiVLUJtmN0a/99lnn8lm9OnTx1xeI8QnhXz58qV6AvLGjRvRzxj+m0KiDJr64sWL2FYu4DCUB6waoomO6/PPPxeLWa5cOf0HbqxSSFGhMG7cOFHt3LlzZYG7d++qnxHTpk1TO1I9mUICusTYL7pZJ06cyJ07t6arQe8k74uNbwL4cFGnouPKmDGj5i406AzVW4hkzpxZ3VU0KSR6PKyZtm3bqrNG94uj+8GDB+aailUkejD0/2ghesJ06dKJ9+ITCn0apqq/uqGfefjwYZkyZbCG0fGKkujn0TtNnz5dvoLFUXunaGNviS8keBc6bdkPY8/BK/ggw8eZbVY9ERERESUSCS6FdHNzi/Og6PLly2XLlkUlQ4cOlS8mhBRy5syZmjbEJ4XU8/PzE+lPt27doozE6xgbyIf/YBx7/Phx9V0LFiwQ75Iw1FmzZk316tU1r6vNRoFevXqJ/2L00qJFCzG4lSOQP/74Q87izp074jJAtZIaNWrUqlVL/I3t1aBBA81cMHw6evSorASL06VLF7WAOv4UBX777bfUqVPLAl988YVaAKP9ChUqqDXUrVu3hVHXrl3VgdbJkydz5MiBBpcuXRozjYyMxFQMoipVqqQuozwBJFbWrVsnxmDNmjUTNQuDBg2SNatXtOHQwDhNs3I6dOiQL18+lPzoo4/Qfk2Yi6Hgvn37TM4dI9Xvv//eYEzf0IC1a9di1hgzoxI5+BRilUKOHj1av7eMHTtWjJ9xOGNeRYsWVaeiPAroq7ImhYyIiJg0aZLBeBQ3bdp09erVYh2uWLECI3lROdqviYmx7BiiFytWTLYB9Y8YMUJuAuuXN9r4mKlSpUppdmz9iahq1FiuXDlzk2JMIbEsXl5empWMBoip2Dk7duyoWf/e3t4W0gcHpJD+/v7bt28Xf6yJjW3bttm2JY8fP27ZsiV2cnkHQ6hZs6b8LQdHGfYcuXrz5s2rnlwWqxRy6dKlLgq8BZ2JmIR9G0tXp04dzZbSdGUacU4h7969+/nnn2O3UX+WQDdoUFLIe/fuoe9FOz/55JOrV6/Gqn5h4MCBckHkT0dhYWE4sjS7q/7BNdankDh4R40apa5VQZ5Mh1nLn6AEFPv3338t1Gm/FDLaeB69+gMM9i70TnIqeptz586pfRE+o7F76OtBSXRTKIDCeIs6SU0hfXx80CWa+8jGJ8j58+f1laMT8PX1xbvwkdSkSZPly5djdleuXFEbht5706ZN8i3oV/Vz+e6778QvQOqLap926dIl/BcFChcu3OKd5s2biw8IvI6PM17HTURERPRecXIKiQG2vCBX6N27t8mziqwxZcoUg3Hgd+DAAflikk8hFy5ciGGAqPbhw4eaqZMnT5Yz7dGjhzpp/vz5mstUpXHjxs18p23btvoC7du3xyRxdfC0adPUSWoK+fLlS1GJTD0kjKPwOgZXoowa88GXX36pNvX+/fvqVJND91mzZskCmhQy2ur7QmL3MxjvKHr69Gn1dYzSxYBQ+Prrr2MbXa1du1auBPVkT9i3b1/27NnFpO7du6s179+/H1tQcx6fp6fnjBkzRKZ88+ZNrD3s83Lq559/brIBEyZMEPWMHDlSc+0kdiF1FrFKIQ8fPowGiPWmwpgTr8+ZMwfHuL+/P0a8OO7k1IoVK+ovzbYmhZT1DBo0SBM1YhOLkS0KmLzIeuzYsbIB8bmZ2tGjR8VerfYtGFqHhoaqxbCSR4wYIaZmzpz5f//7n5wUqxRShOyYnRoQiBQSs+jWrVvNmjUxddiwYer637hxo7kK7ZFCPnr0qJ+iYMGC6dKlwx8WTkM2KW3atOqZzjaEI0WdkbgvBHTs2NHHxwcrsEKFClgt6h0PomOZQqLrE7cklmQKOWTIEPFK//791QJ2SiFXr14t3oj1L3+W6NOnT+rUqcWFuuh11Z9/sPixql/Qp5B//fUXPmU++ugjVIiOS4ZTjRs31rzX+hQS3wfQt6NC9XztokWLHjt2DFMvXLhQrly5FClS/PTTT2rIi41l4Qpxu6aQULlyZVl/9erV9QXwCSsLoPHmTokVHzrYPzWvqymkhO0r+qXp06d7eHjI1zU3WhF+/vln0Vviq4h68jg6N/WnL/XnE6xwVD548GDNfHPlyiXmK3ZyfJTI7wB3794VqwLbTv1Whj5N/CQmoA/UxKxERERElIQ5OYXUPCPb09Nz165dcavK398fQ/1kyZJp8qMEmELmz58fg3ZbVS6TRF9fX/1laBh7y0ulvLy81Cgk2nhzRvVScYwfMHjDuE6tZ8mSJeqVvyiDcbv6oFVsxGnTpsky2bJl05+HlSdPHlkDSk6dOlVz2SzeooYsadOm/fPPP+VUa1JI1CAL6FPIFy9eqJGryRRy27Zt6dKlwwJ26dJFP3X48OEyR8uQIUNsz9gdMGCAnLsmhQSM28UkNEAzeI6IiPj111/le1OmTKm/4Rf2edk2fQqJVT1x4kRxVqzmglPh5cuX6umQcbgv5N9//61uoCxZsly7dk0tgIVatmyZetpskSJFNL83xJhCzpkzRwTu+Fd/7TlGtsuXLxdvx4xmz56tKWCrFFJ6+vTpJ598IirEkF5/c09x7wJRQL1dadzuCyljI2zrU6dOYXV169atUqVKjx8/jjZeGi9PUsbiWzip0OYpJNZ8nTp10M+gM89g5OHhgUZmiJNvv/02/k3Sw1Ewfvx4uQMsWrQI26to0aI5cuQQ18vjv/pTAmN7X0h0jOotgFF/aGjokCFD8NnUtm1bdK2vX7/+8ccfZQE7pZDr16/HmhR9At574sSJ4ODgPn364JWePXsGBATUrl1b1Izurnnz5oGBgbGqH/755x+5Fw0bNgy7+oYNG/BKrly5xHmmz549k79txCeFlNReTtxFAZuscOHC33333aVLl7ATytDfYMx/LVyUbe8UEu2ROSA6q1mzZmkKoOvAgS8KoNMTh7AGdhV0L25ubvr1o6aQLi4uWO3Yx+RtLrAq1q5dK3+bzJgxI74dqW9H1yHyTewM+ofCXb9+Xb5XxLvqVPQ8cqroi+SZjNgHsIdfvHhRfoTt2bPHYPziof/IwytqPStWrLDJPZeJiIiIKOFzcgq5d+9eGUzgq+qSJUviVo+4aBGVVKlSRXPLuQSYQhYpUsRWNd+8efPTTz+V3+NNlvntt9/krPUhVPv27eXUfPnymRwJqJd85smTx2SZzp07yzL6O1eqKSRqM9nOu3fvqmupd+/eclPGP4UEjLhkAX0KKcICg/G0NZMn0WCpseFkDS1atDC5FObEOYWM/u+I3eRzA4KCgiykkFu3bhWTsmTJgtGpyeZt27ZNziL+KaS521Oqg2eMvTVRYIwppDyBSH9ykHDgwAF1H8BQX52qppCTJk2yyTOyZZoDFSpU0Bf4888/sUdpOrc4pJBXrlwRt5swGHuwW7duderUqXLlyi9fvhQFTp8+LU89sxzk2eNcSBwdmzZtOnjwoLjCHXtpr169ouLKJk3S8/Pzkxurf//+8+bNwx+Wn4gVh6fTdOvWTb7l+vXr2O7iD7Fc6H7VUwjtlEJGG7cINkHTpk3FDRywq8gUG//FgdakSRNMRW8ctxW+fv16uRTTp08PDAzEblmiRAnsmaKAzVNI7GBqCnn+/PkPP/xQvbeDmkKKMyXNsXcKGRYW9tlnn8lZtGnTRp/zDh06VC6Oye5O9Jb4SmNukoBNqU8So//b3f3zzz/qJNmR6h86F23M69Xbm2huohptvDRbTq1ataq5x2GhlxPfysw9J0dcvCK4ubk5/pmBREREROQUzkwhMRKQN1PH1/EFCxbEuarffvsN38Vr1qypv8wzaaeQ8iw5DDIvXbpksgwGuurcNWdsbd26VTyixGBMIU3WoEkhTZaJfwr58uVLNRIFuTUdkEI+fvxYhDgpU6YcMGDAQFPU68qbN29ucinM2bNnT9asWfFGDP7Vp0YI1qeQJkfsFlLIkJAQeXKWhcewxPMZ2ZoUUnPqjXT48GH5EBWD8Q6h6lQ1hcyRI4fm2bXXr1+XJx5iFG2yfuwn6sPQsc7VqeqwHDOK8VnS1li9erVsc/ny5U2WQZPKli2rvhKHFFIdsXfv3l0ckuqpzadPn5YFHJ9CJgpnz54tV66cuqNWrFjR8j1eY5tCHjt2TD42Gk6ePImDrk2bNvLkcbUrw6a3fEc8mzwje9euXThe1Dv3oe/CJ2acKxTUFLJ69eroXbHg6q2HbZ5ClilTRr4F3QgONxxE6gmPagrpxPtCCuI0QEm9HllAzyzv2ozuTtxHVTV69GiDFSlkv379TJ71aU0Kif1ffhRGREQMGzYMH3OoUD4Vx2D8cUXz1ULcmVewcM61+FZm+O+Ti6R79+7JH1ANzvhWRkRERETO4rQUEt+bR44cKb6Aenp6/vHHHxbu4mSZn59fmjRp8C3W5CMvknAKiWGDr6+vqPObb74xVywwMFBdCfrrRuVdBZ2bQkYbr/5WV5QjU0j14RUaGMCLc0Mw6PXw8EhvZGEpzLl69erZs2c1EWR4eDjGhHI4avMU8sWLF25ubmKSlSlklixZYnuXLitTSJBJosFiCmnQ3c5s3759cpK5FDL63dBdcEAKic0nH/6Ofuznn3/Wl6lbt65mSeOZQubOnRv7Ye/evYODg2UBppDW6NChg1xL2bNn1zy7XC+2KeTixYvVA6FAgQLoi9SnAKtdWbt27SzXZpMUEvs5ujs1hZw8eTI+FORZtHGAD1D15wSD8R4aN2/eVMvcunVLpJDY1TWTouOdQorDbf369fJEThyJ6vnmTk8h1TskwNatWzXnnD558kTt7jR92vHjxzNnzowCJlNyzTOyTTbAXAqJjgI1y0nYjiWM0BVobkAM+Galv0+OlSkkPolEGXz6l9CR+7aA/bNp06ZWrFciIiIiSvSclkIePXpUjovEw2rjVk9QUJB4vg2GKPpKrl27pjn5xWC8E5a5S4TsRJNC5syZU39NbhxcuXJFrkMLKSRguCvnzhTSYCqFlLfkx8CvUaNGjRXt27ffv38//sBW++GHHyKN4n/d6Llz5zZu3Cge/yobZvMUEqNfzc3UTFJTSENM1zPq2TyFzJAhw7Jly9SpCTOFhCNHjshqR44cqZmKg7R8+fKau4jGNoXE29XjCzsMjnd1D8Tf8rRo1Dx//nwLtTGFFMx1Zap4ppDoWjUdhSNTyF27dqGHQW+Gj7xs2bKJ3BB/5M+fH69UqVIFU/Wn4FkjICBAk1hhLpolLVWqlJgUtz5N48KFC2i2OsdJkyapBbAgsiMtUqSI5ad+OyCFhOXLl8sDLWXKlJp7oahnAhqMD3yTV21jdU2dOtVg7CFNPqwvPikkOmf5euHChRub17Rp01OnTi1atEizZa1JIbH+5R0kKlasaGEuUr9+/WKzdomIiIgosXJOChkREdGlSxfxDTVXrlz79++Pc1UnTpwQ9WTOnPlbHfW5xqpMmTJh6uDBg9+8eWPD5TLHTs/IvnLliqzQ+hRSf5snppDRSgqJHcnet8l//fo19j0M0jA0xWjT19dXnk8X/xQSG1Edc6onECWiFFJzo7Tw8HD16cNWppDY7dWHINkphTx69KisVp9CTpw40c3NTT1pMTr2KeTJkyfV1as/mxs9qny+UMmSJS3X9j6nkFu2bJE3oHBACqlJygDdr7p/Wq4tzinkqVOn8AGnPj1m48aN4hnZ+AP9gzwbztPTc9CgQfI52lbSpJDe3t6ae7BGx/suExqaR8AXKVLkyJEjagH1zrb61a7hmBQSqlSpItezmkKiAfJjV5JbASXF/bL37t1rslo1hcReZDKptCaFNHlfyBhZk0JOnjxZljF5RTYRERERvbeckELiG3aXLl0whkmRIsX8+fNNnrOAMhhmWxMGyRQyDjCYV6+Vs5/ffvtNvdGSwQ4pZIYMGTT30VOpKaQ+pEg4KSQ2R/PmzWVJp6SQmTJlis+1ipaJB/UWL14c+4P6yHIb3hfSYLziUk5yTAqJNfb111/Lt8c/haxcubI6aMffGTNmlG+0kEI+evRInoOD2tSfGeyUQqKePn36iGozZ8586NAhOencuXNZs2bF4a/ZpvFMIWfPnq15tI7TU0gcqiVtxK6pEOTMmVMsu81TSOx7uXLlkuVTpkwpH9UiyRP60M/o+0mNOKeQq1evls3w9PTEJwVexF7q5uYmrtbHEao+gWTmzJmxqt/b21u+F13ZL7/8oimA465YsWKiwF9//aWvIT4ppIuLi/7hYAkzhaxXr56YC77wyP0Hh78Io3HsDxo0SN4xQ6Z1T58+TWF08OBBk9Vqnk5jsitjCklERERECZMTUsgJEyZgFOHl5bVw4UKTOWNQUFDnzp3x3VpzApFJiSKFxGKq4ZrBeLf+Bw8exLNaNYU0mH9GdvR/U8i7d+9qpiacFPLevXty2GZwUgoJrVu3NtfC+AgPDx89ejR2fozbfXx8IiIi5P6f2FNIwIBWvj3+KSTWkuY2r+rTHiykkCDPgHZMChlt7NNkzTt27BAvYuPOmjWrYMGC6KM05WOVQqpXW0P+/PmPHj2qKSNDJay3Hj16WK7QHinkxYsXDTZi+bTueDp16pSMszNnznz69GnL5WOVQqJrVRfEZDclU8js2bPH2Np4ppAeHh4NGjTYuHGjeFFk5S1bthT/3bdvX8OGDbHboPINGzbEqn7sNnIxvb299Z/jgwcPltdHm3wCT3xSyLp166rnOEcbD6jx48eLqZkyZVq1apXl2hyWQr569Ur2aSVKlBCfO1jzrkbffvstVl3VqlVFAXnVNjpG/HfMmDHmfohNXCkkumuTz88hIiIioveTo1PIO3fu4Dt3smTJfv/9d3Nl/v33X3xz1V/GaFKiSCFBPqdY+vPPP+NZJxrfrFkzWaGVKaTmvpB4lzwpxn4ppDomSeBXZBuUgbptifzdYLwoXjO8lClkihQp9A+Lfw9TSENcn04TraSQvXv3Vke/Dk4hsZfmz5/f5LWusUohIyIi5EXEMGTIEH2ZRo0aiamurq4x9mn2SCEDAwOn2Ejc7lRoJfW+kNC1a1fL5eOcQmKz6iPONWvWeHl5iQJ2TSEvXbqENTl79mz1RU0KKfj5+a1fvz5WlUcrKWTKlCnXrl2rLzBo0CC5KuKfQmJxKlasKMurT+IW1Gdw1atXL8b2OyyFxJGOXkjt08LDw8VO2LdvX9E7LVq0SDQe/4rHW6EHy5s3r7kTIaMTQwqJuciPVHw2yWfEExERERE5NIXEN1Fxx3p3d/f79+8HmYLRbOnSpQ3GZ27KC2MxDsekHj16YBJGLPhbhjjxSSHTpEkjb68mZtGrV6/mzZvjD82pFvF348YNeSWgoL/pexyoJ0nNnz/fXIUWUshbt27Je4TZL4W8c+eOnGplCokBm7zdlQNSSAz55Mk7Xl5eFiLdaOPpaRs3bqxUqZL+ikuTsDtNmDBBPghb/2wimUIajOfJaqYmyRQSa0Pz+FfrU8isWbPqkwhhzpw5MlV3zNNpoo2X4mJnEDVj7P3q1avQ0NCaNWtWr17dZPk4p5DYyiaDA6enkAkflnrZsmU5cuRYuHCh3A1sm0LWqVNHFu7QoYO+wFdffSULWHi4sGSTZ2QLO3fuFCeBonNbvnx5fKqaOnWq7MqwI+nP3UZ3J6M3lDx//ry+klilkFu2bJGFUeGpU6c0BRJsChn935O4hw0bhr4Ci4D+5/Dhw6JASEiIXJ+pUqXClxz0YFWrVrVQp5pCYhOYvL21NSlklixZMMny9xB0ZfjoRJ8mX4ntM7LRa+mfiaeHjah5gA8RERERJUmOSyGvXbsm79cmvpiaIwqo9xI6ceIEXhchEf718PDAmEpWW9+iTJkyGXTSpEmDSfIObvgW7ufnJ2YB+MPHx8fmQSQGY2obMJdNmzbFoR414lFTSFdX14cPH5p8i0whS5YsGRAQoJnqgCuy45BCqmfLOiCFfPz4sfqs6l69eqnjLo3Nmzdj8/3000/mCmisX79efX7rzZs3NQVkCunu7o4RpmZqfFLIr7/+Ws66XLly169fN9lCx6eQ1atX1xxillPIs2fPFipUSE419zwNxz8jW5AJFLZgcHAwBur4w9wZQLFKIY8ePZoqVSpRGMevPvS5ceOGPFMMm1j8eIM+01wP9n6mkKtWrcqdO/eOHTtw9MndwLYppHgItcGYlE2dOlVfQE0hzR2JKhumkPv378fii6pie/21xoABA+RS4GNUn2Ft3LhR9jnor0yGXHFOIXFk6SuUKST+1T9+Tc+RKeSZM2fkdhTfLvDHqFGj5FKEhYXJi7IFfJRjJVuoU00hp0yZorlLrKB2d1jDsszFixfVjhQ9oYX7IKMH69KlC75xqRemxDaFBHz3s7yW0MuhSxw6dKjlYkRERESUBDgohbxz586nn35qiA357RZj5m+++UYzNUuWLBYexqJq2LCh5r34iq+5mz5mIZ/tIEcLMd7hPrYCAgLUm/objIFUbCtZtmxZzpw55f3+T5w4IU4vFUymkEeOHJEPCsDb9QUSSAqJkaQ8patMmTLqCS+OTyHh0qVLJtsJRYsWLVGihPVRHbaXrLZWrVqPHj3SFLDffSHVs4Tghx9+MNlCx6SQO3fulDub+hQXwXIKCePGjZNTO3XqZPJeYzKFrF27tmY/dEwKie5l4MCB1apV6969u8ln10b/N4WMsStr0KCBbDYOdn2BqVOnygLiJoD79u0rXLiwuZMi388UEt1mt27doo0Hi7w/RsmSJeVJtatXr1YPHMH6FHLNmjXylFXs5CbL6FPIdevWBQYGmqvThilktDF6w+Fv8lkxsaKmkPrTumHDhg2ygK+vL165cOHC8OHD1Y8n61PIkJCQNm3ayML6bQSYi3hmd5o0aUS3MGvWrPnz55ur05EpJPj4+Bj+S3NGs3qit8GYYps8vVGK7RXZHh4e6o9qakeK9Wbu57SIiIgePXqgDPZbtSuLQwqJXs7CM2r27t1boECBbNmy7dq1y8JSExEREVHS4KAUcvfu3YZYkt9u1RG7atiwYdbMWp9Curi4aIIwDKvUEEcoUaKEzdfD48eP0R6ZdmGwMWHChODgYGsuzX758uWSJUvSpUtXpEgRNV7p3LmzrBCV6984d+5cMbV58+YmR7wOTiHbtm1r8iwt+bCdzJkza84WFI+WljXkzp1b84wdjFTVMU/Lli31s1BTyJMnT8rXsYOhMP5Vb15pMAY0gwYNwtbBmsfUYKNNmzaVLVvW09Ozffv2JteDSWoKadAN3UNDQ+V91ry8vPTnYMYnhUSbMTKXk7CtTV7LbNsU0uRgEmPaESNGiAJff/21fjFjTCGxXHIxcezoL9/DLIYPH24wnmis/xXhwYMH6uOz5dAd7zIXF1rvwoULKVOmlI3HsF+9ClJD06ehzRZqlimkq6vrkSNH9AU0KSR214kTJ6ZKlUrebkLjfUshcXRjx9u5c6e8f8L8+fPlGkP3iB1g1apVODT0m8z6FLJbt26yZKFChfQFtmzZIh+MM3LkSOy96BbwioWTIm2bQtoEPsrlHTxwEOmvtsZn2cqVK+Wq8PX1ffHiBVYIPmTVZM36FFLt3CpXrmzyl7aPP/5YFBApJHrUMmXKNGnSxFydllNIvP3JkycVK1ZEd4EjLv4/V6DnUX8sRGs1VyjjmO3evbssgE95u6aQakdqMF4GPmPGDHxSqF0i/tujRw8U69q1K7agWrOaQmIfNvft5dKlS+pz2LEP4xjUd/unTp3CoWeucyMiIiKipMcRKaR8fmus2C+FxBdrzVXJjRs31tdvjxQy2vj9Xj25CV++3d3dLV+afefOne3bt2O8isIYzDx9+lRTIb7fi9qyZ8+uGRZiXNG/f39M8vT0xEhDX/mZM2fk2NhWKeSaNWv0iyCnuri4DB48WDPKOnfunAxDmzZtqq9/6dKl6tZZuHCheOgBRoxYOdiC6pmM+BtLrRmbqSkkFlmca3ngwIHvv/9+zpw50cYzMnLlyqXOBfW4ubllyJBh9OjRbkZi8Pb555+bvAjOHE0KOXfuXBGDHjx4EI1v1aqV2vgqVapsN5LPVlZH7Bis6p/aZCGFjDYegNiycioG6pqHLB8+fFgdWMKsWbPQAGsuGpXUFBIHrCbXw+qaNm2aOF8pffr0S5Ys0dcQYwoZGRnZr18/UQnG1dh2mgJYn+Lhs3379tWfUhr97uGzBuN10xs3brx27RqKzZ4928fHx/olNSk8PFz2clh8Pz8/Cz8tYG3UrFlTLqmFFPLmzZsVKlQQxbCJTQaLago5duxYLy+v/Pnz61eO9D6kkDiWxUGENfbtt9+WLFlS7Tbx4YKuUq7Vn376CfuM/qlQ0XFNIbFf6QuoPdiAAQNWrFiBWRcrVuzBgwfm6kyAKaTalfn6+up38sDAQBxcskyPHj3Wrl2bJUsWzdPYrE8h//77b3HIW7jaWqaQ+JjbsmVLu3btcHxZ+GnBcgo5ZswYef44tlGdOnUsrRHroFcXFYpzpfUFYvwVR9NCWTgOKSR6AHwEqx8ZaBUWGXujOGrQJeK/+FRCV6Y5Ll68eNGlSxd17pqMUkIvV6tWLYMCcyxcuPB2xdatW8UZxGXLlrVwYTgRERERJSV2TyHxfVpNQKxUvXp1mYCYTCExhrTy4h2TKaRmML9y5UqMXjTF7JRCRhsvzZaXHgsZMmQYaaReG+Xv7y9erF+/vigzYcIEk3f6VwcwZcqUwVtkUDVs2DDxurlLcdu3by/f6+XltW7dOn0ZNYXEmEH/UNTjx49jnC/L5M6dW1NATSEFOZ4MCgpCg8UjiaBZs2Ymo5azZ8+WK1dOraF48eJ4o8hYDcarxjSz6NmzJ7asrAEDHqxDObVo0aJ4e/r06bGh//33X1Fm27ZtMpM1B9tOEwTH6PLly5UrV1YrwWAMcxc3Lf38889HjRqluR7c8O4xNW/evPniiy/U1/UPZ/D19VXf/tlnn2miDXGGoJQ/f/6RimzZsplcUuxv1i+juhO6u7tjjqgZ2x2T/vnnn6FDh4pBLyYtXLjQZA0xppDR/32SQ65cudRO4Pfffxc7KioxdyaRTCGFTz/9FO00eS/O2FJTSOyoMZbHISMKW+7KpkyZIlvbqVMnk09vUFNIgzGx+vvvvy3MOsmnkKtXr5bn/4pdYvHixZoyap9mMPNI6+i4ppD6G79G635HMRivr5e/NJiUwFPI6dOn6wsEBgaK0FDCZ6vaDwvWp5Dy+Vr46DF5E4ZoJYUU6tatayHbjY4phVS7MsibN2/8rxT28/MTySbWhsmjeO/eveK+ovpbSejFmEKi461WrZoso0kho9/9omOwCD32r7/+qnmX+mOewRhfmtwNhIcPH9arV8/yXAzGfvjq1asxrEEiIiIiSirsm0KqJ7hZD99r1VBAXOGFr9GyAEb7mpO5LGjRooUm38F/NeNJfLeWp8YIKVOm1N+3zoYePXp05MiRnDlzqrGLwXidafl38uTJI9YGlhfjNHHqn0mhoaFYId7e3vKa0NKlS4tKUD/e/sMPP+ivUMaw5OXLl+ottwzGkTZelKMalFm1apUa3hmMJxKuWbNGlrlx44YmaMbGwqz//PNPeaaMmkJiMIYmeXl5iRbKS9XQ+GbNmj158sTcYvbp00czvhVbE7Vh3Kg+dELMAgNmzUlJalQqYP/UjH/27duXJk0a9XQeda9o0KCB/q6O1hg2bJh8xohaIQbMGKo9f/5cvZ7XYLws/fLlyzNnzsQgXLMDFy9evFKlSmJgf+DAAaxDzXtFGfVk4bt37+7Zs8fcKcl4u0zhMfJEMcwd+7/lkbyGOnT3NDIYo140TxxcoubFixfrz5/CLjd79uyyZcuqS4p3HT58GJPUc5pwqC5YsAD1iEwTm++QEeaCrSZmMX/+fJMnQkYbz/zV3AEW8F5rHuFqmUwhse9Zcz27TCFxqFo4aeunn35K/Y65W7DNmDFDnrqFTSmfvWtOkk8hu3fvLnckHHStW7fWP5ILvZboYA3GUB7/NVmVlSnk9u3bRZSPDTF27Fh0yPoyOGDVXiV37twxnmuc0FLIoKCgwoULiyZVr17dZE/47Nkz2R2Jflh/ajygx/vyyy9FMStTSKwEcymkPNNQfByIm1FaYDmFxCuaO7TE/1zpN2/eiJ7Hz8/PXO+EzwLM1+SNL9V6/P391a8rWGT0nOg/5en5wcHBcqWpZTT3U8aHe9++fbG69D+AiW8dv/32m3rK/9KlSytWrKi/dw02N7pQc9+X8CFSs2ZN/SeUgC88+AIgfqwiIiIioveEfVPIixcv1oq9r7/+WnO5a1RUFL4BywKxygcxwvf29lbrr1Onjv5suytXrmBSpkyZqlWrhj/MPYHXtsLDwzFCkw3Dl3UZtuJbu3ixY8eOKGZu3KLCSrt165ZmZWKkZ+7t7dq1q1+/PtaGZuXgRTnextsxNNJvI7wo762JMia3I8o8fvxYlFFTSNEkDE405VHG8mXOmNq+fXuUlNF2kSJFWrVqJRYwMDBQVjVu3Di8qE+7njx5opmpybOW8N4ZM2bol+j69euxuhBb03i0sHbt2uJJtdjTUCH2OlkhdjkxKWPGjJgknp+DcaDJdTtixAixTTEiNVkA+7w+28KBg0nqbSIzZMiAV86fP4968ubNi8HkkCFDwo1iu4BqCnngwIFjx45pmjRw4ECTGyU0NLRq1aoFCxbUL0W9evWwN2pOZEMNqKd///4okC9fPnGlfP78+fFfDKpNzkJ1+vRpzSwsPAzdejKFLFeunDU3kpMppIuLy8iRI80Vw1YOf8fccqEM9gexOPv3749x1kk+hcQx1bp1a7FCHj58aO6YvXfvnihjIW23MoXEKv3xxx9R1aRJk8z11Xh96tSpcsezJnlJaCnkixcv0IOJ9muer6JCVybKfPfddxb228GDB4ul69Gjh4WrcfF9QNSGrxMWGiY+pxo1ahQSEhLjx6XlFBI7TK9evdQgL/4pZLTxUXJoocnn+QjoN7BOLDce/TO6LH1XiQ9ueY780KFDTX4o6E9Cx7zevHnTsGFDTP3ss8/SpUsnSvbs2VO/4VAYczdZM1j4Yfjt27fiqyC+4cjfS/AxhFfwSWEuWSYiIiKipMpBT6dJLFauXGnyaimH8fX19TGaPXu2E5thc9Y8I9t6mzZtEmtJXkmdiGzfvh0t11+iGG0cG2PSihUr7NqAefPm+byzdOlS+fquXbvic0qgNc/INufWrVt79uyJw0x3794tFmTv3r1xeLsNiRSyWrVqVt5MU6aQhpieTmNzST6FtCHrr8i2h4SWQtqWTCENpu4yYVfWPCP7xo0b6Fhy5sxpqxQygUO3sGjRIrvOIioqasqUKaLH1pyYSURERETvD6aQ5Ai2TSEpAYpPCpkE9O3b193dfezYsVaWZwqZKDCFtJMDBw6ot6NNgClktPGnhfLlyydLlmzSpEmObB4RERERURLGFJIcgSlkkvc+p5C3bt0qX7589+7drb9gnylkosAU0k4OHTqUK1euBJ5C+vj4uLi41KhRI8434iAiIiIiIg2mkOQITCGTvPc2hbx//37NmjU7d+5s4SEzekwhEwU1hSxduvTJkycdOfcknEJGJ4YrsqtXr+7h4bFgwQJHto2IiIiIKGljCkmOwBQyyXtPUkjxPAcQ/339+nWlSpW6d++uf+CVZWoKmSNHjr17975RxOHpQNa0WRg8eLB8RgRTSMvUFBJ+++03dU3GKneOUVRUlFr5pEmTUqRI8Z6kkEeOHFGX3bZPLFH3/19++aVy5crFihWznEIGBQWVKlXK3d39jz/+sPy0KyIiIiIiihWmkOQIagpZr169hw8fOrtFZGPvQwoZFRU1f/785MmTp0qVatu2bXv37v3kk0/KlSsXh9BETSHB3d09+TsZMmTw8/OzYbOXLl2aXOHq6irnyxTSMk0K6ebmpq7Jrl272nBe6BXVypMlS6b2mTacUQKhppAeHh7qsvv6+tpwRv/++2+hQoX0axW8vLxMPpKlb9++1apVw2EY4+O2iYiIiIgoVphCkiOMHz9eHfvNnz/f2S0iG1NTyD59+iTJO6mJB2Gre7Krq+vPP/8ch6ru37//vRlz5syxYZujoqImTpxobl6zZs2y4bySnqCgIHOrDtauXWvDeQUHB5ubUWBgoA1nlEBs27bN3PLu37/ftvPauXOnyRn98ccftp0RERERERFZxhSS7CgqKiokJGT8+PHJkydXs5tChQrdunULk5JkVvVeefv27fPnz2vUqKE+ayJVqlQvXrwIMXJ2A21JTSFdXV27det24MAB7sNERERERERE1mAKSXb05MmT2rVrZ8+ePXny5FX/q1atWpi0ZcsWZ7eR4mXhwoWZMmXy8vLCNk2TJk3atGnxB/5bs2ZNbN9GjRrZ9hZvzoVlqVOnjtiBu3XrlpQWjYiIiIiIiMjemEKS3W3YsGHGjBnObgXZy/z58xcvXqz+gX95hiARERERERERqZhCEhERERERERERkX0xhSQiIiIiIiIiIiL7YgpJRERERERERERE9sUUkoiIiIiIiIiIiOyLKSQRERERERERERHZF1NIIiIiIiIiIiIisi+mkERERERERERERGRfTCGJiIiIiIiIiIjIvphCEhERERERERERkX0xhSQiIiIiIiIiIiL7YgpJRERERERERERE9sUUkoiIiIiIiIiIiOyLKSQRERERERERERHZF1NIIiIiIiIiIiIisi+mkERERERERERERGRfTCGJiIiIiIiIiIjIvphCEhERERERERERkX0xhSQiIiIiIiIiIiL7YgpJRERERERERERE9sUUkoiIiIiIiIiIiOyLKSQRERERERERERHZF1NIIiIiIiIiIiIisi+mkERERERERERERGRfTCGJiIiIiIiIiIjIvphCEhERERERERERkX0xhSQiIiIiIiIiIiL7YgpJRERERERERERE9sUUkoiIiIiIiIiIiOyLKSQRERERERERERHZF1NIIiIiIiIiIiIisi+mkERERERERERERGRfTCGJiIiIiIiIiIjIvphCEhERERERERERkX0xhSQiIiIiIiIiIiL7YgpJRERERERERERE9sUUkoiIiIiIiIiIiOyLKSQRERERERERERHZF1NIIiIiIiIiIiIisi+mkERERERERERERGRfTCGJiIiIiIiIiIjIvphCEhERERERERERkX0xhSQiIiIiIiIiIiL7YgpJRERERERERERE9sUUkoiIiBKx0NDQ+0YBAQHObgsREREREZnFFJKIiIgSpVOnTi1btmzYsGEGo3r16jm7RUREREREZBZTSCIiIkpkJkyY0KNHj9KlS4v8sVmzZnPnzt2yZYuz20VERERERGYxhSQiIqLE5Mcff0yePLnBYEiTJk2BAgUuX7787NkzZzeKiIiIiIhiwBSSiIiIEo2HDx82adLEYDBkzZp1/fr1zm4OERERERFZiykkERERJQ4hISGNGzcWV2HXr1/f2c0hIiIiIqJYYApJREREicOLFy/c3NwMBkPq1Klv377t7OYQEREREVEsMIUkIiKixEGmkB988MHbt2+d3RwiIiIiIooFppBERESUODCFJCIiIiJKvJhCEhERUeLg4BQyPDz8yZMnX375Jf6w97wc7PXr1w8ePChTpkwRRYkSJW7fvv3q1Stnt44ShJCQEOz/n332GfaN8uXLV6lSRe4qffv2xVRnN5CIiIgSH6aQRERElDg4MoXcvXu3j4+Pi4tLqlSpwsLC7DovB3v27Fnbtm2xaAYdvDhq1ChnN5Ccb9u2bf369cP+4Onp2bx58x07dgQEBDQ3whGBXaVnz55btmxxdjOJiIgokWEKSURERInDhAkTXF1d7Z1CXr58uV+/flmzZhXBXBJLISMiIjp06KDPH6Xy5ctfunTJ2c0kZ1q+fDkOMewMbdu2nT9/vmbqjBkz5KGxaNEip7SQiIiIEimmkERERJQ4fPzxxyL+sFMK+fr165YtW+bJk0dN5ZJSCvnrr78WLVo0Y8aMgwYNOv/O6dOnc+bMmTJlSrnIBQoU4HXZ763Q0NAvv/xS7Al+fn76Ajj0pkyZIgq0b9/e8S0kIiKixIspJBERESUO4hJR+6WQK1asaGr04YcfJr0UUlyI7e7uHhwcHBUVpU6KjIxctWpV5syZxSKLMs5qJznXkiVL5NX6JlNIWLp0qShQvXr1mzdvOraBRERElIgxhSQiIqLEwWH3hTx06JA8I9Ld3X3WrFn2m5fD+Pv7161bd+bMmeYetlOnTh2xyK6urpMnT3Zw86wRFRU1cuTIgQMHDho06PXr185uTgLi4+OD1XL06NH4V7V48WIZwceYQsK8efPiP1MiIiJ6TzCFJCIiosTBkU+nqVixosxZatasadd5OUB4eHjVqlUnTZpkoczVq1flddmfffaZw9pmwfPnz589exYYGPjJJ5+UKFGiePHiyZIlEzsAXnd265wmMjLymRE2Uwkjd3d3rJbChQs/fvw4PjU/evQoZ86cTCGJiIjITphCEhERUeLglBQyWbJkI0aMsOu8HCMyMlJzIbZGeHh46tSpxemfWNUOa5ge5r5x48YNGzZgQ7saiW3h4uJSr169xo0bHz582InNc5bXr19vNPLz81NXC9SuXRurZefOnfGcxd27d9WbosaYQubIkWPbtm3xnCkRERG9P5hCEhERUeLglBTS3d39l19+seu8Egg1hXTKfSEfPHgw2KhTp05qFtalS5epRr6+viEhIY5vmHMFBgaK1fLVV18Z/mvUqFFizdhqe6Getm3byvrr1auHuWvKBAUFNWjQQBTg02mIiIgoVphCEhERUeLAK7LtqkePHuL0urlz50ZGRjpgjqGhoc+fPz927FhJo8KFC4sVnjZtWi8vr3Tp0h04cOD06dPOPTHT8cLCwp4bLVmyBKulSJEiYrVgt/cywiunjczd4jM+Vq5c6eHhIXf+qlWram7BeenSJTEJe8tXX31l8wYQERFREsYUkoiIiBIHppD2c/Xq1TJlymBhCxYseOLECbvO6/r165uNunXrlixZMhF9uri41KlTp0GDBo0aNQoKCoowsmszNF6+fClatXfvXs2kv//+e/M7586ds1MD7ty5I2bRv3//ZEZizaRMmbKB0ePHjyPesVMboo2PAOratat6xmWtWrXQNlmgQIEC4vXmzZs7Jq0mIiKiJIMpJBERESUOTCHt5M6dO1WrVsWS5sqVa9++fXaay+7du4ca1ahRQ65bV1dXHx+fKVOmTJ06NTQ01E6ztuDx48eiVd26dRNNKlKkiJx68ODBIUOGyIf2QK9evWzbAH9/f9GAevXqaS64rlChAtbM3LlzbTvHGG3dujVdunRqS9C2CRMmHD9+HO1MmzYtXmnRosXz588d3DAiIiJK7JhCEhERUeLA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vXopV9EWK1bsXZ3x48cbFv/888++vr5p5eytWrWKj4+XleoUUtixY8dz3TdWjNyuXTuxRaPRdOvWTfx68uRJ0x1u27ZNlLVv3149YPPmzf/5z38arddqtYMGDRKHlCpVSlTK155EREQo7xQSZNi6a9eudw0cO3ZMjvP9998b7pXU343IyEi9vY8ePdJraciQIfXr13fQPQAxrdPs27ev8n8hiD9heVV1hQoVxIAff/xxWkfdu3dPmbdhw4bikDfffFP+Gh0dbXphAQAAbIgUEgAA2Adrp5BFixY9depUWpVarXbDhg32nkLevHkzICDAw8PD19e3Q4cOt2/fvnHjRvXq1cW5i5Nydnb+7LPPlFRRmjt3rr+/v3wzj1SkSJGAFzZt2qRcgauXQi5evHjXrl3iwzLMLr28vC5cuJBWk3v37pVHlStXTs4is0VBfAH8/PyWL1+uPL4zKSnpm2++ERvVHfbv379nz57e3t7qSYsVK3by5EkxmnqjOGWxZefOnXK0mJiYOnXqFC9eXF1TtmzZTz/9VL0s4us3Z84ccaCTk5Mo8PHxuX//vth+9+7dX3/91U9H6adChQqG5yi+zH379nVxcRkxYoT4FOSb2R88eHDixAk5u1hzo4sjKmvUqCHXUC5OwYIFlVZr1ap17949878PAAAA2YkUEgAA2Adrp5Bffvml6eL9+/crxZ07d5bJkR05efJk1apVRfO1a9cODQ1V7/rqq6+UUxs1alRycrJ6b2pqaq9evZQCc54LqdamTZuBOqVLl1bnZUYH2blzp5ubmzxKuZc5IiJCXvQnOTo6xsTEKLvEyGXLljWct0iRImKX8vIojUZz//79vXv3KluEKlWqGPYwe/ZspUAcldYHraSla9eulVvmz58vZlQ/KDatFFJUil0BAQGGuxYsWJBWCnnx4sVGjRp5eHiIWX7//Xe5cdGiRepPR8x++fJlow0DAADYFikkAACwDxZPIRMSEt54443MpZCCEgPZC3GCsvMJEybo7QoJCZFX2MmM77PPPtMr+PPPPzORQpYtW3bFihURERGyYO/evTJhdNBdebpmzRq9EbZv316yZEmxt3379rdu3VLvCg0NrVOnjpIMjhw5Ur1XfDTqSwIddDdlb926Vew6ePDglClT2rRps3LlysTERLlFedOO+C4tW7ZMr42LFy82aNAg3RSyR48e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" alt="Oppenheim Problem 2.4 Orijinal Metin" class="w-full h-auto object-contain rounded">
-          </div>
-          <p class="text-[11px] text-slate-500 text-center italic">
-            Alan V. Oppenheim, Alan S. Willsky - Signals and Systems (2nd Ed.)
-          </p>
+        <div class="p-3.5 bg-indigo-50/70 border border-indigo-200 rounded-xl text-xs text-indigo-950 font-medium">
+          <strong>Teorik Özellik:</strong> Farklı uzunluktaki ($L_1 \ne L_2$) iki dikdörtgen darbenin konvolüsyonu <strong>yamuk (trapezoidal)</strong> bir dalga biçimi üretir. Çıkışın toplam destek uzunluğu $L_y = L_x + L_h - 1 = 6 + 12 - 1 = 17$ örnek olup tepe genliği $\min(L_x, L_h) = 6$'dır.
         </div>
       </div>
     </section>
 
-    <!-- Hızlı Sonuç & Analitik Parçalı İfade Kartı -->
+    <!-- Soru Analizi & Mini Konu Anlatımı Kartı (2.21 Formatı) -->
     <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
-      <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-        <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
-        Analitik Parçalı Fonksiyon Tanımı
-      </h2>
-
-      <div class="p-6 bg-slate-50 border border-slate-200 rounded-2xl text-center space-y-3">
-        <span class="text-xs font-bold uppercase tracking-wider text-indigo-600">Kapalı Form Parçalı Çözüm</span>
-        <div class="text-base sm:text-xl font-black text-slate-900 font-mono">
-          $$y[n] = \begin{cases}
-          0, & n < 7 \\
-          n - 6, & 7 \le n \le 12 \quad \text{(Doğrusal Artış - Ramp)} \\
-          6, & 12 \le n \le 18 \quad \text{(Tepe Platosu - Tam Örtüşme)} \\
-          24 - n, & 18 \le n \le 23 \quad \text{(Doğrusal Azalış - Ramp)} \\
-          0, & n > 23
-          \end{cases}$$
-        </div>
+      <div class="border-b border-slate-100 pb-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+          <span>📖 Soru Analizi &amp; Mini Konu Anlatımı</span>
+        </h2>
+        <p class="text-xs text-slate-500 mt-1">Konvolüsyon toplamının adımları ve örtüşme sınırlarının sistematik analizi</p>
       </div>
 
-      <!-- 3 Bölge Kartları -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-        <div class="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-blue-900 uppercase">1. Bölge: Giriş Rampası</span>
-            <span class="text-[10px] bg-blue-200 text-blue-800 font-bold px-2 py-0.5 rounded">6 Nokta</span>
-          </div>
-          <div class="font-mono font-bold text-blue-700 text-sm">$7 \le n \le 12 \implies y[n] = n - 6$</div>
-          <p class="text-slate-600 leading-relaxed">
-            Filtre $x[k]$'nın içine kademeli olarak girer. Örtüşen örnek sayısı $1$'den $6$'ya kadar adım adım artar: $1, 2, 3, 4, 5, 6$.
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600">
+        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+            <span>📌 Soru Bizden Ne İstiyor?</span>
+          </h3>
+          <p class="text-xs leading-relaxed">
+            Ayrık-zaman konvolüsyon toplamı tanımı:
+            $$y[n] = \sum_{k=-\infty}^{\infty} x[k]\,h[n-k]$$
           </p>
+          <ul class="text-xs space-y-1.5 list-disc list-inside text-slate-700">
+            <li>$x[k] = 1$ aralığı: $k \in [3, 8]$</li>
+            <li>$h[n-k] = 1$ koşulu: $4 \le n - k \le 15 \iff n - 15 \le k \le n - 4$</li>
+            <li>Çarpım $x[k]\cdot h[n-k]$ sadece bu iki pencerenin kesişiminde $1$, dışında $0$'dır.</li>
+            <li>$y[n]$, kesişim aralığındaki tam sayı $k$ değerlerinin sayısıdır!</li>
+          </ul>
         </div>
 
-        <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-amber-900 uppercase">2. Bölge: Tepe Platosu</span>
-            <span class="text-[10px] bg-amber-200 text-amber-800 font-bold px-2 py-0.5 rounded">7 Nokta</span>
+        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+            <span>💡 5 Parçalı Bölge Analizi</span>
+          </h3>
+          <div class="space-y-1.5 text-xs text-slate-700">
+            <p><strong>1. Bölge ($n < 7$):</strong> $n-4 < 3 \implies$ Hiç örtüşme yok, $y[n] = 0$.</p>
+            <p><strong>2. Bölge ($7 \le n \le 12$):</strong> $k \in [3, n-4] \implies y[n] = (n-4) - 3 + 1 = n - 6$. (Lineer artış: $1 \to 6$)</p>
+            <p><strong>3. Bölge ($12 \le n \le 18$):</strong> Küçük darbe tamamen içeride: $k \in [3, 8] \implies y[n] = 6$. (Sabit plato)</p>
+            <p><strong>4. Bölge ($19 \le n \le 23$):</strong> $k \in [n-15, 8] \implies y[n] = 8 - (n-15) + 1 = 24 - n$. (Lineer azalış: $5 \to 1$)</p>
+            <p><strong>5. Bölge ($n > 23$):</strong> $n-15 > 8 \implies$ Örtüşme bitti, $y[n] = 0$.</p>
           </div>
-          <div class="font-mono font-bold text-amber-700 text-sm">$12 \le n \le 18 \implies y[n] = 6$</div>
-          <p class="text-slate-600 leading-relaxed">
-            Kısa olan $x[k]$ darbesi (6 nokta), daha uzun olan $h[n-k]$ filtresinin (12 nokta) içinde tamamen hapsolur. Örtüşme sabittir: $y[n] = 6$.
-          </p>
-        </div>
-
-        <div class="p-4 bg-purple-50 border border-purple-200 rounded-2xl space-y-1.5">
-          <div class="flex items-center justify-between">
-            <span class="font-bold text-purple-900 uppercase">3. Bölge: Çıkış Rampası</span>
-            <span class="text-[10px] bg-purple-200 text-purple-800 font-bold px-2 py-0.5 rounded">5 Nokta</span>
-          </div>
-          <div class="font-mono font-bold text-purple-700 text-sm">$18 \le n \le 23 \implies y[n] = 24 - n$</div>
-          <p class="text-slate-600 leading-relaxed">
-            Filtre $x[k]$ darbesinden dışarı çıkmaya başlar. Örtüşme sayısı $5$'ten $1$'e doğru azalarak $n=24$'te sıfıra düşer.
-          </p>
         </div>
       </div>
     </section>
 
-    <!-- Değer Tablosu -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <h3 class="text-base font-bold text-slate-900">Tüm $n$ Örnek Değerleri ($n = 6 \dots 24$)</h3>
-      <div class="overflow-x-auto">
-        <table class="w-full text-xs text-center border-collapse">
-          <thead>
-            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-300">
-              <th class="py-2.5 px-2">n</th>
-              <th class="py-2.5 px-2">6</th>
-              <th class="py-2.5 px-2 bg-blue-50 text-blue-800">7</th>
-              <th class="py-2.5 px-2 bg-blue-50 text-blue-800">8</th>
-              <th class="py-2.5 px-2 bg-blue-50 text-blue-800">9</th>
-              <th class="py-2.5 px-2 bg-blue-50 text-blue-800">10</th>
-              <th class="py-2.5 px-2 bg-blue-50 text-blue-800">11</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">12</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">13</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">14</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">15</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">16</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">17</th>
-              <th class="py-2.5 px-2 bg-amber-50 text-amber-800">18</th>
-              <th class="py-2.5 px-2 bg-purple-50 text-purple-800">19</th>
-              <th class="py-2.5 px-2 bg-purple-50 text-purple-800">20</th>
-              <th class="py-2.5 px-2 bg-purple-50 text-purple-800">21</th>
-              <th class="py-2.5 px-2 bg-purple-50 text-purple-800">22</th>
-              <th class="py-2.5 px-2 bg-purple-50 text-purple-800">23</th>
-              <th class="py-2.5 px-2">24</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-200 font-mono text-slate-800">
-            <tr class="hover:bg-slate-50 font-bold">
-              <td class="py-2.5 px-2 text-slate-600 font-sans">y[n]</td>
-              <td class="text-slate-400">0</td>
-              <td class="bg-blue-50 text-blue-700">1</td>
-              <td class="bg-blue-50 text-blue-700">2</td>
-              <td class="bg-blue-50 text-blue-700">3</td>
-              <td class="bg-blue-50 text-blue-700">4</td>
-              <td class="bg-blue-50 text-blue-700">5</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-amber-100 text-amber-800 text-sm">6</td>
-              <td class="bg-purple-50 text-purple-700">5</td>
-              <td class="bg-purple-50 text-purple-700">4</td>
-              <td class="bg-purple-50 text-purple-700">3</td>
-              <td class="bg-purple-50 text-purple-700">2</td>
-              <td class="bg-purple-50 text-purple-700">1</td>
-              <td class="text-slate-400">0</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- İnteraktif Simülatör ve Stem Grafiği -->
+    <!-- Canlı Simülatör Kartı (2.21 Formatı - Çift Kanvas) -->
     <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
         <div>
           <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
-            İnteraktif Kayan Darbe Simülatörü
+            <span>⚡ Canlı Konvolüsyon Simülatörü</span>
           </h2>
-          <p class="text-xs text-slate-500 mt-0.5">
-            Öteleme anını ($n$) sürgü ile kaydırarak $h[n-k]$ filtresinin $x[k]$ üzerinden geçişini ve yamuk çıkışının adım adım oluşumunu inceleyiniz.
-          </p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <button id="btnPlay" class="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition">
-            <svg id="playIcon" class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
-            <span id="playText">Animasyonu Oynat</span>
-          </button>
-          <button id="btnExport" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 rounded-xl text-xs font-semibold flex items-center gap-1 transition">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-            PNG İndir
-          </button>
+          <p class="text-xs text-slate-500 mt-1">$n$ kaydırma indisini değiştirerek $k$-uzayındaki örtüşmeyi ve oluşan $y[n]$ değerini canlı izleyin</p>
         </div>
       </div>
 
-      <!-- Görünüm Seçim Sekmeleri (Tabs) -->
-      <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
-        <button class="tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition active" data-mode="process">
-          1. Kayan Filtre ve Örtüşme Bölgesi ($k$-Ekseni)
-        </button>
-        <button class="tab-btn px-4 py-2 rounded-xl text-xs font-bold border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 transition" data-mode="output">
-          2. Tam Çıkış Sinyali $y[n]$ (Yamuk Grafiği)
-        </button>
-      </div>
-
-      <!-- Sürgü Kontrol Alanı -->
-      <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-wrap items-center justify-between gap-4">
-        <div class="flex items-center gap-3 flex-1 min-w-[240px]">
-          <span class="text-xs font-bold text-slate-700 whitespace-nowrap">Öteleme Anı ($n$):</span>
-          <input type="range" id="nSlider" min="4" max="26" step="1" value="14" class="w-full accent-indigo-600 cursor-pointer">
-          <span id="nValueDisplay" class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-mono font-bold text-sm flex items-center justify-center shrink-0 shadow-sm">
-            14
-          </span>
+      <!-- Kontrol Paneli -->
+      <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button id="btnPrev" class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition shadow-sm">&larr; $n-1$</button>
+          <button id="btnPlay" class="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm">Oynat &#9658;</button>
+          <button id="btnNext" class="px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-bold hover:bg-slate-100 transition shadow-sm">$n+1$ &rarr;</button>
         </div>
-        <div id="stepMathDisplay" class="text-xs font-mono bg-white px-4 py-2.5 rounded-xl border border-slate-200 text-slate-800 font-bold shadow-sm">
-          $n = 14 \implies y[14] = 6$ (Tepe Platosu • Tam Örtüşme: $k \in [3, 8]$)
+
+        <div class="flex items-center gap-3 flex-1 min-w-[240px] max-w-xs">
+          <span class="text-xs font-bold text-slate-600">Kaydırma $n$:</span>
+          <input type="range" id="sliderN" min="0" max="30" value="10" class="flex-1 accent-indigo-600 cursor-pointer">
+          <span id="labelN" class="text-xs font-black font-mono bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-lg w-8 text-center">10</span>
         </div>
       </div>
 
-      <!-- Canvas Çizim Alanı -->
-      <div class="relative bg-white rounded-2xl border border-slate-200 p-2 shadow-inner overflow-hidden">
-        <canvas id="stemCanvas" class="w-full h-80 sm:h-96 block"></canvas>
-        <div id="tooltip" class="absolute hidden bg-slate-900/90 text-white text-[11px] font-mono px-2.5 py-1.5 rounded-lg shadow-lg pointer-events-none transition-opacity"></div>
+      <!-- Çift Kanvas Alanı (2.21 Formatı) -->
+      <div class="space-y-4">
+        <!-- 1. Kanvas: k-Uzayı (Girdi, Kayan Sinyal ve Çarpım) -->
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <div class="flex justify-between items-center text-[11px] text-slate-400 font-mono">
+            <span>k-Uzayı: Sabit $x[k]$ (Mavi), Kayan $h[n-k]$ (Yeşil), Örtüşme $x[k]h[n-k]$ (Amber)</span>
+            <span class="text-indigo-400 font-bold" id="statusRegion">Bölge 2 (Artış)</span>
+          </div>
+          <canvas id="canvasTop" class="w-full bg-slate-900 rounded-xl block" style="height: 190px;"></canvas>
+        </div>
+
+        <!-- 2. Kanvas: n-Uzayı (Çıkış Sinyali y[n]) -->
+        <div class="bg-slate-950 p-4 rounded-2xl border border-slate-800 space-y-2">
+          <div class="flex justify-between items-center text-[11px] text-slate-400 font-mono">
+            <span>n-Uzayı: Oluşan Çıkış Sinyali $y[n] = x[n] * h[n]$ (Mor/İndigo Yamuk)</span>
+            <span class="text-amber-400 font-bold" id="statusVal">y[10] = 4</span>
+          </div>
+          <canvas id="canvasBottom" class="w-full bg-slate-900 rounded-xl block" style="height: 190px;"></canvas>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs text-slate-600">
-        <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100 flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-indigo-600 inline-block shrink-0"></span>
-          <span><strong>Mavi Lolipoplar:</strong> Sabit girdi $x[k]$ ($3 \le k \le 8$).</span>
-        </div>
-        <div class="p-3 bg-emerald-50/50 rounded-xl border border-emerald-100 flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-emerald-600 inline-block shrink-0"></span>
-          <span><strong>Yeşil İçi Boş:</strong> Kayan filtre $h[n-k]$ ($n-15 \le k \le n-4$).</span>
-        </div>
-        <div class="p-3 bg-amber-50/50 rounded-xl border border-amber-100 flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-amber-500 inline-block shrink-0"></span>
-          <span><strong>Sarı Gölge / Kırmızı Çıkış:</strong> Örtüşen bölge ve $y[n]$ genliği.</span>
-        </div>
+      <!-- Canlı Matematiksel İfade Kutusu -->
+      <div id="simMath" class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-mono text-slate-700 text-center">
+        <!-- Dinamik matematik ifadesi -->
       </div>
     </section>
 
-    <!-- Adım Adım Matematiksel Çıkarım -->
-    <section class="space-y-6">
-      <div class="border-b border-slate-200 pb-3">
-        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
-          <span class="w-2.5 h-6 bg-indigo-600 rounded-full inline-block"></span>
-          Ayrıntılı Matematiksel Çözüm Adımları
-        </h2>
-        <p class="text-xs text-slate-500 mt-1">
-          Konvolüsyon toplamı tanımı ve örtüşme sınırlarının sistematik analizi.
+    <!-- 6 Adım Kartları (2.21 Formatı - Kart Başına PNG İndir Butonu ve Görsel) -->
+    <div class="space-y-8">
+
+      <!-- Adım 1 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">1. Adım</span>
+            <h3 class="text-lg font-bold text-slate-900">Darbelerin Tanımı ve Taşıyıcı Aralıklar ($x[k]$ ve $h[k]$)</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_2_4_adim_1.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
+            <span>📥 PNG İndir</span>
+          </button>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Girdi sinyali $x[k]$, $k \in [3, 8]$ aralığında 1 değerini alan 6 örnek uzunluğunda bir darbedir. Dürtü yanıtı $h[k]$ ise $k \in [4, 15]$ aralığında 1 değerini alan 12 örnek uzunluğunda bir darbedir. Konvolüsyon integrali/toplamı için $k$ kukla değişkeni üzerinden eksen çizilir.
         </p>
-      </div>
-
-      <!-- Adım 1: Sinyallerin Tanımı -->
-      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <span class="w-6 h-6 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">1</span>
-          <h3 class="text-base sm:text-lg font-bold text-slate-900">Sinyallerin Kukla Değişken $k$ Cinsinden İfadesi</h3>
+        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
+          <img id="img1" class="max-w-full rounded-xl" alt="1. Adım">
         </div>
-        <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
-          <p>
-            Konvolüsyon toplamında:
-            $$y[n] = \sum_{k=-\infty}^{\infty} x[k] h[n-k]$$
-          </p>
-          <ul class="list-disc list-inside space-y-1.5 ml-2 font-mono text-xs sm:text-sm text-slate-800">
-            <li>$x[k] = 1$ yalnızca $3 \le k \le 8$ aralığındadır.</li>
-            <li>$h[n-k] = 1$ koşulu: $4 \le n - k \le 15$ olmasıdır.</li>
-          </ul>
-          <p>
-            $4 \le n - k \le 15$ çift eşitsizliğini $k$ için çözelim:
-          </p>
-          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 font-mono text-xs sm:text-sm space-y-1 text-slate-900">
-            <div>$$4 - n \le -k \le 15 - n$$</div>
-            <div>$$\implies n - 15 \le k \le n - 4$$</div>
+      </section>
+
+      <!-- Adım 2 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">2. Adım</span>
+            <h3 class="text-lg font-bold text-slate-900">Çevir ve Kaydır: $h[n-k]$ Desteğinin Belirlenmesi</h3>
           </div>
-          <p class="text-xs text-slate-600">
-            Demek ki $h[n-k]$ filtresi, sol sınırı $k_L = n - 15$ ve sağ sınırı $k_R = n - 4$ olan 12 örnek genişliğinde bir penceredir.
-          </p>
+          <button onclick="downloadCard('img2', 'problem_2_4_adim_2.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
+            <span>📥 PNG İndir</span>
+          </button>
         </div>
-      </div>
-
-      <!-- Adım 2: 5 Ayrı Örtüşme Durumu -->
-      <div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-        <div class="flex items-center gap-2 border-b border-slate-100 pb-3">
-          <span class="w-6 h-6 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">2</span>
-          <h3 class="text-base sm:text-lg font-bold text-slate-900">Örtüşme Aralıklarının Belirlenmesi</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          $h[k]$ zaman ekseninde ters çevrilir ($h[-k]$), desteği $[-15, -4]$ olur. Ardından $n$ birim sağa ötelenir ($h[n-k]$). Böylece $h[n-k]$'nın sıfırdan farklı olduğu pencere $[n-15, n-4]$ aralığı haline gelir. Bu pencerenin ön ucu $n-4$, arka ucu $n-15$'tir.
+        </p>
+        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
+          <img id="img2" class="max-w-full rounded-xl" alt="2. Adım">
         </div>
-        <div class="text-sm text-slate-700 space-y-4 leading-relaxed">
-          <div class="space-y-2">
-            <h4 class="font-bold text-slate-900">1. Henüz Örtüşme Yok ($n - 4 < 3 \implies n < 7$):</h4>
-            <p class="text-slate-600">Filtrenin sağ sınırı $x[k]$'nın sol sınırına ulaşmamıştır. Çarpım her yerde sıfırdır: <strong>$y[n] = 0$</strong>.</p>
-          </div>
+      </section>
 
-          <div class="space-y-2">
-            <h4 class="font-bold text-blue-900">2. Kısmi Giriş Rampası ($7 \le n \le 12$):</h4>
-            <p class="text-slate-600">Filtrenin sağ ucu $x[k]$'nın içine girmiştir, ancak sol ucu henüz girmemiştir ($n - 15 < 3 \implies n < 18$). Örtüşme aralığı $k \in [3, n - 4]$'tür:</p>
-            <div class="bg-blue-50/70 p-3 rounded-xl border border-blue-200 font-mono text-xs sm:text-sm text-blue-950">
-              $$y[n] = \sum_{k=3}^{n-4} 1 = (n - 4) - 3 + 1 = \mathbf{n - 6}$$
-            </div>
+      <!-- Adım 3 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">3. Adım</span>
+            <h3 class="text-lg font-bold text-slate-900">Bölge 1 ($n < 7$): Örtüşme Yok</h3>
           </div>
-
-          <div class="space-y-2">
-            <h4 class="font-bold text-amber-900">3. Tam Örtüşme - Plato ($12 \le n \le 18$):</h4>
-            <p class="text-slate-600">Filtrenin sağ ucu $x[k]$'yı tamamen aşmış ($n - 4 \ge 8 \implies n \ge 12$), sol ucu ise henüz $x[k]$'nın içine girmemiştir ($n - 15 \le 3 \implies n \le 18$). $x[k]$ tamamen kapsanır ($k \in [3, 8]$):</p>
-            <div class="bg-amber-50/70 p-3 rounded-xl border border-amber-200 font-mono text-xs sm:text-sm text-amber-950">
-              $$y[n] = \sum_{k=3}^{8} 1 = 8 - 3 + 1 = \mathbf{6}$$
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <h4 class="font-bold text-purple-900">4. Kısmi Çıkış Rampası ($18 \le n \le 23$):</h4>
-            <p class="text-slate-600">Filtrenin sol ucu $x[k]$'nın içine girmiştir ($n - 15 > 3 \implies n > 18$), ancak sağ ucu $x[k]$'yı çoktan terk etmiştir. Örtüşme aralığı $k \in [n - 15, 8]$'dir:</p>
-            <div class="bg-purple-50/70 p-3 rounded-xl border border-purple-200 font-mono text-xs sm:text-sm text-purple-950">
-              $$y[n] = \sum_{k=n-15}^{8} 1 = 8 - (n - 15) + 1 = 24 - n = \mathbf{24 - n}$$
-            </div>
-          </div>
-
-          <div class="space-y-2">
-            <h4 class="font-bold text-slate-900">5. Örtüşme Sona Erdi ($n - 15 > 8 \implies n > 23$):</h4>
-            <p class="text-slate-600">Filtrenin sol ucu $x[k]$'nın sağ ucunu tamamen geçmiştir. Hiçbir ortak nokta kalmamıştır: <strong>$y[n] = 0$</strong>.</p>
-          </div>
+          <button onclick="downloadCard('img3', 'problem_2_4_adim_3.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
+            <span>📥 PNG İndir</span>
+          </button>
         </div>
-      </div>
-    </section>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Kayan darbenin ön ucu $n-4$, sabit sinyalin başlangıç noktası olan $3$'e henüz ulaşmamıştır: $n - 4 < 3 \iff n < 7$. Kesişim kümesi boş kümedir: $[3, 8] \cap [n-15, n-4] = \emptyset$. Dolayısıyla $y[n] = 0$'dır.
+        </p>
+        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
+          <img id="img3" class="max-w-full rounded-xl" alt="3. Adım">
+        </div>
+      </section>
 
-    <!-- Akıllı Gezinme ve İlgili Problemler -->
-    <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
-      <h3 class="text-base font-bold text-slate-900">İlgili Diğer Konvolüsyon Problemleri</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-        <a href="problem_2_1_ayrik_zaman_konvolusyon_ve_lti_oteleme.html" class="p-3 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/30 transition group block">
-          <span class="font-bold text-indigo-600 block group-hover:translate-x-0.5 transition-transform">Problem 2.1 &rarr;</span>
-          <span class="text-slate-500 mt-1 block">Ayrık konvolüsyon ve zaman öteleme eşdeğerliği</span>
-        </a>
-        <a href="problem_2_2_ayrik_zaman_konvolusyon_pencere_sinirlari.html" class="p-3 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/30 transition group block">
-          <span class="font-bold text-indigo-600 block group-hover:translate-x-0.5 transition-transform">Problem 2.2 &rarr;</span>
-          <span class="text-slate-500 mt-1 block">Kayan filtre pencere sınır analizi ($A \le k \le B$)</span>
-        </a>
-        <a href="problem_2_3_ayrik_zaman_konvolusyon_toplami.html" class="p-3 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/30 transition group block">
-          <span class="font-bold text-indigo-600 block group-hover:translate-x-0.5 transition-transform">Problem 2.3 &rarr;</span>
-          <span class="text-slate-500 mt-1 block">Geometrik dizi birikimi ve öteleme iptali</span>
-        </a>
-        <a href="index.html" class="p-3 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/30 transition group block">
-          <span class="font-bold text-indigo-600 block group-hover:translate-x-0.5 transition-transform">Ana Portal &rarr;</span>
-          <span class="text-slate-500 mt-1 block">55+ çözümlü problem ve interaktif araçlar</span>
-        </a>
-      </div>
-    </section>
+      <!-- Adım 4 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">4. Adım</span>
+            <h3 class="text-lg font-bold text-slate-900">Bölge 2 ($7 \le n \le 12$): Lineer Artış</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_2_4_adim_4.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
+            <span>📥 PNG İndir</span>
+          </button>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Kayan darbe içeri doğru girmektedir: $3 \le n-4 \le 8$ ve arka uç henüz $3$'ü geçmemiştir ($n-15 < 3 \iff n < 18$). Ortak aralık $k \in [3, n-4]$'tür. Örtüşen örnek sayısı:
+          $$y[n] = \sum_{k=3}^{n-4} 1 = (n-4) - 3 + 1 = n - 6$$
+          $n=7 \implies y[7]=1$, $n=12 \implies y[12]=6$.
+        </p>
+        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
+          <img id="img4" class="max-w-full rounded-xl" alt="4. Adım">
+        </div>
+      </section>
+
+      <!-- Adım 5 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">5. Adım</span>
+            <h3 class="text-lg font-bold text-slate-900">Bölge 3 ($12 \le n \le 18$): Tam Örtüşme (Plato)</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_2_4_adim_5.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
+            <span>📥 PNG İndir</span>
+          </button>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          Kısa olan $x[k]$ darbesi ($L_x=6$), daha uzun olan $h[n-k]$ penceresinin ($L_h=12$) tamamen içine girmiştir. $n-4 \ge 8$ ve $n-15 \le 3$'tür. Kesişim aralığı $[3, 8]$ sabit kalır:
+          $$y[n] = \sum_{k=3}^{8} 1 = 8 - 3 + 1 = 6$$
+          Bu bölgede çıkış genliği sabit kalıp yamuğun üst düzlüğünü (platosunu) oluşturur.
+        </p>
+        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
+          <img id="img5" class="max-w-full rounded-xl" alt="5. Adım">
+        </div>
+      </section>
+
+      <!-- Adım 6 -->
+      <section class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-xs font-black text-indigo-600 uppercase tracking-wider">6. Adım</span>
+            <h3 class="text-lg font-bold text-slate-900">Bölge 4 &amp; 5 ($19 \le n \le 23$ ve $n > 23$): Lineer Azalış ve Çıkış Yanıtı</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_2_4_adim_6.png')" class="px-3 py-1 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-lg text-xs font-bold text-slate-700 transition flex items-center gap-1 shadow-sm">
+            <span>📥 PNG İndir</span>
+          </button>
+        </div>
+        <p class="text-xs text-slate-600 leading-relaxed">
+          $n-15 > 3$ olduğunda arka uç $x[k]$'nin içine girer. Kesişim aralığı $k \in [n-15, 8]$ olur. Örnek sayısı:
+          $$y[n] = \sum_{k=n-15}^{8} 1 = 8 - (n-15) + 1 = 24 - n$$
+          $n=19 \implies y[19]=5$, $n=23 \implies y[23]=1$. $n > 23$ için $n-15 > 8$ olur ve örtüşme tamamen biter: $y[n] = 0$.
+        </p>
+        <div class="bg-slate-950 p-2 rounded-2xl border border-slate-800 flex justify-center">
+          <img id="img6" class="max-w-full rounded-xl" alt="6. Adım">
+        </div>
+      </section>
+
+    </div>
 
   </main>
 
-  <!-- Simülasyon ve Canvas Betiği -->
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const canvas = document.getElementById("stemCanvas");
-      const ctx = canvas.getContext("2d");
-      const slider = document.getElementById("nSlider");
-      const nDisplay = document.getElementById("nValueDisplay");
-      const stepMath = document.getElementById("stepMathDisplay");
-      const btnPlay = document.getElementById("btnPlay");
-      const playText = document.getElementById("playText");
-      const tabBtns = document.querySelectorAll(".tab-btn");
+    // Matematik Fonksiyonları
+    function getX(k) {
+      return (k >= 3 && k <= 8) ? 1 : 0;
+    }
 
-      let currentMode = "process"; // 'process', 'output'
-      let currentN = 14;
-      let isPlaying = false;
-      let playInterval = null;
+    function getH(k) {
+      return (k >= 4 && k <= 15) ? 1 : 0;
+    }
 
-      // Sinyal Fonksiyonları
-      // x[k] = 1 for 3 <= k <= 8
-      function getX(k) {
-        return (k >= 3 && k <= 8) ? 1 : 0;
-      }
+    function getY(n) {
+      if (n < 7) return 0;
+      if (n <= 12) return n - 6;
+      if (n <= 18) return 6;
+      if (n <= 23) return 24 - n;
+      return 0;
+    }
 
-      // h[m] = 1 for 4 <= m <= 15
-      function getH(m) {
-        return (m >= 4 && m <= 15) ? 1 : 0;
-      }
+    // Yüksek Çözünürlüklü Tuval Yardımcısı
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const dpr = 2; // Keskin render için 2x
+      c.width = w * dpr;
+      c.height = h * dpr;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(dpr, dpr);
+      return { canvas: c, ctx: ctx, width: w, height: h };
+    }
 
-      // Analitik y[n]
-      function getY(n) {
-        if (n < 7 || n > 23) return 0;
-        if (n >= 7 && n <= 12) return n - 6;
-        if (n >= 12 && n <= 18) return 6;
-        if (n >= 18 && n <= 23) return 24 - n;
-        return 0;
-      }
+    // Ayrık Eksen Çizici
+    function drawDiscreteAxis(ctx, w, h, minX, maxX, minY, maxY, xLabel) {
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, w, h);
 
-      function resizeCanvas() {
-        const rect = canvas.getBoundingClientRect();
-        const dpr = window.devicePixelRatio || 1;
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.resetTransform();
-        ctx.scale(dpr, dpr);
-        draw();
-      }
+      const padX = 40;
+      const padY = 28;
+      const plotW = w - 2 * padX;
+      const plotH = h - 2 * padY;
 
-      window.addEventListener("resize", resizeCanvas);
+      const toX = val => padX + ((val - minX) / (maxX - minX)) * plotW;
+      const toY = val => h - padY - ((val - minY) / (maxY - minY)) * plotH;
 
-      function drawStem(ctx, x, y0, y1, color, radius = 4, filled = true) {
+      // Izgara
+      ctx.strokeStyle = '#1e293b';
+      ctx.lineWidth = 1;
+      for (let x = Math.ceil(minX); x <= Math.floor(maxX); x += 2) {
         ctx.beginPath();
-        ctx.moveTo(x, y0);
-        ctx.lineTo(x, y1);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 2;
+        ctx.moveTo(toX(x), padY);
+        ctx.lineTo(toX(x), h - padY);
         ctx.stroke();
+      }
 
-        ctx.beginPath();
-        ctx.arc(x, y1, radius, 0, Math.PI * 2);
-        if (filled) {
-          ctx.fillStyle = color;
-          ctx.fill();
-        } else {
-          ctx.fillStyle = "#ffffff";
-          ctx.fill();
-          ctx.lineWidth = 2;
-          ctx.strokeStyle = color;
-          ctx.stroke();
+      // Eksenler
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 1.5;
+      const y0 = toY(0);
+      ctx.beginPath();
+      ctx.moveTo(padX - 10, y0);
+      ctx.lineTo(w - padX + 15, y0);
+      ctx.stroke();
+
+      // Ok
+      ctx.fillStyle = '#475569';
+      ctx.beginPath();
+      ctx.moveTo(w - padX + 15, y0);
+      ctx.lineTo(w - padX + 8, y0 - 4);
+      ctx.lineTo(w - padX + 8, y0 + 4);
+      ctx.fill();
+
+      // Eksen Etiketi
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'bold 11px monospace';
+      ctx.fillText(xLabel, w - padX + 18, y0 + 4);
+
+      // Sayı İşaretleri
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      for (let x = Math.ceil(minX); x <= Math.floor(maxX); x += 2) {
+        ctx.fillText(x, toX(x), y0 + 5);
+      }
+
+      return { toX, toY, padX, padY, plotW, plotH };
+    }
+
+    // Stem (Ayrık Örnek) Çizici
+    function drawStem(ctx, xPix, yPix, y0Pix, color, radius = 3.5) {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(xPix, y0Pix);
+      ctx.lineTo(xPix, yPix);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(xPix, yPix, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Simülatör Tuval Çizimi
+    function updateSim() {
+      const n = parseInt(document.getElementById('sliderN').value);
+      document.getElementById('labelN').innerText = n;
+
+      const yVal = getY(n);
+      document.getElementById('statusVal').innerText = `y[${n}] = ${yVal}`;
+
+      // Bölge ve İfade Güncelleme
+      let regionText = "";
+      let mathHtml = "";
+      if (n < 7) {
+        regionText = "Bölge 1: Örtüşme Yok (n < 7)";
+        mathHtml = `$$n = ${n} < 7 \\implies [3, 8] \\cap [${n-15}, ${n-4}] = \\emptyset \\implies y[${n}] = 0$$`;
+      } else if (n <= 12) {
+        regionText = "Bölge 2: Lineer Artış (7 ≤ n ≤ 12)";
+        mathHtml = `$$n = ${n} \\in [7, 12] \\implies y[${n}] = \\sum_{k=3}^{${n-4}} 1 = (${n}-4) - 3 + 1 = ${yVal}$$`;
+      } else if (n <= 18) {
+        regionText = "Bölge 3: Plato / Tam Örtüşme (12 ≤ n ≤ 18)";
+        mathHtml = `$$n = ${n} \\in [12, 18] \\implies y[${n}] = \\sum_{k=3}^{8} 1 = 8 - 3 + 1 = 6$$`;
+      } else if (n <= 23) {
+        regionText = "Bölge 4: Lineer Azalış (19 ≤ n ≤ 23)";
+        mathHtml = `$$n = ${n} \\in [19, 23] \\implies y[${n}] = \\sum_{k=${n-15}}^{8} 1 = 8 - (${n}-15) + 1 = 24 - ${n} = ${yVal}$$`;
+      } else {
+        regionText = "Bölge 5: Örtüşme Bitti (n > 23)";
+        mathHtml = `$$n = ${n} > 23 \\implies [3, 8] \\cap [${n-15}, ${n-4}] = \\emptyset \\implies y[${n}] = 0$$`;
+      }
+      document.getElementById('statusRegion').innerText = regionText;
+      const mathBox = document.getElementById('simMath');
+      mathBox.innerHTML = mathHtml;
+      if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});
+
+      // Canvas 1: k-Uzayı
+      const cTop = document.getElementById('canvasTop');
+      const dpr = 2;
+      const w1 = cTop.clientWidth || 700;
+      const h1 = 190;
+      cTop.width = w1 * dpr;
+      cTop.height = h1 * dpr;
+      const ctx1 = cTop.getContext('2d');
+      ctx1.scale(dpr, dpr);
+
+      const ax1 = drawDiscreteAxis(ctx1, w1, h1, -12, 26, -0.4, 1.8, 'k');
+
+      // Örtüşme Alanı Vurgusu
+      const kStart = Math.max(3, n - 15);
+      const kEnd = Math.min(8, n - 4);
+      if (kStart <= kEnd) {
+        const xA = ax1.toX(kStart - 0.4);
+        const xB = ax1.toX(kEnd + 0.4);
+        ctx1.fillStyle = 'rgba(245, 158, 11, 0.15)';
+        ctx1.fillRect(xA, ax1.padY, xB - xA, h1 - 2 * ax1.padY);
+        ctx1.strokeStyle = 'rgba(245, 158, 11, 0.5)';
+        ctx1.setLineDash([3, 3]);
+        ctx1.strokeRect(xA, ax1.padY, xB - xA, h1 - 2 * ax1.padY);
+        ctx1.setLineDash([]);
+      }
+
+      // k = -12'den 26'ya kadar çiz
+      for (let k = -12; k <= 26; k++) {
+        const xk = getX(k);
+        const h_nk = getH(n - k);
+
+        // x[k] (Mavi)
+        if (xk > 0) {
+          drawStem(ctx1, ax1.toX(k) - 2.5, ax1.toY(xk), ax1.toY(0), '#38bdf8', 3);
+        }
+        // h[n-k] (Yeşil)
+        if (h_nk > 0) {
+          drawStem(ctx1, ax1.toX(k) + 2.5, ax1.toY(h_nk * 0.95), ax1.toY(0), '#34d399', 3);
+        }
+        // Çarpım x[k]*h[n-k] (Amber)
+        if (xk > 0 && h_nk > 0) {
+          drawStem(ctx1, ax1.toX(k), ax1.toY(1.3), ax1.toY(0), '#fbbf24', 4);
         }
       }
 
-      function draw() {
-        const w = canvas.getBoundingClientRect().width;
-        const h = canvas.getBoundingClientRect().height;
-        ctx.clearRect(0, 0, w, h);
+      // Legend
+      ctx1.fillStyle = '#38bdf8';
+      ctx1.fillRect(ax1.padX, 10, 8, 8);
+      ctx1.fillStyle = '#94a3b8';
+      ctx1.font = '10px monospace';
+      ctx1.textAlign = 'left';
+      ctx1.fillText('x[k] [3..8]', ax1.padX + 12, 17);
 
-        const padX = 55;
+      ctx1.fillStyle = '#34d399';
+      ctx1.fillRect(ax1.padX + 100, 10, 8, 8);
+      ctx1.fillStyle = '#94a3b8';
+      ctx1.fillText(`h[${n}-k] [${n-15}..${n-4}]`, ax1.padX + 112, 17);
 
-        if (currentMode === "process") {
-          // 1. Mod: x[k] ve h[n-k] örtüşmesi (k-ekseni)
-          const kMin = -12;
-          const kMax = 24;
-          const totalK = kMax - kMin;
+      ctx1.fillStyle = '#fbbf24';
+      ctx1.fillRect(ax1.padX + 240, 10, 8, 8);
+      ctx1.fillStyle = '#94a3b8';
+      ctx1.fillText('x[k]·h[n-k] (Örtüşme)', ax1.padX + 252, 17);
 
-          function getXCoord(k) {
-            return padX + ((k - kMin) / totalK) * (w - 2 * padX);
-          }
+      // Canvas 2: n-Uzayı (y[n])
+      const cBot = document.getElementById('canvasBottom');
+      const w2 = cBot.clientWidth || 700;
+      const h2 = 190;
+      cBot.width = w2 * dpr;
+      cBot.height = h2 * dpr;
+      const ctx2 = cBot.getContext('2d');
+      ctx2.scale(dpr, dpr);
 
-          const yBase = h - 55;
+      const ax2 = drawDiscreteAxis(ctx2, w2, h2, -2, 30, -0.8, 7.2, 'n');
 
-          // h[n-k] penceresi: [n - 15, n - 4]
-          const hL = currentN - 15;
-          const hR = currentN - 4;
-
-          // x[k] penceresi: [3, 8]
-          const xL = 3;
-          const xR = 8;
-
-          // Örtüşme (Kesişim): [max(xL, hL), min(xR, hR)]
-          const overL = Math.max(xL, hL);
-          const overR = Math.min(xR, hR);
-
-          // h[n-k] gölgesi
-          const pxHL = getXCoord(hL);
-          const pxHR = getXCoord(hR);
-          ctx.fillStyle = "rgba(5, 150, 105, 0.08)";
-          ctx.fillRect(pxHL - 6, 40, (pxHR - pxHL) + 12, yBase - 35);
-
-          // Örtüşme gölgesi
-          if (overL <= overR) {
-            const pxOL = getXCoord(overL);
-            const pxOR = getXCoord(overR);
-            ctx.fillStyle = "rgba(245, 158, 11, 0.22)";
-            ctx.fillRect(pxOL - 8, 40, (pxOR - pxOL) + 16, yBase - 35);
-
-            ctx.strokeStyle = "rgba(245, 158, 11, 0.6)";
-            ctx.lineWidth = 1;
-            ctx.setLineDash([3, 3]);
-            ctx.strokeRect(pxOL - 8, 40, (pxOR - pxOL) + 16, yBase - 35);
-            ctx.setLineDash([]);
-
-            ctx.fillStyle = "#b45309";
-            ctx.font = "bold 11px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(`Örtüşme: [${overL}, ${overR}] ⟹ y[${currentN}] = ${getY(currentN)}`, (pxOL + pxOR) / 2, 30);
-          } else {
-            ctx.fillStyle = "#dc2626";
-            ctx.font = "bold 11px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(`Örtüşme Yok! y[${currentN}] = 0`, w / 2, 30);
-          }
-
-          // Eksen
-          ctx.beginPath();
-          ctx.moveTo(padX - 20, yBase);
-          ctx.lineTo(w - padX + 20, yBase);
-          ctx.strokeStyle = "#cbd5e1";
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          ctx.fillStyle = "#64748b";
-          ctx.font = "bold 11px monospace";
-          ctx.textAlign = "right";
-          ctx.fillText("k", w - padX + 25, yBase + 26);
-
-          for (let k = kMin; k <= kMax; k++) {
-            const px = getXCoord(k);
-
-            // Çentik
-            ctx.beginPath();
-            ctx.moveTo(px, yBase - 3);
-            ctx.lineTo(px, yBase + 3);
-            ctx.strokeStyle = "#94a3b8";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            if (k % 2 === 0 || k === 3 || k === 8 || k === hL || k === hR) {
-              ctx.fillStyle = (k >= 3 && k <= 8) ? "#4f46e5" : "#64748b";
-              ctx.font = (k >= 3 && k <= 8) ? "bold 11px monospace" : "10px monospace";
-              ctx.textAlign = "center";
-              ctx.fillText(k, px, yBase + 16);
-            }
-
-            // x[k] stemleri
-            const isX = (k >= 3 && k <= 8);
-            if (isX) {
-              drawStem(ctx, px - 3, yBase, yBase - 90, "#4f46e5", 4, true);
-            }
-
-            // h[n-k] stemleri
-            const isH = (k >= hL && k <= hR);
-            if (isH) {
-              drawStem(ctx, px + 3, yBase, yBase - 70, "#059669", 3.5, false);
-            }
-          }
-
-          ctx.fillStyle = "#1e293b";
-          ctx.font = "bold 12px sans-serif";
-          ctx.textAlign = "left";
-          ctx.fillText(`Girdi x[k] (Mavi) ve Filtre h[${currentN}-k] (Yeşil İçi Boş, [${hL}, ${hR}])`, padX, 50);
-
-        } else if (currentMode === "output") {
-          // 2. Mod: Tam Çıkış Sinyali y[n]
-          const nMin = 5;
-          const nMax = 25;
-          const totalN = nMax - nMin;
-
-          function getXCoord(n) {
-            return padX + ((n - nMin) / totalN) * (w - 2 * padX);
-          }
-
-          const yBase = h - 55;
-          const maxH = 140; // y = 6 için
-
-          // 3 Bölgenin Renkli Gölgeleri
-          const p7 = getXCoord(7);
-          const p12 = getXCoord(12);
-          const p18 = getXCoord(18);
-          const p23 = getXCoord(23);
-
-          // 1. Bölge (Mavi)
-          ctx.fillStyle = "rgba(59, 130, 246, 0.08)";
-          ctx.fillRect(p7 - 10, yBase - maxH - 20, (p12 - p7), maxH + 20);
-
-          // 2. Bölge (Amber Plato)
-          ctx.fillStyle = "rgba(245, 158, 11, 0.12)";
-          ctx.fillRect(p12, yBase - maxH - 20, (p18 - p12), maxH + 20);
-
-          // 3. Bölge (Mor)
-          ctx.fillStyle = "rgba(147, 51, 234, 0.08)";
-          ctx.fillRect(p18, yBase - maxH - 20, (p23 - p18) + 10, maxH + 20);
-
-          // Eksen
-          ctx.beginPath();
-          ctx.moveTo(padX - 20, yBase);
-          ctx.lineTo(w - padX + 20, yBase);
-          ctx.strokeStyle = "#cbd5e1";
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          ctx.fillStyle = "#64748b";
-          ctx.font = "bold 11px monospace";
-          ctx.textAlign = "right";
-          ctx.fillText("n", w - padX + 25, yBase + 26);
-
-          for (let n = nMin; n <= nMax; n++) {
-            const px = getXCoord(n);
-            const val = getY(n);
-            const isCurrent = (n === currentN);
-
-            // Çentik
-            ctx.beginPath();
-            ctx.moveTo(px, yBase - 3);
-            ctx.lineTo(px, yBase + 3);
-            ctx.strokeStyle = "#94a3b8";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            ctx.fillStyle = isCurrent ? "#dc2626" : "#64748b";
-            ctx.font = isCurrent ? "bold 11px monospace" : "10px monospace";
-            ctx.textAlign = "center";
-            ctx.fillText(n, px, yBase + 16);
-
-            // Mevcut n göstergesi
-            if (isCurrent) {
-              ctx.fillStyle = "rgba(220, 38, 38, 0.1)";
-              ctx.fillRect(px - 12, 30, 24, yBase - 25);
-            }
-
-            if (val > 0) {
-              const stemH = (val / 6.0) * maxH;
-              let col = "#4f46e5";
-              if (n >= 12 && n <= 18) col = "#d97706";
-              else if (n > 18) col = "#7c3aed";
-
-              if (isCurrent) col = "#dc2626";
-
-              drawStem(ctx, px, yBase, yBase - stemH, col, isCurrent ? 5.5 : 4, true);
-
-              ctx.fillStyle = col;
-              ctx.font = isCurrent ? "bold 11px monospace" : "10px monospace";
-              ctx.textAlign = "center";
-              ctx.fillText(val, px, yBase - stemH - 6);
-            }
-          }
-
-          ctx.fillStyle = "#1e293b";
-          ctx.font = "bold 12px sans-serif";
-          ctx.textAlign = "left";
-          ctx.fillText("Yamuk Çıkış Sinyali y[n] = x[n] * h[n] Grafiği", padX, 26);
-        }
+      // y[n] Tüm Değerler
+      for (let ni = -2; ni <= 30; ni++) {
+        const val = getY(ni);
+        const col = (ni === n) ? '#f43f5e' : (val > 0 ? '#818cf8' : '#334155');
+        const rad = (ni === n) ? 5 : (val > 0 ? 3.5 : 2);
+        drawStem(ctx2, ax2.toX(ni), ax2.toY(val), ax2.toY(0), col, rad);
       }
 
-      function updateMathDisplay() {
-        let text = "";
-        const val = getY(currentN);
-        if (currentN < 7) {
-          text = `n = ${currentN} < 7 için örtüşme yok ⟹ $y[${currentN}] = 0$`;
-        } else if (currentN >= 7 && currentN < 12) {
-          text = `1. Bölge (Giriş Rampası): $n = ${currentN} \\implies y[${currentN}] = ${currentN} - 6 = ${val}$`;
-        } else if (currentN >= 12 && currentN <= 18) {
-          text = `2. Bölge (Tepe Platosu - Tam Örtüşme): $n = ${currentN} \\implies y[${currentN}] = 6$`;
-        } else if (currentN > 18 && currentN <= 23) {
-          text = `3. Bölge (Çıkış Rampası): $n = ${currentN} \\implies y[${currentN}] = 24 - ${currentN} = ${val}$`;
-        } else {
-          text = `n = ${currentN} > 23 için örtüşme sona erdi ⟹ $y[${currentN}] = 0$`;
-        }
+      // İmleç Göstergesi
+      ctx2.strokeStyle = '#f43f5e';
+      ctx2.lineWidth = 1.5;
+      ctx2.setLineDash([3, 3]);
+      ctx2.beginPath();
+      ctx2.moveTo(ax2.toX(n), ax2.padY);
+      ctx2.lineTo(ax2.toX(n), h2 - ax2.padY);
+      ctx2.stroke();
+      ctx2.setLineDash([]);
 
-        stepMath.innerHTML = text;
-        if (window.renderMathInElement) {
-          renderMathInElement(stepMath, {
-            delimiters: [{ left: "$", right: "$", display: false }]
-          });
+      ctx2.fillStyle = '#f43f5e';
+      ctx2.font = 'bold 11px monospace';
+      ctx2.textAlign = 'center';
+      ctx2.fillText(`n=${n}`, ax2.toX(n), ax2.padY - 4);
+    }
+
+    // 6 Adım Görsellerinin Oluşturulması
+    function renderStepCards() {
+      // Adım 1: x[k] ve h[k]
+      {
+        const hdc = createHiDPICanvas(760, 220);
+        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -2, 18, -0.4, 1.8, 'k');
+        for (let k = -2; k <= 18; k++) {
+          if (getX(k) > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(1), ax.toY(0), '#38bdf8', 3.5);
+          if (getH(k) > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1), ax.toY(0), '#34d399', 3.5);
         }
+        hdc.ctx.fillStyle = '#38bdf8'; hdc.ctx.fillRect(ax.padX, 12, 10, 10);
+        hdc.ctx.fillStyle = '#cbd5e1'; hdc.ctx.font = '11px monospace'; hdc.ctx.textAlign = 'left';
+        hdc.ctx.fillText('x[k] = 1, k ∈ [3, 8] (L=6)', ax.padX + 15, 21);
+
+        hdc.ctx.fillStyle = '#34d399'; hdc.ctx.fillRect(ax.padX + 220, 12, 10, 10);
+        hdc.ctx.fillStyle = '#cbd5e1';
+        hdc.ctx.fillText('h[k] = 1, k ∈ [4, 15] (L=12)', ax.padX + 235, 21);
+
+        document.getElementById('img1').src = hdc.canvas.toDataURL('image/png');
       }
 
-      slider.addEventListener("input", function () {
-        currentN = parseInt(this.value, 10);
-        nDisplay.textContent = currentN;
-        updateMathDisplay();
-        draw();
+      // Adım 2: Çevir ve Kaydır: h[n-k]
+      {
+        const hdc = createHiDPICanvas(760, 220);
+        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -16, 12, -0.4, 1.8, 'k');
+        // h[-k] ve h[n-k]
+        for (let k = -16; k <= 12; k++) {
+          const h_inv = getH(-k);
+          if (h_inv > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(0.9), ax.toY(0), '#94a3b8', 3);
+          const h_shifted = getH(5 - k); // n = 5
+          if (h_shifted > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1.1), ax.toY(0), '#34d399', 3.5);
+        }
+        hdc.ctx.fillStyle = '#94a3b8'; hdc.ctx.fillRect(ax.padX, 12, 10, 10);
+        hdc.ctx.fillStyle = '#cbd5e1'; hdc.ctx.font = '11px monospace'; hdc.ctx.textAlign = 'left';
+        hdc.ctx.fillText('h[-k] (Ters Çevrilmiş, k ∈ [-15, -4])', ax.padX + 15, 21);
+
+        hdc.ctx.fillStyle = '#34d399'; hdc.ctx.fillRect(ax.padX + 300, 12, 10, 10);
+        hdc.ctx.fillStyle = '#cbd5e1';
+        hdc.ctx.fillText('h[n-k] (k ∈ [n-15, n-4])', ax.padX + 315, 21);
+
+        document.getElementById('img2').src = hdc.canvas.toDataURL('image/png');
+      }
+
+      // Adım 3: Bölge 1 (n = 4 < 7)
+      {
+        const hdc = createHiDPICanvas(760, 220);
+        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -14, 12, -0.4, 1.8, 'k');
+        const n = 4;
+        for (let k = -14; k <= 12; k++) {
+          if (getX(k) > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1), ax.toY(0), '#38bdf8', 3.5);
+          if (getH(n - k) > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1), ax.toY(0), '#34d399', 3.5);
+        }
+        hdc.ctx.fillStyle = '#f87171'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
+        hdc.ctx.fillText(`n = ${n} < 7: Kesişim Yok ⟹ y[${n}] = 0`, 380, 25);
+        document.getElementById('img3').src = hdc.canvas.toDataURL('image/png');
+      }
+
+      // Adım 4: Bölge 2 (n = 10, 7 <= n <= 12)
+      {
+        const hdc = createHiDPICanvas(760, 220);
+        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -8, 14, -0.4, 1.8, 'k');
+        const n = 10;
+        const kA = Math.max(3, n - 15);
+        const kB = Math.min(8, n - 4);
+        hdc.ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
+        hdc.ctx.fillRect(ax.toX(kA - 0.4), ax.padY, ax.toX(kB + 0.4) - ax.toX(kA - 0.4), 220 - 2 * ax.padY);
+
+        for (let k = -8; k <= 14; k++) {
+          const xk = getX(k);
+          const h_nk = getH(n - k);
+          if (xk > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(1), ax.toY(0), '#38bdf8', 3);
+          if (h_nk > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1), ax.toY(0), '#34d399', 3);
+          if (xk > 0 && h_nk > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1.3), ax.toY(0), '#fbbf24', 4);
+        }
+        hdc.ctx.fillStyle = '#fbbf24'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
+        hdc.ctx.fillText(`n = ${n} ∈ [7, 12]: Kesişim [3, ${n-4}] (${n-6} nokta) ⟹ y[${n}] = ${n-6}`, 380, 25);
+        document.getElementById('img4').src = hdc.canvas.toDataURL('image/png');
+      }
+
+      // Adım 5: Bölge 3 (n = 15, 12 <= n <= 18)
+      {
+        const hdc = createHiDPICanvas(760, 220);
+        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -4, 16, -0.4, 1.8, 'k');
+        const n = 15;
+        const kA = 3;
+        const kB = 8;
+        hdc.ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
+        hdc.ctx.fillRect(ax.toX(kA - 0.4), ax.padY, ax.toX(kB + 0.4) - ax.toX(kA - 0.4), 220 - 2 * ax.padY);
+
+        for (let k = -4; k <= 16; k++) {
+          const xk = getX(k);
+          const h_nk = getH(n - k);
+          if (xk > 0) drawStem(hdc.ctx, ax.toX(k) - 2, ax.toY(1), ax.toY(0), '#38bdf8', 3);
+          if (h_nk > 0) drawStem(hdc.ctx, ax.toX(k) + 2, ax.toY(1), ax.toY(0), '#34d399', 3);
+          if (xk > 0 && h_nk > 0) drawStem(hdc.ctx, ax.toX(k), ax.toY(1.3), ax.toY(0), '#fbbf24', 4);
+        }
+        hdc.ctx.fillStyle = '#fbbf24'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
+        hdc.ctx.fillText(`n = ${n} ∈ [12, 18]: Tam Örtüşme [3, 8] (6 nokta) ⟹ y[${n}] = 6 (Plato)`, 380, 25);
+        document.getElementById('img5').src = hdc.canvas.toDataURL('image/png');
+      }
+
+      // Adım 6: Bölge 4 & 5 ve Nihai Çıkış Yanıtı (n = 21, 19 <= n <= 23)
+      {
+        const hdc = createHiDPICanvas(760, 220);
+        const ax = drawDiscreteAxis(hdc.ctx, 760, 220, -2, 28, -0.5, 7.2, 'n');
+        for (let ni = -2; ni <= 28; ni++) {
+          const y = getY(ni);
+          const col = (y > 0) ? '#818cf8' : '#334155';
+          drawStem(hdc.ctx, ax.toX(ni), ax.toY(y), ax.toY(0), col, y > 0 ? 3.5 : 2);
+        }
+        hdc.ctx.fillStyle = '#a5b4fc'; hdc.ctx.font = 'bold 12px monospace'; hdc.ctx.textAlign = 'center';
+        hdc.ctx.fillText('Nihai Çıkış y[n] = x[n] * h[n] (Yamuk Yanıt, Tepe Değeri = 6, Destek = [7, 23])', 380, 25);
+        document.getElementById('img6').src = hdc.canvas.toDataURL('image/png');
+      }
+    }
+
+    // PNG İndirme Fonksiyonu
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      if (!img || !img.src) return;
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Olay Dinleyicileri
+    let playInterval = null;
+    document.addEventListener('DOMContentLoaded', () => {
+      const slider = document.getElementById('sliderN');
+      slider.addEventListener('input', updateSim);
+
+      document.getElementById('btnPrev').addEventListener('click', () => {
+        if (slider.value > 0) {
+          slider.value = parseInt(slider.value) - 1;
+          updateSim();
+        }
       });
 
-      tabBtns.forEach(btn => {
-        btn.addEventListener("click", function () {
-          tabBtns.forEach(b => b.classList.remove("active"));
-          this.classList.add("active");
-          currentMode = this.getAttribute("data-mode");
-          updateMathDisplay();
-          draw();
-        });
+      document.getElementById('btnNext').addEventListener('click', () => {
+        if (slider.value < 30) {
+          slider.value = parseInt(slider.value) + 1;
+          updateSim();
+        }
       });
 
-      // Play / Pause Animation
-      btnPlay.addEventListener("click", function () {
-        if (isPlaying) {
+      const btnPlay = document.getElementById('btnPlay');
+      btnPlay.addEventListener('click', () => {
+        if (playInterval) {
           clearInterval(playInterval);
-          isPlaying = false;
-          playText.textContent = "Animasyonu Oynat";
+          playInterval = null;
+          btnPlay.innerText = 'Oynat ►';
+          btnPlay.className = 'px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition shadow-sm';
         } else {
-          isPlaying = true;
-          playText.textContent = "Durdur";
+          btnPlay.innerText = 'Durdur ❚❚';
+          btnPlay.className = 'px-4 py-1.5 bg-amber-600 text-white rounded-xl text-xs font-bold hover:bg-amber-700 transition shadow-sm';
           playInterval = setInterval(() => {
-            let nextN = currentN + 1;
-            if (nextN > 25) nextN = 5;
-            currentN = nextN;
-            slider.value = currentN;
-            nDisplay.textContent = currentN;
-            updateMathDisplay();
-            draw();
-          }, 750);
+            let nextVal = parseInt(slider.value) + 1;
+            if (nextVal > 30) nextVal = 0;
+            slider.value = nextVal;
+            updateSim();
+          }, 350);
         }
       });
 
-      // PNG Export
-      document.getElementById("btnExport").addEventListener("click", function () {
-        const link = document.createElement("a");
-        link.download = `Oppenheim_Problem_2_4_Stem_${currentMode}_n${currentN}.png`;
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-
-      resizeCanvas();
-      updateMathDisplay();
+      window.addEventListener('resize', updateSim);
+      updateSim();
+      renderStepCards();
     });
   </script>
 </body>
