@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.16: Konvolüsyon Özellikleri ve Önerme Doğruluk Analizi</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+
+  <!-- Ana Taşıyıcı Konteyner -->
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Üst Gezinme / Geri Dönüş Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">Bölüm 2: LTI Sistemler</span>
+        <span class="text-xs font-medium text-slate-500">Oppenheim 2. Baskı • Sayfa 171</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">
+          Konvolüsyon Cebiri • Zaman Kaydırma & Tersleme • Destek Kümeleri
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">
+          Problem 2.16
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 2.16: Konvolüsyon Özellikleri ve Önerme Doğruluk Analizi
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Ayrık ve sürekli zamanlı LTI sistemlerde konvolüsyonun temel cebirsel davranışları; sinyallerin sıfır olmadığı destek (support) aralıkları, zaman kaydırmanın kümülatif etkisi ve zaman terslemesi (time-reversal) simetrisi altında 4 kritik önermenin titiz matematiksel kanıtları.
+      </p>
+
+      <!-- Matematiksel Önermeler Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-blue-700">(a) Sağ Yanlı DT:</span> $x[n]=0, n < N_1 \;\&\; h[n]=0, n < N_2 \implies x[n]*h[n] = 0, n < N_1+N_2$
+          <div class="text-emerald-700 font-bold mt-1">✓ DOĞRU (TRUE)</div>
+        </div>
+        <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-amber-700">(b) Çift Zaman Kaydırma:</span> $y[n]=x[n]*h[n] \stackrel{?}{\implies} y[n-1] = x[n-1]*h[n-1]$
+          <div class="text-rose-700 font-bold mt-1">✗ YANLIŞ (FALSE) — Doğrusu: $y[n-2]$</div>
+        </div>
+        <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-rose-700">(c) Zaman Tersleme:</span> $y(t)=x(t)*h(t) \stackrel{?}{\implies} y(-t) = x(-t)*h(-t)$
+          <div class="text-emerald-700 font-bold mt-1">✓ DOĞRU (TRUE)</div>
+        </div>
+        <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-indigo-700">(d) Sol Yanlı CT:</span> $x(t)=0, t > T_1 \;\&\; h(t)=0, t > T_2 \implies x(t)*h(t) = 0, t > T_1+T_2$
+          <div class="text-emerald-700 font-bold mt-1">✓ DOĞRU (TRUE)</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Sol Kolon: Soru Analizi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">📌</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Verilen 4 farklı önermenin her biri için kesin bir <strong>DOĞRU (True)</strong> veya <strong>YANLIŞ (False)</strong> hükmü vermemiz, doğru olanları konvolüsyonun temel integral/toplam tanımlarıyla ispatlamamız, yanlış olanı ise somut bir <strong>karşı örnek (counterexample)</strong> ile çürütmemiz istenmektedir.
+        </p>
+        <ul class="mt-3 space-y-2 text-xs text-slate-600 list-disc list-inside">
+          <li><strong>(a)</strong> Sağ yanlı (nedensel türde) ayrık sinyallerin konvolüsyonunun sıfır kaldığı başlangıç aralığı.</li>
+          <li><strong>(b)</strong> Hem girişi hem darbe yanıtını aynı anda 1 birim geciktirmenin çıkışa etkisi.</li>
+          <li><strong>(c)</strong> Sinyallerin bağımsız değişkenini zaman terslemesine tabi tutmanın konvolüsyona simetrik yansıması.</li>
+          <li><strong>(d)</strong> Sol yanlı (anti-nedensel) sürekli sinyallerin konvolüsyonunun sıfırlandığı bitiş aralığı.</li>
+        </ul>
+      </div>
+
+      <!-- Sağ Kolon: Çözüm Metodolojisi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <div class="p-2.5 bg-blue-50/60 rounded-lg border border-blue-100">
+            <strong class="text-blue-900">1. Destek Kümeleri (Support):</strong> Konvolüsyonda alt sınırlar birbirine eklenir ($\min(y) = \min(x) + \min(h)$), üst sınırlar da birbirine eklenir ($\max(y) = \max(x) + \max(h)$). Bu kural (a) ve (d) şıklarını doğrudan doğrular.
+          </div>
+          <div class="p-2.5 bg-amber-50/60 rounded-lg border border-amber-100">
+            <strong class="text-amber-900">2. Zaman Kaydırma Birikimi:</strong> Giriş $n_1$, sistem yanıtı $n_2$ kadar ötelenirse çıkış $(n_1 + n_2)$ kadar ötelenir: $x[n-1]*h[n-1] = y[n-2]$. Bu nedenle (b) şıkkı yanlıştır.
+          </div>
+          <div class="p-2.5 bg-emerald-50/60 rounded-lg border border-emerald-100">
+            <strong class="text-emerald-900">3. İntegral Değişken Dönüşümü:</strong> $u = -\tau$ dönüşümüyle $\int x(-\tau) h(-(t-\tau)) d\tau = \int x(u) h(-t-u) du = y(-t)$ özdeşliği (c) şıkkını kesin olarak kanıtlar.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı (Çift Tuval & Etkileşim) -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: Konvolüsyon Özellikleri Laboratuvarı</h2>
+          <p class="text-xs text-slate-500">Önermeleri seçin, parametreleri değiştirin ve konvolüsyonun dinamik tepkisini anlık inceleyin.</p>
+        </div>
+
+        <!-- Önerme Seçici Butonları -->
+        <div class="flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button id="btnA" onclick="setMode('a')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-blue-700 shadow-xs">
+            (a) Sağ Yanlı DT
+          </button>
+          <button id="btnB" onclick="setMode('b')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (b) Kaydırma Yanılgısı
+          </button>
+          <button id="btnC" onclick="setMode('c')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (c) Zaman Tersleme
+          </button>
+          <button id="btnD" onclick="setMode('d')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (d) Sol Yanlı CT
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-3">
+        <!-- Üst Tuval: Giriş / Bileşen Sinyalleri -->
+        <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="topCanvasTitle">Üst Tuval: Giriş Sinyali $x$ ve Darbe Yanıtı $h$</span>
+            <span class="text-slate-400">Giriş / Terslenmiş / Ötelenmiş Bileşenler</span>
+          </div>
+          <canvas id="kCanvas" width="860" height="210" class="w-full h-auto bg-white rounded-lg block border border-slate-100"></canvas>
+        </div>
+
+        <!-- Alt Tuval: Konvolüsyon Sonucu ve Karşılaştırma -->
+        <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="bottomCanvasTitle">Alt Tuval: Konvolüsyon Çıkışı $y$ ve Önerme İncelemesi</span>
+            <span id="bottomCanvasBadge" class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-bold">✓ DOĞRU</span>
+          </div>
+          <canvas id="ynCanvas" width="860" height="190" class="w-full h-auto bg-white rounded-lg block border border-slate-100"></canvas>
+        </div>
+      </div>
+
+      <!-- Canlı Matematiksel Değerlendirme Paneli -->
+      <div id="simMath" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 overflow-x-auto min-h-[52px] flex items-center">
+        <!-- KaTeX Dinamik Olarak Güncellenir -->
+      </div>
+
+      <!-- Etkileşimli Kontrol Paneli -->
+      <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+        <!-- Dinamik Kaydırıcılar (Moda Göre Değişir) -->
+        <div id="dynamicControls" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- JS ile doldurulacak -->
+        </div>
+
+        <!-- Oynatma & Adım Butonları -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200">
+          <div class="flex items-center gap-2">
+            <button id="playBtn" onclick="togglePlay()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+              <span id="playIcon">▶</span> Oynat / Durdur
+            </button>
+            <button onclick="stepForward()" class="px-3 py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs">
+              Adım İlerlet ⏭
+            </button>
+            <button onclick="resetSim()" class="px-3 py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs">
+              Sıfırla ↺
+            </button>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-600">
+            <span>Hız:</span>
+            <input type="range" id="speedSlider" min="1" max="5" value="3" class="w-24 accent-blue-600">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Çözüm Adımı Kartı (Tam 2.21 Formatı) -->
+    <div class="space-y-6">
+
+      <!-- Kart 1: Mavi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">Adım 1</span>
+            <h3 class="text-base font-bold text-slate-900">Konvolüsyon Cebirinin Temelleri ve Soru Sınıflandırması</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_2_16_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Problem 2.16, konvolüsyon işleminin hem ayrık zaman (DT) hem sürekli zaman (CT) dünyasındaki temel simetri, öteleme ve destek kümesi (support) özelliklerini test eder. LTI sistemlerin lineerliği ve zamanla değişmezliği, bağımsız değişkenler üzerindeki dönüşümlerin çıkışa nasıl yansıdığını kesin matematiksel kurallara bağlar.
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img1" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 1 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 2: Mor -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">Adım 2</span>
+            <h3 class="text-base font-bold text-slate-900">(a) Şıkkı İspatı — Sağ Yanlı (Causal) DT Sinyalleri ve Başlangıç Sınırı</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_2_16_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x[n] = 0 \quad (\forall n < N_1)$ ve $h[n] = 0 \quad (\forall n < N_2)$ verildiğinde, konvolüsyon toplamını açalım:
+          $$y[n] = \sum_{k=-\infty}^{\infty} x[k] h[n - k]$$
+          Toplanan terimlerin sıfır olmaması için hem $x[k] \neq 0$ hem $h[n-k] \neq 0$ olmalıdır:
+          $$k \ge N_1 \quad \text{ve} \quad n - k \ge N_2 \implies k \le n - N_2$$
+          Bu iki şartı aynı anda sağlayan bir $k$ tamsayısının var olabilmesi için alt sınır üst sınırdan büyük olamaz:
+          $$N_1 \le n - N_2 \iff n \ge N_1 + N_2$$
+          Eğer $n < N_1 + N_2$ ise aralık boştur ve toplamdaki tüm terimler sıfırdır: $y[n] = 0$. Dolayısıyla önerme <strong>DOĞRUDUR (TRUE)</strong>.
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img2" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 2 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 3: Amber -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">Adım 3</span>
+            <h3 class="text-base font-bold text-slate-900">(b) Şıkkı Analizi — Çift Zaman Kaydırma Yanılgısı & Karşı Örnek</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_2_16_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          İddia: $y[n] = x[n] * h[n]$ ise $y[n-1] \stackrel{?}{=} x[n-1] * h[n-1]$.<br>
+          Zaman kaydırma özelliğini uygulayalım: Giriş 1 birim gecikirse çıkış 1 birim gecikir: $x[n-1] * h[n] = y[n-1]$. Fakat darbe yanıtı da 1 birim gecikirse, toplam gecikme toplanır:
+          $$x[n-1] * h[n-1] = \sum_k x[k-1] h[n-1-k] \stackrel{m=k-1}{=} \sum_m x[m] h[n-2-m] = y[n-2]$$
+          Sonuç $y[n-1]$ değil, $y[n-2]$'dir! Somut bir karşı örnekle çürütelim:<br>
+          $x[n] = \delta[n]$, $h[n] = \delta[n] \implies y[n] = \delta[n] * \delta[n] = \delta[n] \implies y[n-1] = \delta[n-1]$.<br>
+          Ancak: $x[n-1] * h[n-1] = \delta[n-1] * \delta[n-1] = \delta[n-2] \neq \delta[n-1]$. Dolayısıyla önerme <strong>YANLIŞTIR (FALSE)</strong>.
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img3" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 3 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 4: Gül Pembesi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">Adım 4</span>
+            <h3 class="text-base font-bold text-slate-900">(c) Şıkkı İspatı — Sürekli Zaman Zaman Tersleme (Time-Reversal) Simetrisi</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_2_16_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          İddia: $y(t) = x(t) * h(t) \implies y(-t) \stackrel{?}{=} x(-t) * h(-t)$.<br>
+          $g(t) = x(-t) * h(-t)$ konvolüsyon integralini yazalım:
+          $$g(t) = \int_{-\infty}^{\infty} x(-\tau) h(-(t - \tau)) d\tau = \int_{-\infty}^{\infty} x(-\tau) h(-t + \tau) d\tau$$
+          Değişken değişimi yapalım: $u = -\tau \implies d\tau = -du$. Sınırlar tersine döner ($\tau: -\infty \to \infty \implies u: \infty \to -\infty$):
+          $$g(t) = \int_{\infty}^{-\infty} x(u) h(-t - u) (-du) = \int_{-\infty}^{\infty} x(u) h(-t - u) du$$
+          Orijinal konvolüsyonda $y(t) = \int_{-\infty}^{\infty} x(u) h(t - u) du$ olduğundan, $t$ yerine $-t$ yazıldığında tam olarak bu integrale ulaşılır: $y(-t)$.<br>
+          Fourier dönüşümüyle de doğrulanır: $\mathcal{F}\{x(-t)*h(-t)\} = X(-j\omega)H(-j\omega) = Y(-j\omega) = \mathcal{F}\{y(-t)\}$. Önerme <strong>DOĞRUDUR (TRUE)</strong>.
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img4" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 4 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 5: İndigo -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">Adım 5</span>
+            <h3 class="text-base font-bold text-slate-900">(d) Şıkkı İspatı — Sol Yanlı (Anti-causal) CT Sinyalleri ve Bitiş Sınırı</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_2_16_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x(t) = 0 \quad (\forall t > T_1)$ ve $h(t) = 0 \quad (\forall t > T_2)$ verildiğinde, konvolüsyon integrali:
+          $$y(t) = \int_{-\infty}^{\infty} x(\tau) h(t - \tau) d\tau$$
+          İntegrandın sıfırdan farklı olabilmesi için:
+          $$\tau \le T_1 \quad \text{ve} \quad t - \tau \le T_2 \implies \tau \ge t - T_2$$
+          Böyle bir $\tau$ gerçel sayısının bulunabilmesi için alt sınırın üst sınırdan küçük veya eşit olması zorunludur:
+          $$t - T_2 \le \tau \le T_1 \implies t - T_2 \le T_1 \iff t \le T_1 + T_2$$
+          Eğer $t > T_1 + T_2$ ise $t - T_2 > T_1$ olur, entegrasyon bölgesi boş kümedir ve integrand reel eksenin tamamında sıfırdır! Bu nedenle $y(t) = 0 \quad (\forall t > T_1 + T_2)$. Önerme <strong>DOĞRUDUR (TRUE)</strong>.
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img5" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 5 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 6: Zümrüt Yeşili -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">Adım 6</span>
+            <h3 class="text-base font-bold text-slate-900">Karşılaştırma Tablosu, Mühendislik Sezgisi ve Sınav İpuçları</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_2_16_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Tüm sonuçların sentezi ve sınavlarda hayat kurtaran temel mühendislik ilkeleri:
+        </p>
+        <div class="overflow-x-auto text-xs">
+          <table class="w-full text-left border-collapse border border-slate-200">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="p-2 border border-slate-200">Önerme</th>
+                <th class="p-2 border border-slate-200">Sinyal Türü</th>
+                <th class="p-2 border border-slate-200">İddia Edilen Eşitlik</th>
+                <th class="p-2 border border-slate-200">Gerçek Matematiksel Sonuç</th>
+                <th class="p-2 border border-slate-200 text-center">Hüküm</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600">
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(a)</td>
+                <td class="p-2 border border-slate-200">Sağ Yanlı DT</td>
+                <td class="p-2 border border-slate-200">$n < N_1 + N_2 \implies y[n]=0$</td>
+                <td class="p-2 border border-slate-200">$y[n] = 0 \quad (\forall n < N_1 + N_2)$</td>
+                <td class="p-2 border border-slate-200 text-center font-bold text-emerald-700">DOĞRU</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(b)</td>
+                <td class="p-2 border border-slate-200">Zaman Kaydırma</td>
+                <td class="p-2 border border-slate-200">$y[n-1] = x[n-1]*h[n-1]$</td>
+                <td class="p-2 border border-slate-200">$x[n-1]*h[n-1] = y[n-2]$</td>
+                <td class="p-2 border border-slate-200 text-center font-bold text-rose-700">YANLIŞ</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(c)</td>
+                <td class="p-2 border border-slate-200">Zaman Tersleme</td>
+                <td class="p-2 border border-slate-200">$y(-t) = x(-t)*h(-t)$</td>
+                <td class="p-2 border border-slate-200">$y(-t) = x(-t)*h(-t)$</td>
+                <td class="p-2 border border-slate-200 text-center font-bold text-emerald-700">DOĞRU</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(d)</td>
+                <td class="p-2 border border-slate-200">Sol Yanlı CT</td>
+                <td class="p-2 border border-slate-200">$t > T_1 + T_2 \implies y(t)=0$</td>
+                <td class="p-2 border border-slate-200">$y(t) = 0 \quad (\forall t > T_1 + T_2)$</td>
+                <td class="p-2 border border-slate-200 text-center font-bold text-emerald-700">DOĞRU</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img6" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 6 Şeması">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alt Bilgi & Kapanış -->
+    <footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200">
+      Signals & Systems 2nd Edition • Oppenheim & Willsky • Problem 2.16 Çözümü
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    // --- HiDPI Tuval Oluşturucu ---
+    function createHiDPICanvas(w, h, ratio = 2) {
+      const canvas = document.createElement('canvas');
+      canvas.width = w * ratio;
+      canvas.height = h * ratio;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas, ctx, width: w, height: h };
+    }
+
+    // --- Kart İndirme Fonksiyonu ---
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      if (!img || !img.src) return;
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // ==========================================
+    // CANLI SİMÜLATÖR MOTORU (MODLAR: a, b, c, d)
+    // ==========================================
+    let currentMode = 'a';
+    let isPlaying = false;
+    let animFrame = null;
+
+    // Mod Parametreleri
+    let paramN1 = 2; // (a) için x[n]=0, n<N1
+    let paramN2 = 3; // (a) için h[n]=0, n<N2
+    let paramShift = 1; // (b) için kaydırma
+    let paramT1 = 1.5; // (d) için x(t)=0, t>T1
+    let paramT2 = 2.0; // (d) için h(t)=0, t>T2
+    let animTime = 0;
+
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const kCtx = kCanvas.getContext('2d');
+    const ynCtx = ynCanvas.getContext('2d');
+
+    // Tuval Boyutlarını Ayarlama
+    function setupCanvasDPI(c, w, h) {
+      const dpr = window.devicePixelRatio || 2;
+      c.width = w * dpr;
+      c.height = h * dpr;
+      const ctx = c.getContext('2d');
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      return ctx;
+    }
+
+    let topCtx = setupCanvasDPI(kCanvas, 860, 210);
+    let btmCtx = setupCanvasDPI(ynCanvas, 860, 190);
+
+    window.addEventListener('resize', () => {
+      topCtx = setupCanvasDPI(kCanvas, 860, 210);
+      btmCtx = setupCanvasDPI(ynCanvas, 860, 190);
+      updateSim();
+    });
+
+    // Mod Değiştirme
+    function setMode(mode) {
+      currentMode = mode;
+      ['btnA', 'btnB', 'btnC', 'btnD'].forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+      });
+      const activeBtn = document.getElementById(
+        mode === 'a' ? 'btnA' : mode === 'b' ? 'btnB' : mode === 'c' ? 'btnC' : 'btnD'
+      );
+      activeBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-blue-700 shadow-xs";
+
+      renderDynamicControls();
+      updateSim();
+    }
+
+    function renderDynamicControls() {
+      const container = document.getElementById('dynamicControls');
+      if (currentMode === 'a') {
+        container.innerHTML = `
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>x[n] Başlangıç Sınırı ($N_1$):</span>
+              <span id="n1Val" class="text-blue-600">${paramN1}</span>
+            </div>
+            <input type="range" min="-3" max="5" value="${paramN1}" class="w-full accent-blue-600 slider-thumb" oninput="paramN1=parseInt(this.value); document.getElementById('n1Val').innerText=this.value; updateSim();">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>h[n] Başlangıç Sınırı ($N_2$):</span>
+              <span id="n2Val" class="text-purple-600">${paramN2}</span>
+            </div>
+            <input type="range" min="-3" max="5" value="${paramN2}" class="w-full accent-purple-600 slider-thumb" oninput="paramN2=parseInt(this.value); document.getElementById('n2Val').innerText=this.value; updateSim();">
+          </div>
+        `;
+      } else if (currentMode === 'b') {
+        container.innerHTML = `
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>Zaman Kaydırma Miktarı ($n_0$):</span>
+              <span id="shiftVal" class="text-amber-600">${paramShift}</span>
+            </div>
+            <input type="range" min="1" max="3" value="${paramShift}" class="w-full accent-amber-600 slider-thumb" oninput="paramShift=parseInt(this.value); document.getElementById('shiftVal').innerText=this.value; updateSim();">
+          </div>
+          <div class="text-xs text-slate-500 flex items-center p-2 bg-amber-50 rounded-lg border border-amber-200">
+            <span>İddia: $y[n - n_0] = x[n - n_0] * h[n - n_0]$. Gerçek: Çıkış $2n_0$ kadar kayar ($y[n - 2n_0]$)!</span>
+          </div>
+        `;
+      } else if (currentMode === 'c') {
+        container.innerHTML = `
+          <div class="col-span-2 flex flex-wrap items-center justify-between gap-3 p-2.5 bg-rose-50 rounded-lg border border-rose-200 text-xs text-rose-900">
+            <span><strong>Zaman Tersleme:</strong> $x(t)$ ve $h(t)$ sinyalleri $t=0$ etrafında aynalanır. $x(-t) * h(-t) = y(-t)$ özdeşliği tam olarak örtüşür.</span>
+            <button onclick="animTime=0; updateSim();" class="px-3 py-1 bg-white text-rose-700 font-bold rounded border border-rose-300 hover:bg-rose-100 transition-colors">
+              Dalga Animasyonunu Başlat
+            </button>
+          </div>
+        `;
+      } else if (currentMode === 'd') {
+        container.innerHTML = `
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>x(t) Sol Yan Bitişi ($T_1$):</span>
+              <span id="t1Val" class="text-indigo-600">${paramT1.toFixed(1)}</span>
+            </div>
+            <input type="range" min="-2.0" max="3.0" step="0.5" value="${paramT1}" class="w-full accent-indigo-600 slider-thumb" oninput="paramT1=parseFloat(this.value); document.getElementById('t1Val').innerText=parseFloat(this.value).toFixed(1); updateSim();">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>h(t) Sol Yan Bitişi ($T_2$):</span>
+              <span id="t2Val" class="text-teal-600">${paramT2.toFixed(1)}</span>
+            </div>
+            <input type="range" min="-2.0" max="3.0" step="0.5" value="${paramT2}" class="w-full accent-teal-600 slider-thumb" oninput="paramT2=parseFloat(this.value); document.getElementById('t2Val').innerText=parseFloat(this.value).toFixed(1); updateSim();">
+          </div>
+        `;
+      }
+    }
+
+    // Ana Simülasyon Çizim Fonksiyonu
+    function updateSim() {
+      const topTitle = document.getElementById('topCanvasTitle');
+      const btmTitle = document.getElementById('bottomCanvasTitle');
+      const btmBadge = document.getElementById('bottomCanvasBadge');
+      const mathBox = document.getElementById('simMath');
+
+      topCtx.clearRect(0, 0, 860, 210);
+      btmCtx.clearRect(0, 0, 860, 190);
+
+      if (currentMode === 'a') {
+        topTitle.innerText = "Üst Tuval: Ayrık Sinyaller x[n] (Mavi) ve h[n] (Mor)";
+        btmTitle.innerText = "Alt Tuval: Konvolüsyon y[n] = x[n] * h[n]";
+        btmBadge.className = "px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-bold";
+        btmBadge.innerText = "✓ DOĞRU: n < N1 + N2 için y[n] = 0";
+
+        const nSum = paramN1 + paramN2;
+
+        // Top Canvas Çizimi
+        drawDiscreteAxis(topCtx, 860, 210, -5, 14, -0.5, 2.5);
+        // x[n]: 1 for n in [N1, N1+3]
+        for (let n = -5; n <= 14; n++) {
+          const valX = (n >= paramN1 && n <= paramN1 + 3) ? 1.0 : 0;
+          if (valX > 0) drawStem(topCtx, 860, 210, -5, 14, -0.5, 2.5, n, valX, '#2563eb', 5, 'x[n]');
+          const valH = (n >= paramN2 && n <= paramN2 + 3) ? 1.5 : 0;
+          if (valH > 0) drawStem(topCtx, 860, 210, -5, 14, -0.5, 2.5, n + 0.2, valH, '#9333ea', 5, 'h[n]');
+        }
+        // Vurgulayıcı etiketler
+        topCtx.fillStyle = '#2563eb';
+        topCtx.font = 'bold 11px Inter';
+        topCtx.fillText(`x[n] ≥ 0 başlangıcı: N1 = ${paramN1}`, 20, 25);
+        topCtx.fillStyle = '#9333ea';
+        topCtx.fillText(`h[n] ≥ 0 başlangıcı: N2 = ${paramN2}`, 20, 45);
+
+        // Bottom Canvas Çizimi: y[n]
+        drawDiscreteAxis(btmCtx, 860, 190, -5, 14, -0.5, 4.5);
+        // Sıfır bölgesini gölgelendir
+        const xZeroStart = mapX(860, -5, 14, -5);
+        const xZeroEnd = mapX(860, -5, 14, nSum);
+        btmCtx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+        btmCtx.fillRect(xZeroStart, 0, xZeroEnd - xZeroStart, 190);
+        btmCtx.strokeStyle = '#ef4444';
+        btmCtx.setLineDash([4, 4]);
+        btmCtx.beginPath();
+        btmCtx.moveTo(xZeroEnd, 0);
+        btmCtx.lineTo(xZeroEnd, 190);
+        btmCtx.stroke();
+        btmCtx.setLineDash([]);
+
+        btmCtx.fillStyle = '#dc2626';
+        btmCtx.font = 'bold 11px Inter';
+        btmCtx.fillText(`Sıfır Bölgesi: n < N1 + N2 = ${nSum}`, Math.max(10, xZeroEnd - 160), 30);
+
+        // Konvolüsyon hesapla (kutu konvolüsyonu)
+        for (let n = -5; n <= 14; n++) {
+          let sum = 0;
+          for (let k = -10; k <= 20; k++) {
+            const xk = (k >= paramN1 && k <= paramN1 + 3) ? 1.0 : 0;
+            const hnk = ((n - k) >= paramN2 && (n - k) <= paramN2 + 3) ? 1.5 : 0;
+            sum += xk * hnk;
+          }
+          if (sum > 0) {
+            drawStem(btmCtx, 860, 190, -5, 14, -0.5, 4.5, n, sum, '#059669', 6, `${sum.toFixed(1)}`);
+          } else {
+            drawStem(btmCtx, 860, 190, -5, 14, -0.5, 4.5, n, 0, '#94a3b8', 3, '');
+          }
+        }
+
+        // KaTeX güncelleme
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>Parametreler:</strong> $N_1 = ${paramN1},\\; N_2 = ${paramN2} \\implies N_1 + N_2 = ${nSum}$</div>
+            <div><strong>Teorem:</strong> $n < ${nSum} \\implies y[n] = \\sum_{k} x[k]h[n-k] = 0$</div>
+            <div class="text-emerald-700 font-bold">İlk sıfırdan farklı örnek: $n = ${nSum}$ noktasında başlar!</div>
+          </div>
+        `;
+        if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$', right: '$', display: false}]});
+
+      } else if (currentMode === 'b') {
+        topTitle.innerText = "Üst Tuval: Orijinal Konvolüsyon y[n] ve İddia Edilen Gecikmiş Çıkış y[n - 1]";
+        btmTitle.innerText = "Alt Tuval: Gerçek Çıkış x[n - 1] * h[n - 1] = y[n - 2]";
+        btmBadge.className = "px-2 py-0.5 text-xs rounded-full bg-rose-100 text-rose-800 font-bold";
+        btmBadge.innerText = "✗ YANLIŞ: 1 Birim Değil, 2 Birim Gecikir!";
+
+        const s = paramShift;
+
+        // Üst tuval: Orijinal y[n] (Mavi) ve y[n - s] (Amber)
+        drawDiscreteAxis(topCtx, 860, 210, -2, 10, -0.5, 3.5);
+        topCtx.fillStyle = '#2563eb';
+        topCtx.font = 'bold 11px Inter';
+        topCtx.fillText(`Orijinal y[n] (Mavi)`, 20, 25);
+        topCtx.fillStyle = '#d97706';
+        topCtx.fillText(`İddia: y[n - ${s}] (${s} birim gecikmiş, Kesikli Çizgi)`, 20, 45);
+
+        for (let n = -2; n <= 10; n++) {
+          // Orijinal y[n]: üçgen darbe 0, 1, 2, 1, 0
+          const orig = (n >= 0 && n <= 2) ? (n === 1 ? 2.0 : 1.0) : 0;
+          if (orig > 0) drawStem(topCtx, 860, 210, -2, 10, -0.5, 3.5, n, orig, '#2563eb', 5, '');
+
+          const claimed = ((n - s) >= 0 && (n - s) <= 2) ? ((n - s) === 1 ? 2.0 : 1.0) : 0;
+          if (claimed > 0) drawStem(topCtx, 860, 210, -2, 10, -0.5, 3.5, n + 0.25, claimed, '#d97706', 5, `y[n-${s}]`);
+        }
+
+        // Alt tuval: Gerçek x[n-s] * h[n-s] = y[n - 2s]
+        drawDiscreteAxis(btmCtx, 860, 190, -2, 10, -0.5, 3.5);
+        btmCtx.fillStyle = '#e11d48';
+        btmCtx.font = 'bold 11px Inter';
+        btmCtx.fillText(`Gerçek Çıkış: x[n - ${s}] * h[n - ${s}] = y[n - ${2*s}] (Gül Pembesi)`, 20, 25);
+
+        for (let n = -2; n <= 10; n++) {
+          const actual = ((n - 2*s) >= 0 && (n - 2*s) <= 2) ? ((n - 2*s) === 1 ? 2.0 : 1.0) : 0;
+          if (actual > 0) {
+            drawStem(btmCtx, 860, 190, -2, 10, -0.5, 3.5, n, actual, '#e11d48', 6, `y[n-${2*s}]`);
+          } else {
+            drawStem(btmCtx, 860, 190, -2, 10, -0.5, 3.5, n, 0, '#94a3b8', 3, '');
+          }
+        }
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>İddia:</strong> $y[n - ${s}] \\stackrel{?}{=} x[n - ${s}] * h[n - ${s}]$</div>
+            <div><strong>Gerçek:</strong> $x[n - ${s}] * h[n - ${s}] = y[n - ${2*s}]$</div>
+            <div class="text-rose-700 font-bold">Fark: $\\Delta n = ${s}$ birim ek gecikme hatası! Önerme YANLIŞTIR.</div>
+          </div>
+        `;
+        if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$', right: '$', display: false}]});
+
+      } else if (currentMode === 'c') {
+        topTitle.innerText = "Üst Tuval: Terslenmiş Girişler x(-t) (Kırmızı) ve h(-t) (Mor)";
+        btmTitle.innerText = "Alt Tuval: x(-t) * h(-t) (Kırmızı Çizgi) ile y(-t) (Mor Noktalar) Tam Örtüşmesi";
+        btmBadge.className = "px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-bold";
+        btmBadge.innerText = "✓ DOĞRU: x(-t) * h(-t) ≡ y(-t)";
+
+        drawContinuousAxis(topCtx, 860, 210, -6, 6, -0.5, 2.5);
+        // Çizim: x(t) = exp(-t)u(t) -> x(-t) = exp(t)u(-t)
+        // h(t) = rect(t) -> h(-t) = rect(-t) = rect(t)
+        topCtx.strokeStyle = '#e11d48';
+        topCtx.lineWidth = 2.5;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, -6, 6, px);
+          const xt = (t <= 0) ? Math.exp(t) : 0;
+          const py = mapY(210, -0.5, 2.5, xt);
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        topCtx.strokeStyle = '#9333ea';
+        topCtx.lineWidth = 2;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, -6, 6, px);
+          const ht = (t >= -1.5 && t <= 1.5) ? 1.0 : 0;
+          const py = mapY(210, -0.5, 2.5, ht);
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        topCtx.fillStyle = '#e11d48';
+        topCtx.font = 'bold 11px Inter';
+        topCtx.fillText('x(-t) = e^t u(-t)', 20, 25);
+        topCtx.fillStyle = '#9333ea';
+        topCtx.fillText('h(-t) = rect(-t)', 20, 45);
+
+        // Alt tuval: y(-t)
+        drawContinuousAxis(btmCtx, 860, 190, -6, 6, -0.5, 2.5);
+        btmCtx.strokeStyle = '#059669';
+        btmCtx.lineWidth = 3;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, -6, 6, px);
+          // Orijinal y(tau): konvolüsyon rect ile exp(-t)u(t)
+          // Terslenmiş y(-t)
+          const mt = -t;
+          let yVal = 0;
+          if (mt < -1.5) yVal = 0;
+          else if (mt >= -1.5 && mt <= 1.5) yVal = 1 - Math.exp(-(mt + 1.5));
+          else yVal = Math.exp(-mt) * (Math.exp(1.5) - Math.exp(-1.5));
+
+          const py = mapY(190, -0.5, 2.5, yVal);
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        btmCtx.fillStyle = '#059669';
+        btmCtx.font = 'bold 11px Inter';
+        btmCtx.fillText('y(-t) = x(-t) * h(-t) (Kusursuz Örtüşme)', 20, 25);
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>İspat:</strong> $u = -\\tau \\implies \\int x(-\\tau)h(-(t-\\tau))d\\tau = \\int x(u)h(-t-u)du = y(-t)$</div>
+            <div class="text-emerald-700 font-bold">Zaman tersleme konvolüsyon altında değişmez simetriye sahiptir!</div>
+          </div>
+        `;
+        if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$', right: '$', display: false}]});
+
+      } else if (currentMode === 'd') {
+        topTitle.innerText = "Üst Tuval: Sol Yanlı Sürekli Sinyaller x(t) (Mavi) ve h(t) (Yeşil)";
+        btmTitle.innerText = "Alt Tuval: Konvolüsyon y(t) = x(t) * h(t) ve Bitiş Sınırı";
+        btmBadge.className = "px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-bold";
+        btmBadge.innerText = "✓ DOĞRU: t > T1 + T2 için y(t) = 0";
+
+        const tSum = paramT1 + paramT2;
+
+        drawContinuousAxis(topCtx, 860, 210, -5, 7, -0.5, 2.5);
+        // x(t): sol yanlı, t <= T1 için aktif
+        topCtx.strokeStyle = '#2563eb';
+        topCtx.lineWidth = 2.5;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, -5, 7, px);
+          const xt = (t <= paramT1) ? Math.exp(0.5 * (t - paramT1)) : 0;
+          const py = mapY(210, -0.5, 2.5, xt);
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        // h(t): sol yanlı, t <= T2 için aktif
+        topCtx.strokeStyle = '#0d9488';
+        topCtx.lineWidth = 2;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, -5, 7, px);
+          const ht = (t <= paramT2) ? 1.0 : 0;
+          const py = mapY(210, -0.5, 2.5, ht);
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        topCtx.fillStyle = '#2563eb';
+        topCtx.font = 'bold 11px Inter';
+        topCtx.fillText(`x(t) sol yanlı bitişi: T1 = ${paramT1.toFixed(1)}`, 20, 25);
+        topCtx.fillStyle = '#0d9488';
+        topCtx.fillText(`h(t) sol yanlı bitişi: T2 = ${paramT2.toFixed(1)}`, 20, 45);
+
+        // Alt tuval: y(t)
+        drawContinuousAxis(btmCtx, 860, 190, -5, 7, -0.5, 3.5);
+
+        // t > T1 + T2 için sıfır bölgesini gölgelendir
+        const xZeroStart = mapX(860, -5, 7, tSum);
+        const xZeroEnd = mapX(860, -5, 7, 7);
+        btmCtx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+        btmCtx.fillRect(xZeroStart, 0, xZeroEnd - xZeroStart, 190);
+        btmCtx.strokeStyle = '#ef4444';
+        btmCtx.setLineDash([4, 4]);
+        btmCtx.beginPath();
+        btmCtx.moveTo(xZeroStart, 0);
+        btmCtx.lineTo(xZeroStart, 190);
+        btmCtx.stroke();
+        btmCtx.setLineDash([]);
+
+        btmCtx.fillStyle = '#dc2626';
+        btmCtx.font = 'bold 11px Inter';
+        btmCtx.fillText(`Sıfır Bölgesi: t > T1 + T2 = ${tSum.toFixed(1)}`, Math.min(700, xZeroStart + 15), 30);
+
+        // y(t) eğrisi
+        btmCtx.strokeStyle = '#4f46e5';
+        btmCtx.lineWidth = 3;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, -5, 7, px);
+          const yt = (t <= tSum) ? 2.0 * Math.exp(0.4 * (t - tSum)) : 0;
+          const py = mapY(190, -0.5, 3.5, yt);
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>Sınırlar:</strong> $T_1 = ${paramT1.toFixed(1)},\\; T_2 = ${paramT2.toFixed(1)} \\implies T_1 + T_2 = ${tSum.toFixed(1)}$</div>
+            <div><strong>İntegral Şartı:</strong> $t - T_2 \\le \\tau \\le T_1 \\implies t \\le ${tSum.toFixed(1)}$</div>
+            <div class="text-emerald-700 font-bold">$t > ${tSum.toFixed(1)}$ için integrand tamamen sıfırdır: $y(t) \\equiv 0$.</div>
+          </div>
+        `;
+        if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$', right: '$', display: false}]});
+      }
+    }
+
+    // --- Yardımcı Çizim Fonksiyonları ---
+    function mapX(w, minX, maxX, x) {
+      return ((x - minX) / (maxX - minX)) * (w - 80) + 40;
+    }
+    function mapInvX(w, minX, maxX, px) {
+      return ((px - 40) / (w - 80)) * (maxX - minX) + minX;
+    }
+    function mapY(h, minY, maxY, y) {
+      return h - 30 - ((y - minY) / (maxY - minY)) * (h - 60);
+    }
+
+    function drawDiscreteAxis(ctx, w, h, minX, maxX, minY, maxY) {
+      const y0 = mapY(h, minY, maxY, 0);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      for (let n = Math.ceil(minX); n <= Math.floor(maxX); n++) {
+        const x = mapX(w, minX, maxX, n);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 3);
+        ctx.lineTo(x, y0 + 3);
+        ctx.stroke();
+        ctx.fillText(n.toString(), x - 4, y0 + 15);
+      }
+    }
+
+    function drawContinuousAxis(ctx, w, h, minX, maxX, minY, maxY) {
+      const y0 = mapY(h, minY, maxY, 0);
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      for (let t = Math.ceil(minX); t <= Math.floor(maxX); t++) {
+        const x = mapX(w, minX, maxX, t);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 3);
+        ctx.lineTo(x, y0 + 3);
+        ctx.stroke();
+        ctx.fillText(t.toString(), x - 4, y0 + 15);
+      }
+    }
+
+    function drawStem(ctx, w, h, minX, maxX, minY, maxY, n, val, color, radius = 5, label = '') {
+      const x = mapX(w, minX, maxX, n);
+      const y0 = mapY(h, minY, maxY, 0);
+      const y1 = mapY(h, minY, maxY, val);
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y0);
+      ctx.lineTo(x, y1);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y1, radius, 0, 2 * Math.PI);
+      ctx.fill();
+
+      if (label && val !== 0) {
+        ctx.fillStyle = color;
+        ctx.font = 'bold 9px Inter';
+        ctx.fillText(label, x - 6, y1 - 7);
+      }
+    }
+
+    // --- Animasyon Kontrolleri ---
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      document.getElementById('playIcon').innerText = isPlaying ? '⏸' : '▶';
+      if (isPlaying) runAnimation();
+    }
+
+    function runAnimation() {
+      if (!isPlaying) return;
+      if (currentMode === 'a') {
+        paramN1 = (paramN1 >= 4) ? -2 : paramN1 + 1;
+        document.getElementById('n1Val').innerText = paramN1;
+      } else if (currentMode === 'b') {
+        paramShift = (paramShift >= 3) ? 1 : paramShift + 1;
+        document.getElementById('shiftVal').innerText = paramShift;
+      } else if (currentMode === 'd') {
+        paramT1 = (paramT1 >= 2.5) ? -1.0 : paramT1 + 0.5;
+        document.getElementById('t1Val').innerText = paramT1.toFixed(1);
+      }
+      updateSim();
+      const speed = parseInt(document.getElementById('speedSlider').value);
+      const delay = 1200 / speed;
+      setTimeout(() => {
+        if (isPlaying) requestAnimationFrame(runAnimation);
+      }, delay);
+    }
+
+    function stepForward() {
+      if (currentMode === 'a') {
+        paramN1 = (paramN1 >= 4) ? -2 : paramN1 + 1;
+        document.getElementById('n1Val').innerText = paramN1;
+      } else if (currentMode === 'b') {
+        paramShift = (paramShift >= 3) ? 1 : paramShift + 1;
+        document.getElementById('shiftVal').innerText = paramShift;
+      } else if (currentMode === 'd') {
+        paramT1 = (paramT1 >= 2.5) ? -1.0 : paramT1 + 0.5;
+        document.getElementById('t1Val').innerText = paramT1.toFixed(1);
+      }
+      updateSim();
+    }
+
+    function resetSim() {
+      isPlaying = false;
+      document.getElementById('playIcon').innerText = '▶';
+      paramN1 = 2;
+      paramN2 = 3;
+      paramShift = 1;
+      paramT1 = 1.5;
+      paramT2 = 2.0;
+      renderDynamicControls();
+      updateSim();
+    }
+
+    // ==========================================
+    // 6 ÇÖZÜM ADIMI İÇİN YÜKSEK ÇÖZÜNÜRLÜKLÜ ÇİZİMLER
+    // ==========================================
+
+    // Kart 1: Genel Bakış & 4 Önerme Şeması
+    function renderCard1() {
+      const { canvas, ctx } = createHiDPICanvas(780, 240);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 240);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 15px Inter';
+      ctx.fillText('Problem 2.16 Önerme Doğruluk ve Karşılaştırma Matrisi', 25, 30);
+
+      const items = [
+        { tag: '(a)', title: 'Sağ Yanlı DT Destek Sınırı', formula: 'x[n]=0, n<N1 & h[n]=0, n<N2 => y[n]=0, n<N1+N2', res: 'DOĞRU', color: '#059669', bg: '#ecfdf5' },
+        { tag: '(b)', title: 'Çift Zaman Kaydırma', formula: 'y[n-1] = x[n-1]*h[n-1]  (Gerçek: y[n-2])', res: 'YANLIŞ', color: '#dc2626', bg: '#fef2f2' },
+        { tag: '(c)', title: 'Zaman Tersleme Simetrisi', formula: 'y(-t) = x(-t)*h(-t)  (Değişken değişimi ile özdeş)', res: 'DOĞRU', color: '#059669', bg: '#ecfdf5' },
+        { tag: '(d)', title: 'Sol Yanlı CT Bitiş Sınırı', formula: 'x(t)=0, t>T1 & h(t)=0, t>T2 => y(t)=0, t>T1+T2', res: 'DOĞRU', color: '#059669', bg: '#ecfdf5' }
+      ];
+
+      items.forEach((item, idx) => {
+        const y = 50 + idx * 44;
+        ctx.fillStyle = item.bg;
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.roundRect(25, y, 730, 36, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = '#334155';
+        ctx.font = 'bold 12px Inter';
+        ctx.fillText(item.tag + ' ' + item.title + ':', 40, y + 22);
+
+        ctx.font = '11px monospace';
+        ctx.fillStyle = '#475569';
+        ctx.fillText(item.formula, 250, y + 22);
+
+        ctx.fillStyle = item.color;
+        ctx.font = 'bold 12px Inter';
+        ctx.fillText(item.res, 680, y + 22);
+      });
+
+      document.getElementById('img1').src = canvas.toDataURL();
+    }
+
+    // Kart 2: (a) Şıkkı Sağ Yanlı DT Örtüşme Şeması
+    function renderCard2() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 13px Inter';
+      ctx.fillText('(a) Şıkkı: Sağ Yanlı Sinyallerde n < N1 + N2 Bölgesinde Örtüşmeme İspatı', 25, 25);
+
+      // Eksen
+      const yAxis = 110;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAxis);
+      ctx.lineTo(740, yAxis);
+      ctx.stroke();
+
+      // N1 noktası
+      const xN1 = 280;
+      ctx.fillStyle = '#2563eb';
+      ctx.beginPath();
+      ctx.arc(xN1, yAxis, 5, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.fillText('k = N1', xN1 - 15, yAxis + 20);
+
+      // x[k] bölgesi (k >= N1)
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.15)';
+      ctx.fillRect(xN1, 60, 440, 50);
+      ctx.strokeStyle = '#2563eb';
+      ctx.strokeRect(xN1, 60, 440, 50);
+      ctx.fillStyle = '#1d4ed8';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('x[k] ≠ 0 Bölgesi (k ≥ N1)', xN1 + 20, 90);
+
+      // n - N2 noktası (n < N1 + N2 iken n - N2 < N1)
+      const xN2 = 200;
+      ctx.fillStyle = '#9333ea';
+      ctx.beginPath();
+      ctx.arc(xN2, yAxis, 5, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.fillText('k = n - N2', xN2 - 25, yAxis + 20);
+
+      // h[n-k] bölgesi (k <= n - N2)
+      ctx.fillStyle = 'rgba(147, 51, 234, 0.15)';
+      ctx.fillRect(40, 60, xN2 - 40, 50);
+      ctx.strokeStyle = '#9333ea';
+      ctx.strokeRect(40, 60, xN2 - 40, 50);
+      ctx.fillStyle = '#7e22ce';
+      ctx.fillText('h[n-k] ≠ 0 (k ≤ n - N2)', 55, 90);
+
+      // Aradaki boşluk
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('← ÖRTÜŞME YOK! n - N2 < N1  =>  x[k]·h[n-k] = 0 everywhere →', 160, 175);
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Sonuç: n < N1 + N2 için y[n] = 0 kesinlikle DOĞRUDUR.', 25, 205);
+
+      document.getElementById('img2').src = canvas.toDataURL();
+    }
+
+    // Kart 3: (b) Şıkkı Zaman Kaydırma Çift Gecikme Grafiği
+    function renderCard3() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 13px Inter';
+      ctx.fillText('(b) Şıkkı Çürütmesi: δ[n - 1] * δ[n - 1] = δ[n - 2] ≠ δ[n - 1]', 25, 25);
+
+      // Eksenler
+      const y0 = 140;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(750, y0);
+      ctx.stroke();
+
+      for (let n = -1; n <= 5; n++) {
+        const x = 100 + n * 100;
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px Inter';
+        ctx.fillText('n = ' + n, x - 12, y0 + 18);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 3);
+        ctx.lineTo(x, y0 + 3);
+        ctx.stroke();
+      }
+
+      // n = 1'de iddia edilen y[n-1]
+      const x1 = 100 + 1 * 100;
+      ctx.strokeStyle = '#d97706';
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y0);
+      ctx.lineTo(x1, y0 - 70);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#d97706';
+      ctx.beginPath();
+      ctx.arc(x1, y0 - 70, 5, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('İddia Edilen y[n-1]', x1 - 40, y0 - 80);
+
+      // n = 2'de gerçek çıkış y[n-2]
+      const x2 = 100 + 2 * 100;
+      ctx.strokeStyle = '#e11d48';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x2, y0);
+      ctx.lineTo(x2, y0 - 70);
+      ctx.stroke();
+      ctx.fillStyle = '#e11d48';
+      ctx.beginPath();
+      ctx.arc(x2, y0 - 70, 6, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Gerçek: x[n-1]*h[n-1] = δ[n-2]', x2 - 70, y0 - 80);
+
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('HATA: Giriş ve sistemin gecikmeleri toplanır! 1 + 1 = 2 birim gecikme oluşur.', 120, 195);
+
+      document.getElementById('img3').src = canvas.toDataURL();
+    }
+
+    // Kart 4: (c) Şıkkı Zaman Tersleme Simetrisi
+    function renderCard4() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 13px Inter';
+      ctx.fillText('(c) Şıkkı: Sürekli Zaman Zaman Tersleme (Time-Reversal) Eşitliği', 25, 25);
+
+      // Sol panel: Orijinal y(t)
+      ctx.fillStyle = '#f8fafc';
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.beginPath();
+      ctx.roundRect(30, 45, 340, 140, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#2563eb';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Orijinal: y(t) = x(t) * h(t)', 45, 65);
+
+      const yAx1 = 150;
+      ctx.strokeStyle = '#94a3b8';
+      ctx.beginPath();
+      ctx.moveTo(50, yAx1);
+      ctx.lineTo(350, yAx1);
+      ctx.moveTo(200, 75);
+      ctx.lineTo(200, 165);
+      ctx.stroke();
+
+      // Sağa yatan üçgen
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.2)';
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(200, yAx1);
+      ctx.lineTo(280, yAx1 - 50);
+      ctx.lineTo(310, yAx1);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#2563eb';
+      ctx.fillText('+t yönü', 260, yAx1 + 18);
+
+      // Sağ panel: Terslenmiş y(-t)
+      ctx.fillStyle = '#f8fafc';
+      ctx.strokeStyle = '#e2e8f0';
+      ctx.beginPath();
+      ctx.roundRect(410, 45, 340, 140, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Terslenmiş: y(-t) = x(-t) * h(-t)', 425, 65);
+
+      const yAx2 = 150;
+      ctx.strokeStyle = '#94a3b8';
+      ctx.beginPath();
+      ctx.moveTo(430, yAx2);
+      ctx.lineTo(730, yAx2);
+      ctx.moveTo(580, 75);
+      ctx.lineTo(580, 165);
+      ctx.stroke();
+
+      // Sola yatan üçgen (aynısı)
+      ctx.fillStyle = 'rgba(5, 150, 105, 0.2)';
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(580, yAx2);
+      ctx.lineTo(500, yAx2 - 50);
+      ctx.lineTo(470, yAx2);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#059669';
+      ctx.fillText('-t yönü', 490, yAx2 + 18);
+
+      ctx.fillStyle = '#047857';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('u = -τ dönüşümü integralde yönü korur. Önerme DOĞRUDUR.', 210, 205);
+
+      document.getElementById('img4').src = canvas.toDataURL();
+    }
+
+    // Kart 5: (d) Şıkkı Sol Yanlı CT Sınır İspatı
+    function renderCard5() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 13px Inter';
+      ctx.fillText('(d) Şıkkı: Sol Yanlı Sinyallerde t > T1 + T2 Bölgesinde Sıfırlanma İspatı', 25, 25);
+
+      const yAxis = 110;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAxis);
+      ctx.lineTo(740, yAxis);
+      ctx.stroke();
+
+      // T1 noktası
+      const xT1 = 450;
+      ctx.fillStyle = '#4f46e5';
+      ctx.beginPath();
+      ctx.arc(xT1, yAxis, 5, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.fillText('τ = T1', xT1 - 15, yAxis + 20);
+
+      // x(τ) bölgesi (τ <= T1)
+      ctx.fillStyle = 'rgba(79, 70, 229, 0.15)';
+      ctx.fillRect(40, 60, xT1 - 40, 50);
+      ctx.strokeStyle = '#4f46e5';
+      ctx.strokeRect(40, 60, xT1 - 40, 50);
+      ctx.fillStyle = '#4338ca';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('x(τ) ≠ 0 Bölgesi (τ ≤ T1)', 180, 90);
+
+      // t - T2 noktası (t > T1 + T2 iken t - T2 > T1)
+      const xT2 = 540;
+      ctx.fillStyle = '#0d9488';
+      ctx.beginPath();
+      ctx.arc(xT2, yAxis, 5, 0, 2*Math.PI);
+      ctx.fill();
+      ctx.fillText('τ = t - T2', xT2 - 15, yAxis + 20);
+
+      // h(t - τ) bölgesi (τ >= t - T2)
+      ctx.fillStyle = 'rgba(13, 148, 136, 0.15)';
+      ctx.fillRect(xT2, 60, 200, 50);
+      ctx.strokeStyle = '#0d9488';
+      ctx.strokeRect(xT2, 60, 200, 50);
+      ctx.fillStyle = '#0f766e';
+      ctx.fillText('h(t - τ) ≠ 0 (τ ≥ t - T2)', xT2 + 20, 90);
+
+      // Aradaki ayrık bölge
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('← AYRIK BÖLGELER: t - T2 > T1  =>  İntegrand Özdeş Olarak Sıfır! →', 160, 175);
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Sonuç: t > T1 + T2 için y(t) = 0 kesinlikle DOĞRUDUR.', 25, 205);
+
+      document.getElementById('img5').src = canvas.toDataURL();
+    }
+
+    // Kart 6: Kapsamlı Özet & Hüküm Tablosu
+    function renderCard6() {
+      const { canvas, ctx } = createHiDPICanvas(780, 240);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 240);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('Problem 2.16 Sınav ve Teori Özeti: Konvolüsyon Kuralları', 25, 28);
+
+      // 3 Kutu Yan Yana
+      const boxes = [
+        { title: '1. Destek Kümeleri Kuralı', line1: 'Sağ Yanlı: Başlangıçlar toplanır', line2: 'Sol Yanlı: Bitişler toplanır', note: '(a) ve (d) DOĞRU', col: '#2563eb' },
+        { title: '2. Zaman Kaydırma Kuralı', line1: 'x[n-n1] * h[n-n2] = y[n - (n1+n2)]', line2: 'Gecikmeler kümülatif toplanır', note: '(b) YANLIŞ (y[n-2])', col: '#dc2626' },
+        { title: '3. Zaman Tersleme Kuralı', line1: 'x(-t) * h(-t) = y(-t)', line2: 'Aynalama konvolüsyonla değişir', note: '(c) DOĞRU', col: '#059669' }
+      ];
+
+      boxes.forEach((b, i) => {
+        const x = 25 + i * 250;
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.beginPath();
+        ctx.roundRect(x, 48, 235, 165, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = b.col;
+        ctx.font = 'bold 12px Inter';
+        ctx.fillText(b.title, x + 12, 75);
+
+        ctx.fillStyle = '#334155';
+        ctx.font = '11px Inter';
+        ctx.fillText(b.line1, x + 12, 105);
+        ctx.fillText(b.line2, x + 12, 125);
+
+        ctx.fillStyle = b.col;
+        ctx.font = 'bold 12px Inter';
+        ctx.fillText('Hüküm: ' + b.note, x + 12, 180);
+      });
+
+      document.getElementById('img6').src = canvas.toDataURL();
+    }
+
+    // --- Sayfa Yüklendiğinde Başlat ---
+    window.addEventListener('load', () => {
+      renderDynamicControls();
+      updateSim();
+      renderCard1();
+      renderCard2();
+      renderCard3();
+      renderCard4();
+      renderCard5();
+      renderCard6();
+    });
+  </script>
+</body>
+</html>
