@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.15 — Ayrık Zamanlı LTI Kararlılık ve Mutlak Toplanabilirlik Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Üst Gezinme Çubuğu / Geri Dönüş -->
+    <div class="flex items-center justify-between bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition font-medium text-sm">
+        <svg class="w-4 h-4 text-slate-500 group-hover:text-indigo-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)
+      </a>
+      <span class="text-xs font-semibold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
+        Oppenheim 2. Baskı &bull; Bölüm 2
+      </span>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full uppercase tracking-wider">
+            Ayrık Zaman (DT) &bull; LTI Kararlılık (BIBO Stability)
+          </span>
+          <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full border border-indigo-100">
+            Problem 2.15 (a &amp; b)
+          </span>
+        </div>
+        <span class="text-xs text-slate-500 font-mono">Sayfa 170 &bull; Oppenheim &amp; Willsky</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        Ayrık Zamanlı LTI Sistemlerde Kararlılık ve Mutlak Toplanabilirlik Analizi
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        Bir ayrık-zamanlı LTI sisteminin BIBO (Sınırlı Giriş - Sınırlı Çıkış) kararlı olması için gerek ve yeter koşul, dürtü yanıtının mutlak toplanabilir ($\sum_{n=-\infty}^{\infty} |h[n]| < \infty$) olmasıdır. Bu problemde verilen sağ yanlı salınımlı $h_1[n] = n\cos(\frac{\pi}{4}n)u[n]$ ve sol yanlı üstel $h_2[n] = 3^n u[-n + 10]$ yanıtları incelenmekte; <strong>yalnızca (b) sisteminin kararlı olduğu</strong> analitik olarak ispatlanmaktadır.
+      </p>
+
+      <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4 text-xs sm:text-sm text-indigo-900 font-mono">
+        $$\text{BIBO Kararlılık Şartı: } \sum_{n=-\infty}^{\infty} |h[n]| < \infty$$
+        $$\text{(a) } h_1[n] = n\cos\left(\frac{\pi}{4}n\right)u[n] \implies \sum_{n=0}^{\infty} n\left|\cos\left(\frac{\pi}{4}n\right)\right| = \infty \implies \mathbf{KARARSIZ \ (Unstable)}$$
+        $$\text{(b) } h_2[n] = 3^n u[-n + 10] \implies \sum_{n=-\infty}^{10} 3^n = \frac{3^{11}}{2} = 88573.5 < \infty \implies \mathbf{KARARLI \ (Stable)}$$
+      </div>
+    </div>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Sütun) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>📌</span> Soru Bizden Ne İstiyor?
+        </h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>(a) $h_1[n] = n\cos(\frac{\pi}{4}n)u[n]$ Kararlılığı:</strong> Lineer büyüyen $n$ katsayısının kosinüs salınımıyla çarpımının oluşturduğu mutlak toplamın ıraksadığını kanıtlamak.</li>
+          <li><strong>(b) $h_2[n] = 3^n u[-n + 10]$ Kararlılığı:</strong> Tabanı 3 olan üstel fonksiyonun sol yanlı ($n \le 10$) bir aralıkta tanımlanması sebebiyle geçmişe doğru hızla söndüğünü ve toplamın sonlu kaldığını göstermek.</li>
+          <li><strong>Nihai Değerlendirme:</strong> Kararlı olan sistem(ler)i belirlemek.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>💡</span> Adım Adım Çözüm Metodolojisi
+        </h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>1. Alt-Dizi Kriteri ((a) Şıkkı):</strong> $\cos(\frac{\pi}{4}n)$ periyodu 8'dir. $n = 4m$ anlarında $|\cos(\pi m)| = 1$ olur. Toplam $4\sum_{m=0}^\infty m = \infty$ alt sınırından büyük olduğundan doğrudan sonsuza ıraksar!</li>
+          <li><strong>2. Sol Yanlı İndis Dönüşümü ((b) Şıkkı):</strong> $u[-n + 10] = 1 \iff n \le 10$. $m = 10 - n$ dersek $n = 10 - m$ olur. $n: -\infty \to 10 \implies m: \infty \to 0$.</li>
+          <li><strong>3. Geometrik Seri Hesabı:</strong> $\sum_{n=-\infty}^{10} 3^n = \sum_{m=0}^\infty 3^{10-m} = 3^{10}\sum_{m=0}^\infty (1/3)^m = 3^{10} \cdot \frac{1}{1 - 1/3} = \frac{3^{11}}{2} = 88573.5 < \infty$.</li>
+          <li><strong>4. Z-Düzlemi ROC Kuralı:</strong> $H_2(z)$'nin kutbu $z = 3$'tedir. Dizi sol yanlı olduğundan $\text{ROC}: |z| < 3$'tür. Birim çember ($|z| = 1$) ROC içinde kaldığı için sistem kesinlikle kararlıdır!</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">İnteraktif Ayrık Stem ve Birikimli Toplam Simülatörü</h2>
+          <p class="text-xs text-slate-500">Sistem 1 (kararsız) ve Sistem 2 (kararlı) arasında geçiş yapın, örnekleri adım adım toplayarak ıraksama ve yakınsama davranışını canlı izleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnSys1" class="px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold transition shadow-sm">
+            Sistem 1: $h_1[n]$ (Kararsız)
+          </button>
+          <button id="btnSys2" class="px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-700 border border-slate-200 rounded-xl text-xs font-semibold transition">
+            Sistem 2: $h_2[n]$ (Kararlı)
+          </button>
+          <button id="btnPlay" class="px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1 shadow-sm">
+            <svg id="playIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span id="playText">Animasyon</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Kaydırıcılar -->
+      <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+          <span id="labelSlider">Toplam Örnek Sınırı ($N$):</span>
+          <span id="valN" class="font-mono text-indigo-600 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">N = 8</span>
+        </div>
+        <input id="sliderN" type="range" min="0" max="24" step="1" value="8" class="w-full accent-indigo-600 cursor-pointer">
+        <div class="flex justify-between text-[10px] text-slate-400 font-mono" id="sliderTicks">
+          <span>0</span>
+          <span>6</span>
+          <span>12</span>
+          <span>18</span>
+          <span>24</span>
+        </div>
+      </div>
+
+      <!-- Matematiksel Dinamik Değer Kutusu -->
+      <div id="simMath" class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 text-xs font-mono text-slate-700 transition">
+        <!-- Dinamik KaTeX JS tarafından basılır -->
+      </div>
+
+      <!-- İki Kanvas Alanı -->
+      <div class="space-y-4">
+        <!-- Üst Kanvas: h[n] ve |h[n]| Stem Grafiği -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-600 px-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> İşaretli Stem $h[n]$ &nbsp;|&nbsp;
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Mutlak Değer Stem $|h[n]|$
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">Dürtü Yanıtı Örnekleri</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-inner">
+            <canvas id="kCanvas" width="860" height="210" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+
+        <!-- Alt Kanvas: Birikimli Toplam S[n] -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-600 px-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Birikimli Toplam: $S[N] = \sum |h[n]|$ &nbsp;|&nbsp;
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Doyum / Iraksama Göstergesi
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">BIBO Kararlılık Doğrulaması</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-inner">
+            <canvas id="ynCanvas" width="860" height="190" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Ayrı Adım Kartı (Problem 2.21 Formatı) -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h2 class="text-xl font-black text-slate-900 tracking-tight">
+          Adım Adım Detaylı Çözüm Kartları
+        </h2>
+        <span class="text-xs text-slate-500">Vektörel Grafik &bull; İndirilebilir Yüksek Çözünürlük</span>
+      </div>
+
+      <!-- Kart 1: Mavi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-black flex items-center justify-center">1</span>
+            <h3 class="font-bold text-slate-900 text-base">Ayrık Zamanlı LTI Sistemlerde BIBO Kararlılık Şartı</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_2_15_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Bir ayrık-zaman LTI sisteminin sınırlı bir giriş verildiğinde sınırlı bir çıkış üretmesi için (BIBO Kararlılığı), dürtü yanıtının mutlak değerlerinin sonsuz toplamı sonlu bir reel sayıya yakınsamalıdır ($\sum_{n=-\infty}^{\infty} |h[n]| < \infty$). Toplam sonsuza ıraksıyorsa sistem kararsızdır.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$\text{Sistem BIBO Kararlıdır} \iff \sum_{n=-\infty}^{\infty} |h[n]| < \infty$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img1" class="w-full h-auto block rounded-lg" alt="Adım 1 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 2: Mor -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 text-xs font-black flex items-center justify-center">2</span>
+            <h3 class="font-bold text-slate-900 text-base">(a) Şıkkı: $h_1[n] = n\cos(\frac{\pi}{4}n)u[n]$ Sinyal Yapısı</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_2_15_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $h_1[n]$ sinyali $n \ge 0$ için periyodu $N = 8$ olan kosinüs dalgası ile doğrusal artan $n$ katsayısının çarpımıdır. $n$ büyüdükçe salınımın genlik zarfı sınırsız olarak genişler: $h_1[0]=0, h_1[1]=0.71, h_1[2]=0, h_1[3]=-2.12, h_1[4]=-4, \dots$
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$|h_1[n]| = n \left|\cos\left(\frac{\pi}{4}n\right)\right| \quad (n \ge 0)$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img2" class="w-full h-auto block rounded-lg" alt="Adım 2 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 3: Amber -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-xs font-black flex items-center justify-center">3</span>
+            <h3 class="font-bold text-slate-900 text-base">(a) Şıkkı İspatı: Alt-Dizi ile Sonsuza Iraksama ($\mathbf{KARARSIZ}$)</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_2_15_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Mutlak toplamı $n = 4m$ katları alt-kümesi ile aşağıdan sınırlandıralım:
+          $$\sum_{n=0}^{\infty} n\left|\cos\left(\frac{\pi}{4}n\right)\right| \ge \sum_{m=0}^{\infty} (4m)\cdot |\cos(\pi m)| = 4\sum_{m=0}^{\infty} m = 4(0 + 1 + 2 + 3 + \dots) = \infty$$
+          Toplam sonsuza ıraksadığından Sistem 1 kesin olarak <strong>KARARSIZDIR (Unstable)</strong>.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700 font-bold">
+          $$\sum_{n=-\infty}^{\infty} |h_1[n]| = \infty \implies \mathbf{Sistem \ 1 \ KARARSIZDIR \ (Unstable)}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img3" class="w-full h-auto block rounded-lg" alt="Adım 3 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 4: Rose -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-700 text-xs font-black flex items-center justify-center">4</span>
+            <h3 class="font-bold text-slate-900 text-base">(b) Şıkkı: Sol Yanlı Dizi $h_2[n] = 3^n u[-n + 10]$ Desteği</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_2_15_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Birim basamak fonksiyonu $u[-n + 10] = 1 \iff -n + 10 \ge 0 \implies n \le 10$ şartını getirir. Bu sinyal $n > 10$ için tamamen sıfırdır. Tabanı $3 > 1$ olmasına rağmen dizi geçmişe doğru ($n \to -\infty$) ilerlediğinden $3^{-1} = 1/3, 3^{-2} = 1/9, \dots$ şeklinde hızla sönümlenir.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$h_2[n] = \begin{cases} 3^n, & n \le 10 \\ 0, & n > 10 \end{cases} \quad (\text{Sol Yanlı / Left-Sided Dizi})$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img4" class="w-full h-auto block rounded-lg" alt="Adım 4 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 5: İndigo -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-black flex items-center justify-center">5</span>
+            <h3 class="font-bold text-slate-900 text-base">(b) Şıkkı İspatı: Geometrik Seri ile Sonlu Toplam ($\mathbf{KARARLI}$)</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_2_15_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          İndis dönüşümü yapalım: $m = 10 - n \implies n = 10 - m$. $n: -\infty \to 10$ giderken $m: \infty \to 0$ olur:
+          $$\sum_{n=-\infty}^{10} 3^n = \sum_{m=0}^{\infty} 3^{10 - m} = 3^{10} \sum_{m=0}^{\infty} \left(\frac{1}{3}\right)^m = 3^{10} \cdot \frac{1}{1 - \frac{1}{3}} = 3^{10} \cdot \frac{3}{2} = \frac{3^{11}}{2} = 88573.5 < \infty$$
+          Toplam sonlu olduğundan Sistem 2 kesin olarak <strong>KARARLIDIR (Stable)</strong>.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700 font-bold">
+          $$\sum_{n=-\infty}^{\infty} |h_2[n]| = 88573.5 < \infty \implies \mathbf{Sistem \ 2 \ KARARLIDIR \ (Stable)}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img5" class="w-full h-auto block rounded-lg" alt="Adım 5 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 6: Zümrüt Yeşili -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-black flex items-center justify-center">6</span>
+            <h3 class="font-bold text-slate-900 text-base">Z-Domeni ROC Analizi ve Nihai Karar Özeti</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_2_15_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Z-dönüşümü altında bir sistemin kararlılığı, Yakınsaklık Bölgesinin (ROC) birim çemberi ($|z| = 1$) içermesiyle belirlenir:
+          <br>&bull; <strong>Sistem 1:</strong> $z = e^{\pm j\pi/4}$ birim çemberi üzerinde çift katlı kutup vardır $\implies$ Kararsız.
+          <br>&bull; <strong>Sistem 2:</strong> Kutup $z = 3$'tedir. Dizi sol yanlı olduğu için $\text{ROC}: |z| < 3$'tür. Birim çember $|z|=1$, $3$'ten küçük olduğu için ROC içindedir $\implies$ Kararlı!
+        </p>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs font-mono text-emerald-900 font-bold">
+          $$\mathbf{\text{Nihai Cevap: Verilen yanıtlardan YALNIZCA (b) kararlı bir LTI sisteme aittir.}}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img6" class="w-full h-auto block rounded-lg" alt="Adım 6 Şeması">
+        </div>
+      </div>
+    </div>
+
+    <!-- Alt Bilgi / Footer -->
+    <div class="text-center text-xs text-slate-400 py-6 border-t border-slate-200 space-y-1">
+      <p>Sinyaller ve Sistemler İnteraktif Eğitim Platformu &bull; Problem 2.15 Çözümü</p>
+      <p class="text-[11px] text-slate-400">Oppenheim &amp; Willsky 2. Baskı standartlarına ve Problem 2.21 formatına tam uyumlu olarak hazırlanmıştır.</p>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Kodları: Simülatör ve 6 Adım Kartı Çizimleri -->
+  <script>
+    // Ortak Çizim Yardımcısı: Yüksek Çözünürlüklü Kanvas
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2; // retina netliği
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    // Ayrık Eksen Çizici (Stem Plotting)
+    function drawDiscreteAxis(ctx, ox, oy, width, nMin, nMax, yMin, yMax, scaleN, scaleY, nLabel, yLabel) {
+      ctx.save();
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, system-ui, sans-serif';
+
+      // N ekseni
+      ctx.beginPath();
+      ctx.moveTo(ox + nMin * scaleN - 15, oy);
+      ctx.lineTo(ox + nMax * scaleN + 25, oy);
+      ctx.stroke();
+
+      // N ok
+      ctx.beginPath();
+      ctx.moveTo(ox + nMax * scaleN + 25, oy);
+      ctx.lineTo(ox + nMax * scaleN + 17, oy - 3);
+      ctx.lineTo(ox + nMax * scaleN + 17, oy + 3);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fill();
+
+      // Y ekseni
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - yMax * scaleY - 15);
+      ctx.lineTo(ox, oy - yMin * scaleY + 15);
+      ctx.stroke();
+
+      // Y ok
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - yMax * scaleY - 15);
+      ctx.lineTo(ox - 3, oy - yMax * scaleY - 7);
+      ctx.lineTo(ox + 3, oy - yMax * scaleY - 7);
+      ctx.fill();
+
+      // Eksen Etiketleri
+      ctx.fillStyle = '#475569';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText(nLabel, ox + nMax * scaleN + 28, oy + 4);
+      ctx.fillText(yLabel, ox - 18, oy - yMax * scaleY - 18);
+
+      // N Tikleri
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = '#64748b';
+      for (let n = Math.ceil(nMin); n <= Math.floor(nMax); n++) {
+        if (n === 0) continue;
+        const px = ox + n * scaleN;
+        ctx.beginPath();
+        ctx.moveTo(px, oy - 3);
+        ctx.lineTo(px, oy + 3);
+        ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(n.toString(), px, oy + 14);
+      }
+
+      // Y Tikleri
+      for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+        if (y === 0) continue;
+        const py = oy - y * scaleY;
+        ctx.beginPath();
+        ctx.moveTo(ox - 3, py);
+        ctx.lineTo(ox + 3, py);
+        ctx.stroke();
+        ctx.textAlign = 'right';
+        ctx.fillText(y.toString(), ox - 6, py + 3);
+      }
+
+      // Orijin 0
+      ctx.textAlign = 'right';
+      ctx.fillText('0', ox - 5, oy + 12);
+
+      ctx.restore();
+    }
+
+    // Stem çizimi
+    function drawStem(ctx, px, pyBase, pyVal, color, radius = 3.5) {
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(px, pyBase);
+      ctx.lineTo(px, pyVal);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(px, pyVal, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    let currentSystem = 1; // 1: h1[n], 2: h2[n]
+
+    function calcH1(n) {
+      if (n < 0) return 0;
+      return n * Math.cos((Math.PI / 4) * n);
+    }
+
+    function calcH2(n) {
+      if (n > 10) return 0;
+      return Math.pow(3, n);
+    }
+
+    // -------------------------------------------------------------
+    // ADIM KARTLARI ÇİZİMLERİ (1'den 6'ya)
+    // -------------------------------------------------------------
+
+    // Kart 1: BIBO Kararlılık
+    function renderCard1() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      // Blok Şema
+      ctx.fillStyle = '#eff6ff';
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(300, 70, 220, 75);
+      ctx.fillRect(300, 70, 220, 75);
+
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Ayrık LTI Sistem', 410, 100);
+      ctx.font = '11px monospace';
+      ctx.fillText('∑_{n=-∞}^∞ |h[n]| < ∞', 410, 122);
+
+      // Giriş Oku
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(120, 107); ctx.lineTo(300, 107); ctx.stroke();
+      ctx.fillStyle = '#475569';
+      ctx.beginPath(); ctx.moveTo(300, 107); ctx.lineTo(292, 102); ctx.lineTo(292, 112); ctx.fill();
+
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('Sınırlı Giriş: |x[n]| ≤ Bx < ∞', 210, 95);
+
+      // Çıkış Oku
+      ctx.beginPath(); ctx.moveTo(520, 107); ctx.lineTo(700, 107); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(700, 107); ctx.lineTo(692, 102); ctx.lineTo(692, 112); ctx.fill();
+
+      ctx.fillStyle = '#059669';
+      ctx.fillText('Sınırlı Çıkış: |y[n]| ≤ By < ∞', 610, 95);
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillText('Ayrık-Zaman BIBO Kararlılık İlkesi (Mutlak Toplanabilirlik)', 60, 35);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('Bir LTI sistemin çıkışı, sınırlı her giriş dizisi için ancak ve ancak', 60, 185);
+      ctx.fillText('dürtü yanıtının mutlak toplamı sonlu ise sınırlı kalır.', 60, 200);
+
+      document.getElementById('img1').src = canvas.toDataURL();
+    }
+
+    // Kart 2: h1[n] Stem Grafiği (Büyüyen Dalga)
+    function renderCard2() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 120, oy = 110, scaleN = 40, scaleY = 7;
+      drawDiscreteAxis(ctx, ox, oy, 600, -1.0, 14.5, -12, 12, scaleN, scaleY, 'n', 'h₁[n]');
+
+      // n = 0'dan 13'e stemler
+      for (let n = 0; n <= 13; n++) {
+        const val = calcH1(n);
+        const px = ox + n * scaleN;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, val >= 0 ? '#2563eb' : '#dc2626', 3.5);
+      }
+
+      // Zarf çizgileri (±n)
+      ctx.strokeStyle = '#94a3b8';
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + 13 * scaleN, oy - 13 * scaleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + 13 * scaleN, oy + 13 * scaleY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('h₁[n] = n cos(πn/4) u[n]', ox + 180, 30);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Genlik zarfı ±n sınırları boyunca doğrusal genişler.', ox + 180, 48);
+
+      document.getElementById('img2').src = canvas.toDataURL();
+    }
+
+    // Kart 3: h1[n] Iraksama İspatı
+    function renderCard3() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillText('Sistem 1 (|h₁[n]|) Alt-Dizi ile Iraksama Kanıtı:', 60, 40);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('1. Adım: Tüm terimler pozitif olduğundan alt-küme toplamı genel toplamdan küçüktür:', 60, 70);
+
+      ctx.font = 'bold 12px monospace';
+      ctx.fillStyle = '#be123c';
+      ctx.fillText('∑_{n=0}^∞ n |cos(πn/4)| ≥ ∑_{m=0}^∞ (4m) |cos(πm)|', 90, 100);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('2. Adım: Her tam sayı m için |cos(πm)| = 1\'dir:', 60, 130);
+
+      ctx.font = 'bold 12px monospace';
+      ctx.fillStyle = '#be123c';
+      ctx.fillText('4 ∑_{m=0}^∞ m = 4 (0 + 1 + 2 + 3 + 4 + ...) = ∞', 90, 160);
+
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillStyle = '#dc2626';
+      ctx.fillText('Sonuç: Toplam sonsuza ıraksar ⟹ Sistem 1 KESİNLİKLE KARARSIZDIR (Unstable).', 60, 195);
+
+      document.getElementById('img3').src = canvas.toDataURL();
+    }
+
+    // Kart 4: h2[n] Sol Yanlı Stem Grafiği
+    function renderCard4() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 420, oy = 160, scaleN = 25, scaleY = 1.6;
+      drawDiscreteAxis(ctx, ox, oy, 600, -12, 12, -5, 70, scaleN, scaleY, 'n', 'h₂[n]');
+
+      // n = 10'da tepe 3^10 çok büyük olduğundan görsel ölçekleme:
+      // m = 10 - n için (1/3)^m olarak çizelim
+      for (let n = 0; n <= 10; n++) {
+        const m = 10 - n;
+        const normVal = Math.pow(0.55, m) * 60; // görsel netlik için ölçeklenmiş
+        const px = ox + n * scaleN;
+        drawStem(ctx, px, oy, oy - normVal * scaleY, '#7c3aed', 3.5);
+      }
+
+      ctx.fillStyle = '#5b21b6';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('h₂[n] = 3ⁿ u[-n + 10] (Sol Yanlı Dizi)', 60, 40);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('• n > 10 için: h₂[n] = 0', 60, 60);
+      ctx.fillText('• n ≤ 10 için: Geçmişe doğru gittikçe (n → -∞) üstel hızla söner.', 60, 75);
+      ctx.fillText('• n = 10: 3¹⁰, n = 9: 3⁹ = 3¹⁰/3, n = 8: 3⁸ = 3¹⁰/9 ...', 60, 90);
+
+      document.getElementById('img4').src = canvas.toDataURL();
+    }
+
+    // Kart 5: h2[n] Geometrik Seri Hesabı
+    function renderCard5() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillText('Sistem 2 Geometrik Seri Dönüşümü ve Kesin Değer:', 60, 40);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('1. Adım: İndis değişimi: m = 10 - n  ⟹  n = 10 - m  (m: 0 → ∞)', 60, 70);
+
+      ctx.font = 'bold 12px monospace';
+      ctx.fillStyle = '#059669';
+      ctx.fillText('∑_{n=-∞}^{10} 3ⁿ = ∑_{m=0}^∞ 3^{10-m} = 3^{10} ∑_{m=0}^∞ (1/3)^m', 90, 100);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('2. Adım: Ortak çarpan r = 1/3 < 1 olduğundan geometrik seri formülü uygulanır:', 60, 130);
+
+      ctx.font = 'bold 12px monospace';
+      ctx.fillStyle = '#059669';
+      ctx.fillText('3^{10} · [ 1 / (1 - 1/3) ] = 3^{10} · (3/2) = 3^{11} / 2 = 88573.5 < ∞', 90, 160);
+
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillStyle = '#047857';
+      ctx.fillText('Sonuç: Toplam sonludur ⟹ Sistem 2 KESİNLİKLE KARARLIDIR (Stable).', 60, 195);
+
+      document.getElementById('img5').src = canvas.toDataURL();
+    }
+
+    // Kart 6: Z-Domeni Kutupları ve Sonuç
+    function renderCard6() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      // Z-düzlemi çizimi
+      const ox = 260, oy = 110, scale = 45;
+      drawDiscreteAxis(ctx, ox, oy, 260, -2.5, 3.5, -2.5, 2.5, scale, scale, 'Re{z}', 'Im{z}');
+
+      // Birim çember
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(ox, oy, 1 * scale, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // ROC tarama: |z| < 3
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+      ctx.beginPath();
+      ctx.arc(ox, oy, 3 * scale, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Kutup: z = 3
+      const px = ox + 3 * scale, py = oy;
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(px - 5, py - 5); ctx.lineTo(px + 5, py + 5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(px - 5, py + 5); ctx.lineTo(px + 5, py - 5); ctx.stroke();
+
+      ctx.fillStyle = '#b91c1c';
+      ctx.font = 'bold 10px Inter, sans-serif';
+      ctx.fillText('Kutup: z = 3', px - 25, py - 10);
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#065f46';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillText('Z-Domeni ROC Analizi (Sistem 2):', ox + 140, 40);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = '#475569';
+      ctx.fillText('Sol yanlı dizi ⟹ ROC kutubun içidir: |z| < 3.', ox + 140, 60);
+      ctx.fillText('Mavi birim çember (|z| = 1) ROC içinde kalır.', ox + 140, 75);
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('Nihai Cevap: YALNIZCA (b) kararlıdır!', ox + 140, 95);
+
+      document.getElementById('img6').src = canvas.toDataURL();
+    }
+
+    // -------------------------------------------------------------
+    // İNTERAKTİF SİMÜLATÖR MOTORU
+    // -------------------------------------------------------------
+    const sliderN = document.getElementById('sliderN');
+    const valN = document.getElementById('valN');
+    const simMath = document.getElementById('simMath');
+    const btnPlay = document.getElementById('btnPlay');
+    const btnSys1 = document.getElementById('btnSys1');
+    const btnSys2 = document.getElementById('btnSys2');
+    const playText = document.getElementById('playText');
+
+    let isPlaying = false;
+    let animId = null;
+
+    btnSys1.addEventListener('click', () => {
+      currentSystem = 1;
+      btnSys1.className = "px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold transition shadow-sm";
+      btnSys2.className = "px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-700 border border-slate-200 rounded-xl text-xs font-semibold transition";
+      sliderN.max = "24";
+      sliderN.value = "8";
+      document.getElementById('sliderTicks').innerHTML = `<span>0</span><span>6</span><span>12</span><span>18</span><span>24</span>`;
+      updateSim();
+    });
+
+    btnSys2.addEventListener('click', () => {
+      currentSystem = 2;
+      btnSys2.className = "px-3 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-semibold transition shadow-sm";
+      btnSys1.className = "px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-slate-700 hover:text-indigo-700 border border-slate-200 rounded-xl text-xs font-semibold transition";
+      sliderN.max = "15";
+      sliderN.value = "5";
+      document.getElementById('sliderTicks').innerHTML = `<span>0 (m=0)</span><span>4</span><span>8</span><span>12</span><span>15</span>`;
+      updateSim();
+    });
+
+    function updateSim() {
+      const maxN = parseInt(sliderN.value, 10);
+      valN.textContent = currentSystem === 1 ? `N = ${maxN}` : `m_max = ${maxN} (n = 10 - m)`;
+
+      let sum = 0;
+      if (currentSystem === 1) {
+        for (let n = 0; n <= maxN; n++) {
+          sum += Math.abs(calcH1(n));
+        }
+      } else {
+        for (let m = 0; m <= maxN; m++) {
+          sum += Math.pow(1 / 3, m); // 3^10 normalize edilerek
+        }
+      }
+
+      if (currentSystem === 1) {
+        simMath.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <strong>Model:</strong> $h_1[n] = n\\cos(\\frac{\\pi}{4}n)u[n]$ &nbsp;|&nbsp; <strong>Aktif Örnek:</strong> $|h_1[${maxN}]| = ${Math.abs(calcH1(maxN)).toFixed(2)}$
+            </div>
+            <div class="text-right sm:text-right">
+              <strong>Kısmi Toplam:</strong> $S_1[${maxN}] = \\mathbf{${sum.toFixed(2)}}$ &nbsp;|&nbsp; 
+              <strong>Limit:</strong> $\\to \\infty$ <span class="text-rose-600 font-bold">(KARARSIZ)</span>
+            </div>
+          </div>
+        `;
+      } else {
+        const fullSum = sum * Math.pow(3, 10);
+        simMath.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <strong>Model:</strong> $h_2[n] = 3^n u[-n + 10]$ &nbsp;|&nbsp; <strong>Normalize Terim:</strong> $(1/3)^{${maxN}} = ${(Math.pow(1/3, maxN)).toFixed(5)}$
+            </div>
+            <div class="text-right sm:text-right">
+              <strong>Geometrik Seri:</strong> $\\sum_{m=0}^{${maxN}} (1/3)^m = \\mathbf{${sum.toFixed(5)}}$ &nbsp;|&nbsp; 
+              <strong>Limit:</strong> $1.50000$ <span class="text-emerald-700 font-bold">(KARARLI: 88573.5)</span>
+            </div>
+          </div>
+        `;
+      }
+
+      if (window.renderMathInElement) {
+        renderMathInElement(simMath, { delimiters: [{ left: '$', right: '$', display: false }] });
+      }
+
+      drawKCanvas(maxN);
+      drawYnCanvas(maxN, sum);
+    }
+
+    function drawKCanvas(activeMax) {
+      const c = document.getElementById('kCanvas');
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      if (currentSystem === 1) {
+        const ox = 60, oy = 110, scaleN = 30, scaleY = 3.5;
+        drawDiscreteAxis(ctx, ox, oy, 720, -1, 24.5, -20, 20, scaleN, scaleY, 'n', 'h₁[n]');
+
+        for (let n = 0; n <= 24; n++) {
+          const val = calcH1(n);
+          const px = ox + n * scaleN;
+          const isIncluded = n <= activeMax;
+          drawStem(ctx, px, oy, oy - val * scaleY, isIncluded ? (val >= 0 ? '#2563eb' : '#dc2626') : '#cbd5e1', isIncluded ? 4 : 2.5);
+        }
+      } else {
+        // Sistem 2: m = 0'dan 15'e kadar (1/3)^m olarak gösterim
+        const ox = 100, oy = 160, scaleM = 45, scaleY = 120;
+        drawDiscreteAxis(ctx, ox, oy, 680, -0.5, 14.5, -0.1, 1.2, scaleM, scaleY, 'm (10-n)', '(1/3)ᵐ');
+
+        for (let m = 0; m <= 14; m++) {
+          const val = Math.pow(1 / 3, m);
+          const px = ox + m * scaleM;
+          const isIncluded = m <= activeMax;
+          drawStem(ctx, px, oy, oy - val * scaleY, isIncluded ? '#7c3aed' : '#cbd5e1', isIncluded ? 4.5 : 2.5);
+        }
+      }
+    }
+
+    function drawYnCanvas(activeMax, currentSum) {
+      const c = document.getElementById('ynCanvas');
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      if (currentSystem === 1) {
+        const ox = 60, oy = 160, scaleN = 30, scaleY = 0.8;
+        drawDiscreteAxis(ctx, ox, oy, 720, -1, 24.5, -5, 180, scaleN, scaleY, 'N', 'S₁[N]');
+
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        let runningSum = 0;
+        ctx.moveTo(ox, oy);
+        for (let n = 0; n <= activeMax; n++) {
+          runningSum += Math.abs(calcH1(n));
+          const px = ox + n * scaleN;
+          const py = oy - runningSum * scaleY;
+          ctx.lineTo(px, py);
+          drawStem(ctx, px, oy, py, '#ef4444', 3.5);
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = '#b91c1c';
+        ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.fillText('S₁[N] Parabolik Olarak Sonsuza Doğru Patlıyor (Iraksak)', ox + 200, 40);
+      } else {
+        const ox = 100, oy = 160, scaleM = 45, scaleY = 90;
+        drawDiscreteAxis(ctx, ox, oy, 680, -0.5, 14.5, -0.1, 1.8, scaleM, scaleY, 'm_max', '∑ (1/3)ᵐ');
+
+        // Asimptot: 1.5
+        const pyAsymp = oy - 1.5 * scaleY;
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([4, 3]);
+        ctx.beginPath();
+        ctx.moveTo(ox, pyAsymp);
+        ctx.lineTo(ox + 14.5 * scaleM, pyAsymp);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = '#dc2626';
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.fillText('Sonlu Asimptot = 1.500 (Yakınsak)', ox + 350, pyAsymp - 6);
+
+        // Kısmi toplam
+        ctx.strokeStyle = '#059669';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        let runSum = 0;
+        ctx.moveTo(ox, oy);
+        for (let m = 0; m <= activeMax; m++) {
+          runSum += Math.pow(1 / 3, m);
+          const px = ox + m * scaleM;
+          const py = oy - runSum * scaleY;
+          ctx.lineTo(px, py);
+          drawStem(ctx, px, oy, py, '#059669', 3.5);
+        }
+        ctx.stroke();
+      }
+    }
+
+    // Animasyon Döngüsü
+    function animate() {
+      let val = parseInt(sliderN.value, 10);
+      val++;
+      const maxLimit = currentSystem === 1 ? 24 : 15;
+      if (val > maxLimit) val = 0;
+      sliderN.value = val;
+      updateSim();
+      if (isPlaying) {
+        setTimeout(() => {
+          if (isPlaying) requestAnimationFrame(animate);
+        }, 300);
+      }
+    }
+
+    btnPlay.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playText.textContent = 'Durdur';
+        btnPlay.classList.replace('bg-indigo-600', 'bg-rose-600');
+        btnPlay.classList.replace('hover:bg-indigo-700', 'hover:bg-rose-700');
+        animate();
+      } else {
+        playText.textContent = 'Animasyon';
+        btnPlay.classList.replace('bg-rose-600', 'bg-indigo-600');
+        btnPlay.classList.replace('hover:bg-rose-700', 'hover:bg-indigo-700');
+      }
+    });
+
+    sliderN.addEventListener('input', updateSim);
+
+    // PNG Kartı İndirme Fonksiyonu
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Sayfa Yüklendiğinde Başlat
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCard1();
+      renderCard2();
+      renderCard3();
+      renderCard4();
+      renderCard5();
+      renderCard6();
+      updateSim();
+    });
+  </script>
+</body>
+</html>
