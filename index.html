@@ -78,7 +78,7 @@
       <!-- Sayaç İstatistikleri -->
       <div class="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-4 pt-8 border-t border-indigo-800/60 mt-8">
         <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
-          <div class="text-2xl sm:text-3xl font-black text-white">55</div>
+          <div class="text-2xl sm:text-3xl font-black text-white">56</div>
           <div class="text-xs text-indigo-200 font-medium">İnteraktif Web Çözümü</div>
         </div>
         <div class="bg-white/5 backdrop-blur-sm p-4 rounded-2xl border border-white/10">
@@ -112,9 +112,9 @@
 
       <!-- Kategori Filtreleme Butonları (Pills) -->
       <div class="flex flex-wrap items-center gap-1.5 pt-1 text-xs font-semibold" id="filterPills">
-        <button data-filter="all" class="filter-pill active px-3 py-1.5 bg-indigo-600 text-white rounded-lg shadow-sm transition">Tüm Problemler (55)</button>
+        <button data-filter="all" class="filter-pill active px-3 py-1.5 bg-indigo-600 text-white rounded-lg shadow-sm transition">Tüm Problemler (56)</button>
           <button data-filter="cat-basic" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Temel Sinyaller (4)</button>
-        <button data-filter="cat-conv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Konvolüsyon (20)</button>
+        <button data-filter="cat-conv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Konvolüsyon (21)</button>
         <button data-filter="cat-props" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Nedensellik &amp; Kararlılık (14)</button>
         <button data-filter="cat-diff" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Fark Denklemleri (4)</button>
         <button data-filter="cat-rest" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Dinginlik &amp; LTI Sınırları (5)</button>
@@ -236,16 +236,16 @@
           </div>
           <p class="text-xs text-slate-500 mt-1">Ayrık Zaman Konvolüsyon Toplamları ($x[n]*h[n]$), Sürekli Zaman Konvolüsyon İntegralleri ($x(t)*h(t)$), Dirac Dürtü Trenleri ve Kaskat Sistemler.</p>
         </div>
-        <span class="text-xs font-mono text-slate-400">Problemler: 2.1 &bull; 2.2 &bull; 2.3 &bull; 2.21 &bull; 2.22 &bull; 2.23 &bull; 2.24 &bull; 2.25</span>
+        <span class="text-xs font-mono text-slate-400">Problemler: 2.1 &bull; 2.2 &bull; 2.3 &bull; 2.4 &bull; 2.21 &bull; 2.22 &bull; 2.23 &bull; 2.24 &bull; 2.25</span>
       </div>
 
       <!-- Alt Kategori 1.0: Temel Giriş Problemleri (Problem 2.1 ve Problem 2.2) -->
       <div class="space-y-3">
         <div class="flex items-center justify-between text-xs font-bold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg">
-          <span>Temel Giriş Problemleri &mdash; Problem 2.1, 2.2 &amp; 2.3 (Ayrık Konvolüsyon, Pencereleme ve Geometrik Dizi Birikimi)</span>
-          <span class="text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 text-[10px]">Ayrık Zaman (DT) • 3 Temel Problem</span>
+          <span>Temel Giriş Problemleri &mdash; Problem 2.1, 2.2, 2.3 &amp; 2.4 (Ayrık Konvolüsyon ve Dikdörtgen Darbe Etkileşimleri)</span>
+          <span class="text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 text-[10px]">Ayrık Zaman (DT) • 4 Temel Problem</span>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <!-- Problem 2.1 -->
           <a href="problem_2_1_ayrik_zaman_konvolusyon_ve_lti_oteleme.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="dt" data-keywords="2.1 temel ayrık zaman konvolüsyon toplamı zaman öteleme lti dürtü cevabı oppenheim">
             <div class="flex justify-between items-center text-xs">
@@ -296,6 +296,24 @@
             </p>
             <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
               <span class="text-indigo-600 font-medium">Kapalı Form: $y[n] = [2 - (1/2)^n]u[n]$</span>
+              <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+            </div>
+          </a>
+
+          <!-- Problem 2.4 -->
+          <a href="problem_2_4_dikdortgen_darbeler_ayrik_konvolusyon.html" class="problem-card group block p-4 bg-white rounded-2xl border border-slate-200 hover:border-indigo-500 hover:shadow-md transition space-y-2" data-cat="cat-conv" data-domain="dt" data-keywords="2.4 temel ayrık zaman konvolüsyon toplamı dikdörtgen darbeler yamuk yanıtı plato rampa oppenheim">
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md group-hover:bg-indigo-600 group-hover:text-white transition">Problem 2.4</span>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">Ayrık Zaman (DT) • Yamuk Yanıtı</span>
+            </div>
+            <h3 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition">
+              Sonlu Dikdörtgen Darbelerin Konvolüsyonu ve Yamuk Yanıtı ($x[n] * h[n]$)
+            </h3>
+            <p class="text-xs text-slate-500 line-clamp-2">
+              $x[n] \in [3, 8]$ ve $h[n] \in [4, 15]$ dikdörtgen darbelerinin konvolüsyonu: 3 bölgeli parçalı yamuk fonksiyonu ($n \in [7, 23]$) ve interaktif kayan pencere simülatörü.
+            </p>
+            <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+              <span class="text-indigo-600 font-medium">Yamuk Yanıtı: $n \in [7, 23]$ (Tepe = 6)</span>
               <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
             </div>
           </a>
