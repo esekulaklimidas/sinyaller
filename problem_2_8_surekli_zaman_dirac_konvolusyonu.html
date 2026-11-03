@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.8 Konvolüsyon Görselleştirici — Dirac Dürtüleri ile Sürekli Zaman Konvolüsyonu</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Sürekli Zaman (Continuous-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.8</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.8 — Parçalı Sürekli Sinyalin Dirac Dürtü Treni ile Konvolüsyonu</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x(t) = \begin{cases} t + 1, & 0 \le t \le 1 \\ 2 - t, & 1 < t \le 2 \\ 0, & \text{diğer} \end{cases}, \quad h(t) = \delta(t + 2) + 2\delta(t + 1) \quad \Longrightarrow \quad y(t) = x(t + 2) + 2\,x(t + 1)$$
+        Dirac delta fonksiyonunun sifting (eleme) ve öteleme özelliği sayesinde sürekli-zaman konvolüsyon integrali doğrudan iki ötelenmiş ve ölçeklenmiş sinyalin süperpozisyonuna ($y(t) = x(t+2) + 2x(t+1)$) dönüşür.
+      </p>
+    </div>
+
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Dirac deltaları ile konvolüsyon özellikleri, süreksizlik sıçramaları ve süperpozisyon</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Sinyal Modeli:</strong> $x(t)$, $t \in [0, 2]$ aralığında parçalı lineer bir dalgadır. $t = 0$'da $0 \to 1$ sıçraması, $t = 1$'de ise $2 \to 1$ düşüş sıçraması vardır.</li>
+            <li><strong>Dürtü Yanıtı:</strong> $h(t) = \delta(t+2) + 2\delta(t+1)$ iki ağırlıklı Dirac impulsundan oluşur.</li>
+            <li><strong>İstenen:</strong> $y(t) = x(t) * h(t)$ fonksiyonunu parçalı analitik olarak belirlemek ve tüm süreksizlikleriyle birlikte tam dalga biçimini çizmek.</li>
+          </ul>
+        </div>
+
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Dirac Öteleme Kuralı:</strong> $x(t) * \delta(t - t_0) = x(t - t_0) \implies y(t) = x(t+2) + 2x(t+1)$.</li>
+            <li><strong>Bileşen Destekleri:</strong> $x(t+2)$'nin desteği $[-2, 0]$; $2x(t+1)$'in desteği $[-1, 1]$'dir. Toplam destek: $[-2, 1]$.</li>
+            <li><strong>Bölge 1 ($-2 \le t \le -1$):</strong> Yalnızca $x(t+2)$ aktiftir $\implies y(t) = t + 3$ ($1 \to 2$ rampası).</li>
+            <li><strong>Bölge 2 ($-1 < t \le 0$):</strong> İki sinyal toplanır $\implies y(t) = (-t) + (2t + 4) = t + 4$ ($3 \to 4$ rampası).</li>
+            <li><strong>Bölge 3 ($0 < t \le 1$):</strong> Yalnızca $2x(t+1)$ aktiftir $\implies y(t) = 2 - 2t$ ($2 \to 0$ iniş rampası).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Sürekli Zaman Konvolüsyon Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte ötelenmiş ve ölçeklenmiş bileşen sinyaller $x(t+2)$ ve $2x(t+1)$; altta toplam çıkış $y(t)$.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-semibold text-slate-600">Zaman t:</label>
+            <input type="range" id="tSlider" min="-25" max="15" step="1" value="-5" class="w-36 accent-purple-600 cursor-pointer">
+            <span id="tVal" class="text-xs font-mono font-bold bg-slate-100 px-2 py-1 rounded text-slate-800">t = -0.5</span>
+          </div>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Üst Kanvas: Bileşen Sinyaller -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Bileşenler: <span class="text-blue-600 font-bold">■ x(t + 2)</span> &nbsp;|&nbsp; <span class="text-purple-600 font-bold">■ 2x(t + 1)</span></span>
+          <span class="text-slate-400">Sürekli Zaman Dalgası</span>
+        </div>
+        <canvas id="kCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: Toplam Çıkış y(t) -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Toplam Çıkış: <span class="text-teal-700 font-bold">y(t) = x(t + 2) + 2x(t + 1)</span></span>
+          <span class="text-rose-600 font-medium">Kırmızı imleç anlık $t$ konumunu gösterir</span>
+        </div>
+        <canvas id="ynCanvas" width="860" height="180" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_sinyallerin_tanimi.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Sinyallerin Tanımı ve Dirac Dürtülerinin Özelliği</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $x(t)$ parçalı lineer fonksiyonu $t \in [0, 2]$ aralığında tanımlıdır. $h(t) = \delta(t+2) + 2\delta(t+1)$ ise $t = -2$ ve $t = -1$ noktalarında yer alan iki Dirac impulsundan ibarettir. Dirac delta fonksiyonunun integrasyon altındaki sifting özelliği: $\int_{-\infty}^{\infty} x(\tau)\delta(t - \tau - t_0) d\tau = x(t - t_0)$ şeklindedir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_superpozisyon_ayrimi.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Konvolüsyonun Dağılma ve Öteleme Özelliği</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Konvolüsyon operatörü toplam üzerine dağılır:
+        $$y(t) = x(t) * \big[\delta(t+2) + 2\delta(t+1)\big] = x(t) * \delta(t+2) + 2\big[x(t) * \delta(t+1)\big] = x(t+2) + 2x(t+1)$$
+        Çıkış, $x(t)$ sinyalinin 2 birim sola ötelenmiş hali ile 1 birim sola ötelenip genliği 2 ile çarpılmış halinin toplamıdır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_bilesen_1_x_t_arti_2.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">1. Bileşenin Analizi: $y_1(t) = x(t + 2)$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $x(t)$ 2 birim sola kayar. Destek aralığı $[0-2, 2-2] = [-2, 0]$ olur.
+        - $t \in [-2, -1]$ için: $x(t+2) = (t+2) + 1 = t + 3$ (1'den 2'ye artan rampa).
+        - $t \in (-1, 0]$ için: $x(t+2) = 2 - (t+2) = -t$ (1'den 0'a inen rampa).
+        $t = -1$'de değer $2$'den $1$'e anlık düşer.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_bilesen_2_2x_t_arti_1.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">2. Bileşenin Analizi: $y_2(t) = 2x(t + 1)$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $x(t)$ 1 birim sola kayar ve genliği 2 ile çarpılır. Destek aralığı $[0-1, 2-1] = [-1, 1]$ olur.
+        - $t \in [-1, 0]$ için: $2x(t+1) = 2[(t+1) + 1] = 2t + 4$ (2'den 4'e artan rampa).
+        - $t \in (0, 1]$ için: $2x(t+1) = 2[2 - (t+1)] = 2 - 2t$ (2'den 0'a inen rampa).
+        $t = 0$'da değer $4$'ten $2$'ye anlık düşer.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_parcali_bolgeler_ve_sicramalar.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Parçalı Bölgelerde Toplama ve Sıçrama Süreksizlikleri</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        İki bileşenin örtüştüğü $[-1, 0]$ aralığında toplam: $y(t) = (-t) + (2t + 4) = t + 4$'tür.
+        - $t = -1$ noktasında soldan $y(-1^-) = 2$, sağdan $y(-1^+) = -1 + 4 = 3$ olur ($+1$ sıçraması).
+        - $t = 0$ noktasında soldan $y(0^-) = 4$, sağdan $y(0^+) = 2 - 2(0) = 2$ olur ($-2$ sıçraması).
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_nihai_cikis_dalgasi_y_t.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Nihai Çıkış Dalga Biçimi $y(t)$</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Toplam çıkış dalga biçimi $t \in [-2, 1]$ aralığında aktiftir:
+        $$y(t) = \begin{cases} t + 3, & -2 \le t < -1 \\ t + 4, & -1 < t \le 0 \\ 2 - 2t, & 0 < t \le 1 \\ 0, & \text{diğer} \end{cases}$$
+        Dalga $t = -2$'de 1 ile başlar, $t = -1$'de 2'den 3'e sıçrar, $t = 0$'da zirve değeri 4'e ulaştıktan sonra 2'ye düşer ve $t = 1$'de sıfırlanır.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawContinuousAxis(ctx, w, h, ox, oy, minT, maxT, stepPx, scaleY = 32, labelX = "t", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      // Kılavuz çizgileri
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 20; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      for (let t = Math.ceil(minT); t <= Math.floor(maxT); t++) {
+        const px = ox + t * stepPx;
+        if (px >= 25 && px <= w - 25) {
+          ctx.moveTo(px, 20); ctx.lineTo(px, h - 20);
+        }
+      }
+      ctx.stroke();
+
+      // Ana Eksenler
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy); // Yatay eksen
+      ctx.moveTo(ox, oy + 15); ctx.lineTo(ox, 15); // Düşey eksen
+      ctx.stroke();
+
+      // Oklar
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 15); ctx.lineTo(ox, 8); ctx.lineTo(ox + 4, 15); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 14);
+
+      // Eksen Çentikleri ve Sayılar
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let t = Math.ceil(minT); t <= Math.floor(maxT); t++) {
+        const px = ox + t * stepPx;
+        if (px >= 30 && px <= w - 30) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          ctx.fillText(t.toString(), px - (t < 0 ? 6 : 3), oy + 15);
+        }
+      }
+    }
+
+    function x_val(t) {
+      if (t >= 0 && t <= 1) return t + 1;
+      if (t > 1 && t <= 2) return 2 - t;
+      return 0;
+    }
+
+    function y1_val(t) {
+      return x_val(t + 2);
+    }
+
+    function y2_val(t) {
+      return 2 * x_val(t + 1);
+    }
+
+    function y_total(t) {
+      return y1_val(t) + y2_val(t);
+    }
+
+    // --- KART 1: x(t) ve h(t) ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 260, oy = 170, stepPx = 80, scaleY = 40;
+      drawContinuousAxis(ctx, 860, 220, ox, oy, -3, 4, stepPx, scaleY, "t", "Genlik");
+
+      // x(t) çizimi (Mavi)
+      ctx.strokeStyle = "#2563eb";
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(ox - 2 * stepPx, oy);
+      ctx.lineTo(ox, oy);
+      ctx.lineTo(ox, oy - 1 * scaleY); // jump 0 -> 1
+      ctx.lineTo(ox + 1 * stepPx, oy - 2 * scaleY); // ramp 1 -> 2
+      ctx.lineTo(ox + 1 * stepPx, oy - 1 * scaleY); // drop 2 -> 1
+      ctx.lineTo(ox + 2 * stepPx, oy); // ramp 1 -> 0
+      ctx.lineTo(ox + 3.5 * stepPx, oy);
+      ctx.stroke();
+
+      // h(t) Dirac okları
+      // delta(t+2) at t = -2, amp = 1
+      const p1 = ox - 2 * stepPx;
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.2;
+      ctx.beginPath(); ctx.moveTo(p1, oy); ctx.lineTo(p1, oy - 1 * scaleY); ctx.stroke();
+      ctx.fillStyle = "#9333ea";
+      ctx.beginPath(); ctx.moveTo(p1, oy - 1 * scaleY - 6); ctx.lineTo(p1 - 4, oy - 1 * scaleY + 2); ctx.lineTo(p1 + 4, oy - 1 * scaleY + 2); ctx.fill();
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillText("δ(t+2)", p1 - 15, oy - 1 * scaleY - 10);
+
+      // 2*delta(t+1) at t = -1, amp = 2
+      const p2 = ox - 1 * stepPx;
+      ctx.beginPath(); ctx.moveTo(p2, oy); ctx.lineTo(p2, oy - 2 * scaleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(p2, oy - 2 * scaleY - 6); ctx.lineTo(p2 - 4, oy - 2 * scaleY + 2); ctx.lineTo(p2 + 4, oy - 2 * scaleY + 2); ctx.fill();
+      ctx.fillText("2δ(t+1)", p2 - 18, oy - 2 * scaleY - 10);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x(t) [Mavi Çizgi, Destek: 0 ≤ t ≤ 2]", 480, 45);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("h(t) [Mor Oklar: t = -2 ve t = -1]", 480, 68);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("x(t) t=0'da 1'e sıçrar, t=1'de 2'den 1'e düşer", 480, 95);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 2: Dağılma İlkesi ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 430, oy = 170, stepPx = 90, scaleY = 32;
+      drawContinuousAxis(ctx, 860, 220, ox, oy, -3, 2, stepPx, scaleY, "t", "Genlik");
+
+      // x(t+2) (Mavi)
+      ctx.strokeStyle = "#3b82f6"; ctx.lineWidth = 1.8; ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(ox - 3 * stepPx, oy); ctx.lineTo(ox - 2 * stepPx, oy);
+      ctx.lineTo(ox - 2 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox, oy); ctx.lineTo(ox + 1.5 * stepPx, oy);
+      ctx.stroke();
+
+      // 2x(t+1) (Mor)
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(ox - 2 * stepPx, oy); ctx.lineTo(ox - 1 * stepPx, oy);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.lineTo(ox, oy - 4 * scaleY);
+      ctx.lineTo(ox, oy - 2 * scaleY);
+      ctx.lineTo(ox + 1 * stepPx, oy); ctx.lineTo(ox + 1.5 * stepPx, oy);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#3b82f6"; ctx.fillText("x(t + 2) [Kesikli Mavi: Destek [-2, 0]]", 80, 45);
+      ctx.fillStyle = "#9333ea"; ctx.fillText("2x(t + 1) [Düz Mor: Destek [-1, 1]]", 80, 68);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("y(t) = x(t + 2) + 2x(t + 1) süperpozisyonu", 80, 95);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 3: Bileşen 1 ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 430, oy = 170, stepPx = 90, scaleY = 45;
+      drawContinuousAxis(ctx, 860, 220, ox, oy, -3, 2, stepPx, scaleY, "t", "y_1(t)");
+
+      ctx.fillStyle = "rgba(59, 130, 246, 0.12)";
+      ctx.beginPath();
+      ctx.moveTo(ox - 2 * stepPx, oy);
+      ctx.lineTo(ox - 2 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox, oy); ctx.closePath(); ctx.fill();
+
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(ox - 2 * stepPx, oy);
+      ctx.lineTo(ox - 2 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.stroke();
+
+      ctx.setLineDash([2, 2]); ctx.strokeStyle = "#94a3b8";
+      ctx.beginPath(); ctx.moveTo(ox - 1 * stepPx, oy - 2 * scaleY); ctx.lineTo(ox - 1 * stepPx, oy - 1 * scaleY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.strokeStyle = "#2563eb";
+      ctx.beginPath();
+      ctx.moveTo(ox - 1 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox, oy);
+      ctx.stroke();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("y_1(t) = x(t + 2)", 80, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("-2 ≤ t ≤ -1: y_1(t) = t + 3;   -1 < t ≤ 0: y_1(t) = -t", 80, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("t = -1 anında değer 2'den 1'e düşer", 80, 95);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 4: Bileşen 2 ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 430, oy = 170, stepPx = 90, scaleY = 32;
+      drawContinuousAxis(ctx, 860, 220, ox, oy, -3, 2, stepPx, scaleY, "t", "y_2(t)");
+
+      ctx.fillStyle = "rgba(147, 51, 234, 0.12)";
+      ctx.beginPath();
+      ctx.moveTo(ox - 1 * stepPx, oy);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.lineTo(ox, oy - 4 * scaleY);
+      ctx.lineTo(ox, oy - 2 * scaleY);
+      ctx.lineTo(ox + 1 * stepPx, oy); ctx.closePath(); ctx.fill();
+
+      ctx.strokeStyle = "#9333ea"; ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      ctx.moveTo(ox - 1 * stepPx, oy);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.lineTo(ox, oy - 4 * scaleY);
+      ctx.stroke();
+
+      ctx.setLineDash([2, 2]); ctx.strokeStyle = "#94a3b8";
+      ctx.beginPath(); ctx.moveTo(ox, oy - 4 * scaleY); ctx.lineTo(ox, oy - 2 * scaleY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.strokeStyle = "#9333ea";
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - 2 * scaleY);
+      ctx.lineTo(ox + 1 * stepPx, oy);
+      ctx.stroke();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#9333ea"; ctx.fillText("y_2(t) = 2x(t + 1)", 80, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("-1 ≤ t ≤ 0: y_2(t) = 2t + 4;   0 < t ≤ 1: y_2(t) = 2 - 2t", 80, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("t = 0 anında zirve değeri 4'tür ve 2'ye düşer", 80, 95);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 5: Sıçrama Analizi ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 430, oy = 170, stepPx = 90, scaleY = 32;
+      drawContinuousAxis(ctx, 860, 220, ox, oy, -3, 2, stepPx, scaleY, "t", "y(t)");
+
+      // y(t) parçaları
+      ctx.strokeStyle = "#0d9488"; ctx.lineWidth = 2.6;
+
+      // [-2, -1]
+      ctx.beginPath(); ctx.moveTo(ox - 2 * stepPx, oy - 1 * scaleY); ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY); ctx.stroke();
+      // [-1, 0]
+      ctx.beginPath(); ctx.moveTo(ox - 1 * stepPx, oy - 3 * scaleY); ctx.lineTo(ox, oy - 4 * scaleY); ctx.stroke();
+      // [0, 1]
+      ctx.beginPath(); ctx.moveTo(ox, oy - 2 * scaleY); ctx.lineTo(ox + 1 * stepPx, oy); ctx.stroke();
+
+      // Kesikli sıçrama çizgileri
+      ctx.setLineDash([3, 3]); ctx.strokeStyle = "#f43f5e"; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(ox - 1 * stepPx, oy - 2 * scaleY); ctx.lineTo(ox - 1 * stepPx, oy - 3 * scaleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, oy - 4 * scaleY); ctx.lineTo(ox, oy - 2 * scaleY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillStyle = "#f43f5e";
+      ctx.fillText("+1 Sıçraması (2 → 3)", ox - 1 * stepPx - 110, oy - 2.5 * scaleY);
+      ctx.fillText("-2 Düşüşü (4 → 2)", ox + 15, oy - 3 * scaleY);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("Süreksizlik Noktaları: t = -1 ve t = 0", 80, 45);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("Örtüşen bölgede y(t) = (-t) + (2t + 4) = t + 4", 80, 70);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 6: Nihai Dalga Çizimi ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 430, oy = 170, stepPx = 90, scaleY = 32;
+      drawContinuousAxis(ctx, 860, 220, ox, oy, -3, 2, stepPx, scaleY, "t", "y(t)");
+
+      ctx.fillStyle = "rgba(13, 148, 136, 0.15)";
+      ctx.beginPath();
+      ctx.moveTo(ox - 2 * stepPx, oy);
+      ctx.lineTo(ox - 2 * stepPx, oy - 1 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY);
+      ctx.lineTo(ox - 1 * stepPx, oy - 3 * scaleY);
+      ctx.lineTo(ox, oy - 4 * scaleY);
+      ctx.lineTo(ox, oy - 2 * scaleY);
+      ctx.lineTo(ox + 1 * stepPx, oy);
+      ctx.closePath(); ctx.fill();
+
+      ctx.strokeStyle = "#0d9488"; ctx.lineWidth = 2.6;
+      ctx.beginPath(); ctx.moveTo(ox - 2 * stepPx, oy - 1 * scaleY); ctx.lineTo(ox - 1 * stepPx, oy - 2 * scaleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox - 1 * stepPx, oy - 3 * scaleY); ctx.lineTo(ox, oy - 4 * scaleY); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, oy - 2 * scaleY); ctx.lineTo(ox + 1 * stepPx, oy); ctx.stroke();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("y(t) = x(t + 2) + 2x(t + 1) — Nihai Konvolüsyon Dalgası", 180, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("Destek: t ∈ [-2, 1], Tepe Noktası: y(0^-) = 4", 180, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("t ∈ [-2,-1): t+3;   t ∈ (-1, 0]: t+4;   t ∈ (0, 1]: 2-2t", 180, 95);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const slider = document.getElementById('tSlider');
+    const tVal = document.getElementById('tVal');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const simMath = document.getElementById('simMath');
+    const kCtx = kCanvas.getContext('2d');
+    const yCtx = ynCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+
+    function updateSim() {
+      const t = parseFloat(slider.value) / 10.0;
+      tVal.textContent = "t = " + t.toFixed(1);
+
+      const w = 860, hK = 230, oxK = 430, oyK = 175, stepK = 90, scaleYK = 32;
+      drawContinuousAxis(kCtx, w, hK, oxK, oyK, -3, 2, stepK, scaleYK, "t", "Genlik");
+
+      // x(t+2) (Mavi)
+      kCtx.strokeStyle = "#3b82f6"; kCtx.lineWidth = 1.8;
+      kCtx.beginPath();
+      kCtx.moveTo(oxK - 3 * stepK, oyK); kCtx.lineTo(oxK - 2 * stepK, oyK);
+      kCtx.lineTo(oxK - 2 * stepK, oyK - 1 * scaleYK);
+      kCtx.lineTo(oxK - 1 * stepK, oyK - 2 * scaleYK);
+      kCtx.lineTo(oxK - 1 * stepK, oyK - 1 * scaleYK);
+      kCtx.lineTo(oxK, oyK); kCtx.lineTo(oxK + 1.5 * stepK, oyK);
+      kCtx.stroke();
+
+      // 2x(t+1) (Mor)
+      kCtx.strokeStyle = "#9333ea"; kCtx.lineWidth = 1.8;
+      kCtx.beginPath();
+      kCtx.moveTo(oxK - 2 * stepK, oyK); kCtx.lineTo(oxK - 1 * stepK, oyK);
+      kCtx.lineTo(oxK - 1 * stepK, oyK - 2 * scaleYK);
+      kCtx.lineTo(oxK, oyK - 4 * scaleYK);
+      kCtx.lineTo(oxK, oyK - 2 * scaleYK);
+      kCtx.lineTo(oxK + 1 * stepK, oyK); kCtx.lineTo(oxK + 1.5 * stepK, oyK);
+      kCtx.stroke();
+
+      // Anlık t çizgisi üst kanvasta
+      const pT = oxK + t * stepK;
+      kCtx.strokeStyle = "#f43f5e"; kCtx.lineWidth = 1.4; kCtx.setLineDash([3, 3]);
+      kCtx.beginPath(); kCtx.moveTo(pT, oyK + 15); kCtx.lineTo(pT, 25); kCtx.stroke();
+      kCtx.setLineDash([]);
+
+      const y1 = y1_val(t);
+      const y2 = y2_val(t);
+      const yTot = y_total(t);
+
+      // Alt Kanvas: y(t)
+      const hY = 180, oxY = 430, oyY = 145, stepY = 90, scaleYY = 28;
+      drawContinuousAxis(yCtx, w, hY, oxY, oyY, -3, 2, stepY, scaleYY, "t", "y(t)");
+
+      // y(t) Dalgası (Turkuaz)
+      yCtx.strokeStyle = "#0d9488"; yCtx.lineWidth = 2.6;
+      yCtx.beginPath(); yCtx.moveTo(oxY - 2 * stepY, oyY - 1 * scaleYY); yCtx.lineTo(oxY - 1 * stepY, oyY - 2 * scaleYY); yCtx.stroke();
+      yCtx.beginPath(); yCtx.moveTo(oxY - 1 * stepY, oyY - 3 * scaleYY); yCtx.lineTo(oxY, oyY - 4 * scaleYY); yCtx.stroke();
+      yCtx.beginPath(); yCtx.moveTo(oxY, oyY - 2 * scaleYY); yCtx.lineTo(oxY + 1 * stepY, oyY); yCtx.stroke();
+
+      // Seçili t imleci
+      const curPx = oxY + t * stepY;
+      const curPy = oyY - yTot * scaleYY;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.5; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oyY); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5, 0, Math.PI * 2); yCtx.fill();
+
+      // Durum paneli KaTeX
+      let statusHtml = "";
+      if (t < -2 || t > 1) {
+        statusHtml = `Zaman: <b class="text-slate-600">t = ${t.toFixed(1)} (Destek Dışı)</b> &nbsp;|&nbsp; $x(t+2) = 0, \\; 2x(t+1) = 0$ &nbsp;|&nbsp; <b>y(${t.toFixed(1)}) = 0.00</b>`;
+      } else if (t >= -2 && t <= -1) {
+        statusHtml = `Bölge 1: <b class="text-blue-600">-2 ≤ t = ${t.toFixed(1)} ≤ -1</b> &nbsp;|&nbsp; ` +
+                     `$x(t+2) = ${(t+3).toFixed(2)}, \\; 2x(t+1) = 0$ &nbsp;|&nbsp; ` +
+                     `Formül: $y(t) = t + 3$ &nbsp;|&nbsp; <b>y(${t.toFixed(1)}) = ${(t+3).toFixed(2)}</b>`;
+      } else if (t > -1 && t <= 0) {
+        statusHtml = `Bölge 2 (Örtüşme): <b class="text-purple-600">-1 &lt; t = ${t.toFixed(1)} ≤ 0</b> &nbsp;|&nbsp; ` +
+                     `$x(t+2) = ${(-t).toFixed(2)}, \\; 2x(t+1) = ${(2*t+4).toFixed(2)}$ &nbsp;|&nbsp; ` +
+                     `Formül: $y(t) = t + 4$ &nbsp;|&nbsp; <b>y(${t.toFixed(1)}) = ${(t+4).toFixed(2)}</b>`;
+      } else {
+        statusHtml = `Bölge 3: <b class="text-teal-600">0 &lt; t = ${t.toFixed(1)} ≤ 1</b> &nbsp;|&nbsp; ` +
+                     `$x(t+2) = 0, \\; 2x(t+1) = ${(2-2*t).toFixed(2)}$ &nbsp;|&nbsp; ` +
+                     `Formül: $y(t) = 2 - 2t$ &nbsp;|&nbsp; <b>y(${t.toFixed(1)}) = ${(2-2*t).toFixed(2)}</b>`;
+      }
+      simMath.innerHTML = statusHtml;
+      if (window.renderMathInElement) {
+        renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+      }
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let playInterval = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      if (isPlaying) {
+        playInterval = setInterval(() => {
+          let v = parseInt(slider.value) + 1;
+          if (v > parseInt(slider.max)) v = parseInt(slider.min);
+          slider.value = v;
+          updateSim();
+        }, 180);
+      } else {
+        clearInterval(playInterval);
+      }
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>
