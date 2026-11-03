@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.7 Görselleştirici — Doğrusal Zamanla Değişen (LTV) Sistem Analizi</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı</span>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 2.7</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 2.7 — Doğrusal Zamanla Değişen (LTV) Sistem ve Darbe Dizisi Analizi</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$y[n] = \sum_{k=-\infty}^{\infty} x[k]\,g[n - 2k], \quad g[n] = u[n] - u[n - 4]$$
+        Sistem doğrusaldır; ancak çekirdekteki $2k$ çarpanı nedeniyle girdideki $1$ birimlik öteleme çıkışta $2$ birimlik ötelemeye yol açar. Bu nedenle sistem <strong>zamanla değişmeyen (TI) değildir</strong>, yani bir <strong>LTI sistem değildir</strong>.
+      </p>
+    </div>
+
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Konvolüsyon benzeri süperpozisyon toplamları, zaman ölçekleme ve LTI testi</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>(a)</strong> $x[n] = \delta[n-1]$ için çıkışı bulmak: Sifting özelliği ile $k=1 \implies y[n] = g[n-2]$.</li>
+            <li><strong>(b)</strong> $x[n] = \delta[n-2]$ için çıkışı bulmak: $k=2 \implies y[n] = g[n-4]$.</li>
+            <li><strong>(c)</strong> Sistemin LTI olup olmadığını belirlemek: $x[n-1]$ ötelemesi $y[n-1]$ üretmediği için sistem <strong>zamanla değişendir (Time-Varying)</strong>.</li>
+            <li><strong>(d)</strong> $x[n] = u[n]$ için çıkış: $y[n] = \sum_{k=0}^{\infty} g[n-2k]$ toplamını hesaplamak.</li>
+          </ul>
+        </div>
+
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Çekirdek Desteği:</strong> $g[m] = 1 \iff 0 \le m \le 3$. Dolayısıyla $g[n-2k] = 1 \iff \frac{n-3}{2} \le k \le \frac{n}{2}$.</li>
+            <li><strong>Darbe Hızı ($2k$ Etkisi):</strong> Girdideki $1$ adımlık öteleme, çekirdeğin $2$ birim sağa kaymasına yol açar. Bu bir zaman genişletme (interpolasyon) davranışıdır.</li>
+            <li><strong>Birim Basamak Yanıtı:</strong> $x[n] = u[n]$ için $k \ge 0$ aralığındaki tam sayı $k$ değerleri sayılır. $n < 0 \implies 0$; $n \in \{0, 1\} \implies 1$; $n \ge 2 \implies 2$ (Doyum).</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Sistem Simülatörü ve Şık Seçici</h2>
+          <p class="text-xs text-slate-500">Üstte $k$ uzayında $x[k]$ ve etkinleşen $g[n-2k]$ darbeleri; altta çıkış dizisi $y[n]$.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+          <button class="mode-btn px-2.5 py-1 text-xs font-semibold rounded-lg border border-purple-600 bg-purple-600 text-white transition shadow-sm" data-mode="a">Şık (a): δ[n-1]</button>
+          <button class="mode-btn px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition shadow-sm" data-mode="b">Şık (b): δ[n-2]</button>
+          <button class="mode-btn px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition shadow-sm" data-mode="c">Şık (c): LTI Testi</button>
+          <button class="mode-btn px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition shadow-sm" data-mode="d">Şık (d): u[n]</button>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-50 p-3 rounded-xl border border-slate-200">
+        <div class="flex items-center gap-2">
+          <label class="text-xs font-semibold text-slate-600">İncelenen n:</label>
+          <input type="range" id="nSlider" min="-3" max="10" step="1" value="3" class="w-36 accent-purple-600 cursor-pointer">
+          <span id="nVal" class="text-xs font-mono font-bold bg-white px-2 py-1 rounded text-slate-800 border border-slate-200">n = 3</span>
+        </div>
+        <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+      </div>
+
+      <!-- Üst Kanvas: k uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span id="topCanvasTitle">$k$ Uzayı: <span class="text-blue-600">■ Girdi x[k]</span> &nbsp;|&nbsp; <span class="text-purple-600">■ g[n-2k] Bileşenleri</span></span>
+          <span class="text-slate-400">Ayrık Zaman Örnekleri (Stems)</span>
+        </div>
+        <canvas id="kCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: y[n] uzayı -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Çıkış Dizisi: <span class="text-teal-700 font-bold">y[n]</span></span>
+          <span class="text-rose-600 font-medium">Kırmızı imleç anlık $n$ konumunu gösterir</span>
+        </div>
+        <canvas id="ynCanvas" width="860" height="180" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_sistem_ve_cekirdek_g_n.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Sistem Bağıntısı ve Çekirdek Darbe $g[n]$ Tanımı</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Sistem $y[n] = \sum_{k=-\infty}^{\infty} x[k] g[n - 2k]$ olarak tanımlanmıştır. Temel çekirdek fonksiyonu:
+        $$g[n] = u[n] - u[n - 4] = \begin{cases} 1, & 0 \le n \le 3 \\ 0, & \text{diğer} \end{cases}$$
+        4 örnek uzunluğunda ($n = 0, 1, 2, 3$) bir dikdörtgen darbedir. $2k$ katsayısı, $k$ indisindeki her 1 birimlik değişimin çekirdeği 2 birim ötelediğini gösterir.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_sik_a_x_delta_n_eksi_1.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Şık (a): $x[n] = \delta[n - 1]$ Girdisine Verilen Yanıt</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Girdi $x[k] = \delta[k - 1]$ olduğundan toplamda yalnızca $k = 1$ terimi hayatta kalır (sifting özelliği):
+        $$y[n] = \sum_{k=-\infty}^{\infty} \delta[k - 1]\,g[n - 2k] = g[n - 2(1)] = g[n - 2]$$
+        $0 \le n - 2 \le 3 \iff 2 \le n \le 5$ aralığında 1 değerini alır:
+        $$y[n] = \begin{cases} 1, & 2 \le n \le 5 \\ 0, & \text{diğer} \end{cases}$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_sik_b_x_delta_n_eksi_2.png')" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Şık (b): $x[n] = \delta[n - 2]$ Girdisine Verilen Yanıt</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Girdi $x[k] = \delta[k - 2]$ olduğunda yalnızca $k = 2$ terimi katkı sağlar:
+        $$y[n] = \sum_{k=-\infty}^{\infty} \delta[k - 2]\,g[n - 2k] = g[n - 2(2)] = g[n - 4]$$
+        $0 \le n - 4 \le 3 \iff 4 \le n \le 7$ aralığında 1 değerini alır:
+        $$y[n] = \begin{cases} 1, & 4 \le n \le 7 \\ 0, & \text{diğer} \end{cases}$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_sik_c_lti_testi_zamanla_degisen.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Şık (c): Zamanla Değişmezlik (Time-Invariance) Testi</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Zamanla değişmezlik kuralı: $x_1[n] \to y_1[n]$ ise $x_1[n - n_0] \to y_1[n - n_0]$ olmalıdır.
+        (a) şıkkında $x_1[n] = \delta[n-1] \to y_1[n] = g[n-2]$ bulunmuştu. Bu girdiyi 1 birim öteleyelim: $x_2[n] = x_1[n-1] = \delta[n-2]$.
+        Eğer sistem zamanla değişmeseydi çıkış $y_1[n-1] = g[n-3]$ olmalıydı. Oysa (b) şıkkında elde edilen gerçek çıkış $y_2[n] = g[n-4]$'tür.
+        $$g[n-4] \neq g[n-3] \implies \text{Sistem Zamanla Değişendir (Time-Varying) ve LTI Değildir!}$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_sik_d_u_n_darbe_superpozisyonu.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Şık (d): $x[n] = u[n]$ Girdisi ve Süperpozisyon Toplamı</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $x[n] = u[n] = \sum_{k=0}^{\infty} \delta[n-k]$ olduğundan sistem doğrusallığı gereği çıkış tüm ötelenmiş darbelerin toplamıdır:
+        $$y[n] = \sum_{k=0}^{\infty} g[n - 2k] = g[n] + g[n-2] + g[n-4] + g[n-6] + \dots$$
+        Her darbe 4 birim genişliğindedir ve ikişer birim aralıklarla başlar ($0, 2, 4, 6 \dots$). Bu nedenle ardışık darbeler ikişer birimlik aralıklarla birbiri üzerine biner.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_sik_d_nihai_cikis_y_n.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Şık (d): Nihai Çıkış Dizisi $y[n]$ ve Doyum Analizi</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $g[n-2k] = 1 \iff \frac{n-3}{2} \le k \le \frac{n}{2}$ koşulunu sağlayan $k \ge 0$ tam sayılarının sayısı:
+        - $n < 0 \implies y[n] = 0$
+        - $n = 0, 1 \implies$ Sadece $k = 0$ içeride $\implies y[0] = 1, y[1] = 1$
+        - $n \ge 2 \implies$ Aralığın uzunluğu 1.5 olup daima tam 2 tane tam sayı içerir ($k = \lfloor n/2 \rfloor$ ve $k = \lfloor n/2 \rfloor - 1$) $\implies y[n] = 2$
+        $$y[n] = \begin{cases} 0, & n < 0 \\ 1, & n = 0, 1 \\ 2, & n \ge 2 \end{cases} = \delta[n] + \delta[n - 1] + 2u[n - 2]$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minK, maxK, stepPx, labelX = "k", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      // Kılavuz çizgileri
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 25; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      // Ana Eksenler
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy); // Yatay
+      ctx.moveTo(ox, oy + 15); ctx.lineTo(ox, 20); // Düşey
+      ctx.stroke();
+
+      // Oklar
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 20); ctx.lineTo(ox, 12); ctx.lineTo(ox + 4, 20); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 16, oy + 4);
+      ctx.fillText(labelY, ox - 35, 16);
+
+      // Eksen Çentikleri ve Sayılar
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let k = minK; k <= maxK; k++) {
+        const px = ox + k * stepPx;
+        if (px >= 30 && px <= w - 30) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          if (k % 2 === 0 || k === 0) {
+            ctx.fillText(k.toString(), px - (k < 0 ? 6 : 3), oy + 15);
+          }
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 90, radius = 3.5, drawZeroDot = true) {
+      const py = oy - val * scaleY;
+      if (Math.abs(val) < 0.001) {
+        if (drawZeroDot) {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(px, oy, 2.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        return;
+      }
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function getG(m) {
+      return (m >= 0 && m <= 3) ? 1 : 0;
+    }
+
+    function getY_a(n) {
+      return (n >= 2 && n <= 5) ? 1 : 0;
+    }
+
+    function getY_b(n) {
+      return (n >= 4 && n <= 7) ? 1 : 0;
+    }
+
+    function getY_d(n) {
+      if (n < 0) return 0;
+      if (n === 0 || n === 1) return 1;
+      return 2;
+    }
+
+    // --- KART 1: g[n] Tanımı ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 260, oy = 165, stepPx = 38;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -3, 8, stepPx, "n", "g[n]");
+
+      for (let n = -3; n <= 8; n++) {
+        const val = getG(n);
+        drawStem(ctx, ox + n * stepPx, oy, val, "#2563eb", 95, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("g[n] = u[n] - u[n-4] (4 Örnekli Dikdörtgen Darbe)", 420, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("n = 0, 1, 2, 3 için g[n] = 1; diğer durumlarda 0", 420, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("g[n - 2k] terimi k adım başına n ekseninde 2 birim ötelenir", 420, 95);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 2: Şık (a) x[n] = delta[n-1] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 220, oy = 165, stepPx = 38;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -2, 10, stepPx, "n", "y[n]");
+
+      for (let n = -2; n <= 10; n++) {
+        const val = getY_a(n);
+        drawStem(ctx, ox + n * stepPx, oy, val, "#9333ea", 95, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#9333ea"; ctx.fillText("Şık (a): x[n] = δ[n-1] ⟹ y[n] = g[n - 2]", 380, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("k = 1 terimi: 0 ≤ n - 2 ≤ 3 ⟹ 2 ≤ n ≤ 5", 380, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("n = 2, 3, 4, 5 noktalarında genlik 1'dir", 380, 95);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 3: Şık (b) x[n] = delta[n-2] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 200, oy = 165, stepPx = 38;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -2, 11, stepPx, "n", "y[n]");
+
+      for (let n = -2; n <= 11; n++) {
+        const val = getY_b(n);
+        drawStem(ctx, ox + n * stepPx, oy, val, "#d97706", 95, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#d97706"; ctx.fillText("Şık (b): x[n] = δ[n-2] ⟹ y[n] = g[n - 4]", 360, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("k = 2 terimi: 0 ≤ n - 4 ≤ 3 ⟹ 4 ≤ n ≤ 7", 360, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("n = 4, 5, 6, 7 noktalarında genlik 1'dir", 360, 95);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 4: Şık (c) LTI Testi ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 180, oy = 165, stepPx = 38;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -2, 12, stepPx, "n", "Yanıt");
+
+      for (let n = -2; n <= 12; n++) {
+        const valA_shift = (n - 1 >= 2 && n - 1 <= 5) ? 1 : 0; // y1[n-1] = g[n-3]
+        const valB = getY_b(n); // actual y2[n] = g[n-4]
+        if (valA_shift > 0) drawStem(ctx, ox + n * stepPx - 3, oy, valA_shift, "#94a3b8", 90, 3);
+        if (valB > 0) drawStem(ctx, ox + n * stepPx + 3, oy, valB, "#dc2626", 90, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#94a3b8"; ctx.fillText("Gri: y_1[n-1] = g[n-3] (LTI olsaydı beklenen yanıt)", 340, 45);
+      ctx.fillStyle = "#dc2626"; ctx.fillText("Kırmızı: y_2[n] = g[n-4] (Sistemin verdiği gerçek yanıt)", 340, 70);
+      ctx.fillStyle = "#991b1b"; ctx.fillText("y_2[n] ≠ y_1[n-1] ⟹ SİSTEM ZAMANLA DEĞİŞENDİR (LTI DEĞİLDİR!)", 340, 95);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 5: Şık (d) u[n] Süperpozisyonu ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 150, oy = 165, stepPx = 36;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -2, 12, stepPx, "n", "Katkılar");
+
+      // Çeşitli renklerde k=0, 1, 2, 3 darbelerini üst üste bindir
+      const colors = ["#2563eb", "#7c3aed", "#db2777", "#ea580c"];
+      for (let k = 0; k < 4; k++) {
+        for (let n = -2; n <= 12; n++) {
+          if (getG(n - 2 * k) > 0) {
+            drawStem(ctx, ox + n * stepPx + (k - 1.5) * 3, oy, 0.75 + k * 0.05, colors[k], 70, 2.5, false);
+          }
+        }
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#7c3aed"; ctx.fillText("y[n] = g[n] + g[n-2] + g[n-4] + g[n-6] + ...", 320, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("Her darbe 4 örnek genişliğindedir, ikişer birim aralıkla başlar", 320, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("n ≥ 2 bölgesinde daima tam iki darbe aynı anda aktiftir (1 + 1 = 2)", 320, 95);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 6: Şık (d) Nihai y[n] ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      const ox = 180, oy = 165, stepPx = 38;
+      drawDiscreteAxis(ctx, 860, 220, ox, oy, -3, 11, stepPx, "n", "y[n]");
+
+      for (let n = -3; n <= 11; n++) {
+        const val = getY_d(n);
+        drawStem(ctx, ox + n * stepPx, oy, val, "#0d9488", 65, 3.5);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("y[n] = x[n] = u[n] Çıkışı: Basamak Yanıtı", 360, 45);
+      ctx.fillStyle = "#475569"; ctx.fillText("n < 0: 0;   n = 0: 1;   n = 1: 1;   n ≥ 2: 2 (Sabit doyum)", 360, 70);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("Kapalı Form: y[n] = δ[n] + δ[n-1] + 2 u[n-2]", 360, 95);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    let currentMode = 'a';
+    const slider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const simMath = document.getElementById('simMath');
+    const kCtx = kCanvas.getContext('2d');
+    const yCtx = ynCanvas.getContext('2d');
+    const playBtn = document.getElementById('playBtn');
+    const modeBtns = document.querySelectorAll('.mode-btn');
+
+    modeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        modeBtns.forEach(b => {
+          b.className = "mode-btn px-2.5 py-1 text-xs font-semibold rounded-lg border border-slate-200 bg-white text-slate-700 hover:bg-slate-100 transition shadow-sm";
+        });
+        btn.className = "mode-btn px-2.5 py-1 text-xs font-semibold rounded-lg border border-purple-600 bg-purple-600 text-white transition shadow-sm";
+        currentMode = btn.getAttribute('data-mode');
+        updateSim();
+      });
+    });
+
+    function updateSim() {
+      const n = parseInt(slider.value);
+      nVal.textContent = "n = " + n;
+
+      const w = 860, hK = 230, oxK = 380, oyK = 175, stepK = 36;
+      drawDiscreteAxis(kCtx, w, hK, oxK, oyK, -5, 8, stepK, "k", "Genlik");
+
+      const hY = 180, oxY = 220, oyY = 145, stepY = 38;
+      drawDiscreteAxis(yCtx, w, hY, oxY, oyY, -3, 11, stepY, "n", "y[n]");
+
+      let statusHtml = "";
+      let curY = 0;
+
+      if (currentMode === 'a') {
+        // x[k] = delta[k-1]
+        for (let k = -5; k <= 8; k++) {
+          const xk = (k === 1) ? 1 : 0;
+          const gVal = getG(n - 2 * k);
+          if (xk > 0) drawStem(kCtx, oxK + k * stepK - 3, oyK, xk, "#2563eb", 100, 3.5, false);
+          if (gVal > 0) drawStem(kCtx, oxK + k * stepK + 3, oyK, gVal, "#9333ea", 90, 3, false);
+          if (xk > 0 && gVal > 0) drawStem(kCtx, oxK + k * stepK, oyK, 1, "#d97706", 110, 4.5, false);
+        }
+        for (let i = -3; i <= 11; i++) {
+          const val = getY_a(i);
+          drawStem(yCtx, oxY + i * stepY, oyY, val, "#9333ea", 80, 3.5);
+        }
+        curY = getY_a(n);
+        statusHtml = `Şık (a) Modu: $x[n] = \\delta[n-1]$ &nbsp;|&nbsp; <b>n = ${n}</b> &nbsp;|&nbsp; ` +
+                     `Formül: $y[${n}] = g[${n} - 2] = \\begin{cases} 1, & 2 \\le ${n} \\le 5 \\\\ 0, & \\text{diğer} \\end{cases}$ &nbsp;|&nbsp; ` +
+                     `<b>y[${n}] = ${curY}</b>`;
+      } else if (currentMode === 'b') {
+        // x[k] = delta[k-2]
+        for (let k = -5; k <= 8; k++) {
+          const xk = (k === 2) ? 1 : 0;
+          const gVal = getG(n - 2 * k);
+          if (xk > 0) drawStem(kCtx, oxK + k * stepK - 3, oyK, xk, "#2563eb", 100, 3.5, false);
+          if (gVal > 0) drawStem(kCtx, oxK + k * stepK + 3, oyK, gVal, "#9333ea", 90, 3, false);
+          if (xk > 0 && gVal > 0) drawStem(kCtx, oxK + k * stepK, oyK, 1, "#d97706", 110, 4.5, false);
+        }
+        for (let i = -3; i <= 11; i++) {
+          const val = getY_b(i);
+          drawStem(yCtx, oxY + i * stepY, oyY, val, "#d97706", 80, 3.5);
+        }
+        curY = getY_b(n);
+        statusHtml = `Şık (b) Modu: $x[n] = \\delta[n-2]$ &nbsp;|&nbsp; <b>n = ${n}</b> &nbsp;|&nbsp; ` +
+                     `Formül: $y[${n}] = g[${n} - 4] = \\begin{cases} 1, & 4 \\le ${n} \\le 7 \\\\ 0, & \\text{diğer} \\end{cases}$ &nbsp;|&nbsp; ` +
+                     `<b>y[${n}] = ${curY}</b>`;
+      } else if (currentMode === 'c') {
+        // LTI karşılaştırması
+        for (let i = -3; i <= 11; i++) {
+          const valExpected = (i - 1 >= 2 && i - 1 <= 5) ? 1 : 0; // y1[n-1] = g[n-3]
+          const valActual = getY_b(i); // y2[n] = g[n-4]
+          drawStem(yCtx, oxY + i * stepY - 3, oyY, valExpected, "#94a3b8", 75, 3);
+          drawStem(yCtx, oxY + i * stepY + 3, oyY, valActual, "#dc2626", 75, 3.5);
+        }
+        curY = getY_b(n);
+        statusHtml = `Şık (c) Modu: Zamanla Değişmezlik Testi &nbsp;|&nbsp; <b>n = ${n}</b> &nbsp;|&nbsp; ` +
+                     `<span class="text-slate-600">LTI Beklentisi: $y_1[${n}-1] = g[${n}-3]$</span> &nbsp;|&nbsp; ` +
+                     `<span class="text-rose-600 font-bold">Gerçek: $y_2[${n}] = g[${n}-4]$</span> &nbsp;|&nbsp; ` +
+                     `<b class="text-rose-600">Sistem LTI DEĞİLDİR!</b>`;
+      } else {
+        // x[k] = u[k]
+        let sum = 0;
+        for (let k = -5; k <= 8; k++) {
+          const xk = (k >= 0) ? 1 : 0;
+          const gVal = getG(n - 2 * k);
+          if (xk > 0) drawStem(kCtx, oxK + k * stepK - 3, oyK, xk, "#2563eb", 90, 3, false);
+          if (gVal > 0) drawStem(kCtx, oxK + k * stepK + 3, oyK, gVal, "#9333ea", 90, 3, false);
+          if (xk > 0 && gVal > 0) {
+            drawStem(kCtx, oxK + k * stepK, oyK, 1, "#d97706", 110, 4.5, false);
+            sum++;
+          }
+        }
+        for (let i = -3; i <= 11; i++) {
+          const val = getY_d(i);
+          drawStem(yCtx, oxY + i * stepY, oyY, val, "#0d9488", 55, 3.5);
+        }
+        curY = getY_d(n);
+        statusHtml = `Şık (d) Modu: $x[n] = u[n]$ (Basamak Yanıtı) &nbsp;|&nbsp; <b>n = ${n}</b> &nbsp;|&nbsp; ` +
+                     `Örtüşen darbe sayısı: $k \\in [\\frac{${n}-3}{2}, \\frac{${n}}{2}] \\cap [0, \\infty)$ &nbsp;|&nbsp; ` +
+                     `<b>y[${n}] = ${curY}</b>`;
+      }
+
+      // Kırmızı imleç
+      const curPx = oxY + n * stepY;
+      const curScale = (currentMode === 'd') ? 55 : 80;
+      const curPy = oyY - curY * curScale;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.5; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oyY); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5.5, 0, Math.PI * 2); yCtx.fill();
+
+      simMath.innerHTML = statusHtml;
+      if (window.renderMathInElement) {
+        renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+      }
+    }
+
+    slider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let playInterval = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      if (isPlaying) {
+        playInterval = setInterval(() => {
+          let v = parseInt(slider.value) + 1;
+          if (v > parseInt(slider.max)) v = parseInt(slider.min);
+          slider.value = v;
+          updateSim();
+        }, 600);
+      } else {
+        clearInterval(playInterval);
+      }
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>
