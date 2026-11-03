@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.13 — Ayrık Zamanlı Ters Sistem ve Dürtü Yanıtı Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Üst Gezinme Çubuğu / Geri Dönüş -->
+    <div class="flex items-center justify-between bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition font-medium text-sm">
+        <svg class="w-4 h-4 text-slate-500 group-hover:text-indigo-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)
+      </a>
+      <span class="text-xs font-semibold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
+        Oppenheim 2. Baskı &bull; Bölüm 2
+      </span>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full uppercase tracking-wider">
+            Ayrık Zaman (DT) &bull; Ters Sistem (Inverse System)
+          </span>
+          <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full border border-indigo-100">
+            Problem 2.13 (a &amp; b)
+          </span>
+        </div>
+        <span class="text-xs text-slate-500 font-mono">Sayfa 170 &bull; Oppenheim &amp; Willsky</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        Ayrık Zamanlı Ters Sistem (Inverse System) ve Dürtü Yanıtının Belirlenmesi
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        Dürtü yanıtı $h[n] = (1/5)^n u[n]$ olan $S_1$ LTI sistemi ele alınmaktadır. (a) şıkkında $h[n] - Ah[n-1] = \delta[n]$ bağıntısını sağlayan $A = 1/5$ katsayısı analitik olarak bulunmakta; (b) şıkkında ise bu bağıntı kullanılarak $S_1$'in ters sistemi (inverse system) olan $S_2$'nin dürtü cevabı $g[n] = \delta[n] - \frac{1}{5}\delta[n-1]$ elde edilmektedir.
+      </p>
+
+      <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4 text-xs sm:text-sm text-indigo-900 font-mono">
+        $$h[n] = \left(\frac{1}{5}\right)^n u[n], \qquad h[n] - A h[n - 1] = \delta[n] \implies \mathbf{A = \frac{1}{5}}$$
+        $$h[n] * g[n] = \delta[n] \implies \mathbf{g[n] = \delta[n] - \frac{1}{5}\delta[n - 1]}$$
+      </div>
+    </div>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Sütun) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>📌</span> Soru Bizden Ne İstiyor?
+        </h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>(a) $A$ Değerinin Belirlenmesi:</strong> $h[n] - A h[n - 1] = \delta[n]$ eşitliğinin tüm $n \in \mathbb{Z}$ için sağlanması için gereken $A$ sabitini bulmak. *(Kitap metnindeki "integer A" ifadesi Oppenheim'ın bilinen bir dizgi hatasıdır; doğru değer rasyonel $A = 1/5$'tir).*</li>
+          <li><strong>(b) Ters Sistemin Dürtü Yanıtı $g[n]$:</strong> Bir sistemin tersi, onunla seri (kaskat) bağlandığında çıkışı girişe eşitleyen ($h[n] * g[n] = \delta[n]$) sistemdir. (a)'daki formülü konvolüsyon formatına çevirerek $g[n]$'i bulmak.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>💡</span> Adım Adım Çözüm Metodolojisi
+        </h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>1. Zaman İndisi Ayrıştırması:</strong>
+            <br>&bull; $n = 0$ için: $h[0] - A h[-1] = 1 - 0 = 1 = \delta[0]$ (her $A$ için sağlanır).
+            <br>&bull; $n \ge 1$ için: $(1/5)^n - A (1/5)^{n-1} = 0 \implies A = 1/5$.
+          </li>
+          <li><strong>2. Konvolüsyonel Özdeşlik:</strong> $h[n] = h[n] * \delta[n]$ ve $h[n-1] = h[n] * \delta[n-1]$ olduğundan:
+            $$h[n] - \frac{1}{5}h[n-1] = h[n] * \left(\delta[n] - \frac{1}{5}\delta[n-1]\right) = \delta[n]$$
+          </li>
+          <li><strong>3. Ters Sistem Eşleşmesi:</strong> $h[n] * g[n] = \delta[n]$ tanımıyla doğrudan kıyaslandığında $g[n] = \delta[n] - \frac{1}{5}\delta[n-1]$ iki terimli FIR filtre yanıtı elde edilir.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">İnteraktif Ayrık Zamanlı Ters Sistem Simülatörü</h2>
+          <p class="text-xs text-slate-500">$n$ zaman indeksini ve $A$ parametresini değiştirerek $h[n]$, $g[n]$ ve kaskat çıkış $(h * g)[n]$'in nasıl $\delta[n]$'e dönüştüğünü gözlemleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnPlay" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm shadow-indigo-100">
+            <svg id="playIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span id="playText">Animasyonu Başlat</span>
+          </button>
+          <button id="btnSetCritA" class="px-3 py-2 bg-slate-100 hover:bg-emerald-100 text-slate-700 hover:text-emerald-700 border border-slate-200 rounded-xl text-xs font-semibold transition">
+            $A = 0.20$ ($1/5$ Kritik Çözüm)
+          </button>
+        </div>
+      </div>
+
+      <!-- Kaydırıcılar -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <div class="space-y-1.5">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+            <span>Zaman Örnek İndisi ($n$):</span>
+            <span id="valN" class="font-mono text-indigo-600 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">n = 1</span>
+          </div>
+          <input id="sliderN" type="range" min="-2" max="8" step="1" value="1" class="w-full accent-indigo-600 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+            <span>-2 (Nedensellik Öncesi)</span>
+            <span>0 (Dürtü Anı)</span>
+            <span>1</span>
+            <span>4</span>
+            <span>8 (Sönümleme)</span>
+          </div>
+        </div>
+
+        <div class="space-y-1.5">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+            <span>Katsayı Parametresi ($A$):</span>
+            <span id="valA" class="font-mono text-emerald-600 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">A = 0.20</span>
+          </div>
+          <input id="sliderA" type="range" min="0.00" max="0.50" step="0.02" value="0.20" class="w-full accent-emerald-600 cursor-pointer">
+          <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+            <span>0.00</span>
+            <span>0.20 (Tam Çözüm: 1/5)</span>
+            <span>0.35</span>
+            <span>0.50</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matematiksel Dinamik Değer Kutusu -->
+      <div id="simMath" class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 text-xs font-mono text-slate-700 transition">
+        <!-- Dinamik KaTeX JS tarafından basılır -->
+      </div>
+
+      <!-- İki Kanvas Alanı -->
+      <div class="space-y-4">
+        <!-- Üst Kanvas: h[n] ve g[n] stem grafikleri -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-600 px-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> Sistem 1: $h[n] = (1/5)^n u[n]$ (IIR) &nbsp;|&nbsp;
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span> Ters Sistem 2: $g[n] = \delta[n] - \frac{1}{5}\delta[n-1]$ (FIR)
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">Dürtü Yanıtları: $n$ ekseni</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-inner">
+            <canvas id="kCanvas" width="860" height="220" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+
+        <!-- Alt Kanvas: Kaskat Çıkış (h * g)[n] -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-600 px-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Kaskat Çıkış: $(h * g)[n] = h[n] - A h[n-1]$ &nbsp;|&nbsp;
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Hedef Birim Dürtü: $\delta[n]$
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">Ters Sistem Doğrulaması</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-inner">
+            <canvas id="ynCanvas" width="860" height="190" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Ayrı Adım Kartı (Problem 2.21 Formatı) -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h2 class="text-xl font-black text-slate-900 tracking-tight">
+          Adım Adım Detaylı Çözüm Kartları
+        </h2>
+        <span class="text-xs text-slate-500">Vektörel Grafik &bull; İndirilebilir Yüksek Çözünürlük</span>
+      </div>
+
+      <!-- Kart 1: Mavi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-black flex items-center justify-center">1</span>
+            <h3 class="font-bold text-slate-900 text-base">$S_1$ Sisteminin Dürtü Yanıtı: $h[n] = (1/5)^n u[n]$ (Nedensel IIR)</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_2_13_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sistem $S_1$'in dürtü yanıtı $h[n] = (1/5)^n u[n]$ olarak verilmiştir. Bu sinyal $n < 0$ için sıfır olduğundan sistem nedenseldir (causal). $n \ge 0$ için ise $h[0] = 1$, $h[1] = 0.2$, $h[2] = 0.04$ şeklinde hızla sönümlenen sonsuz dürtü yanıtlı (IIR) kararlı bir sistemdir.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$h[n] = \begin{cases} \left(\frac{1}{5}\right)^n, & n \ge 0 \\ 0, & n < 0 \end{cases} \implies \{1, \ 0.2, \ 0.04, \ 0.008, \ \dots\}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img1" class="w-full h-auto block rounded-lg" alt="Adım 1 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 2: Mor -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 text-xs font-black flex items-center justify-center">2</span>
+            <h3 class="font-bold text-slate-900 text-base">Fark Denklemi Bağıntısı: $h[n] - A h[n - 1] = \delta[n]$</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_2_13_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Soru bizden $h[n]$ ile 1 örnek gecikmiş hali $h[n-1]$ arasındaki doğrusal farkın birim dürtü $\delta[n]$'e eşit olmasını istemektedir. Bu ifade birinci dereceden bir otoregresif fark denklemidir. Sistemin tüm $n \in \mathbb{Z}$ için $\delta[n]$ üretmesi hedeflenmektedir.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$\left(\frac{1}{5}\right)^n u[n] - A \left(\frac{1}{5}\right)^{n-1} u[n - 1] = \delta[n] = \begin{cases} 1, & n = 0 \\ 0, & n \ne 0 \end{cases}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img2" class="w-full h-auto block rounded-lg" alt="Adım 2 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 3: Amber -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-xs font-black flex items-center justify-center">3</span>
+            <h3 class="font-bold text-slate-900 text-base">(a) Şıkkı: $A = 1/5$ Katsayısının Analitik İspatı</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_2_13_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Denklemi kritik $n$ noktalarında test edelim:
+          <br>&bull; <strong>$n = 0$:</strong> $h[0] - A h[-1] = 1 - A(0) = 1 = \delta[0]$ (Her $A$ için otomatik sağlanır).
+          <br>&bull; <strong>$n = 1$:</strong> $h[1] - A h[0] = \frac{1}{5} - A(1) = 0 \implies \mathbf{A = 1/5}$.
+          <br>&bull; <strong>$n \ge 1$:</strong> $\left(\frac{1}{5}\right)^n - \frac{1}{5}\left(\frac{1}{5}\right)^{n-1} = \left(\frac{1}{5}\right)^n - \left(\frac{1}{5}\right)^n = 0 = \delta[n]$ (Tam sıfırlama!).
+          <br>*(Not: Kitap metnindeki "integer" ifadesi meşhur bir dizgi hatasıdır, doğru değer $A = 1/5$'tir).*
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$\mathbf{A = \frac{1}{5} = 0.20}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img3" class="w-full h-auto block rounded-lg" alt="Adım 3 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 4: Rose -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-700 text-xs font-black flex items-center justify-center">4</span>
+            <h3 class="font-bold text-slate-900 text-base">Ters Sistem (Inverse System) Teoremi ve Konvolüsyonel Özdeşlik</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_2_13_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Bir $S_1$ LTI sisteminin tersi olan $S_2$ sistemi, $S_1$'in giriş sinyali $x[n]$ üzerinde yarattığı tüm etkiyi geri alarak çıkışı $w[n] = x[n]$ yapan sistemdir. İki LTI sistemin kaskat bağlantısında toplam dürtü cevabı konvolüsyonla bulunduğundan:
+          $$h[n] * g[n] = \delta[n]$$
+          şartı sağlanmalıdır. $\delta[n]$ konvolüsyon cebirinde birim elemandır (identity element).
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$x[n] \longrightarrow \fbox{$S_1: h[n]$} \overset{y[n]}{\longrightarrow} \fbox{$S_2: g[n]$} \longrightarrow w[n] = x[n] \iff h[n] * g[n] = \delta[n]$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img4" class="w-full h-auto block rounded-lg" alt="Adım 4 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 5: İndigo -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-black flex items-center justify-center">5</span>
+            <h3 class="font-bold text-slate-900 text-base">(b) Şıkkı: $g[n] = \delta[n] - \frac{1}{5}\delta[n-1]$ İki Terimli FIR Çözümü</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_2_13_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          (a) şıkkında elde ettiğimiz $h[n] - \frac{1}{5}h[n-1] = \delta[n]$ denklemini konvolüsyon şeklinde yazalım:
+          $$h[n] * \delta[n] - \frac{1}{5} (h[n] * \delta[n-1]) = \delta[n]$$
+          $$h[n] * \left( \delta[n] - \frac{1}{5}\delta[n-1] \right) = \delta[n]$$
+          Bu ifade doğrudan $h[n] * g[n] = \delta[n]$ tanımıyla eşleştirildiğinde ters sistemin dürtü yanıtı bulunur:
+          $$\mathbf{g[n] = \delta[n] - \frac{1}{5}\delta[n-1]}$$
+          Ters sistem yalnızca iki katsayılı ($g[0]=1, g[1]=-0.2$) basit ve kararlı bir FIR filtredir!
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$\mathbf{g[n] = \delta[n] - \frac{1}{5}\delta[n-1]} \implies g[0] = 1, \quad g[1] = -0.2, \quad g[n] = 0 \ (n \notin \{0, 1\})$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img5" class="w-full h-auto block rounded-lg" alt="Adım 5 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 6: Zümrüt Yeşili -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-black flex items-center justify-center">6</span>
+            <h3 class="font-bold text-slate-900 text-base">Z-Domeni Doğrulaması: $H(z) \cdot G(z) = 1$ ve Kararlılık Analizi</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_2_13_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Z-dönüşümü altında konvolüsyon çarpmaya dönüşür:
+          $$H(z) = \sum_{n=0}^{\infty} \left(\frac{1}{5}\right)^n z^{-n} = \frac{1}{1 - \frac{1}{5}z^{-1}}, \quad (|z| > 1/5)$$
+          Ters sistemin transfer fonksiyonu:
+          $$G(z) = \frac{1}{H(z)} = 1 - \frac{1}{5}z^{-1}$$
+          Ters Z-dönüşümü alındığında: $\mathcal{Z}^{-1}\{1 - \frac{1}{5}z^{-1}\} = \delta[n] - \frac{1}{5}\delta[n-1] = g[n]$.
+          Kutuplar: $H(z)$'nin $z = 1/5$'te kutbu varken, $G(z)$'nin $z = 1/5$'te sıfırı (zero) vardır. Kutuplar ve sıfırlar birbirini tam götürür: $H(z)G(z) = 1$!
+        </p>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs font-mono text-emerald-900 font-bold">
+          $$\text{Nihai Sonuç: } \mathbf{A = \frac{1}{5}}, \qquad \mathbf{g[n] = \delta[n] - \frac{1}{5}\delta[n-1]} \quad \left(H(z) \cdot G(z) = 1\right)$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img6" class="w-full h-auto block rounded-lg" alt="Adım 6 Şeması">
+        </div>
+      </div>
+    </div>
+
+    <!-- Alt Bilgi / Footer -->
+    <div class="text-center text-xs text-slate-400 py-6 border-t border-slate-200 space-y-1">
+      <p>Sinyaller ve Sistemler İnteraktif Eğitim Platformu &bull; Problem 2.13 Çözümü</p>
+      <p class="text-[11px] text-slate-400">Oppenheim &amp; Willsky 2. Baskı standartlarına ve Problem 2.21 formatına tam uyumlu olarak hazırlanmıştır.</p>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Kodları: Simülatör ve 6 Adım Kartı Çizimleri -->
+  <script>
+    // Ortak Çizim Yardımcısı: Yüksek Çözünürlüklü Kanvas
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2; // retina netliği
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    // Ayrık Eksen Çizici (Stem Plotting)
+    function drawDiscreteAxis(ctx, ox, oy, width, nMin, nMax, yMin, yMax, scaleN, scaleY, nLabel, yLabel) {
+      ctx.save();
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, system-ui, sans-serif';
+
+      // N ekseni
+      ctx.beginPath();
+      ctx.moveTo(ox + nMin * scaleN - 15, oy);
+      ctx.lineTo(ox + nMax * scaleN + 25, oy);
+      ctx.stroke();
+
+      // N ok
+      ctx.beginPath();
+      ctx.moveTo(ox + nMax * scaleN + 25, oy);
+      ctx.lineTo(ox + nMax * scaleN + 17, oy - 3);
+      ctx.lineTo(ox + nMax * scaleN + 17, oy + 3);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fill();
+
+      // Y ekseni
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - yMax * scaleY - 15);
+      ctx.lineTo(ox, oy - yMin * scaleY + 15);
+      ctx.stroke();
+
+      // Y ok
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - yMax * scaleY - 15);
+      ctx.lineTo(ox - 3, oy - yMax * scaleY - 7);
+      ctx.lineTo(ox + 3, oy - yMax * scaleY - 7);
+      ctx.fill();
+
+      // Eksen Etiketleri
+      ctx.fillStyle = '#475569';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText(nLabel, ox + nMax * scaleN + 28, oy + 4);
+      ctx.fillText(yLabel, ox - 18, oy - yMax * scaleY - 18);
+
+      // N Tikleri
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = '#64748b';
+      for (let n = Math.ceil(nMin); n <= Math.floor(nMax); n++) {
+        if (n === 0) continue;
+        const px = ox + n * scaleN;
+        ctx.beginPath();
+        ctx.moveTo(px, oy - 3);
+        ctx.lineTo(px, oy + 3);
+        ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(n.toString(), px, oy + 14);
+      }
+
+      // Y Tikleri
+      for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+        if (y === 0) continue;
+        const py = oy - y * scaleY;
+        ctx.beginPath();
+        ctx.moveTo(ox - 3, py);
+        ctx.lineTo(ox + 3, py);
+        ctx.stroke();
+        ctx.textAlign = 'right';
+        ctx.fillText(y.toString(), ox - 6, py + 3);
+      }
+
+      // Orijin 0
+      ctx.textAlign = 'right';
+      ctx.fillText('0', ox - 5, oy + 12);
+
+      ctx.restore();
+    }
+
+    // Stem çizimi
+    function drawStem(ctx, px, pyBase, pyVal, color, radius = 3.5) {
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 2;
+
+      ctx.beginPath();
+      ctx.moveTo(px, pyBase);
+      ctx.lineTo(px, pyVal);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(px, pyVal, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // h[n] fonksiyonu
+    function calcH(n) {
+      if (n < 0) return 0;
+      return Math.pow(0.2, n);
+    }
+
+    // g[n] fonksiyonu
+    function calcG(n) {
+      if (n === 0) return 1.0;
+      if (n === 1) return -0.2;
+      return 0.0;
+    }
+
+    // -------------------------------------------------------------
+    // ADIM KARTLARI ÇİZİMLERİ (1'den 6'ya)
+    // -------------------------------------------------------------
+
+    // Kart 1: h[n] Stem Grafiği
+    function renderCard1() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 120, oy = 160, scaleN = 65, scaleY = 110;
+      drawDiscreteAxis(ctx, ox, oy, 600, -2.5, 7.5, -0.2, 1.3, scaleN, scaleY, 'n', 'h[n]');
+
+      for (let n = -2; n <= 7; n++) {
+        const val = calcH(n);
+        const px = ox + n * scaleN;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, '#2563eb', 4);
+
+        if (n >= 0 && n <= 3) {
+          ctx.fillStyle = '#1d4ed8';
+          ctx.font = 'bold 9px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(val.toFixed(2), px, py - 6);
+        }
+      }
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('h[n] = (1/5)ⁿ u[n] (IIR Dürtü Yanıtı)', ox + 220, 45);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('n < 0 için h[n] = 0 (Nedensel Sistem)', ox + 220, 65);
+      ctx.fillText('n = 0: 1.00,  n = 1: 0.20,  n = 2: 0.04', ox + 220, 80);
+
+      document.getElementById('img1').src = canvas.toDataURL();
+    }
+
+    // Kart 2: h[n] ve h[n-1] Karşılaştırması
+    function renderCard2() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 120, oy = 160, scaleN = 65, scaleY = 110;
+      drawDiscreteAxis(ctx, ox, oy, 600, -2.5, 7.5, -0.2, 1.3, scaleN, scaleY, 'n', 'Örnekler');
+
+      for (let n = -2; n <= 7; n++) {
+        const valH = calcH(n);
+        const valHprev = calcH(n - 1);
+        const px = ox + n * scaleN;
+
+        // h[n] mavi
+        drawStem(ctx, px - 4, oy, oy - valH * scaleY, '#2563eb', 3.5);
+        // h[n-1] mor
+        drawStem(ctx, px + 4, oy, oy - valHprev * scaleY, '#9333ea', 3.5);
+      }
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('Mavi: h[n]  |  Mor: h[n-1]', ox + 220, 45);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Hedef Fark: h[n] - A h[n-1] = δ[n]', ox + 220, 65);
+      ctx.fillText('h[n-1], h[n]\'nin 1 örnek sağa ötelenmiş halidir.', ox + 220, 80);
+
+      document.getElementById('img2').src = canvas.toDataURL();
+    }
+
+    // Kart 3: A = 1/5 Analitik Kanıtı
+    function renderCard3() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillText('A Katsayısının n Adımlarında İspatı:', 60, 40);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('1. n = 0 anı: h[0] - A h[-1] = 1 - A·0 = 1 = δ[0]  (Her A için geçerli)', 60, 70);
+      ctx.fillText('2. n = 1 anı: h[1] - A h[0] = 0.2 - A·1.0 = 0 = δ[1]  ⟹  A = 1/5 = 0.2', 60, 100);
+      ctx.fillText('3. n ≥ 1 genel: (1/5)ⁿ - A (1/5)ⁿ⁻¹ = (1/5)ⁿ⁻¹ [ 1/5 - A ] = 0  ⟹  A = 1/5', 60, 130);
+
+      ctx.fillStyle = 'rgba(16, 185, 129, 0.1)';
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(60, 150, 700, 50);
+      ctx.fillRect(60, 150, 700, 50);
+
+      ctx.font = 'bold 13px monospace';
+      ctx.fillStyle = '#065f46';
+      ctx.fillText('Sonuç: A = 1/5 = 0.20 (Tüm n ≥ 1 için fark tam sıfırlanır)', 80, 180);
+
+      document.getElementById('img3').src = canvas.toDataURL();
+    }
+
+    // Kart 4: Ters Sistem Blok Diyagramı
+    function renderCard4() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillText('Kaskat Ters Sistem (Inverse System) Prensibi:', 60, 40);
+
+      // Kutu 1: S1
+      ctx.fillStyle = '#eff6ff';
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(160, 80, 150, 65);
+      ctx.fillRect(160, 80, 150, 65);
+      ctx.fillStyle = '#1d4ed8';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Sistem S₁', 235, 108);
+      ctx.font = '10px monospace';
+      ctx.fillText('h[n] = (1/5)ⁿ u[n]', 235, 128);
+
+      // Kutu 2: S2
+      ctx.fillStyle = '#f5f3ff';
+      ctx.strokeStyle = '#8b5cf6';
+      ctx.strokeRect(430, 80, 170, 65);
+      ctx.fillRect(430, 80, 170, 65);
+      ctx.fillStyle = '#6d28d9';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillText('Ters Sistem S₂', 515, 108);
+      ctx.font = '10px monospace';
+      ctx.fillText('g[n] = δ[n] - 0.2δ[n-1]', 515, 128);
+
+      // Oklar
+      ctx.strokeStyle = '#475569';
+      ctx.lineWidth = 2;
+
+      // Giriş
+      ctx.beginPath(); ctx.moveTo(60, 112); ctx.lineTo(160, 112); ctx.stroke();
+      ctx.fillStyle = '#475569';
+      ctx.beginPath(); ctx.moveTo(160, 112); ctx.lineTo(152, 107); ctx.lineTo(152, 117); ctx.fill();
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('x[n]', 100, 102);
+
+      // Ara Çıkış
+      ctx.beginPath(); ctx.moveTo(310, 112); ctx.lineTo(430, 112); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(430, 112); ctx.lineTo(422, 107); ctx.lineTo(422, 117); ctx.fill();
+      ctx.fillText('y[n] = x[n]*h[n]', 370, 102);
+
+      // Nihai Çıkış
+      ctx.beginPath(); ctx.moveTo(600, 112); ctx.lineTo(720, 112); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(720, 112); ctx.lineTo(712, 107); ctx.lineTo(712, 117); ctx.fill();
+      ctx.fillStyle = '#059669';
+      ctx.fillText('w[n] = x[n] !', 660, 102);
+
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillStyle = '#047857';
+      ctx.fillText('Toplam Yanıt: h[n] * g[n] = δ[n]  ⟹  Tam Geri Kazanım (Inversion)', 160, 185);
+
+      document.getElementById('img4').src = canvas.toDataURL();
+    }
+
+    // Kart 5: g[n] Stem Grafiği (FIR Filtre)
+    function renderCard5() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 180, oy = 130, scaleN = 65, scaleY = 70;
+      drawDiscreteAxis(ctx, ox, oy, 500, -2.5, 6.5, -0.6, 1.4, scaleN, scaleY, 'n', 'g[n]');
+
+      for (let n = -2; n <= 6; n++) {
+        const val = calcG(n);
+        const px = ox + n * scaleN;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, '#7c3aed', 4);
+
+        if (n === 0 || n === 1) {
+          ctx.fillStyle = '#6d28d9';
+          ctx.font = 'bold 10px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(val.toFixed(1), px, py - (val > 0 ? 6 : -14));
+        }
+      }
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#4c1d95';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('g[n] = δ[n] - (1/5) δ[n-1]', ox + 180, 45);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Yalnızca İki Örnekli Sonlu Dürtü Yanıtı (FIR):', ox + 180, 65);
+      ctx.fillText('• n = 0: g[0] = +1.0', ox + 180, 80);
+      ctx.fillText('• n = 1: g[1] = -0.2', ox + 180, 95);
+
+      document.getElementById('img5').src = canvas.toDataURL();
+    }
+
+    // Kart 6: Kaskat Çıkış Doğrulaması (h * g)[n] = delta[n]
+    function renderCard6() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 180, oy = 140, scaleN = 65, scaleY = 90;
+      drawDiscreteAxis(ctx, ox, oy, 500, -2.5, 6.5, -0.2, 1.3, scaleN, scaleY, 'n', '(h*g)[n]');
+
+      for (let n = -2; n <= 6; n++) {
+        const val = n === 0 ? 1.0 : 0.0;
+        const px = ox + n * scaleN;
+        const py = oy - val * scaleY;
+        drawStem(ctx, px, oy, py, '#059669', 4.5);
+      }
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#065f46';
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillText('Kaskat Doğrulama: (h * g)[n] = δ[n] (Kusursuz Birim Dürtü)', ox + 120, 40);
+      ctx.fillStyle = '#475569';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Z-Domeni: H(z) = 1 / (1 - 0.2z⁻¹),  G(z) = 1 - 0.2z⁻¹', ox + 120, 60);
+      ctx.fillText('H(z) · G(z) = 1  ⟹  Kutuplar ve sıfırlar tam sadeleşir.', ox + 120, 75);
+
+      document.getElementById('img6').src = canvas.toDataURL();
+    }
+
+    // -------------------------------------------------------------
+    // İNTERAKTİF SİMÜLATÖR MOTORU
+    // -------------------------------------------------------------
+    const sliderN = document.getElementById('sliderN');
+    const sliderA = document.getElementById('sliderA');
+    const valN = document.getElementById('valN');
+    const valA = document.getElementById('valA');
+    const simMath = document.getElementById('simMath');
+    const btnPlay = document.getElementById('btnPlay');
+    const btnSetCritA = document.getElementById('btnSetCritA');
+    const playText = document.getElementById('playText');
+
+    let isPlaying = false;
+    let animId = null;
+
+    function updateSim() {
+      const n = parseInt(sliderN.value, 10);
+      const a = parseFloat(sliderA.value);
+
+      valN.textContent = `n = ${n}`;
+      valA.textContent = `A = ${a.toFixed(2)}`;
+
+      const hN = calcH(n);
+      const hNprev = calcH(n - 1);
+      const diffVal = hN - a * hNprev;
+      const isPerfect = Math.abs(a - 0.20) < 0.001;
+
+      simMath.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <strong>Örnek Değerleri:</strong> $h[${n}] = ${hN.toFixed(4)}$, &nbsp; $h[${n - 1}] = ${hNprev.toFixed(4)}$
+          </div>
+          <div class="text-right sm:text-right">
+            <strong>Fark:</strong> $h[${n}] - A h[${n - 1}] = \\mathbf{${diffVal.toFixed(4)}}$ &nbsp;|&nbsp; 
+            <strong>Durum:</strong> <span class="${isPerfect ? 'text-emerald-700 font-bold' : 'text-rose-600'}">${isPerfect ? 'Kusursuz δ[n] Eşleşmesi (A = 0.20)' : 'Hata Var (A ≠ 0.20)'}</span>
+          </div>
+        </div>
+      `;
+      if (window.renderMathInElement) {
+        renderMathInElement(simMath, { delimiters: [{ left: '$', right: '$', display: false }] });
+      }
+
+      drawKCanvas(n, a);
+      drawYnCanvas(n, a);
+    }
+
+    function drawKCanvas(activeN, a) {
+      const c = document.getElementById('kCanvas');
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      // Sol: h[n]
+      const ox1 = 80, oy1 = 150, scaleN1 = 35, scaleY1 = 90;
+      drawDiscreteAxis(ctx, ox1, oy1, 320, -2.5, 8.5, -0.2, 1.3, scaleN1, scaleY1, 'n', 'h[n]');
+
+      for (let n = -2; n <= 8; n++) {
+        const val = calcH(n);
+        const px = ox1 + n * scaleN1;
+        const isCurrent = n === activeN;
+        drawStem(ctx, px, oy1, oy1 - val * scaleY1, isCurrent ? '#ef4444' : '#2563eb', isCurrent ? 5.5 : 3.5);
+      }
+
+      // Sağ: g[n]
+      const ox2 = 520, oy2 = 130, scaleN2 = 45, scaleY2 = 65;
+      drawDiscreteAxis(ctx, ox2, oy2, 280, -2.5, 5.5, -0.5, 1.4, scaleN2, scaleY2, 'n', 'g[n]');
+
+      for (let n = -2; n <= 5; n++) {
+        const val = n === 0 ? 1.0 : (n === 1 ? -a : 0.0);
+        const px = ox2 + n * scaleN2;
+        drawStem(ctx, px, oy2, oy2 - val * scaleY2, '#7c3aed', 4);
+
+        if (n === 0 || n === 1) {
+          ctx.fillStyle = '#6d28d9';
+          ctx.font = 'bold 9px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(val.toFixed(2), px, oy2 - val * scaleY2 - (val > 0 ? 5 : -12));
+        }
+      }
+    }
+
+    function drawYnCanvas(activeN, a) {
+      const c = document.getElementById('ynCanvas');
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const ox = 260, oy = 135, scaleN = 45, scaleY = 80;
+      drawDiscreteAxis(ctx, ox, oy, 520, -2.5, 8.5, -0.3, 1.3, scaleN, scaleY, 'n', 'h[n] - Ah[n-1]');
+
+      for (let n = -2; n <= 8; n++) {
+        const val = calcH(n) - a * calcH(n - 1);
+        const px = ox + n * scaleN;
+        const py = oy - val * scaleY;
+        const isCurrent = n === activeN;
+
+        drawStem(ctx, px, oy, py, isCurrent ? '#ef4444' : (Math.abs(val) > 0.001 ? '#059669' : '#94a3b8'), isCurrent ? 5.5 : 3.5);
+
+        if (Math.abs(val) > 0.01 || n === 0) {
+          ctx.fillStyle = isCurrent ? '#b91c1c' : '#047857';
+          ctx.font = 'bold 9px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(val.toFixed(2), px, py - (val >= 0 ? 5 : -12));
+        }
+      }
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(`A = ${a.toFixed(2)} ile Kaskat Ters Sistem Çıkışı`, ox + 160, 30);
+    }
+
+    // Animasyon Döngüsü
+    function animate() {
+      let val = parseInt(sliderN.value, 10);
+      val++;
+      if (val > 8) val = -2;
+      sliderN.value = val;
+      updateSim();
+      if (isPlaying) {
+        setTimeout(() => {
+          if (isPlaying) requestAnimationFrame(animate);
+        }, 400); // stem animasyonu için daha sakin hız
+      }
+    }
+
+    btnPlay.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playText.textContent = 'Durdur';
+        btnPlay.classList.replace('bg-indigo-600', 'bg-rose-600');
+        btnPlay.classList.replace('hover:bg-indigo-700', 'hover:bg-rose-700');
+        animate();
+      } else {
+        playText.textContent = 'Animasyonu Başlat';
+        btnPlay.classList.replace('bg-rose-600', 'bg-indigo-600');
+        btnPlay.classList.replace('hover:bg-rose-700', 'hover:bg-indigo-700');
+      }
+    });
+
+    btnSetCritA.addEventListener('click', () => {
+      sliderA.value = "0.20";
+      updateSim();
+    });
+
+    sliderN.addEventListener('input', updateSim);
+    sliderA.addEventListener('input', updateSim);
+
+    // PNG Kartı İndirme Fonksiyonu
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Sayfa Yüklendiğinde Başlat
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCard1();
+      renderCard2();
+      renderCard3();
+      renderCard4();
+      renderCard5();
+      renderCard6();
+      updateSim();
+    });
+  </script>
+</body>
+</html>
