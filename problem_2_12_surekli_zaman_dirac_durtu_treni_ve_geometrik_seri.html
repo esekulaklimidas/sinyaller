@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.12 — Dirac Dürtü Treni ile Konvolüsyon ve Geometrik Seri Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Üst Gezinme Çubuğu / Geri Dönüş -->
+    <div class="flex items-center justify-between bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-indigo-600 hover:border-indigo-200 hover:shadow-sm transition font-medium text-sm">
+        <svg class="w-4 h-4 text-slate-500 group-hover:text-indigo-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)
+      </a>
+      <span class="text-xs font-semibold px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
+        Oppenheim 2. Baskı &bull; Bölüm 2
+      </span>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full uppercase tracking-wider">
+            Sürekli Zaman (CT) &bull; Dürtü Treni &amp; Geometrik Seri
+          </span>
+          <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full border border-indigo-100">
+            Problem 2.12
+          </span>
+        </div>
+        <span class="text-xs text-slate-500 font-mono">Sayfa 169 &bull; Oppenheim &amp; Willsky</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        Üstel Dürtü Yanıtının Dirac Dürtü Treni ile Konvolüsyonu ve Periyodik Kararlı Durum
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-600 leading-relaxed">
+        $h(t) = e^{-t}u(t)$ üstel sönümlü sinyalinin, $T = 3$ periyotlu sonsuz Dirac dürtü katarı $\sum_{k=-\infty}^{\infty} \delta(t - 3k)$ ile konvolüsyonu hesaplanmaktadır. Bu işlem, $0 \le t < 3$ temel aralığında $y(t) = A e^{-t}$ biçimini almakta; sonsuz geometrik seri toplamı yöntemiyle $A = \frac{1}{1 - e^{-3}} \approx 1.0524$ katsayısı analitik olarak ispatlanmaktadır.
+      </p>
+
+      <div class="bg-indigo-50/70 border border-indigo-100 rounded-xl p-4 text-xs sm:text-sm text-indigo-900 font-mono">
+        $$y(t) = e^{-t}u(t) * \sum_{k=-\infty}^{\infty} \delta(t - 3k) = \sum_{k=-\infty}^{\infty} e^{-(t - 3k)} u(t - 3k)$$
+        $$0 \le t < 3 \implies y(t) = A e^{-t} \quad \text{ve} \quad \mathbf{A = \frac{1}{1 - e^{-3}} = \frac{e^3}{e^3 - 1} \approx 1.0524}$$
+      </div>
+    </div>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Sütun) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>📌</span> Soru Bizden Ne İstiyor?
+        </h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>Konvolüsyon İfadesi:</strong> $y(t) = e^{-t}u(t) * \sum_{k=-\infty}^{\infty} \delta(t - 3k)$ işlemini süperpozisyon ve öteleme ilkeleriyle açmak.</li>
+          <li><strong>$0 \le t < 3$ Aralığında Gösterim:</strong> Temel periyot aralığında sistem çıkışının saf bir üstel fonksiyon olan $y(t) = A e^{-t}$ formuna indirgendiğini göstermek.</li>
+          <li><strong>$A$ Katsayısının Belirlenmesi:</strong> Geçmişteki tüm dürtülerin ($k \le 0$) birikimli üstel kuyruklarının toplamını sonsuz geometrik seri ile kapalı formda hesaplamak.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-3">
+        <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+          <span>💡</span> Adım Adım Çözüm Metodolojisi
+        </h3>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>1. Dirac Öteleme Özelliği:</strong> $e^{-t}u(t) * \delta(t - 3k) = e^{-(t - 3k)}u(t - 3k)$ olup her darbe 3 saniye arayla ötelenmiş bir üstel yanıt üretir.</li>
+          <li><strong>2. Nedensellik Kısıtı ($u(t - 3k)$):</strong> $0 \le t < 3$ için $t - 3k \ge 0 \iff k \le t/3 < 1 \implies k \le 0$. Pozitif $k \ge 1$ terimleri henüz tetiklenmemiştir (0'dır).</li>
+          <li><strong>3. $e^{-t}$ Teriminin Ayrıştırılması:</strong> $y(t) = \sum_{k=-\infty}^0 e^{-t} e^{3k} = e^{-t} \sum_{m=0}^\infty (e^{-3})^m$ şeklinde yazılır ($m = -k$).</li>
+          <li><strong>4. Geometrik Seri Toplamı:</strong> Ortak çarpan $r = e^{-3} < 1$ olduğundan $\sum_{m=0}^\infty r^m = \frac{1}{1 - r} = \frac{1}{1 - e^{-3}} = A$.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">İnteraktif Konvolüsyon ve Periyodik Süperpozisyon Simülatörü</h2>
+          <p class="text-xs text-slate-500">Zaman parametresi $t$'yi kaydırarak geçmiş dürtülerin üstel kuyruklarının birikimini ve periyodik $T=3$ testere dişi dalgasını izleyin.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnPlay" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition flex items-center gap-1.5 shadow-sm shadow-indigo-100">
+            <svg id="playIcon" class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span id="playText">Animasyonu Başlat</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Kaydırıcı ve Hızlı Butonlar -->
+      <div class="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-700">
+          <span>Zaman Parametresi ($t$):</span>
+          <span id="valT" class="font-mono text-indigo-600 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">t = 1.00</span>
+        </div>
+        <input id="sliderT" type="range" min="-3.00" max="9.00" step="0.02" value="1.00" class="w-full accent-indigo-600 cursor-pointer">
+        <div class="flex justify-between text-[10px] text-slate-400 font-mono">
+          <span>-3.00 (Önceki Periyot)</span>
+          <span>0.00 (Temel Başlangıç)</span>
+          <span>3.00 (Yeni Dürtü)</span>
+          <span>6.00</span>
+          <span>9.00</span>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 pt-1">
+          <span class="text-xs text-slate-500 font-medium">Hızlı Konumlar:</span>
+          <button onclick="setT(0.0)" class="px-2.5 py-1 bg-white hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 border border-slate-200 rounded-lg text-xs font-medium transition">$t = 0.0$ ($y = A \approx 1.052$)</button>
+          <button onclick="setT(1.0)" class="px-2.5 py-1 bg-white hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 border border-slate-200 rounded-lg text-xs font-medium transition">$t = 1.0$ ($y \approx 0.387$)</button>
+          <button onclick="setT(2.0)" class="px-2.5 py-1 bg-white hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 border border-slate-200 rounded-lg text-xs font-medium transition">$t = 2.0$ ($y \approx 0.142$)</button>
+          <button onclick="setT(2.98)" class="px-2.5 py-1 bg-white hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 border border-slate-200 rounded-lg text-xs font-medium transition">$t = 2.98$ (Minimum $\approx 0.052$)</button>
+          <button onclick="setT(3.0)" class="px-2.5 py-1 bg-white hover:bg-indigo-50 text-slate-600 hover:text-indigo-600 border border-slate-200 rounded-lg text-xs font-medium transition">$t = 3.0$ (Sıçrama $+1.0$)</button>
+        </div>
+      </div>
+
+      <!-- Matematiksel Dinamik Değer Kutusu -->
+      <div id="simMath" class="bg-indigo-50/50 border border-indigo-100 rounded-xl p-4 text-xs font-mono text-slate-700 transition">
+        <!-- Dinamik KaTeX JS tarafından basılır -->
+      </div>
+
+      <!-- İki Kanvas Alanı -->
+      <div class="space-y-4">
+        <!-- Üst Kanvas: tau ekseni, Dirac treni ve kayan h(t - tau) -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-600 px-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500 inline-block"></span> Dirac Treni $\sum \delta(\tau - 3k)$ (Mavi Oklar) &nbsp;|&nbsp;
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span> Kayan $h(t - \tau) = e^{-(t - \tau)}u(t - \tau)$
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">Entegrasyon Alanı: $\tau$ ekseni</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-inner">
+            <canvas id="kCanvas" width="860" height="220" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+
+        <!-- Alt Kanvas: t ekseni, periyodik y(t) ve A e^{-t} eğrisi -->
+        <div class="space-y-1">
+          <div class="flex justify-between items-center text-xs font-semibold text-slate-600 px-1">
+            <span class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span> Çıkış Sinyali $y(t)$ (Periyot $T = 3$) &nbsp;|&nbsp;
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> Temel Eğri $A e^{-t}$ ($0 \le t < 3$)
+            </span>
+            <span class="text-[11px] text-slate-400 font-mono">Periyodik Çıkış: $t$ ekseni</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-inner">
+            <canvas id="ynCanvas" width="860" height="210" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Ayrı Adım Kartı (Problem 2.21 Formatı) -->
+    <div class="space-y-6">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h2 class="text-xl font-black text-slate-900 tracking-tight">
+          Adım Adım Detaylı Çözüm Kartları
+        </h2>
+        <span class="text-xs text-slate-500">Vektörel Grafik &bull; İndirilebilir Yüksek Çözünürlük</span>
+      </div>
+
+      <!-- Kart 1: Mavi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-black flex items-center justify-center">1</span>
+            <h3 class="font-bold text-slate-900 text-base">Sinyal Modelleri: Üstel Yanıt ve Periyodik Dirac Treni ($T=3$)</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_2_12_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Giriş sinyali $p(t) = \sum_{k=-\infty}^{\infty} \delta(t - 3k)$, her $3$ saniyede bir tekrarlayan sonsuz bir Dirac dürtü katarıdır ($T = 3$). Sistemin dürtü cevabı $h(t) = e^{-t}u(t)$ ise $t = 0$'da $1$ değerinden başlayan ve sonsuza doğru azalan tek yanlı üstel sinyaldir.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$h(t) = e^{-t} u(t), \qquad p(t) = \sum_{k=-\infty}^{\infty} \delta(t - 3k) \quad (T = 3)$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img1" class="w-full h-auto block rounded-lg" alt="Adım 1 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 2: Mor -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-purple-100 text-purple-700 text-xs font-black flex items-center justify-center">2</span>
+            <h3 class="font-bold text-slate-900 text-base">LTI Dağılma ve Öteleme Özelliği: Sonsuz Toplam Olarak Konvolüsyon</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_2_12_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Konvolüsyon işleminin toplam üzerine dağılma özelliği ve Dirac deltasının eleme (sifting) özelliği uygulanır: $f(t) * \delta(t - t_0) = f(t - t_0)$. Bu sayede konvolüsyon integrali, zaman ötelenmiş sonsuz sayıda üstel yanıtın süperpozisyonuna dönüşür.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$y(t) = e^{-t}u(t) * \sum_{k=-\infty}^{\infty} \delta(t - 3k) = \sum_{k=-\infty}^{\infty} e^{-(t - 3k)} u(t - 3k)$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img2" class="w-full h-auto block rounded-lg" alt="Adım 2 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 3: Amber -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-xs font-black flex items-center justify-center">3</span>
+            <h3 class="font-bold text-slate-900 text-base">Temel Aralık $0 \le t < 3$ İçin Nedensellik Sınırı ($k \le 0$)</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_2_12_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Birim basamak fonksiyonu $u(t - 3k)$ ancak $t - 3k \ge 0 \implies 3k \le t$ olduğunda 1 değerini alır. İncelediğimiz aralık $0 \le t < 3$ olduğundan, $k$ tam sayısı için $k \le t/3 < 1 \implies k \le 0$ olmalıdır. Gelecekteki ($k \ge 1$) dürtüler henüz oluşmadığından bu aralıktaki toplama katkıları kesinlikle sıfırdır.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$0 \le t < 3 \implies u(t - 3k) = \begin{cases} 1, & k \le 0 \\ 0, & k \ge 1 \end{cases} \implies y(t) = \sum_{k=-\infty}^0 e^{-(t - 3k)}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img3" class="w-full h-auto block rounded-lg" alt="Adım 3 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 4: Rose -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-rose-100 text-rose-700 text-xs font-black flex items-center justify-center">4</span>
+            <h3 class="font-bold text-slate-900 text-base">Üstel Terimin Dışarı Alınması ve Sonsuz Geometrik Seri</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_2_12_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Üs kuralları gereğince $e^{-(t - 3k)} = e^{-t} \cdot e^{3k}$ yazılabilir. $e^{-t}$ terimi $k$ indisinden bağımsız bir çarpan olduğundan toplamın dışına alınır:
+          $$y(t) = e^{-t} \sum_{k=-\infty}^0 e^{3k}$$
+          İndis dönüşümü yaparak $m = -k$ tanımlayalım. $k$ eksi sonsuzdan $0$'a giderken, $m$ sıfırdan artı sonsuza gider: $e^{3k} = e^{-3m} = (e^{-3})^m$.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$y(t) = e^{-t} \sum_{m=0}^{\infty} \left(e^{-3}\right)^m \implies y(t) = A e^{-t}, \quad \text{burada } A = \sum_{m=0}^{\infty} (e^{-3})^m$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img4" class="w-full h-auto block rounded-lg" alt="Adım 4 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 5: İndigo -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-black flex items-center justify-center">5</span>
+            <h3 class="font-bold text-slate-900 text-base">Geometrik Seri Toplamı ve $A$ Katsayısının Analitik Hesabı</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_2_12_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Oluşan toplam, ortak çarpanı $r = e^{-3} = \frac{1}{e^3} \approx 0.049787$ olan bir sonsuz geometrik seridir. $|r| < 1$ olduğundan seri mutlak yakınsaktır:
+          $$A = \sum_{m=0}^{\infty} r^m = \frac{1}{1 - r} = \frac{1}{1 - e^{-3}} = \frac{e^3}{e^3 - 1}$$
+          Sayısal değer olarak: $e^3 \approx 20.0855 \implies A = \frac{20.0855}{19.0855} \approx 1.0524$ bulunur.
+        </p>
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-xs font-mono text-slate-700">
+          $$\mathbf{A = \frac{1}{1 - e^{-3}} = \frac{e^3}{e^3 - 1} \approx 1.05238}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img5" class="w-full h-auto block rounded-lg" alt="Adım 5 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 6: Zümrüt Yeşili -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-xs font-black flex items-center justify-center">6</span>
+            <h3 class="font-bold text-slate-900 text-base">Periyodik Kararlı Durum ($T=3$) ve Sıçrama Süreksizlikleri ($\Delta = +1$)</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_2_12_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition font-medium">
+            İndir (PNG)
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Giriş periyodik olduğundan LTI çıkışı da $T = 3$ periyoduna sahiptir: $y(t + 3) = y(t)$. 
+          <br>&bull; $t = 0^+$'da genlik $y(0^+) = A \approx 1.0524$.
+          <br>&bull; $t \to 3^-$ anında üstel sönümleme sonucu genlik $y(3^-) = A e^{-3} = \frac{e^{-3}}{1 - e^{-3}} \approx 0.0524$'e düşer.
+          <br>&bull; $t = 3$'te yeni gelen $\delta(t - 3)$ dürtüsü sinyale tam olarak $+1$ sıçraması ekler: $y(3^+) = y(3^-) + 1 = 1.0524 = A$!
+        </p>
+        <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 text-xs font-mono text-emerald-900 font-bold">
+          $$\text{Nihai Sonuç: } y(t) = \left(\frac{1}{1 - e^{-3}}\right) e^{-t} \quad (0 \le t < 3), \qquad \mathbf{A = \frac{e^3}{e^3 - 1} \approx 1.0524}$$
+        </div>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-2">
+          <img id="img6" class="w-full h-auto block rounded-lg" alt="Adım 6 Şeması">
+        </div>
+      </div>
+    </div>
+
+    <!-- Alt Bilgi / Footer -->
+    <div class="text-center text-xs text-slate-400 py-6 border-t border-slate-200 space-y-1">
+      <p>Sinyaller ve Sistemler İnteraktif Eğitim Platformu &bull; Problem 2.12 Çözümü</p>
+      <p class="text-[11px] text-slate-400">Oppenheim &amp; Willsky 2. Baskı standartlarına ve Problem 2.21 formatına tam uyumlu olarak hazırlanmıştır.</p>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Kodları: Simülatör ve 6 Adım Kartı Çizimleri -->
+  <script>
+    // Ortak Çizim Yardımcısı: Yüksek Çözünürlüklü Kanvas
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2; // retina netliği
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    // Sürekli Eksen Çizici
+    function drawContinuousAxis(ctx, ox, oy, width, xMin, xMax, yMin, yMax, scaleX, scaleY, xLabel, yLabel) {
+      ctx.save();
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, system-ui, sans-serif';
+
+      // X ekseni
+      ctx.beginPath();
+      ctx.moveTo(ox + xMin * scaleX - 15, oy);
+      ctx.lineTo(ox + xMax * scaleX + 25, oy);
+      ctx.stroke();
+
+      // X ok
+      ctx.beginPath();
+      ctx.moveTo(ox + xMax * scaleX + 25, oy);
+      ctx.lineTo(ox + xMax * scaleX + 17, oy - 3);
+      ctx.lineTo(ox + xMax * scaleX + 17, oy + 3);
+      ctx.fillStyle = '#94a3b8';
+      ctx.fill();
+
+      // Y ekseni
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - yMax * scaleY - 15);
+      ctx.lineTo(ox, oy - yMin * scaleY + 15);
+      ctx.stroke();
+
+      // Y ok
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - yMax * scaleY - 15);
+      ctx.lineTo(ox - 3, oy - yMax * scaleY - 7);
+      ctx.lineTo(ox + 3, oy - yMax * scaleY - 7);
+      ctx.fill();
+
+      // Eksen Etiketleri
+      ctx.fillStyle = '#475569';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText(xLabel, ox + xMax * scaleX + 28, oy + 4);
+      ctx.fillText(yLabel, ox - 18, oy - yMax * scaleY - 18);
+
+      // X Tikleri
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillStyle = '#64748b';
+      for (let x = Math.ceil(xMin); x <= Math.floor(xMax); x++) {
+        if (Math.abs(x) < 0.001) continue;
+        const px = ox + x * scaleX;
+        ctx.beginPath();
+        ctx.moveTo(px, oy - 3);
+        ctx.lineTo(px, oy + 3);
+        ctx.stroke();
+        ctx.textAlign = 'center';
+        ctx.fillText(x.toString(), px, oy + 14);
+      }
+
+      // Y Tikleri
+      for (let y = Math.ceil(yMin); y <= Math.floor(yMax); y++) {
+        if (Math.abs(y) < 0.001) continue;
+        const py = oy - y * scaleY;
+        ctx.beginPath();
+        ctx.moveTo(ox - 3, py);
+        ctx.lineTo(ox + 3, py);
+        ctx.stroke();
+        ctx.textAlign = 'right';
+        ctx.fillText(y.toString(), ox - 6, py + 3);
+      }
+
+      // Orijin 0
+      ctx.textAlign = 'right';
+      ctx.fillText('0', ox - 5, oy + 12);
+
+      ctx.restore();
+    }
+
+    const A_CONST = 1 / (1 - Math.exp(-3)); // ≈ 1.052382
+
+    // y(t) genel periyodik çıkış değeri
+    function calcY(t) {
+      // Periyodik indirgeme: t mod 3
+      let tMod = t % 3;
+      if (tMod < 0) tMod += 3;
+      return A_CONST * Math.exp(-tMod);
+    }
+
+    // -------------------------------------------------------------
+    // ADIM KARTLARI ÇİZİMLERİ (1'den 6'ya)
+    // -------------------------------------------------------------
+
+    // Kart 1: h(t) ve Dirac treni p(t)
+    function renderCard1() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      // Sol: h(t) = e^{-t} u(t)
+      drawContinuousAxis(ctx, 60, 160, 260, -0.5, 4.0, -0.2, 1.4, 60, 90, 't', 'h(t)');
+      ctx.strokeStyle = '#9333ea';
+      ctx.lineWidth = 2.5;
+      ctx.fillStyle = 'rgba(168, 85, 247, 0.15)';
+
+      ctx.beginPath();
+      ctx.moveTo(60 - 0.5 * 60, 160);
+      ctx.lineTo(60, 160);
+      ctx.lineTo(60, 160 - 90);
+      for (let t = 0; t <= 4.0; t += 0.05) {
+        ctx.lineTo(60 + t * 60, 160 - Math.exp(-t) * 90);
+      }
+      ctx.stroke();
+      ctx.lineTo(60 + 4 * 60, 160);
+      ctx.lineTo(60, 160);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#7e22ce';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('h(t) = e^{-t} u(t)', 75, 45);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Tek Yanlı Üstel Sönüm', 75, 62);
+
+      // Sağ: p(t) Dirac katarı (T=3)
+      drawContinuousAxis(ctx, 480, 160, 260, -3.5, 6.5, -0.2, 1.4, 30, 90, 't', 'p(t)');
+
+      function drawDelta(t, label) {
+        const px = 480 + t * 30;
+        const py = 160 - 90;
+        ctx.strokeStyle = '#2563eb';
+        ctx.fillStyle = '#2563eb';
+        ctx.lineWidth = 2.5;
+
+        ctx.beginPath();
+        ctx.moveTo(px, 160);
+        ctx.lineTo(px, py);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px - 4, py + 8);
+        ctx.lineTo(px + 4, py + 8);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(label, px, py - 6);
+      }
+
+      drawDelta(-3, 'δ(t+3)');
+      drawDelta(0, 'δ(t)');
+      drawDelta(3, 'δ(t-3)');
+      drawDelta(6, 'δ(t-6)');
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('p(t) = ∑ δ(t - 3k)  (T = 3)', 495, 45);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Periyodik Dirac Dürtü Treni', 495, 62);
+
+      document.getElementById('img1').src = canvas.toDataURL();
+    }
+
+    // Kart 2: Dağılma ve Ötelenmiş Üstseller
+    function renderCard2() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 180, oy = 160, scaleX = 55, scaleY = 90;
+      drawContinuousAxis(ctx, ox, oy, 500, -3.5, 7.5, -0.2, 1.4, scaleX, scaleY, 't', 'e^{-(t-3k)}u(t-3k)');
+
+      // Bireysel ötelenmiş üstseller
+      const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#10b981'];
+      const ks = [-1, 0, 1, 2];
+
+      ks.forEach((k, idx) => {
+        const t0 = 3 * k;
+        ctx.strokeStyle = colors[idx];
+        ctx.lineWidth = 2;
+        ctx.setLineDash([3, 2]);
+
+        ctx.beginPath();
+        ctx.moveTo(ox + (t0 - 1) * scaleX, oy);
+        ctx.lineTo(ox + t0 * scaleX, oy);
+        ctx.lineTo(ox + t0 * scaleX, oy - scaleY);
+        for (let t = t0; t <= t0 + 6; t += 0.05) {
+          if (t <= 7.5) {
+            ctx.lineTo(ox + t * scaleX, oy - Math.exp(-(t - t0)) * scaleY);
+          }
+        }
+        ctx.stroke();
+
+        ctx.fillStyle = colors[idx];
+        ctx.font = 'bold 10px Inter, sans-serif';
+        ctx.fillText(`k = ${k}`, ox + t0 * scaleX + 6, oy - scaleY + 12);
+      });
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#475569';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('Her Dürtünün Bağımsız Yanıtı: h(t - 3k) = e^{-(t - 3k)} u(t - 3k)', ox + 150, 40);
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Toplam çıkış y(t), bu sonsuz sayıda üstelin süperpozisyonudur.', ox + 150, 58);
+
+      document.getElementById('img2').src = canvas.toDataURL();
+    }
+
+    // Kart 3: 0 <= t < 3 Nedensellik Kısıtı (k <= 0)
+    function renderCard3() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 180, oy = 160, scaleX = 55, scaleY = 90;
+      drawContinuousAxis(ctx, ox, oy, 500, -3.5, 7.5, -0.2, 1.4, scaleX, scaleY, 't', 'Katkı');
+
+      // Vurgulanan temel aralık [0, 3)
+      ctx.fillStyle = 'rgba(254, 240, 138, 0.4)';
+      ctx.fillRect(ox, oy - 1.2 * scaleY, 3 * scaleX, 1.2 * scaleY);
+
+      ctx.strokeStyle = '#ca8a04';
+      ctx.setLineDash([4, 3]);
+      ctx.strokeRect(ox, oy - 1.2 * scaleY, 3 * scaleX, 1.2 * scaleY);
+      ctx.setLineDash([]);
+
+      // Aktif olanlar: k = 0, k = -1
+      // k = 0
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(ox, oy - scaleY);
+      for (let t = 0; t <= 3.0; t += 0.05) {
+        ctx.lineTo(ox + t * scaleX, oy - Math.exp(-t) * scaleY);
+      }
+      ctx.stroke();
+
+      // k = -1 (t0 = -3)
+      ctx.strokeStyle = '#7c3aed';
+      ctx.beginPath();
+      for (let t = 0; t <= 3.0; t += 0.05) {
+        ctx.lineTo(ox + t * scaleX, oy - Math.exp(-(t + 3)) * scaleY);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#854d0e';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('Sarı Bölge: Temel Aralık 0 ≤ t < 3', ox + 20, oy - 1.2 * scaleY + 16);
+
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText('k ≥ 1 Dürtüleri Henüz Başlamadı (0 ≤ t < 3 için u(t - 3k) = 0)', ox + 180, 45);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Bu aralıkta yalnızca geçmiş dürtüler (k = 0, -1, -2, ...) katkı verir.', ox + 180, 62);
+      ctx.fillText('Toplam İndisi Kısıtı: k ≤ 0', ox + 180, 78);
+
+      document.getElementById('img3').src = canvas.toDataURL();
+    }
+
+    // Kart 4: Üstel Terimin Ayrıştırılması
+    function renderCard4() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillText('Cebirsel Ayrıştırma ve İndis Dönüşümü:', 60, 45);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('1. Adım: e^{-(t - 3k)} = e^{-t} · e^{3k}', 60, 75);
+      ctx.fillText('2. Adım: e^{-t} terimi k indisinden bağımsızdır, toplam dışına alınır:', 60, 105);
+
+      ctx.font = 'bold 13px monospace';
+      ctx.fillStyle = '#be123c';
+      ctx.fillText('y(t) = e^{-t} · ∑_{k=-∞}^0 e^{3k}', 100, 135);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('3. Adım: İndis değişimi: m = -k  ⟹  k = -m  (k: -∞ → 0  ⟹  m: 0 → ∞)', 60, 165);
+
+      ctx.font = 'bold 13px monospace';
+      ctx.fillStyle = '#047857';
+      ctx.fillText('y(t) = e^{-t} · ∑_{m=0}^∞ (e^{-3})^m = A e^{-t}', 100, 195);
+
+      document.getElementById('img4').src = canvas.toDataURL();
+    }
+
+    // Kart 5: Sonsuz Geometrik Seri ve A Değeri
+    function renderCard5() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      ctx.fillStyle = '#1e1b4b';
+      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.fillText('Sonsuz Geometrik Seri Formülü ve Yakınsaklık:', 60, 40);
+
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('Ortak çarpan r = e^{-3} = 1 / e^3 ≈ 0.049787', 60, 68);
+      ctx.fillText('|r| = e^{-3} < 1 olduğundan seri kesin olarak yakınsar:', 60, 90);
+
+      // Kutu içinde formül
+      ctx.fillStyle = 'rgba(79, 70, 229, 0.08)';
+      ctx.strokeStyle = '#4f46e5';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(60, 105, 700, 60);
+      ctx.fillRect(60, 105, 700, 60);
+
+      ctx.font = 'bold 14px monospace';
+      ctx.fillStyle = '#312e81';
+      ctx.fillText('A = ∑_{m=0}^∞ r^m = 1 / (1 - r) = 1 / (1 - e^{-3}) = e^3 / (e^3 - 1)', 80, 142);
+
+      ctx.font = 'bold 12px Inter, sans-serif';
+      ctx.fillStyle = '#065f46';
+      ctx.fillText('Sayısal Değer: e^3 ≈ 20.085537 ⟹ A = 20.085537 / 19.085537 ≈ 1.052382', 60, 195);
+
+      document.getElementById('img5').src = canvas.toDataURL();
+    }
+
+    // Kart 6: Periyodik Kararlı Durum ve Sıçrama Analizi
+    function renderCard6() {
+      const { canvas, ctx } = createHiDPICanvas(820, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 820, 220);
+
+      const ox = 140, oy = 160, scaleX = 50, scaleY = 100;
+      drawContinuousAxis(ctx, ox, oy, 520, -1.0, 9.5, -0.2, 1.4, scaleX, scaleY, 't', 'y(t)');
+
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 2.5;
+
+      // 3 periyot çizimi: [0, 3), [3, 6), [6, 9)
+      for (let p = 0; p < 3; p++) {
+        const startT = p * 3;
+        ctx.beginPath();
+        ctx.moveTo(ox + startT * scaleX, oy - A_CONST * scaleY);
+        for (let t = startT; t < startT + 3; t += 0.05) {
+          const val = A_CONST * Math.exp(-(t - startT));
+          ctx.lineTo(ox + t * scaleX, oy - val * scaleY);
+        }
+        ctx.stroke();
+
+        // Sıçrama Çizgisi
+        if (p > 0) {
+          ctx.strokeStyle = '#10b981';
+          ctx.setLineDash([2, 2]);
+          ctx.beginPath();
+          const lowVal = A_CONST * Math.exp(-3);
+          ctx.moveTo(ox + startT * scaleX, oy - lowVal * scaleY);
+          ctx.lineTo(ox + startT * scaleX, oy - A_CONST * scaleY);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.strokeStyle = '#059669';
+        }
+      }
+
+      // Etiketler
+      ctx.fillStyle = '#047857';
+      ctx.font = 'bold 11px Inter, sans-serif';
+      ctx.fillText(`Tepe Değeri: y(0⁺) = A ≈ 1.052`, ox + 15, oy - A_CONST * scaleY - 6);
+      ctx.fillText(`Dip Değeri: y(3⁻) = Ae⁻³ ≈ 0.052`, ox + 110, oy - 0.052 * scaleY + 16);
+
+      ctx.fillStyle = '#065f46';
+      ctx.fillText('Tam Periyodik Çıkış: y(t + 3) = y(t)', ox + 240, 40);
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter, sans-serif';
+      ctx.fillText('Her t = 3k anında yeni dürtü sisteme girerek genliği tam +1.0 artırır.', ox + 240, 58);
+      ctx.fillText('0.052 + 1.000 = 1.052 = A (Kusursuz Kararlı Durum Dengesi)', ox + 240, 74);
+
+      document.getElementById('img6').src = canvas.toDataURL();
+    }
+
+    // -------------------------------------------------------------
+    // İNTERAKTİF SİMÜLATÖR MOTORU
+    // -------------------------------------------------------------
+    const sliderT = document.getElementById('sliderT');
+    const valT = document.getElementById('valT');
+    const simMath = document.getElementById('simMath');
+    const btnPlay = document.getElementById('btnPlay');
+    const playText = document.getElementById('playText');
+
+    let isPlaying = false;
+    let animId = null;
+
+    function setT(targetT) {
+      sliderT.value = targetT.toFixed(2);
+      updateSim();
+    }
+
+    function updateSim() {
+      const t = parseFloat(sliderT.value);
+      valT.textContent = `t = ${t.toFixed(2)}`;
+
+      const currentY = calcY(t);
+
+      // t mod 3 hesabı
+      let tMod = t % 3;
+      if (tMod < 0) tMod += 3;
+      const kIndex = Math.floor(t / 3);
+
+      simMath.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div>
+            <strong>Periyot Bölgesi:</strong> $k = ${kIndex} \\quad (3k = ${kIndex * 3} \\le t < ${(kIndex + 1) * 3})$, &nbsp; Lokal Zaman: $\\tau_{lokal} = ${(tMod).toFixed(2)}$
+          </div>
+          <div class="text-right sm:text-right">
+            <strong>Hesaplanan:</strong> $y(${t.toFixed(2)}) = A e^{-${tMod.toFixed(2)}} = \\mathbf{${currentY.toFixed(4)}}$ &nbsp;|&nbsp; <strong>A Katsayısı:</strong> $\\frac{1}{1-e^{-3}} \\approx 1.0524$
+          </div>
+        </div>
+      `;
+      if (window.renderMathInElement) {
+        renderMathInElement(simMath, { delimiters: [{ left: '$', right: '$', display: false }] });
+      }
+
+      drawKCanvas(t);
+      drawYnCanvas(t, currentY);
+    }
+
+    function drawKCanvas(t) {
+      const c = document.getElementById('kCanvas');
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const ox = 260, oy = 160, scaleX = 45, scaleY = 90;
+      drawContinuousAxis(ctx, ox, oy, 520, -5.5, 9.5, -0.2, 1.4, scaleX, scaleY, 'τ', 'Genlik');
+
+      // Dirac Katarı (Dürtüler)
+      for (let k = -2; k <= 3; k++) {
+        const tauK = 3 * k;
+        const px = ox + tauK * scaleX;
+        const isActive = tauK <= t;
+
+        ctx.strokeStyle = isActive ? '#2563eb' : '#94a3b8';
+        ctx.fillStyle = isActive ? '#2563eb' : '#94a3b8';
+        ctx.lineWidth = isActive ? 2.5 : 1.5;
+
+        ctx.beginPath();
+        ctx.moveTo(px, oy);
+        ctx.lineTo(px, oy - scaleY);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(px, oy - scaleY);
+        ctx.lineTo(px - 4, oy - scaleY + 8);
+        ctx.lineTo(px + 4, oy - scaleY + 8);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.font = 'bold 9px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(`δ(τ-${tauK})`, px, oy - scaleY - 6);
+      }
+
+      // Kayan h(t - tau) = e^{-(t - tau)} u(t - tau)
+      ctx.strokeStyle = '#9333ea';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(ox + (t + 0.5) * scaleX, oy);
+      ctx.lineTo(ox + t * scaleX, oy);
+      ctx.lineTo(ox + t * scaleX, oy - scaleY);
+      for (let tau = t; tau >= t - 8.0; tau -= 0.05) {
+        const val = Math.exp(-(t - tau));
+        ctx.lineTo(ox + tau * scaleX, oy - val * scaleY);
+      }
+      ctx.stroke();
+
+      // t Çizgisi
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = '#9333ea';
+      ctx.beginPath();
+      ctx.moveTo(ox + t * scaleX, oy);
+      ctx.lineTo(ox + t * scaleX, oy + 20);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#9333ea';
+      ctx.font = 'bold 10px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`τ = t (${t.toFixed(2)})`, ox + t * scaleX, oy + 32);
+      ctx.textAlign = 'left';
+    }
+
+    function drawYnCanvas(currentT, currentY) {
+      const c = document.getElementById('ynCanvas');
+      const ctx = c.getContext('2d');
+      const w = c.width, h = c.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const ox = 260, oy = 145, scaleX = 45, scaleY = 75;
+      drawContinuousAxis(ctx, ox, oy, 520, -5.5, 9.5, -0.2, 1.4, scaleX, scaleY, 't', 'y(t)');
+
+      // Periyodik y(t) dalgası
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 2.5;
+
+      for (let p = -2; p <= 3; p++) {
+        const startT = p * 3;
+        ctx.beginPath();
+        ctx.moveTo(ox + startT * scaleX, oy - A_CONST * scaleY);
+        for (let t = startT; t < startT + 3; t += 0.05) {
+          const val = A_CONST * Math.exp(-(t - startT));
+          ctx.lineTo(ox + t * scaleX, oy - val * scaleY);
+        }
+        ctx.stroke();
+
+        // Kesikli sıçrama düşeyi
+        ctx.strokeStyle = '#6ee7b7';
+        ctx.setLineDash([2, 2]);
+        ctx.beginPath();
+        const lowVal = A_CONST * Math.exp(-3);
+        ctx.moveTo(ox + startT * scaleX, oy - lowVal * scaleY);
+        ctx.lineTo(ox + startT * scaleX, oy - A_CONST * scaleY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.strokeStyle = '#059669';
+      }
+
+      // Temel Aralık Vurgusu [0, 3)
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 2]);
+      ctx.strokeRect(ox, oy - 1.2 * scaleY, 3 * scaleX, 1.2 * scaleY);
+      ctx.setLineDash([]);
+
+      // Çalışma Noktası
+      const px = ox + currentT * scaleX;
+      const py = oy - currentY * scaleY;
+
+      ctx.strokeStyle = '#ef4444';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([2, 2]);
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#ef4444';
+      ctx.beginPath();
+      ctx.arc(px, py, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#b91c1c';
+      ctx.font = 'bold 10px Inter, sans-serif';
+      ctx.fillText(`y(${currentT.toFixed(2)}) = ${currentY.toFixed(3)}`, px + 8, py - 6);
+    }
+
+    // Animasyon Döngüsü
+    function animate() {
+      let val = parseFloat(sliderT.value);
+      val += 0.02;
+      if (val > 9.00) val = -3.00;
+      sliderT.value = val.toFixed(2);
+      updateSim();
+      if (isPlaying) {
+        animId = requestAnimationFrame(animate);
+      }
+    }
+
+    btnPlay.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        playText.textContent = 'Durdur';
+        btnPlay.classList.replace('bg-indigo-600', 'bg-rose-600');
+        btnPlay.classList.replace('hover:bg-indigo-700', 'hover:bg-rose-700');
+        animate();
+      } else {
+        playText.textContent = 'Animasyonu Başlat';
+        btnPlay.classList.replace('bg-rose-600', 'bg-indigo-600');
+        btnPlay.classList.replace('hover:bg-rose-700', 'hover:bg-indigo-700');
+        cancelAnimationFrame(animId);
+      }
+    });
+
+    sliderT.addEventListener('input', updateSim);
+
+    // PNG Kartı İndirme Fonksiyonu
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // Sayfa Yüklendiğinde Başlat
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCard1();
+      renderCard2();
+      renderCard3();
+      renderCard4();
+      renderCard5();
+      renderCard6();
+      updateSim();
+    });
+  </script>
+</body>
+</html>
