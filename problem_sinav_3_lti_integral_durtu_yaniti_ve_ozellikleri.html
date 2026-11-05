@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sınav Sorusu 3: LTI İntegral Bağıntısı, Dürtü Yanıtı ve LTI Özellikleri (25p)</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+
+  <!-- Ana Taşıyıcı Konteyner -->
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Üst Gezinme / Geri Dönüş Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">Bölüm 2: LTI Sistemler</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Sınav Sorusu • 25 Puan</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+          Sürekli Zaman LTI • İntegral Eşitliği • Dürtü Yanıtı & LTI Özellikleri
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-rose-100 text-rose-800 rounded-full border border-rose-200">
+          Soru 3 (Toplam 25 Puan)
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Sınav Sorusu 3: LTI İntegral Bağıntısı, Dürtü Yanıtı ve LTI Özellikleri
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Giriş-çıkış ilişkisi $y(t) = \int_{-\infty}^{t} e^{-(t - \tau)} x(\tau - 2) d\tau$ olan sürekli zamanlı bir LTI sistemin analizi; Dirac delta ile birim dürtü yanıtı $h(t)$'nin bulunması, parçalı kutu darbe yanıtının entegrasyonu ve LTI doğrusallık / zamanla değişmezlik özellikleri kullanılarak konvolüsyonsuz doğrudan çıkış hesabı.
+      </p>
+
+      <!-- Matematiksel Önermeler Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2.5">
+        <div class="font-bold text-slate-800">Verilen Sistem Eşitliği:</div>
+        <div class="text-center font-mono text-sm py-1.5 text-indigo-900 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          $$y(t) = \int_{-\infty}^{t} e^{-(t - \tau)} x(\tau - 2) d\tau$$
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+            <span class="font-bold text-blue-700">(a) Dürtü Yanıtı (9p):</span>
+            <div class="text-slate-800 font-semibold mt-1">
+              $$h(t) = e^{-(t - 2)} u(t - 2)$$
+            </div>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+            <span class="font-bold text-purple-700">(b) Kutu Yanıtı (9p):</span>
+            <div class="text-slate-800 font-semibold mt-1">
+              $$y(t) = \begin{cases} 0, & t < 1 \\ 1 - e^{-(t - 1)}, & 1 \le t < 4 \\ (1 - e^{-3}) e^{-(t - 4)}, & t \ge 4 \end{cases}$$
+            </div>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200 shadow-2xs">
+            <span class="font-bold text-emerald-700">(c) LTI Çıkışı (7p):</span>
+            <div class="text-slate-800 font-semibold mt-1">
+              $$x_c(t) = 2x(t - 4) \implies y_c(t) = 2y(t - 4)$$
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Sol Kolon: Soru Analizi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">📌</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sınav sorusu 3 alt bölümden oluşmakta ve sistem teorisinin temel ilkelerini adım adım sınamaktadır:
+        </p>
+        <ul class="mt-3 space-y-2 text-xs text-slate-600 list-disc list-inside">
+          <li><strong>(a) Şıkkı (9 Puan):</strong> $x(t) = \delta(t)$ koyarak sistemin birim dürtü yanıtı $h(t)$'yi bulmak.</li>
+          <li><strong>(b) Şıkkı (9 Puan):</strong> $[-1, 2]$ aralığında genliği 1 olan dikdörtgen darbe girişine sistemin tam çıkışı $y(t)$'yi belirlemek.</li>
+          <li><strong>(c) Şıkkı (7 Puan):</strong> $[3, 6]$ aralığında genliği 2 olan yeni girişin çıktısını <em>konvolüsyon integrali hesaplamadan</em>, <strong>yalnızca LTI özelliklerini (Ölçekleme + Zaman Kaydırma)</strong> kullanarak doğrudan türetmek.</li>
+        </ul>
+      </div>
+
+      <!-- Sağ Kolon: Çözüm Metodolojisi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <div class="p-2.5 bg-blue-50/60 rounded-lg border border-blue-100">
+            <strong class="text-blue-900">1. Süzme ile h(t):</strong> $x(\tau - 2) = \delta(\tau - 2)$ yerleştirildiğinde darbe $\tau = 2$'dedir. İntegral üst sınırı $t \ge 2$ olduğunda $\tau = 2$ aralığa girer $\implies h(t) = e^{-(t-2)} u(t-2)$.
+          </div>
+          <div class="p-2.5 bg-purple-50/60 rounded-lg border border-purple-100">
+            <strong class="text-purple-900">2. Değişken Dönüşümü & Parçalı Çözüm:</strong> $\lambda = \tau - 2$ dönüşümüyle $y(t) = \int_{-\infty}^{t-2} e^{-(t-2-\lambda)} x(\lambda) d\lambda$. Kutu $[-1, 2]$ aralığında olduğundan $t < 1$, $1 \le t < 4$ ve $t \ge 4$ olarak 3 bölgede çözülür.
+          </div>
+          <div class="p-2.5 bg-emerald-50/60 rounded-lg border border-emerald-100">
+            <strong class="text-emerald-900">3. LTI Dönüşüm Eşleme:</strong> $x_c(t)$ kutusu $[-1, 2]$'nin 4 birim sağa kaydırılmış ve 2 ile çarpılmış halidir: $x_c(t) = 2x(t - 4)$. LTI sistemlerde çıkış doğrudan $y_c(t) = 2y(t - 4)$ olur!
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı (Çift Tuval & Etkileşim) -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: LTI İntegrasyon & Süperpozisyon Laboratuvarı</h2>
+          <p class="text-xs text-slate-500">Şıkları seçin, zaman işaretçisini ($t$) ilerletin, giriş ve çıkış dalga formlarını dinamik olarak inceleyin.</p>
+        </div>
+
+        <!-- Şık Seçici Butonları -->
+        <div class="flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button id="btnPartA" onclick="setSimPart('a')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (a) Dürtü Yanıtı h(t)
+          </button>
+          <button id="btnPartB" onclick="setSimPart('b')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-blue-700 shadow-xs">
+            (b) Kutu Giriş Yanıtı y(t)
+          </button>
+          <button id="btnPartC" onclick="setSimPart('c')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (c) LTI Özelliği y_c(t) = 2y(t - 4)
+          </button>
+          <button id="btnCompare" onclick="setSimPart('compare')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (b) ve (c) Karşılaştırması
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-3">
+        <!-- Üst Tuval: Giriş Sinyali x(t) -->
+        <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="topCanvasTitle">Üst Tuval: Giriş Sinyali x(t)</span>
+            <span class="text-slate-400">Zaman Alanı Dalga Formu</span>
+          </div>
+          <canvas id="kCanvas" width="860" height="210" class="w-full h-auto bg-white rounded-lg block border border-slate-100"></canvas>
+        </div>
+
+        <!-- Alt Tuval: Sistem Çıkışı y(t) -->
+        <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="bottomCanvasTitle">Alt Tuval: Sistem Çıkışı y(t)</span>
+            <span id="bottomCanvasBadge" class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-bold">Analitik Çözüm</span>
+          </div>
+          <canvas id="ynCanvas" width="860" height="190" class="w-full h-auto bg-white rounded-lg block border border-slate-100"></canvas>
+        </div>
+      </div>
+
+      <!-- Canlı Matematiksel Değerlendirme Paneli -->
+      <div id="simMath" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 overflow-x-auto min-h-[52px] flex items-center">
+        <!-- KaTeX Dinamik Olarak Güncellenir -->
+      </div>
+
+      <!-- Etkileşimli Kontrol Paneli -->
+      <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>Hareketli Zaman İşaretçisi ($t$):</span>
+              <span id="timeVal" class="text-blue-600 font-mono">2.50 s</span>
+            </div>
+            <input type="range" min="-2.0" max="11.0" step="0.1" value="2.5" id="sliderTime" class="w-full accent-blue-600 slider-thumb" oninput="paramT=parseFloat(this.value); document.getElementById('timeVal').innerText=paramT.toFixed(2)+' s'; updateSim();">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>(c) Şıkkı Zaman Kaydırması ($\Delta t$):</span>
+              <span id="shiftVal" class="text-purple-600 font-mono">4.0 s (Sabit)</span>
+            </div>
+            <input type="range" min="1.0" max="6.0" step="0.5" value="4.0" id="sliderShift" class="w-full accent-purple-600 slider-thumb" oninput="paramShift=parseFloat(this.value); document.getElementById('shiftVal').innerText=paramShift.toFixed(1)+' s'; updateSim();">
+          </div>
+        </div>
+
+        <!-- Butonlar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200">
+          <div class="flex items-center gap-2">
+            <button id="playBtn" onclick="togglePlay()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+              <span id="playIcon">▶</span> Oynat / Durdur
+            </button>
+            <button onclick="stepForward()" class="px-3 py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs">
+              Adım İlerlet (+0.2s) ⏭
+            </button>
+            <button onclick="resetSim()" class="px-3 py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs">
+              Sıfırla ↺
+            </button>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-600">
+            <span>Anlık Çıkış Değeri $y(t) = $</span>
+            <span id="currentYVal" class="font-mono font-bold text-emerald-700">0.777</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Çözüm Adımı Kartı (Tam 2.21 Formatı) -->
+    <div class="space-y-6">
+
+      <!-- Kart 1: Mavi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">Adım 1</span>
+            <h3 class="text-base font-bold text-slate-900">Sistem İntegral Eşitliği ve Konvolüsyon Biçimine Dönüştürme</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_sinav_3_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Verilen sistem $y(t) = \int_{-\infty}^{t} e^{-(t - \tau)} x(\tau - 2) d\tau$ bağıntısı ile tanımlanmıştır. Bu ifadenin standart konvolüsyon integrali $y(t) = \int_{-\infty}^{\infty} x(\lambda) h(t - \lambda) d\lambda$ ile ilişkisini görmek için değişken dönüşümü yapalım:
+          $$\lambda = \tau - 2 \implies \tau = \lambda + 2, \quad d\tau = d\lambda$$
+          Sınırlar: $\tau = -\infty \to \lambda = -\infty$ ve $\tau = t \to \lambda = t - 2$:
+          $$y(t) = \int_{-\infty}^{t - 2} e^{-(t - (\lambda + 2))} x(\lambda) d\lambda = \int_{-\infty}^{t - 2} e^{-(t - 2 - \lambda)} x(\lambda) d\lambda$$
+          Bu form, sistemin bir standart LTI konvolüsyon operatörü olduğunu açıkça ortaya koyar!
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img1" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 1 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 2: Mor -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">Adım 2</span>
+            <h3 class="text-base font-bold text-slate-900">(a) Şıkkı Çözümü — Birim Dürtü Yanıtı $h(t)$'nin Bulunması (9 Puan)</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_sinav_3_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Birim dürtü yanıtı $h(t)$, sisteme $x(t) = \delta(t)$ uygulandığında elde edilen çıkıştır. Girişi denklemde yerine koyalım:
+          $$h(t) = \int_{-\infty}^{t} e^{-(t - \tau)} \delta(\tau - 2) d\tau$$
+          $\delta(\tau - 2)$ darbesi $\tau = 2$ noktasında yer alır. Süzme (sifting) özelliğine göre:
+          $$\text{Eğer } t < 2 \text{ ise, } \tau = 2 \text{ entegrasyon sınırının dışındadır } \implies h(t) = 0$$
+          $$\text{Eğer } t \ge 2 \text{ ise, } \tau = 2 \text{ entegrasyon aralığındadır } \implies h(t) = e^{-(t - 2)}$$
+          Bu iki durumu birim basamak $u(t - 2)$ ile birleştirirsek:
+          $$\mathbf{h(t) = e^{-(t - 2)} u(t - 2)}$$
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img2" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 2 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 3: Amber -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">Adım 3</span>
+            <h3 class="text-base font-bold text-slate-900">(b) Şıkkı Çözümü — Dikdörtgen Kutu Girişi Yanıtı $y(t)$ (9 Puan)</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_sinav_3_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Giriş sinyali $x(t) = 1$ ($-1 \le t \le 2$), $0$ (d.y.) olarak verilmiştir ($x(\lambda) = 1, \lambda \in [-1, 2]$).<br>
+          İntegral formülü: $y(t) = \int_{-\infty}^{t - 2} e^{-(t - 2 - \lambda)} x(\lambda) d\lambda$. Üst sınır $t - 2$'nin konumuna göre 3 bölge incelenir:
+        </p>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-1.5 list-disc list-inside">
+          <li><strong>Bölge 1 ($t - 2 < -1 \iff t < 1$):</strong> Örtüşme yoktur: $\mathbf{y(t) = 0}$.</li>
+          <li><strong>Bölge 2 ($-1 \le t - 2 < 2 \iff 1 \le t < 4$):</strong>
+            $$y(t) = \int_{-1}^{t - 2} e^{-(t - 2 - \lambda)} d\lambda = e^{-(t - 2)} \left[ e^\lambda \right]_{-1}^{t - 2} = e^{-(t - 2)} (e^{t - 2} - e^{-1}) = \mathbf{1 - e^{-(t - 1)}}$$
+          </li>
+          <li><strong>Bölge 3 ($t - 2 \ge 2 \iff t \ge 4$):</strong> Kutu tamamen taranmıştır:
+            $$y(t) = \int_{-1}^{2} e^{-(t - 2 - \lambda)} d\lambda = e^{-(t - 2)} (e^2 - e^{-1}) = (1 - e^{-3}) e^{-(t - 4)}$$
+          </li>
+        </ul>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img3" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 3 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 4: Gül Pembesi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">Adım 4</span>
+            <h3 class="text-base font-bold text-slate-900">Birim Basamak Yanıtı ile Alternatif Doğrulama</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_sinav_3_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sistemin birim basamak yanıtı $s(t) = \int_{-\infty}^{t} h(\tau) d\tau = (1 - e^{-(t - 2)}) u(t - 2)$'dir.<br>
+          Giriş $x(t)$ iki birim basamağın farkı olarak ifade edilebilir:
+          $$x(t) = u(t + 1) - u(t - 2)$$
+          LTI doğrusallığı ve zamanla değişmezliği gereği sistem çıkışı:
+          $$y(t) = s(t + 1) - s(t - 2)$$
+          $$y(t) = \left(1 - e^{-(t + 1 - 2)}\right) u(t + 1 - 2) - \left(1 - e^{-(t - 2 - 2)}\right) u(t - 2 - 2)$$
+          $$\mathbf{y(t) = \left(1 - e^{-(t - 1)}\right) u(t - 1) - \left(1 - e^{-(t - 4)}\right) u(t - 4)}$$
+          Bu formül Adım 3'teki parçalı sonuçla birebir aynıdır ve sürekliliği garanti eder!
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img4" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 4 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 5: İndigo -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">Adım 5</span>
+            <h3 class="text-base font-bold text-slate-900">(c) Şıkkı Çözümü — Konvolüsyonsuz LTI Özellikleri (7 Puan)</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_sinav_3_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Soruda açıkça <em>"Do not use direct computation by using convolution integral. You must use only properties of LTI systems"</em> talimatı verilmiştir.<br>
+          (b)'deki giriş $x(t)$: $[-1, 2]$ aralığında, genlik = $1$.<br>
+          (c)'deki yeni giriş $x_c(t)$: $[3, 6]$ aralığında, genlik = $2$.<br>
+          İki sinyal arasındaki matematiksel ilişkiyi kuralım:
+          $$\text{Zaman Kayması: } 3 - (-1) = 4 \implies x(t - 4) \text{ sinyali } [3, 6] \text{ aralığındadır.}$$
+          $$\text{Genlik Ölçekleme: } 2 \cdot x(t - 4) \implies x_c(t) = 2 x(t - 4)$$
+          LTI sistem özelliklerini sırayla uygulayalım:
+          $$1.\; \text{Zamanla Değişmezlik: } x(t - 4) \xrightarrow{\text{LTI}} y(t - 4)$$
+          $$2.\; \text{Homojenlik (Doğrusallık): } 2 x(t - 4) \xrightarrow{\text{LTI}} 2 y(t - 4)$$
+          Dolayısıyla yeni çıkış doğrudan:
+          $$\mathbf{y_c(t) = 2 y(t - 4) = 2\left(1 - e^{-(t - 5)}\right) u(t - 5) - 2\left(1 - e^{-(t - 8)}\right) u(t - 8)}$$
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img5" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 5 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 6: Zümrüt Yeşili -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">Adım 6</span>
+            <h3 class="text-base font-bold text-slate-900">Sınav Puanlama Özeti, Karşılaştırma Tablosu ve Mühendislik Notları</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_sinav_3_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sınav sorusu 25 puanlık tam puan matrisi ve kritik dönüm noktaları:
+        </p>
+        <div class="overflow-x-auto text-xs">
+          <table class="w-full text-left border-collapse border border-slate-200">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="p-2 border border-slate-200">Bölüm</th>
+                <th class="p-2 border border-slate-200">Puan</th>
+                <th class="p-2 border border-slate-200">İstenen Sonuç</th>
+                <th class="p-2 border border-slate-200">Kritik Sınav İpucu</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600">
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(a)</td>
+                <td class="p-2 border border-slate-200 text-indigo-700 font-bold">9 Puan</td>
+                <td class="p-2 border border-slate-200 font-mono">$h(t) = e^{-(t-2)} u(t-2)$</td>
+                <td class="p-2 border border-slate-200">$\tau=2$ süzme şartı ve $t \ge 2$ üst sınır gecikmesi.</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(b)</td>
+                <td class="p-2 border border-slate-200 text-indigo-700 font-bold">9 Puan</td>
+                <td class="p-2 border border-slate-200 font-mono">3 Bölgeli Çözüm ($1 \le t < 4$ ve $t \ge 4$)</td>
+                <td class="p-2 border border-slate-200">Tepe noktası $t=4$'te $1 - e^{-3} \approx 0.9502$'dir.</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(c)</td>
+                <td class="p-2 border border-slate-200 text-indigo-700 font-bold">7 Puan</td>
+                <td class="p-2 border border-slate-200 font-mono">$y_c(t) = 2 y(t - 4)$</td>
+                <td class="p-2 border border-slate-200">İntegral çözülürse puan kırılır; sadece LTI kuralı yazılmalıdır!</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img6" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 6 Şeması">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alt Bilgi & Kapanış -->
+    <footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200">
+      Sinyaller ve Sistemler Portalı • Sınav Sorusu 3 (25 Puan) Tam Çözümü
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    // --- HiDPI Tuval Oluşturucu ---
+    function createHiDPICanvas(w, h, ratio = 2) {
+      const canvas = document.createElement('canvas');
+      canvas.width = w * ratio;
+      canvas.height = h * ratio;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas, ctx, width: w, height: h };
+    }
+
+    // --- Kart İndirme Fonksiyonu ---
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      if (!img || !img.src) return;
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // ==========================================
+    // CANLI SİMÜLATÖR MOTORU
+    // ==========================================
+    let simPart = 'b'; // 'a', 'b', 'c', 'compare'
+    let isPlaying = false;
+    let paramT = 2.5;
+    let paramShift = 4.0;
+
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    function setupCanvasDPI(c, w, h) {
+      const dpr = window.devicePixelRatio || 2;
+      c.width = w * dpr;
+      c.height = h * dpr;
+      const ctx = c.getContext('2d');
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      return ctx;
+    }
+
+    let topCtx = setupCanvasDPI(kCanvas, 860, 210);
+    let btmCtx = setupCanvasDPI(ynCanvas, 860, 190);
+
+    window.addEventListener('resize', () => {
+      topCtx = setupCanvasDPI(kCanvas, 860, 210);
+      btmCtx = setupCanvasDPI(ynCanvas, 860, 190);
+      updateSim();
+    });
+
+    function setSimPart(p) {
+      simPart = p;
+      ['btnPartA', 'btnPartB', 'btnPartC', 'btnCompare'].forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+      });
+      const activeBtn = document.getElementById(
+        p === 'a' ? 'btnPartA' : p === 'b' ? 'btnPartB' : p === 'c' ? 'btnPartC' : 'btnCompare'
+      );
+      activeBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-blue-700 shadow-xs";
+
+      if (p === 'a') {
+        paramT = 3.0;
+      } else if (p === 'b') {
+        paramT = 2.5;
+      } else if (p === 'c' || p === 'compare') {
+        paramT = 6.5;
+      }
+      document.getElementById('sliderTime').value = paramT.toFixed(1);
+      document.getElementById('timeVal').innerText = paramT.toFixed(2) + ' s';
+
+      updateSim();
+    }
+
+    function calcY_b(t) {
+      if (t < 1.0) return 0.0;
+      if (t < 4.0) return 1.0 - Math.exp(-(t - 1.0));
+      return (1.0 - Math.exp(-3.0)) * Math.exp(-(t - 4.0));
+    }
+
+    function calcY_c(t, shift = 4.0) {
+      return 2.0 * calcY_b(t - shift);
+    }
+
+    function updateSim() {
+      const topTitle = document.getElementById('topCanvasTitle');
+      const btmTitle = document.getElementById('bottomCanvasTitle');
+      const btmBadge = document.getElementById('bottomCanvasBadge');
+      const mathBox = document.getElementById('simMath');
+      const currentYValEl = document.getElementById('currentYVal');
+
+      topCtx.clearRect(0, 0, 860, 210);
+      btmCtx.clearRect(0, 0, 860, 190);
+
+      const tMin = -2.0;
+      const tMax = 11.0;
+
+      drawContinuousAxis(topCtx, 860, 210, tMin, tMax, -0.5, 2.5, 't', '');
+      drawContinuousAxis(btmCtx, 860, 190, tMin, tMax, -0.5, 2.5, 't', '');
+
+      // Zaman çizgisi
+      drawTimeMarker(topCtx, 860, 210, tMin, tMax, paramT);
+      drawTimeMarker(btmCtx, 860, 190, tMin, tMax, paramT);
+
+      if (simPart === 'a') {
+        topTitle.innerText = "Üst Tuval: Giriş x(t) = δ(t) (t=0'da Birim Dürtü)";
+        btmTitle.innerText = "Alt Tuval: Birim Dürtü Yanıtı h(t) = e⁻⁽ᵗ⁻²⁾ u(t - 2)";
+        btmBadge.innerText = "h(t) Yanıtı (a Şıkkı)";
+
+        // x(t) = delta(t)
+        drawImpulseArrow(topCtx, 860, 210, tMin, tMax, 0.0, 1.5, '#2563eb', 'δ(t)');
+
+        // h(t)
+        btmCtx.strokeStyle = '#9333ea';
+        btmCtx.lineWidth = 2.5;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const valH = (t >= 2.0) ? Math.exp(-(t - 2.0)) : 0.0;
+          const py = mapY(190, -0.5, 2.5, valH);
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        const curH = (paramT >= 2.0) ? Math.exp(-(paramT - 2.0)) : 0.0;
+        currentYValEl.innerText = curH.toFixed(3);
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>Dürtü Yanıtı:</strong> $h(t) = e^{-(t - 2)} u(t - 2)$</div>
+            <div><strong>Gecikme:</strong> $t = 2$ anında $h(2^+) = 1.0$ genliği ile başlar ve üstel söner.</div>
+            <div class="text-purple-700 font-bold">Anlık Değer: $h(${paramT.toFixed(1)}) = ${curH.toFixed(3)}$</div>
+          </div>
+        `;
+
+      } else if (simPart === 'b') {
+        topTitle.innerText = "Üst Tuval: Giriş Sinyali x(t) ([-1, 2] Aralığında Genlik = 1)";
+        btmTitle.innerText = "Alt Tuval: Sistem Çıkışı y(t) (1 ≤ t < 4 için Doyum, t ≥ 4 için Sönüm)";
+        btmBadge.innerText = "y(t) Yanıtı (b Şıkkı)";
+
+        // x(t) kutu
+        drawBoxPulse(topCtx, 860, 210, tMin, tMax, -1.0, 2.0, 1.0, '#2563eb', 'x(t)');
+
+        // y(t)
+        btmCtx.strokeStyle = '#059669';
+        btmCtx.lineWidth = 3;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const py = mapY(190, -0.5, 2.5, calcY_b(t));
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        const curYb = calcY_b(paramT);
+        currentYValEl.innerText = curYb.toFixed(3);
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>Formül:</strong> $y(t) = \\left(1 - e^{-(t - 1)}\\right) u(t - 1) - \\left(1 - e^{-(t - 4)}\\right) u(t - 4)$</div>
+            <div><strong>Tepe Noktası:</strong> $t = 4$'te $y(4) = 1 - e^{-3} \\approx 0.950$</div>
+            <div class="text-emerald-700 font-bold">Anlık Değer: $y(${paramT.toFixed(1)}) = ${curYb.toFixed(3)}$</div>
+          </div>
+        `;
+
+      } else if (simPart === 'c') {
+        topTitle.innerText = `Üst Tuval: Yeni Giriş x_c(t) ([3, 6] Aralığında Genlik = 2) = 2 x(t - ${paramShift.toFixed(1)})`;
+        btmTitle.innerText = `Alt Tuval: LTI Çıkışı y_c(t) = 2 y(t - ${paramShift.toFixed(1)}) (Tepe Değeri ≈ 1.900)`;
+        btmBadge.innerText = "y_c(t) LTI Yanıtı (c Şıkkı)";
+
+        // x_c(t) kutu
+        drawBoxPulse(topCtx, 860, 210, tMin, tMax, 3.0, 6.0, 2.0, '#e11d48', 'x_c(t) = 2x(t-4)');
+
+        // y_c(t)
+        btmCtx.strokeStyle = '#dc2626';
+        btmCtx.lineWidth = 3;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const py = mapY(190, -0.5, 2.5, calcY_c(t, paramShift));
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        const curYc = calcY_c(paramT, paramShift);
+        currentYValEl.innerText = curYc.toFixed(3);
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>LTI Teoremi:</strong> $x_c(t) = 2 x(t - 4) \\implies y_c(t) = 2 y(t - 4)$</div>
+            <div><strong>Başlangıç & Bitiş:</strong> $t = 5$'te başlar, $t = 8$'de tepe yapar ($2(1 - e^{-3}) \\approx 1.900$)</div>
+            <div class="text-rose-700 font-bold">Anlık Değer: $y_c(${paramT.toFixed(1)}) = ${curYc.toFixed(3)}$</div>
+          </div>
+        `;
+
+      } else if (simPart === 'compare') {
+        topTitle.innerText = "Üst Tuval: x(t) (Mavi, [-1, 2]) ve x_c(t) = 2x(t - 4) (Kırmızı, [3, 6])";
+        btmTitle.innerText = "Alt Tuval: y(t) (Yeşil) ile y_c(t) = 2y(t - 4) (Kırmızı) Karşılaştırması";
+        btmBadge.innerText = "LTI Süperpozisyon";
+
+        drawBoxPulse(topCtx, 860, 210, tMin, tMax, -1.0, 2.0, 1.0, '#2563eb', 'x(t)');
+        drawBoxPulse(topCtx, 860, 210, tMin, tMax, 3.0, 6.0, 2.0, '#dc2626', 'x_c(t)');
+
+        // y(t)
+        btmCtx.strokeStyle = '#059669';
+        btmCtx.lineWidth = 2.5;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const py = mapY(190, -0.5, 2.5, calcY_b(t));
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        // y_c(t)
+        btmCtx.strokeStyle = '#dc2626';
+        btmCtx.lineWidth = 2.5;
+        btmCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const py = mapY(190, -0.5, 2.5, calcY_c(t, paramShift));
+          if (px === 0) btmCtx.moveTo(px, py); else btmCtx.lineTo(px, py);
+        }
+        btmCtx.stroke();
+
+        btmCtx.fillStyle = '#059669';
+        btmCtx.font = 'bold 11px Inter';
+        btmCtx.fillText('y(t) (Orijinal Yanıt, Tepe=0.950)', 60, 30);
+        btmCtx.fillStyle = '#dc2626';
+        btmCtx.fillText('y_c(t) = 2y(t-4) (4s Gecikmeli & 2 Kat Genlikli, Tepe=1.900)', 60, 48);
+
+        const curYb = calcY_b(paramT);
+        const curYc = calcY_c(paramT, paramShift);
+        currentYValEl.innerText = `y=${curYb.toFixed(2)}, yc=${curYc.toFixed(2)}`;
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>Öteleme:</strong> $\\Delta t = 4.0$ s</div>
+            <div><strong>Ölçekleme:</strong> $A = 2.0$</div>
+            <div class="text-indigo-700 font-bold">LTI sistemlerde şekil korunur; yalnızca 4 saniye ötelenir ve 2 katına büyütülür!</div>
+          </div>
+        `;
+      }
+
+      if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$', right: '$', display: false}]});
+    }
+
+    // --- Çizim Yardımcıları ---
+    function mapX(w, minX, maxX, x) {
+      return ((x - minX) / (maxX - minX)) * (w - 80) + 40;
+    }
+    function mapInvX(w, minX, maxX, px) {
+      return ((px - 40) / (w - 80)) * (maxX - minX) + minX;
+    }
+    function mapY(h, minY, maxY, y) {
+      return h - 30 - ((y - minY) / (maxY - minY)) * (h - 60);
+    }
+
+    function drawContinuousAxis(ctx, w, h, minX, maxX, minY, maxY, labelX, labelY) {
+      const y0 = mapY(h, minY, maxY, 0);
+      const x0 = mapX(w, minX, maxX, 0);
+
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x0, 15);
+      ctx.lineTo(x0, h - 15);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      for (let t = Math.ceil(minX); t <= Math.floor(maxX); t++) {
+        const x = mapX(w, minX, maxX, t);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 3);
+        ctx.lineTo(x, y0 + 3);
+        ctx.stroke();
+        ctx.fillText(t.toString(), x - 4, y0 + 15);
+      }
+
+      if (labelX) {
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 10px Inter';
+        ctx.fillText(labelX, w - 35, y0 - 6);
+      }
+    }
+
+    function drawTimeMarker(ctx, w, h, minX, maxX, t) {
+      const x = mapX(w, minX, maxX, t);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(x, 15);
+      ctx.lineTo(x, h - 15);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.fillStyle = '#d97706';
+      ctx.font = 'bold 9px Inter';
+      ctx.fillText('t = ' + t.toFixed(1), x + 4, 25);
+    }
+
+    function drawBoxPulse(ctx, w, h, minX, maxX, t1, t2, amp, color, label) {
+      const x1 = mapX(w, minX, maxX, t1);
+      const x2 = mapX(w, minX, maxX, t2);
+      const y0 = mapY(h, -0.5, 2.5, 0);
+      const yAmp = mapY(h, -0.5, 2.5, amp);
+
+      ctx.fillStyle = color + '20';
+      ctx.fillRect(x1, yAmp, x2 - x1, y0 - yAmp);
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(mapX(w, minX, maxX, minX), y0);
+      ctx.lineTo(x1, y0);
+      ctx.lineTo(x1, yAmp);
+      ctx.lineTo(x2, yAmp);
+      ctx.lineTo(x2, y0);
+      ctx.lineTo(mapX(w, minX, maxX, maxX), y0);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText(label + ` (Genlik = ${amp})`, (x1 + x2) / 2 - 35, yAmp - 8);
+    }
+
+    function drawImpulseArrow(ctx, w, h, minX, maxX, pos, amp, color, label) {
+      const x = mapX(w, minX, maxX, pos);
+      const y0 = mapY(h, -0.5, 2.5, 0);
+      const y1 = mapY(h, -0.5, 2.5, amp);
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      drawArrow(ctx, x, y0, x, y1);
+
+      ctx.fillStyle = color;
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText(label, x - 15, y1 - 8);
+    }
+
+    function drawArrow(ctx, fromX, fromY, toX, toY) {
+      const headlen = 8;
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.fill();
+    }
+
+    // --- Animasyon Kontrolleri ---
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      document.getElementById('playIcon').innerText = isPlaying ? '⏸' : '▶';
+      if (isPlaying) runAnimation();
+    }
+
+    function runAnimation() {
+      if (!isPlaying) return;
+      paramT += 0.15;
+      if (paramT > 10.5) paramT = -1.0;
+      document.getElementById('sliderTime').value = paramT.toFixed(1);
+      document.getElementById('timeVal').innerText = paramT.toFixed(2) + ' s';
+      updateSim();
+      setTimeout(() => {
+        if (isPlaying) requestAnimationFrame(runAnimation);
+      }, 50);
+    }
+
+    function stepForward() {
+      paramT += 0.2;
+      if (paramT > 10.5) paramT = -1.0;
+      document.getElementById('sliderTime').value = paramT.toFixed(1);
+      document.getElementById('timeVal').innerText = paramT.toFixed(2) + ' s';
+      updateSim();
+    }
+
+    function resetSim() {
+      isPlaying = false;
+      document.getElementById('playIcon').innerText = '▶';
+      paramT = 2.5;
+      paramShift = 4.0;
+      document.getElementById('sliderTime').value = '2.5';
+      document.getElementById('sliderShift').value = '4.0';
+      document.getElementById('timeVal').innerText = '2.50 s';
+      document.getElementById('shiftVal').innerText = '4.0 s (Sabit)';
+      updateSim();
+    }
+
+    // ==========================================
+    // 6 ÇÖZÜM ADIMI İÇİN YÜKSEK ÇÖZÜNÜRLÜKLÜ ÇİZİMLER
+    // ==========================================
+
+    // Kart 1: Sistem Diyagramı ve Eşdeğerlik
+    function renderCard1() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('LTI İntegral Eşitliği ve Blok Gösterimi', 25, 28);
+
+      const yM = 100;
+      // x(t) oku
+      drawArrow(ctx, 40, yM, 160, yM);
+      ctx.fillStyle = '#2563eb';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('x(t)', 80, yM - 10);
+
+      // Sistem Kutusu
+      ctx.fillStyle = '#eff6ff';
+      ctx.strokeStyle = '#3b82f6';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(160, yM - 40, 240, 80, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = 'bold 13px Inter';
+      ctx.fillText('LTI Sürekli Zaman Sistemi', 180, yM - 12);
+      ctx.font = '11px monospace';
+      ctx.fillText('y(t) = ∫ e^{-(t-τ)} x(τ-2) dτ', 170, yM + 15);
+
+      // Çıkış oku
+      drawArrow(ctx, 400, yM, 520, yM);
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('y(t) = x(t) * h(t)', 420, yM - 10);
+
+      // Sağ Kutu: Konvolüsyon Eşdeğeri
+      ctx.fillStyle = '#f8fafc';
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.beginPath();
+      ctx.roundRect(540, 45, 215, 120, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Eşdeğer Dürtü Yanıtı:', 555, 75);
+      ctx.font = '12px monospace';
+      ctx.fillStyle = '#7c3aed';
+      ctx.fillText('h(t) = e^{-(t-2)} u(t-2)', 555, 105);
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 10px Inter';
+      ctx.fillText('Nedensel & BIBO Kararlı', 555, 135);
+
+      document.getElementById('img1').src = canvas.toDataURL();
+    }
+
+    // Kart 2: (a) Şıkkı h(t) Grafiği
+    function renderCard2() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('(a) Şıkkı: Birim Dürtü Yanıtı h(t) = e⁻⁽ᵗ⁻²⁾ u(t - 2) (9 Puan)', 25, 28);
+
+      const yAx = 140, x0 = 120;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAx);
+      ctx.lineTo(740, yAx);
+      ctx.moveTo(x0, 40);
+      ctx.lineTo(x0, 190);
+      ctx.stroke();
+
+      // Sıfır bölgesi t < 2
+      const x2 = x0 + 2 * 80;
+      ctx.fillStyle = 'rgba(239, 68, 68, 0.08)';
+      ctx.fillRect(40, 50, x2 - 40, 110);
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('t < 2 için h(t) = 0 (Nedensellik & Süzme)', 60, 80);
+
+      // t = 2'de sıçrama
+      ctx.strokeStyle = '#7c3aed';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(x0, yAx);
+      ctx.lineTo(x2, yAx);
+      ctx.lineTo(x2, yAx - 80); // genlik = 1
+
+      for (let px = x2; px <= 720; px++) {
+        const t = 2.0 + (px - x2) / 80;
+        const val = Math.exp(-(t - 2.0));
+        ctx.lineTo(px, yAx - val * 80);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#7c3aed';
+      ctx.beginPath();
+      ctx.arc(x2, yAx - 80, 5, 0, 2*Math.PI);
+      ctx.fill();
+
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('h(2⁺) = 1.0', x2 + 10, yAx - 85);
+      ctx.fillText('e⁻⁽ᵗ⁻²⁾ Sönümü', x2 + 120, yAx - 35);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      ctx.fillText('t = 0', x0 - 10, yAx + 16);
+      ctx.fillText('t = 2', x2 - 10, yAx + 16);
+
+      document.getElementById('img2').src = canvas.toDataURL();
+    }
+
+    // Kart 3: (b) Şıkkı Kutu Yanıtı Dalga Formu
+    function renderCard3() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('(b) Şıkkı: Kutu Darbe Girişine Yanıt y(t) (9 Puan)', 25, 28);
+
+      const yAx = 150, x0 = 100, scX = 65, scY = 90;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAx); ctx.lineTo(740, yAx);
+      ctx.moveTo(x0, 35); ctx.lineTo(x0, 195);
+      ctx.stroke();
+
+      // y(t) eğrisi
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let px = 40; px <= 730; px++) {
+        const t = (px - x0) / scX;
+        let yVal = 0;
+        if (t >= 1.0 && t < 4.0) yVal = 1.0 - Math.exp(-(t - 1.0));
+        else if (t >= 4.0) yVal = (1.0 - Math.exp(-3.0)) * Math.exp(-(t - 4.0));
+        const py = yAx - yVal * scY;
+        if (px === 40) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // İşaretleyiciler
+      const x1 = x0 + 1 * scX;
+      const x4 = x0 + 4 * scX;
+      const yPeak = yAx - (1.0 - Math.exp(-3.0)) * scY;
+
+      ctx.fillStyle = '#059669';
+      ctx.beginPath(); ctx.arc(x4, yPeak, 5, 0, 2*Math.PI); ctx.fill();
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Tepe: y(4) = 1 - e⁻³ ≈ 0.950', x4 - 60, yPeak - 10);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      ctx.fillText('t=1 (Başlangıç)', x1 - 25, yAx + 16);
+      ctx.fillText('t=4 (Tepe)', x4 - 15, yAx + 16);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('1 ≤ t < 4: 1 - e⁻⁽ᵗ⁻¹⁾  |  t ≥ 4: (1 - e⁻³) e⁻⁽ᵗ⁻⁴⁾', 280, 50);
+
+      document.getElementById('img3').src = canvas.toDataURL();
+    }
+
+    // Kart 4: Basamak Yanıtı Ayrışımı
+    function renderCard4() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('Birim Basamak Yanıtı Ayrışımı: y(t) = s(t + 1) - s(t - 2)', 25, 28);
+
+      const yAx = 140, x0 = 80, scX = 60, scY = 70;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAx); ctx.lineTo(740, yAx);
+      ctx.moveTo(x0, 35); ctx.lineTo(x0, 195);
+      ctx.stroke();
+
+      // s(t + 1) mavi kesikli
+      ctx.strokeStyle = '#3b82f6';
+      ctx.setLineDash([4, 4]);
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let px = x0; px <= 730; px++) {
+        const t = (px - x0) / scX;
+        const val = (t >= 1.0) ? (1.0 - Math.exp(-(t - 1.0))) : 0;
+        ctx.lineTo(px, yAx - val * scY);
+      }
+      ctx.stroke();
+
+      // s(t - 2) kırmızı kesikli
+      ctx.strokeStyle = '#ef4444';
+      ctx.beginPath();
+      for (let px = x0; px <= 730; px++) {
+        const t = (px - x0) / scX;
+        const val = (t >= 4.0) ? (1.0 - Math.exp(-(t - 4.0))) : 0;
+        ctx.lineTo(px, yAx - val * scY);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Fark: y(t) yeşil kalın
+      ctx.strokeStyle = '#059669';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let px = x0; px <= 730; px++) {
+        const t = (px - x0) / scX;
+        let yVal = 0;
+        if (t >= 1.0 && t < 4.0) yVal = 1.0 - Math.exp(-(t - 1.0));
+        else if (t >= 4.0) yVal = (1.0 - Math.exp(-3.0)) * Math.exp(-(t - 4.0));
+        ctx.lineTo(px, yAx - yVal * scY);
+      }
+      ctx.stroke();
+
+      ctx.fillStyle = '#3b82f6';
+      ctx.font = 'bold 10px Inter';
+      ctx.fillText('+ s(t + 1) (t=1)', 160, 50);
+
+      ctx.fillStyle = '#ef4444';
+      ctx.fillText('- s(t - 2) (t=4)', 340, 50);
+
+      ctx.fillStyle = '#059669';
+      ctx.fillText('━ Fark = y(t)', 480, 50);
+
+      document.getElementById('img4').src = canvas.toDataURL();
+    }
+
+    // Kart 5: (c) Şıkkı LTI Teoremi Çözümü
+    function renderCard5() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('(c) Şıkkı: LTI Özellikleri ile Doğrudan Çıkış Türetimi (7 Puan)', 25, 28);
+
+      // İki kutu karşılaştırması
+      const yBox = 90;
+      // Giriş Eşleme
+      ctx.fillStyle = '#f8fafc';
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.beginPath();
+      ctx.roundRect(40, yBox - 40, 320, 85, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#1e40af';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('Giriş Sinyali İlişkisi:', 55, yBox - 15);
+      ctx.font = '11px monospace';
+      ctx.fillStyle = '#0f172a';
+      ctx.fillText('x_b(t): [-1, 2], Genlik = 1', 55, yBox + 8);
+      ctx.fillText('x_c(t): [ 3, 6], Genlik = 2', 55, yBox + 26);
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('=>  x_c(t) = 2 x(t - 4)', 210, yBox + 15);
+
+      // Çıkış Eşleme
+      ctx.fillStyle = '#f0fdf4';
+      ctx.strokeStyle = '#86efac';
+      ctx.beginPath();
+      ctx.roundRect(400, yBox - 40, 340, 85, 8);
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.fillStyle = '#15803d';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('LTI Özellikleri ile Çıkış:', 415, yBox - 15);
+      ctx.font = '11px Inter';
+      ctx.fillStyle = '#475569';
+      ctx.fillText('1. Zaman Değişmezliği: x(t-4) -> y(t-4)', 415, yBox + 8);
+      ctx.fillText('2. Homojenlik (Ölçekleme): 2 x(t-4) -> 2 y(t-4)', 415, yBox + 26);
+
+      // Sonuç
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 13px Inter';
+      ctx.fillText('Nihai Çıkış: y_c(t) = 2 y(t - 4)  (İntegral Çözümüne Gerek Yoktur!)', 140, 195);
+
+      document.getElementById('img5').src = canvas.toDataURL();
+    }
+
+    // Kart 6: Sınav Özeti ve Puanlama
+    function renderCard6() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('Sınav Sorusu 3: Puanlama Dağılımı ve Tam Puan Kılavuzu (25p)', 25, 28);
+
+      const cards = [
+        { part: '(a) Şıkkı', pt: '9 Puan', desc: 'h(t) = e^{-(t-2)} u(t-2)', sub: 'Süzme & t≥2 gecikmesi', col: '#2563eb' },
+        { part: '(b) Şıkkı', pt: '9 Puan', desc: '3 Bölgeli Parçalı y(t)', sub: 't<1: 0, 1≤t<4: doyum, t≥4: sönüm', col: '#059669' },
+        { part: '(c) Şıkkı', pt: '7 Puan', desc: 'y_c(t) = 2 y(t - 4)', sub: 'Sadece LTI özellikleri (0 integral)', col: '#dc2626' }
+      ];
+
+      cards.forEach((c, idx) => {
+        const x = 40 + idx * 235;
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.beginPath();
+        ctx.roundRect(x, 50, 225, 125, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = c.col;
+        ctx.font = 'bold 13px Inter';
+        ctx.fillText(c.part, x + 15, 75);
+
+        ctx.fillStyle = '#f59e0b';
+        ctx.font = 'bold 11px Inter';
+        ctx.fillText(c.pt, x + 155, 75);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = 'bold 11px monospace';
+        ctx.fillText(c.desc, x + 12, 105);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '10px Inter';
+        ctx.fillText(c.sub, x + 12, 135);
+      });
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('Toplam Sınav Puanı: 25 / 25 Tam Puan • Tüm İspatlar ve Grafikler Kusursuz!', 150, 202);
+
+      document.getElementById('img6').src = canvas.toDataURL();
+    }
+
+    // --- Sayfa Yüklendiğinde Başlat ---
+    window.addEventListener('load', () => {
+      updateSim();
+      renderCard1();
+      renderCard2();
+      renderCard3();
+      renderCard4();
+      renderCard5();
+      renderCard6();
+    });
+  </script>
+</body>
+</html>
