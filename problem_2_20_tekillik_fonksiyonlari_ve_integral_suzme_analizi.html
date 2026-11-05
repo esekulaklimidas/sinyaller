@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 2.20: Tekillik Fonksiyonları ve İntegral Süzme Analizi</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+
+  <!-- Ana Taşıyıcı Konteyner -->
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- Üst Gezinme / Geri Dönüş Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">Bölüm 2: LTI Sistemler</span>
+        <span class="text-xs font-medium text-slate-500">Oppenheim 2. Baskı • Sayfa 172</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">
+          Tekillik Fonksiyonları • Dirac Delta & Birim Çift (Doublet) • Süzme (Sifting) Teoremleri
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">
+          Problem 2.20
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 2.20: Tekillik Fonksiyonları ve İntegral Süzme Analizi
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Sürekli zamanlı genelleştirilmiş fonksiyonlar teorisinde birim dürtü $u_0(t) = \delta(t)$ ve birim çift (doublet) $u_1(t) = \delta'(t)$ tekillik fonksiyonlarının integral altındaki örnekleme ve türev süzme (sifting) özelliklerinin titiz matematiksel değerlendirmesi.
+      </p>
+
+      <!-- Matematiksel İntegraller Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-blue-700">(a) Birim Dürtü Süzmesi:</span>
+          <div class="text-xs font-mono my-1 text-slate-800">
+            $$\int_{-\infty}^{\infty} u_0(t) \cos(t) dt$$
+          </div>
+          <div class="text-emerald-700 font-bold text-center border-t border-slate-100 pt-1">= 1</div>
+        </div>
+        <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-purple-700">(b) Ötelenmiş Dürtü Süzmesi:</span>
+          <div class="text-xs font-mono my-1 text-slate-800">
+            $$\int_{-\infty}^{\infty} \sin(2\pi t) \delta(t + 3) dt$$
+          </div>
+          <div class="text-emerald-700 font-bold text-center border-t border-slate-100 pt-1">= 0</div>
+        </div>
+        <div class="p-3 bg-white rounded-lg border border-slate-200 shadow-2xs">
+          <span class="font-bold text-rose-700">(c) Birim Çift (Doublet) Süzmesi:</span>
+          <div class="text-xs font-mono my-1 text-slate-800">
+            $$\int_{-\infty}^{\infty} u_1(1 - \tau) \cos(2\pi \tau) d\tau$$
+          </div>
+          <div class="text-emerald-700 font-bold text-center border-t border-slate-100 pt-1">= 0</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Sol Kolon: Soru Analizi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">📌</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Oppenheim tekillik fonksiyonları (singularity functions) hiyerarşisinde $u_k(t)$ gösterimi kullanılır:
+        </p>
+        <ul class="mt-2 space-y-1.5 text-xs text-slate-600 list-disc list-inside">
+          <li>$u_{-1}(t) = u(t)$: Birim basamak (Unit Step)</li>
+          <li>$u_0(t) = \delta(t)$: Birim dürtü (Dirac Delta / Unit Impulse)</li>
+          <li>$u_1(t) = \delta'(t) = \frac{d\delta(t)}{dt}$: Birim çift (Unit Doublet)</li>
+        </ul>
+        <p class="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Bu üç temel tekillik fonksiyonu ile modüle edilmiş integrallerin kesin sayısal değerlerini süzme ve kısmi integrasyon kurallarıyla hesaplamamız istenmektedir.
+        </p>
+      </div>
+
+      <!-- Sağ Kolon: Çözüm Metodolojisi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <div class="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <div class="p-2.5 bg-blue-50/60 rounded-lg border border-blue-100">
+            <strong class="text-blue-900">1. Dürtü Süzme Özelliği:</strong> $\int_{-\infty}^{\infty} x(t) \delta(t - t_0) dt = x(t_0)$. (a)'da $t_0=0 \implies \cos(0)=1$; (b)'de $t_0=-3 \implies \sin(-6\pi)=0$.
+          </div>
+          <div class="p-2.5 bg-rose-50/60 rounded-lg border border-rose-100">
+            <strong class="text-rose-900">2. Birim Çift Süzme Teoremi:</strong> $\int_{-\infty}^{\infty} x(t) \delta'(t) dt = -x'(0)$. Veya kısmi integrasyonla $\int x(\tau) \delta'(1-\tau) d\tau = -\left. \frac{d}{d\tau}[x(\tau)] \right|_{\tau=1}$.
+          </div>
+          <div class="p-2.5 bg-emerald-50/60 rounded-lg border border-emerald-100">
+            <strong class="text-emerald-900">3. Değişken Dönüşümü:</strong> $v = 1 - \tau$ dönüşümüyle $\int \delta'(v)\cos(2\pi v)dv = -\left. \frac{d}{dv}[\cos(2\pi v)] \right|_{v=0} = 2\pi\sin(0) = 0$.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı (Çift Tuval & Etkileşim) -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-5">
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: Tekillik Fonksiyonları & Süzme Laboratuvarı</h2>
+          <p class="text-xs text-slate-500">İntegrali seçin, darbe konumunu ($t_0$) veya darbe genişliğini ($\Delta$) kaydırarak limit süzme sürecini izleyin.</p>
+        </div>
+
+        <!-- Şık Seçici Butonları -->
+        <div class="flex flex-wrap gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button id="btnPartA" onclick="setPart('a')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-blue-700 shadow-xs">
+            (a) u₀(t) cos(t)
+          </button>
+          <button id="btnPartB" onclick="setPart('b')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (b) sin(2πt) δ(t + 3)
+          </button>
+          <button id="btnPartC" onclick="setPart('c')" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900">
+            (c) u₁(1 - τ) cos(2πτ)
+          </button>
+        </div>
+      </div>
+
+      <!-- Çift Tuval Alanı -->
+      <div class="space-y-3">
+        <!-- Üst Tuval: Test Sinyali ve Tekillik Fonksiyonu -->
+        <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="topCanvasTitle">Üst Tuval: Fonksiyon $x(t)$ ve Tekillik Darbesi $\delta(t - t_0)$</span>
+            <span class="text-slate-400">Örnekleme Noktası & Eksen</span>
+          </div>
+          <canvas id="kCanvas" width="860" height="210" class="w-full h-auto bg-white rounded-lg block border border-slate-100"></canvas>
+        </div>
+
+        <!-- Alt Tuval: Çarpım & İntegral Süzme Alanı -->
+        <div class="bg-white border border-slate-200 rounded-xl p-3 shadow-2xs">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-600 mb-2">
+            <span id="bottomCanvasTitle">Alt Tuval: Süzme Mekanizması & İntegral Değeri</span>
+            <span id="bottomCanvasBadge" class="px-2 py-0.5 text-xs rounded-full bg-emerald-100 text-emerald-800 font-bold">İntegral = 1.0</span>
+          </div>
+          <canvas id="ynCanvas" width="860" height="190" class="w-full h-auto bg-white rounded-lg block border border-slate-100"></canvas>
+        </div>
+      </div>
+
+      <!-- Canlı Matematiksel Değerlendirme Paneli -->
+      <div id="simMath" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-800 overflow-x-auto min-h-[52px] flex items-center">
+        <!-- KaTeX Dinamik Olarak Güncellenir -->
+      </div>
+
+      <!-- Etkileşimli Kontrol Paneli -->
+      <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span id="posLabel">Darbe Konumu ($t_0$):</span>
+              <span id="posVal" class="text-blue-600 font-mono">0.0</span>
+            </div>
+            <input type="range" min="-4.0" max="4.0" step="0.25" value="0.0" id="sliderPos" class="w-full accent-blue-600 slider-thumb" oninput="paramPos=parseFloat(this.value); document.getElementById('posVal').innerText=paramPos.toFixed(2); updateSim();">
+          </div>
+          <div>
+            <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+              <span>Yaklaşım Darbe Genişliği ($\Delta$ Limit Modeli):</span>
+              <span id="deltaVal" class="text-purple-600 font-mono">0.20</span>
+            </div>
+            <input type="range" min="0.05" max="0.6" step="0.05" value="0.2" id="sliderDelta" class="w-full accent-purple-600 slider-thumb" oninput="paramDelta=parseFloat(this.value); document.getElementById('deltaVal').innerText=paramDelta.toFixed(2); updateSim();">
+          </div>
+        </div>
+
+        <!-- Butonlar -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200">
+          <div class="flex items-center gap-2">
+            <button id="playBtn" onclick="togglePlay()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+              <span id="playIcon">▶</span> Konum Taramasını Başlat
+            </button>
+            <button onclick="resetSim()" class="px-3 py-2 bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold rounded-lg border border-slate-300 shadow-2xs">
+              Sıfırla (Varsayılan) ↺
+            </button>
+          </div>
+          <div class="flex items-center gap-2 text-xs text-slate-600">
+            <span>Süzülen Fonksiyon Değeri: $x(t_0) = $</span>
+            <span id="sampledVal" class="font-mono font-bold text-emerald-700">1.000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 Çözüm Adımı Kartı (Tam 2.21 Formatı) -->
+    <div class="space-y-6">
+
+      <!-- Kart 1: Mavi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">Adım 1</span>
+            <h3 class="text-base font-bold text-slate-900">Tekillik Fonksiyonları ($u_k(t)$) Hiyerarşisi ve Tanımı</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_2_20_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Oppenheim kitabında tekillik fonksiyonları türev ve integral operatörleriyle birbirine zincirlenmiş bir aile olarak tanımlanır:
+          $$u_k(t) = \frac{d}{dt} u_{k-1}(t) \iff u_{k-1}(t) = \int_{-\infty}^{t} u_k(\tau) d\tau$$
+          Bu hiyerarşide:
+          $$u_{-1}(t) = u(t) \quad \text{(Birim Basamak)}, \quad u_0(t) = \delta(t) \quad \text{(Birim Dürtü)}, \quad u_1(t) = \delta'(t) \quad \text{(Birim Çift / Doublet)}$$
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img1" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 1 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 2: Mor -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">Adım 2</span>
+            <h3 class="text-base font-bold text-slate-900">(a) Şıkkı Çözümü — Dürtü Süzme (Sifting) Özelliği</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_2_20_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          İntegral: $I_a = \int_{-\infty}^{\infty} u_0(t) \cos(t) dt$.<br>
+          $u_0(t) = \delta(t)$ olduğundan, Dirac delta fonksiyonunun temel süzme (sifting) teoremine göre:
+          $$\int_{-\infty}^{\infty} x(t) \delta(t - t_0) dt = x(t_0)$$
+          Burada $t_0 = 0$ ve $x(t) = \cos(t)$'dir. Delta fonksiyonu $t=0$ haricinde her yerde sıfır olduğundan, integrali anında $t=0$'daki fonksiyon değerine süzer:
+          $$I_a = \cos(0) = \mathbf{1}$$
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img2" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 2 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 3: Amber -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">Adım 3</span>
+            <h3 class="text-base font-bold text-slate-900">(b) Şıkkı Çözümü — Ötelenmiş Dürtü $\delta(t + 3)$ ve Sinüs Sıfırı</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_2_20_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          İntegral: $I_b = \int_{-\infty}^{\infty} \sin(2\pi t) \delta(t + 3) dt$.<br>
+          Darbe fonksiyonu $\delta(t + 3) = \delta(t - (-3))$ olup tekillik noktası $t_0 = -3$'tür.<br>
+          Süzme özelliğini uygularsak:
+          $$I_b = \left. \sin(2\pi t) \right|_{t = -3} = \sin(2\pi \cdot (-3)) = \sin(-6\pi)$$
+          Tam sayı katsayılı $\pi$ açılarında sinüs sıfırdır ($\sin(k\pi) = 0, \forall k \in \mathbb{Z}$):
+          $$I_b = \sin(-6\pi) = \mathbf{0}$$
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img3" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 3 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 4: Gül Pembesi -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">Adım 4</span>
+            <h3 class="text-base font-bold text-slate-900">Birim Çift (Unit Doublet) $u_1(t)$ ve Türev Süzme Özelliği</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_2_20_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Birim çift $u_1(t) = \delta'(t)$, birim dürtünün türevidir. Kısmi integrasyon uygulanırsa:
+          $$\int_{-\infty}^{\infty} x(t) \delta'(t) dt = \underbrace{\left[ x(t) \delta(t) \right]_{-\infty}^{\infty}}_{0} - \int_{-\infty}^{\infty} x'(t) \delta(t) dt = -x'(0)$$
+          Genel olarak $t_0$ noktasına ötelenmiş bir çift darbe için:
+          $$\int_{-\infty}^{\infty} x(t) \delta'(t - t_0) dt = -x'(t_0)$$
+          Bu teorem, birim çiftin integral altındaki fonksiyonun türevinin negatifini süzdüğünü ifade eder.
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img4" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 4 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 5: İndigo -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">Adım 5</span>
+            <h3 class="text-base font-bold text-slate-900">(c) Şıkkı Çözümü — Değişken Dönüşümü & Kısmi İntegrasyon</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_2_20_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          İntegral: $I_c = \int_{-\infty}^{\infty} u_1(1 - \tau) \cos(2\pi \tau) d\tau$.<br>
+          Değişken değişimi yapalım: $v = 1 - \tau \implies \tau = 1 - v \implies d\tau = -dv$.<br>
+          Sınırlar: $\tau = -\infty \to v = \infty$, $\tau = \infty \to v = -\infty$:
+          $$I_c = \int_{\infty}^{-\infty} u_1(v) \cos(2\pi(1 - v)) (-dv) = \int_{-\infty}^{\infty} \delta'(v) \cos(2\pi - 2\pi v) dv$$
+          Kosinüsün simetrisinden $\cos(2\pi - 2\pi v) = \cos(2\pi v)$'dir:
+          $$I_c = \int_{-\infty}^{\infty} \delta'(v) \cos(2\pi v) dv$$
+          Türev süzme kuralını uygulayalım ($-x'(0)$):
+          $$x(v) = \cos(2\pi v) \implies x'(v) = -2\pi \sin(2\pi v)$$
+          $$I_c = -x'(0) = -(-2\pi \sin(0)) = \mathbf{0}$$
+        </p>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img5" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 5 Şeması">
+        </div>
+      </div>
+
+      <!-- Kart 6: Zümrüt Yeşili -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">Adım 6</span>
+            <h3 class="text-base font-bold text-slate-900">Sonuç Matrisi, Dağılım Teorisi ve Mühendislik Sezgisi</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_2_20_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Tüm integral sonuçlarının özet tablosu ve mühendislikte sinyal örnekleme / diferansiyel alıcı tasarımı ilkeleri:
+        </p>
+        <div class="overflow-x-auto text-xs">
+          <table class="w-full text-left border-collapse border border-slate-200">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="p-2 border border-slate-200">Şık</th>
+                <th class="p-2 border border-slate-200">İntegral İfadesi</th>
+                <th class="p-2 border border-slate-200">Tekillik Türü</th>
+                <th class="p-2 border border-slate-200">Uygulanan Süzme Özelliği</th>
+                <th class="p-2 border border-slate-200 text-center font-bold">Nihai Değer</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600">
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(a)</td>
+                <td class="p-2 border border-slate-200">$\int_{-\infty}^{\infty} u_0(t)\cos(t)dt$</td>
+                <td class="p-2 border border-slate-200">$u_0(t) = \delta(t)$</td>
+                <td class="p-2 border border-slate-200">$\cos(0)$</td>
+                <td class="p-2 border border-slate-200 text-center font-black text-emerald-700">1</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(b)</td>
+                <td class="p-2 border border-slate-200">$\int_{-\infty}^{\infty} \sin(2\pi t)\delta(t+3)dt$</td>
+                <td class="p-2 border border-slate-200">$\delta(t+3)$</td>
+                <td class="p-2 border border-slate-200">$\sin(2\pi \cdot (-3)) = \sin(-6\pi)$</td>
+                <td class="p-2 border border-slate-200 text-center font-black text-emerald-700">0</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">(c)</td>
+                <td class="p-2 border border-slate-200">$\int_{-\infty}^{\infty} u_1(1-\tau)\cos(2\pi\tau)d\tau$</td>
+                <td class="p-2 border border-slate-200">$u_1(t) = \delta'(t)$</td>
+                <td class="p-2 border border-slate-200">$-\left.\frac{d}{dv}[\cos(2\pi v)]\right|_{v=0} = 2\pi\sin(0)$</td>
+                <td class="p-2 border border-slate-200 text-center font-black text-emerald-700">0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="overflow-hidden bg-white p-2">
+          <img id="img6" class="w-full h-auto block rounded-lg border border-slate-100 shadow-2xs" alt="Adım 6 Şeması">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Alt Bilgi & Kapanış -->
+    <footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200">
+      Signals & Systems 2nd Edition • Oppenheim & Willsky • Problem 2.20 Çözümü
+    </footer>
+
+  </div>
+
+  <!-- JavaScript Kodları -->
+  <script>
+    // --- HiDPI Tuval Oluşturucu ---
+    function createHiDPICanvas(w, h, ratio = 2) {
+      const canvas = document.createElement('canvas');
+      canvas.width = w * ratio;
+      canvas.height = h * ratio;
+      const ctx = canvas.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas, ctx, width: w, height: h };
+    }
+
+    // --- Kart İndirme Fonksiyonu ---
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      if (!img || !img.src) return;
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    // ==========================================
+    // CANLI SİMÜLATÖR MOTORU
+    // ==========================================
+    let currentPart = 'a'; // 'a', 'b', 'c'
+    let isPlaying = false;
+    let animTimer = null;
+
+    let paramPos = 0.0;
+    let paramDelta = 0.20;
+
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    function setupCanvasDPI(c, w, h) {
+      const dpr = window.devicePixelRatio || 2;
+      c.width = w * dpr;
+      c.height = h * dpr;
+      const ctx = c.getContext('2d');
+      ctx.resetTransform();
+      ctx.scale(dpr, dpr);
+      return ctx;
+    }
+
+    let topCtx = setupCanvasDPI(kCanvas, 860, 210);
+    let btmCtx = setupCanvasDPI(ynCanvas, 860, 190);
+
+    window.addEventListener('resize', () => {
+      topCtx = setupCanvasDPI(kCanvas, 860, 210);
+      btmCtx = setupCanvasDPI(ynCanvas, 860, 190);
+      updateSim();
+    });
+
+    function setPart(p) {
+      currentPart = p;
+      ['btnPartA', 'btnPartB', 'btnPartC'].forEach(id => {
+        const btn = document.getElementById(id);
+        btn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all text-slate-600 hover:text-slate-900";
+      });
+      const activeBtn = document.getElementById(
+        p === 'a' ? 'btnPartA' : p === 'b' ? 'btnPartB' : 'btnPartC'
+      );
+      activeBtn.className = "px-3 py-1.5 text-xs font-bold rounded-lg transition-all bg-white text-blue-700 shadow-xs";
+
+      if (p === 'a') {
+        paramPos = 0.0;
+        document.getElementById('sliderPos').value = 0.0;
+        document.getElementById('posVal').innerText = '0.0';
+        document.getElementById('posLabel').innerText = 'Darbe Konumu (t₀):';
+      } else if (p === 'b') {
+        paramPos = -3.0;
+        document.getElementById('sliderPos').value = -3.0;
+        document.getElementById('posVal').innerText = '-3.0';
+        document.getElementById('posLabel').innerText = 'Darbe Konumu (t₀):';
+      } else if (p === 'c') {
+        paramPos = 1.0;
+        document.getElementById('sliderPos').value = 1.0;
+        document.getElementById('posVal').innerText = '1.0';
+        document.getElementById('posLabel').innerText = 'Çift Darbe Konumu (τ₀):';
+      }
+
+      updateSim();
+    }
+
+    function updateSim() {
+      const topTitle = document.getElementById('topCanvasTitle');
+      const btmTitle = document.getElementById('bottomCanvasTitle');
+      const btmBadge = document.getElementById('bottomCanvasBadge');
+      const mathBox = document.getElementById('simMath');
+      const sampledValEl = document.getElementById('sampledVal');
+
+      topCtx.clearRect(0, 0, 860, 210);
+      btmCtx.clearRect(0, 0, 860, 190);
+
+      const tMin = -4.5;
+      const tMax = 4.5;
+
+      drawContinuousAxis(topCtx, 860, 210, tMin, tMax, -1.5, 1.5, 't', '');
+      drawContinuousAxis(btmCtx, 860, 190, tMin, tMax, -2.5, 2.5, 't', '');
+
+      if (currentPart === 'a') {
+        topTitle.innerText = `Üst Tuval: Test Fonksiyonu x(t) = cos(t) ve Dürtü u₀(t - ${paramPos.toFixed(1)})`;
+        btmTitle.innerText = `Alt Tuval: Süzülen Alan & İntegral Değeri = cos(${paramPos.toFixed(1)})`;
+
+        const exactVal = Math.cos(paramPos);
+        sampledValEl.innerText = exactVal.toFixed(3);
+        btmBadge.innerText = `İntegral = ${exactVal.toFixed(3)}`;
+
+        // cos(t) çizimi
+        topCtx.strokeStyle = '#2563eb';
+        topCtx.lineWidth = 2.5;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const py = mapY(210, -1.5, 1.5, Math.cos(t));
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        // Darbe u0(t - t0)
+        drawImpulseArrow(topCtx, 860, 210, tMin, tMax, paramPos, 1.2, '#9333ea', 'u0(t)');
+
+        // Alt tuval: Darbe yaklaşımı (pulse approximation)
+        drawPulseApprox(btmCtx, 860, 190, tMin, tMax, paramPos, paramDelta, exactVal, '#059669');
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>İntegral:</strong> $\\int_{-\\infty}^{\\infty} u_0(t) \\cos(t) dt = \\cos(0) = \\mathbf{1}$</div>
+            <div><strong>Anlık Konum:</strong> $t_0 = ${paramPos.toFixed(2)} \\implies \\cos(${paramPos.toFixed(2)}) = ${exactVal.toFixed(3)}$</div>
+            <div class="text-emerald-700 font-bold">Örnekleme Özelliği Tam Sağlandı!</div>
+          </div>
+        `;
+
+      } else if (currentPart === 'b') {
+        topTitle.innerText = `Üst Tuval: Test Fonksiyonu x(t) = sin(2πt) ve Dürtü δ(t - (${paramPos.toFixed(1)}))`;
+        btmTitle.innerText = `Alt Tuval: Süzülen Alan & İntegral Değeri = sin(2π · ${paramPos.toFixed(1)})`;
+
+        const exactVal = Math.sin(2 * Math.PI * paramPos);
+        sampledValEl.innerText = exactVal.toFixed(3);
+        btmBadge.innerText = `İntegral = ${exactVal.toFixed(3)}`;
+
+        // sin(2*pi*t) çizimi
+        topCtx.strokeStyle = '#7c3aed';
+        topCtx.lineWidth = 2;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const t = mapInvX(860, tMin, tMax, px);
+          const py = mapY(210, -1.5, 1.5, Math.sin(2 * Math.PI * t));
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        // Darbe delta(t - pos)
+        drawImpulseArrow(topCtx, 860, 210, tMin, tMax, paramPos, 1.2, '#ef4444', `δ(t - ${paramPos.toFixed(1)})`);
+
+        // Alt tuval
+        drawPulseApprox(btmCtx, 860, 190, tMin, tMax, paramPos, paramDelta, exactVal, '#059669');
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>İntegral:</strong> $\\int_{-\\infty}^{\\infty} \\sin(2\\pi t) \\delta(t + 3) dt = \\sin(-6\\pi) = \\mathbf{0}$</div>
+            <div><strong>Anlık Konum:</strong> $t_0 = ${paramPos.toFixed(2)} \\implies \\sin(2\\pi \\cdot ${paramPos.toFixed(2)}) = ${exactVal.toFixed(3)}$</div>
+            <div class="text-emerald-700 font-bold">$t_0 = -3$'te sinüs sıfırdan geçer $\\implies I_b = 0$.</div>
+          </div>
+        `;
+
+      } else if (currentPart === 'c') {
+        topTitle.innerText = `Üst Tuval: x(τ) = cos(2πτ) ve Birim Çift (Doublet) u₁(1 - τ) Modeli`;
+        btmTitle.innerText = `Alt Tuval: Birim Çiftin Pozitif & Negatif Kutupları ve Türev Süzmesi`;
+
+        // Derivative of cos(2*pi*v) at v=0 is -2*pi*sin(0) = 0
+        const derivVal = 2 * Math.PI * Math.sin(2 * Math.PI * (1 - paramPos));
+        sampledValEl.innerText = (-derivVal).toFixed(3);
+        btmBadge.innerText = `İntegral = ${(-derivVal).toFixed(3)}`;
+
+        // cos(2*pi*tau)
+        topCtx.strokeStyle = '#0284c7';
+        topCtx.lineWidth = 2;
+        topCtx.beginPath();
+        for (let px = 0; px <= 860; px++) {
+          const tau = mapInvX(860, tMin, tMax, px);
+          const py = mapY(210, -1.5, 1.5, Math.cos(2 * Math.PI * tau));
+          if (px === 0) topCtx.moveTo(px, py); else topCtx.lineTo(px, py);
+        }
+        topCtx.stroke();
+
+        // Doublet u1(1 - tau) = delta'(1 - tau)
+        drawDoubletArrows(topCtx, 860, 210, tMin, tMax, paramPos, 1.2, '#e11d48', 'u1(1 - τ)');
+
+        // Alt Tuval: Doublet finite difference limit
+        drawDoubletLimit(btmCtx, 860, 190, tMin, tMax, paramPos, paramDelta, '#e11d48');
+
+        mathBox.innerHTML = `
+          <div class="flex flex-wrap items-center gap-4">
+            <div><strong>İntegral:</strong> $\\int_{-\\infty}^{\\infty} u_1(1 - \\tau) \\cos(2\\pi \\tau) d\\tau = -\\left. \\frac{d}{dv}[\\cos(2\\pi v)] \\right|_{v=0} = 2\\pi \\sin(0) = \\mathbf{0}$</div>
+            <div class="text-rose-700 font-bold">Birim Çift Türev Süzme Özelliği: $\\int x(t)\\delta'(t)dt = -x'(0)$</div>
+          </div>
+        `;
+      }
+
+      if (window.renderMathInElement) renderMathInElement(mathBox, {delimiters: [{left: '$', right: '$', display: false}]});
+    }
+
+    // --- Çizim Yardımcıları ---
+    function mapX(w, minX, maxX, x) {
+      return ((x - minX) / (maxX - minX)) * (w - 80) + 40;
+    }
+    function mapInvX(w, minX, maxX, px) {
+      return ((px - 40) / (w - 80)) * (maxX - minX) + minX;
+    }
+    function mapY(h, minY, maxY, y) {
+      return h - 30 - ((y - minY) / (maxY - minY)) * (h - 60);
+    }
+
+    function drawContinuousAxis(ctx, w, h, minX, maxX, minY, maxY, labelX, labelY) {
+      const y0 = mapY(h, minY, maxY, 0);
+      const x0 = mapX(w, minX, maxX, 0);
+
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(30, y0);
+      ctx.lineTo(w - 20, y0);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x0, 15);
+      ctx.lineTo(x0, h - 15);
+      ctx.stroke();
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '10px Inter';
+      for (let t = Math.ceil(minX); t <= Math.floor(maxX); t++) {
+        const x = mapX(w, minX, maxX, t);
+        ctx.beginPath();
+        ctx.moveTo(x, y0 - 3);
+        ctx.lineTo(x, y0 + 3);
+        ctx.stroke();
+        ctx.fillText(t.toString(), x - 4, y0 + 15);
+      }
+
+      if (labelX) {
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 10px Inter';
+        ctx.fillText(labelX, w - 35, y0 - 6);
+      }
+    }
+
+    function drawImpulseArrow(ctx, w, h, minX, maxX, pos, amp, color, label) {
+      const x = mapX(w, minX, maxX, pos);
+      const y0 = mapY(h, -1.5, 1.5, 0);
+      const y1 = mapY(h, -1.5, 1.5, amp);
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      drawArrow(ctx, x, y0, x, y1);
+
+      ctx.fillStyle = color;
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText(label, x - 15, y1 - 8);
+    }
+
+    function drawDoubletArrows(ctx, w, h, minX, maxX, pos, amp, color, label) {
+      const x1 = mapX(w, minX, maxX, pos - 0.12);
+      const x2 = mapX(w, minX, maxX, pos + 0.12);
+      const y0 = mapY(h, -1.5, 1.5, 0);
+      const yUp = mapY(h, -1.5, 1.5, amp);
+      const yDown = mapY(h, -1.5, 1.5, -amp);
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.5;
+      drawArrow(ctx, x1, y0, x1, yUp);
+      drawArrow(ctx, x2, y0, x2, yDown);
+
+      ctx.fillStyle = color;
+      ctx.font = 'bold 10px Inter';
+      ctx.fillText(label, x1 - 20, yUp - 8);
+    }
+
+    function drawPulseApprox(ctx, w, h, minX, maxX, pos, delta, amp, color) {
+      const xL = mapX(w, minX, maxX, pos - delta / 2);
+      const xR = mapX(w, minX, maxX, pos + delta / 2);
+      const y0 = mapY(h, -2.5, 2.5, 0);
+      const yH = mapY(h, -2.5, 2.5, amp / delta);
+
+      ctx.fillStyle = (amp >= 0) ? 'rgba(5, 150, 105, 0.15)' : 'rgba(225, 29, 72, 0.15)';
+      ctx.fillRect(xL, Math.min(y0, yH), xR - xL, Math.abs(yH - y0));
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(xL, Math.min(y0, yH), xR - xL, Math.abs(yH - y0));
+
+      ctx.fillStyle = color;
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText(`Alan = ${amp.toFixed(3)} (Δ → 0 limitinde)`, xR + 10, (y0 + yH) / 2);
+    }
+
+    function drawDoubletLimit(ctx, w, h, minX, maxX, pos, delta, color) {
+      const x1 = mapX(w, minX, maxX, pos - delta);
+      const xMid = mapX(w, minX, maxX, pos);
+      const x2 = mapX(w, minX, maxX, pos + delta);
+      const y0 = mapY(h, -2.5, 2.5, 0);
+      const yPos = mapY(h, -2.5, 2.5, 1.5);
+      const yNeg = mapY(h, -2.5, 2.5, -1.5);
+
+      // Pozitif lob
+      ctx.fillStyle = 'rgba(37, 99, 235, 0.2)';
+      ctx.fillRect(x1, yPos, xMid - x1, y0 - yPos);
+      ctx.strokeStyle = '#2563eb';
+      ctx.strokeRect(x1, yPos, xMid - x1, y0 - yPos);
+
+      // Negatif lob
+      ctx.fillStyle = 'rgba(225, 29, 72, 0.2)';
+      ctx.fillRect(xMid, y0, x2 - xMid, yNeg - y0);
+      ctx.strokeStyle = '#e11d48';
+      ctx.strokeRect(xMid, y0, x2 - xMid, yNeg - y0);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 10px Inter';
+      ctx.fillText('+1/Δ² Lobe', x1 - 10, yPos - 5);
+      ctx.fillText('-1/Δ² Lobe', xMid + 5, yNeg + 15);
+    }
+
+    function drawArrow(ctx, fromX, fromY, toX, toY) {
+      const headlen = 8;
+      const angle = Math.atan2(toY - fromY, toX - fromX);
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(toX, toY);
+      ctx.lineTo(toX - headlen * Math.cos(angle - Math.PI / 6), toY - headlen * Math.sin(angle - Math.PI / 6));
+      ctx.lineTo(toX - headlen * Math.cos(angle + Math.PI / 6), toY - headlen * Math.sin(angle + Math.PI / 6));
+      ctx.closePath();
+      ctx.fillStyle = ctx.strokeStyle;
+      ctx.fill();
+    }
+
+    // --- Animasyon Kontrolleri ---
+    function togglePlay() {
+      isPlaying = !isPlaying;
+      document.getElementById('playIcon').innerText = isPlaying ? '⏸' : '▶';
+      if (isPlaying) runAnimation();
+    }
+
+    function runAnimation() {
+      if (!isPlaying) return;
+      paramPos += 0.15;
+      if (paramPos > 3.5) paramPos = -3.5;
+      document.getElementById('sliderPos').value = paramPos.toFixed(2);
+      document.getElementById('posVal').innerText = paramPos.toFixed(2);
+      updateSim();
+      setTimeout(() => {
+        if (isPlaying) requestAnimationFrame(runAnimation);
+      }, 50);
+    }
+
+    function resetSim() {
+      isPlaying = false;
+      document.getElementById('playIcon').innerText = '▶';
+      setPart(currentPart);
+    }
+
+    // ==========================================
+    // 6 ÇÖZÜM ADIMI İÇİN YÜKSEK ÇÖZÜNÜRLÜKLÜ ÇİZİMLER
+    // ==========================================
+
+    // Kart 1: Tekillik Fonksiyonları Hiyerarşisi
+    function renderCard1() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('Tekillik Fonksiyonları (Singularity Functions) Zinciri', 25, 28);
+
+      const boxes = [
+        { name: 'u₋₁(t) = u(t)', desc: 'Birim Basamak (Step)', col: '#2563eb', bg: '#eff6ff' },
+        { name: 'u₀(t) = δ(t)', desc: 'Birim Dürtü (Impulse)', col: '#7c3aed', bg: '#f5f3ff' },
+        { name: 'u₁(t) = δ\'(t)', desc: 'Birim Çift (Doublet)', col: '#e11d48', bg: '#fff1f2' }
+      ];
+
+      boxes.forEach((b, i) => {
+        const x = 50 + i * 250;
+        ctx.fillStyle = b.bg;
+        ctx.strokeStyle = b.col;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.roundRect(x, 60, 180, 85, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = b.col;
+        ctx.font = 'bold 13px Inter';
+        ctx.fillText(b.name, x + 30, 95);
+        ctx.fillStyle = '#475569';
+        ctx.font = '11px Inter';
+        ctx.fillText(b.desc, x + 25, 120);
+
+        if (i < 2) {
+          drawArrow(ctx, x + 180, 102, x + 250, 102);
+          ctx.fillStyle = '#059669';
+          ctx.font = 'bold 10px Inter';
+          ctx.fillText('d/dt', x + 205, 92);
+        }
+      });
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Özellik: Ters yönde her geçiş ∫ dt integraliyle gerçekleştirilir (u_k = d/dt u_{k-1}).', 130, 195);
+
+      document.getElementById('img1').src = canvas.toDataURL();
+    }
+
+    // Kart 2: (a) Şıkkı Çözümü
+    function renderCard2() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('(a) Şıkkı: ∫ u₀(t) cos(t) dt = cos(0) = 1 (Süzme Mekanizması)', 25, 28);
+
+      const yAx = 130;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAx);
+      ctx.lineTo(740, yAx);
+      ctx.moveTo(390, 45);
+      ctx.lineTo(390, 195);
+      ctx.stroke();
+
+      // cos(t) eğrisi
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let px = 40; px <= 740; px++) {
+        const t = (px - 390) / 70;
+        const py = yAx - Math.cos(t) * 60;
+        if (px === 40) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // t=0'da darbe ve örnekleme noktası
+      drawArrow(ctx, 390, yAx, 390, yAx - 85);
+      ctx.fillStyle = '#9333ea';
+      ctx.beginPath();
+      ctx.arc(390, yAx - 60, 5, 0, 2*Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = '#9333ea';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('u₀(t) = δ(t) (Alan = 1)', 405, yAx - 85);
+
+      ctx.fillStyle = '#059669';
+      ctx.fillText('cos(0) = 1.0 (Örneklenen Değer)', 405, yAx - 55);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Sonuç: Dirac delta fonksiyonunun süzme teoreminden I_a = 1.0 bulunur.', 180, 200);
+
+      document.getElementById('img2').src = canvas.toDataURL();
+    }
+
+    // Kart 3: (b) Şıkkı Çözümü
+    function renderCard3() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('(b) Şıkkı: ∫ sin(2πt) δ(t + 3) dt = sin(-6π) = 0', 25, 28);
+
+      const yAx = 120;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAx);
+      ctx.lineTo(740, yAx);
+      ctx.stroke();
+
+      // sin(2*pi*t)
+      ctx.strokeStyle = '#7c3aed';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for (let px = 40; px <= 740; px++) {
+        const t = (px - 390) / 70;
+        const py = yAx - Math.sin(2 * Math.PI * t) * 55;
+        if (px === 40) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // t = -3 darbesi
+      const xMinus3 = 390 - 3 * 70;
+      drawArrow(ctx, xMinus3, yAx, xMinus3, yAx - 75);
+      ctx.fillStyle = '#dc2626';
+      ctx.beginPath();
+      ctx.arc(xMinus3, yAx, 6, 0, 2*Math.PI);
+      ctx.fill();
+
+      ctx.fillStyle = '#dc2626';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('t = -3 (δ(t + 3) Konumu)', xMinus3 - 40, yAx - 85);
+      ctx.fillText('sin(2π(-3)) = sin(-6π) = 0', xMinus3 - 40, yAx + 22);
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Sonuç: Darbe tam sıfır geçiş noktasında tetiklendiği için integral kesinlikle 0\'dır.', 160, 200);
+
+      document.getElementById('img3').src = canvas.toDataURL();
+    }
+
+    // Kart 4: Birim Çift (Doublet) Modeli
+    function renderCard4() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('Birim Çift (Unit Doublet) u₁(t) = δ\'(t) Fiziksel ve Limit Modeli', 25, 28);
+
+      const yAx = 120;
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(40, yAx);
+      ctx.lineTo(740, yAx);
+      ctx.moveTo(390, 35);
+      ctx.lineTo(390, 195);
+      ctx.stroke();
+
+      // Pozitif ve Negatif Çift Darbe
+      const xL = 360, xR = 420;
+      ctx.strokeStyle = '#2563eb';
+      drawArrow(ctx, xL, yAx, xL, yAx - 70);
+      ctx.fillStyle = '#2563eb';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('+1/Δ (t = -Δ/2)', xL - 40, yAx - 78);
+
+      ctx.strokeStyle = '#e11d48';
+      drawArrow(ctx, xR, yAx, xR, yAx + 70);
+      ctx.fillStyle = '#e11d48';
+      ctx.fillText('-1/Δ (t = +Δ/2)', xR - 10, yAx + 85);
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Türev Süzme Teoremi: ∫ x(t) δ\'(t) dt = lim [x(-Δ/2) - x(Δ/2)] / Δ = -x\'(0)', 140, 202);
+
+      document.getElementById('img4').src = canvas.toDataURL();
+    }
+
+    // Kart 5: (c) Şıkkı Kısmi İntegrasyon İspatı
+    function renderCard5() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('(c) Şıkkı İspat Adımları: ∫ u₁(1 - τ) cos(2πτ) dτ = 0', 25, 28);
+
+      const steps = [
+        { label: '1. Değişken Değişimi:', math: 'v = 1 - τ  =>  dτ = -dv,  sınırlar tersine döner', col: '#2563eb' },
+        { label: '2. İntegralin Yeniden Yazımı:', math: 'I = ∫ δ\'(v) cos(2π(1 - v)) dv = ∫ δ\'(v) cos(2πv) dv', col: '#7c3aed' },
+        { label: '3. Türev Süzme Kuralı:', math: 'I = -d/dv [cos(2πv)]|_{v=0} = -(-2π sin(0)) = 0', col: '#059669' }
+      ];
+
+      steps.forEach((st, idx) => {
+        const y = 50 + idx * 46;
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.beginPath();
+        ctx.roundRect(40, y, 700, 38, 6);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = st.col;
+        ctx.font = 'bold 11px Inter';
+        ctx.fillText(st.label, 55, y + 23);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.font = '11px monospace';
+        ctx.fillText(st.math, 230, y + 23);
+      });
+
+      ctx.fillStyle = '#059669';
+      ctx.font = 'bold 12px Inter';
+      ctx.fillText('Nihai Çözüm: I_c = 0. Kısmi integrasyon veya değişken değişimi ile tam tutarlı!', 130, 202);
+
+      document.getElementById('img5').src = canvas.toDataURL();
+    }
+
+    // Kart 6: Özet Matrisi & Dağılım Teorisi
+    function renderCard6() {
+      const { canvas, ctx } = createHiDPICanvas(780, 220);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 780, 220);
+
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 14px Inter';
+      ctx.fillText('Problem 2.20 Sonuç Özeti ve Sınav İpuçları', 25, 28);
+
+      const results = [
+        { part: '(a)', integral: '∫ u₀(t) cos(t) dt', formula: 'cos(0)', val: '1', col: '#2563eb' },
+        { part: '(b)', integral: '∫ sin(2πt) δ(t + 3) dt', formula: 'sin(-6π)', val: '0', col: '#7c3aed' },
+        { part: '(c)', integral: '∫ u₁(1 - τ) cos(2πτ) dτ', formula: '2π sin(0)', val: '0', col: '#059669' }
+      ];
+
+      results.forEach((r, idx) => {
+        const x = 40 + idx * 235;
+        ctx.fillStyle = '#f8fafc';
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.beginPath();
+        ctx.roundRect(x, 50, 225, 125, 8);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = r.col;
+        ctx.font = 'bold 13px Inter';
+        ctx.fillText(r.part + ' Şıkkı', x + 15, 75);
+
+        ctx.fillStyle = '#334155';
+        ctx.font = '10px monospace';
+        ctx.fillText(r.integral, x + 12, 100);
+
+        ctx.fillStyle = '#64748b';
+        ctx.font = '11px Inter';
+        ctx.fillText('İşlem: ' + r.formula, x + 15, 125);
+
+        ctx.fillStyle = r.col;
+        ctx.font = 'bold 16px Inter';
+        ctx.fillText('Sonuç = ' + r.val, x + 15, 155);
+      });
+
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 11px Inter';
+      ctx.fillText('Tebrikler! Bölüm 2 Giriş Problemleri (2.1 - 2.20) Eksiksiz Tamamlandı!', 170, 202);
+
+      document.getElementById('img6').src = canvas.toDataURL();
+    }
+
+    // --- Sayfa Yüklendiğinde Başlat ---
+    window.addEventListener('load', () => {
+      updateSim();
+      renderCard1();
+      renderCard2();
+      renderCard3();
+      renderCard4();
+      renderCard5();
+      renderCard6();
+    });
+  </script>
+</body>
+</html>
