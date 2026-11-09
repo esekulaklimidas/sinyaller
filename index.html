@@ -41,6 +41,7 @@
         <a href="#sec-blok-diyagramlari" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">5. Blok Diyagramları</a>
         <a href="#sec-ileri-duzey" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-amber-600 transition">6. İleri Düzey</a>
         <a href="#sec-fiziksel-sistemler" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-emerald-600 transition">7. Fiziksel Sistemler</a>
+        <a href="#sec-fourier-serisi" class="px-3 py-1.5 rounded-lg hover:bg-slate-100 hover:text-indigo-600 transition">8. Fourier Serisi</a>
       </nav>
 
       <div class="flex items-center gap-2">
@@ -121,6 +122,7 @@
         <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
         <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
         <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
+        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (1)</button>
         <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
         <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
         <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
@@ -1181,6 +1183,43 @@ eq 0$ ile nedensellik ihlali.
             </p>
           </a>
         </div>
+      </div>
+    </section>
+
+
+    <!-- ========================================================================= -->
+    <!-- BÖLÜM 8: PERİYODİK SİNYALLERİN FOURIER SERİSİ GÖSTERİMİ (BÖLÜM 3 PROBLEMLERİ) -->
+    <!-- ========================================================================= -->
+    <section id="sec-fourier-serisi" class="category-section space-y-6">
+      <div class="border-b border-slate-200 pb-4 flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-7 bg-indigo-600 rounded-full inline-block"></span>
+            <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-md text-[11px] font-extrabold uppercase tracking-wider">Kitap Bölüm 3</span>
+            <h2 class="text-2xl font-black text-slate-900 tracking-tight">Periyodik Sinyallerin Fourier Serisi Gösterimi</h2>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Sürekli ve Ayrık Zaman Fourier Serisi (CTFS / DTFS), Katsayılar ($a_k$), Harmonik Bileşenler, Eşlenik Simetrisi ve Trigonometrik Dönüşümler.</p>
+        </div>
+        <span class="text-xs font-mono text-slate-400">Problemler: 3.1</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- 3.1 -->
+        <a href="problem_3_1_surekli_zaman_fourier_serisi_katsayilari.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.1 fourier serisi sürekli zaman ctfs periyodik sinyal katsayılar a1 a3 eşlenik simetrisi trigonometrik gösterim oppenheim sayfa 281">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.1</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Serisi (CTFS)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sürekli Zaman Fourier Serisi ve Trigonometrik Gösterim</h3>
+          <p class="text-xs font-mono text-slate-700">$$T = 8, a_1 = 2, a_3 = 4j \implies x(t) = 4\cos(\frac{\pi}{4}t) + 8\cos(\frac{3\pi}{4}t + \frac{\pi}{2})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Temel frekans $\omega_0 = \pi/4$, reel sinyallerde eşlenik simetrisi ($a_{-k} = a_k^*$), üstel açılımdan kosinüs ve faz formuna adım adım dönüşüm ve dönen fazör simülasyonu.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">1. ve 3. Harmonik Analizi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
       </div>
     </section>
 
