@@ -122,7 +122,7 @@
         <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
         <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
         <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
-        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (1)</button>
+        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (2)</button>
         <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
         <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
         <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
@@ -1200,7 +1200,7 @@ eq 0$ ile nedensellik ihlali.
           </div>
           <p class="text-xs text-slate-500 mt-1">Sürekli ve Ayrık Zaman Fourier Serisi (CTFS / DTFS), Katsayılar ($a_k$), Harmonik Bileşenler, Eşlenik Simetrisi ve Trigonometrik Dönüşümler.</p>
         </div>
-        <span class="text-xs font-mono text-slate-400">Problemler: 3.1</span>
+        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1217,6 +1217,22 @@ eq 0$ ile nedensellik ihlali.
           </p>
           <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
             <span class="text-emerald-600 font-medium font-bold">1. ve 3. Harmonik Analizi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+              <!-- 3.2 -->
+        <a href="problem_3_2_ayrik_zaman_fourier_serisi_sinus_donusumu.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.2 fourier serisi ayrık zaman dtfs periyodik dizi katsayılar a0 a2 a4 eşlenik simetrisi trigonometrik sinüs gösterimi oppenheim sayfa 281 282">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.2</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Fourier Serisi (DTFS)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Fourier Serisi ve Sinüs Gösterimi</h3>
+          <p class="text-xs font-mono text-slate-700">$$N = 5, a_0=1, a_2=e^{j\pi/4}, a_4=2e^{j\pi/3} \implies x[n] = 1 + 2\sin(\frac{4\pi}{5}n + \frac{3\pi}{4}) + 4\sin(\frac{8\pi}{5}n + \frac{5\pi}{6})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Temel açısal frekans $\omega_0 = 2\pi/5$, DTFS katsayı periyodikliği ($a_{k+5}=a_k$), reel sinyallerde eşlenik simetrisi ve $\cos\theta = \sin(\theta+\pi/2)$ ile tam analitik sinüs açılımı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">DT Stem &amp; DTFS Fazör Simülatörü</span>
             <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
           </div>
         </a>

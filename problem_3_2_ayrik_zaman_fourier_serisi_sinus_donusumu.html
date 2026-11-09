@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.2 Ayrık Zaman Fourier Serisi Görselleştirici</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    .math-font { font-family: "Cambria Math", "Times New Roman", serif; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- 🧭 Ana Menüye Dönüş Navigasyonu -->
+    <div class="flex items-center justify-between pb-2">
+      <a href="index.html" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-700 hover:text-purple-600 hover:border-purple-300 shadow-sm transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+        <span>Ana Menüye Dön (Tüm Sorular &amp; Konu Anlatımı)</span>
+      </a>
+      <span class="text-xs text-slate-400 font-mono">Oppenheim 2. Baskı &bull; Bölüm 3</span>
+    </div>
+
+    <!-- Üst Başlık Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+      <div class="flex items-center space-x-3 mb-2">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold uppercase tracking-wider">Ayrık Zaman (Discrete-Time)</span>
+        <span class="text-xs text-slate-500 font-medium">Oppenheim Problem 3.2</span>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900 mb-2">Problem 3.2 — Ayrık Zaman Fourier Serisi (DTFS) ve Trigonometrik Sinüs Gösterimi</h1>
+      <p class="text-slate-600 text-sm leading-relaxed">
+        $$x[n] \text{ reel ve periyodik}, \quad N = 5, \quad a_0 = 1, \quad a_2 = a_{-2}^* = e^{j\pi/4}, \quad a_4 = a_{-4}^* = 2e^{j\pi/3}$$
+        $$x[n] = A_0 + \sum_{k=1}^{\infty} A_k \sin(\omega_k n + \phi_k)$$
+        Ayrık zaman Fourier serisi katsayılarının ($a_k$) periyodikliği, reel sinyallerde eşlenik simetrisi ve Euler bağıntısı kullanılarak sinyal sinüs harmonikleri formunda ifade edilir.
+      </p>
+    </div>
+
+    <!-- 📖 Soru Analizi & Mini Konu Anlatımı Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+        <span class="p-2 bg-purple-50 text-purple-700 rounded-xl">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746-0.332-.477-4.5-1.253"/></svg>
+        </span>
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Soru Analizi &amp; Mini Konu Anlatımı</h2>
+          <p class="text-xs text-slate-500">Ayrık zaman Fourier serisi (DTFS), katsayı periyodikliği ve sinüs dönüşüm ilkeleri</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2">
+          <h4 class="font-bold text-slate-900 flex items-center gap-1.5 text-xs uppercase tracking-wide text-purple-700">
+            🎯 Soru Bizden Ne İstiyor?
+          </h4>
+          <ul class="text-slate-600 text-xs leading-relaxed space-y-1.5 list-disc list-inside">
+            <li><strong>Fiziksel Model:</strong> $N = 5$ periyotlu, sıfırdan farklı sadece $a_0=1$, $a_2=e^{j\pi/4}$ ve $a_4=2e^{j\pi/3}$ Fourier serisi katsayılarına sahip reel değerli ayrık sinyal $x[n]$.</li>
+            <li><strong>İstenen:</strong> $x[n]$ sinyalini $A_0 + \sum_{k=1}^{\infty} A_k \sin(\omega_k n + \phi_k)$ sinüs serisi formunda ifade etmek ve $A_0, A_k, \omega_k, \phi_k$ sabitlerini bulmak.</li>
+            <li><strong>Kritik Ayrık Zaman Özelliği:</strong> DTFS katsayıları periyodiktir ($a_{k+5} = a_k$). Dolayısıyla $a_4 = a_{-1}$ ve $a_{-4} = a_1$'dir. Ayrıca kosinüsten sinüse geçişte $\cos\theta = \sin(\theta + \pi/2)$ özdeşliği uygulanır.</li>
+          </ul>
+        </div>
+
+        <div class="bg-purple-50/50 p-4 rounded-xl border border-purple-100 space-y-2">
+          <h4 class="font-bold text-purple-950 flex items-center gap-1.5 text-xs uppercase tracking-wide">
+            💡 Adım Adım Çözüm Metodolojisi
+          </h4>
+          <ol class="text-slate-700 text-xs leading-relaxed space-y-1.5 list-decimal list-inside">
+            <li><strong>Temel Açısal Frekans:</strong> $\omega_0 = 2\pi / N = 2\pi / 5$ rad hesaplanır.</li>
+            <li><strong>Reel Eşlenik Simetrisi:</strong> $a_{-2} = a_2^* = e^{-j\pi/4}$ ve $a_{-4} = a_4^* = 2e^{-j\pi/3}$ belirlenir.</li>
+            <li><strong>DTFS Sentez Denklemi:</strong> $x[n] = a_0 + (a_2 e^{j 2\omega_0 n} + a_{-2} e^{-j 2\omega_0 n}) + (a_4 e^{j 4\omega_0 n} + a_{-4} e^{-j 4\omega_0 n})$ yazılır.</li>
+            <li><strong>Sinüs Formuna Dönüşüm:</strong> Kosinüs terimleri $\cos\theta = \sin(\theta + \pi/2)$ ile sinüs faz açısına kaydırılır.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Ayrık Zaman Fourier Serisi Simülatörü</h2>
+          <p class="text-xs text-slate-500">Üstte ayrık zaman harmonik bileşen stemleri ve dönen fazörler; altta toplam sinyal $x[n]$.</p>
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2">
+            <label class="text-xs font-semibold text-slate-600">n indisi:</label>
+            <input type="range" id="nSlider" min="-5" max="15" step="1" value="0" class="w-32 accent-purple-600 cursor-pointer">
+            <span id="nVal" class="text-xs font-mono font-bold bg-slate-100 px-2 py-1 rounded text-slate-800">n = 0</span>
+          </div>
+          <button id="playBtn" class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold">Oynat</button>
+        </div>
+      </div>
+
+      <!-- Üst Kanvas: Harmonikler ve Fazörler -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Harmonik Bileşenler: <span class="text-blue-600 font-bold">■ k=2: 2sin(4πn/5 + 3π/4)</span> &nbsp;|&nbsp; <span class="text-rose-600 font-bold">■ k=4: 4sin(8πn/5 + 5π/6)</span></span>
+          <span class="text-purple-600 font-medium">Sağ Bölüm: Karmaşık DTFS Fazör Dairesi</span>
+        </div>
+        <canvas id="kCanvas" width="860" height="230" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Alt Kanvas: x[n] Sinyali -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <div class="bg-slate-50 px-3 py-1.5 border-b border-slate-200 text-xs font-semibold text-slate-600 flex justify-between">
+          <span>Toplam Ayrık Zaman Sinyali: <span class="text-teal-700 font-bold">x[n] = 1 + x₂[n] + x₄[n]</span></span>
+          <span class="text-rose-600 font-medium">Kırmızı imleç anlık n indisini ve x[n] değerini gösterir</span>
+        </div>
+        <canvas id="ynCanvas" width="860" height="180" class="w-full h-auto block"></canvas>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Kutusu -->
+      <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 text-xs text-slate-700 font-mono" id="simMath">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 1. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">1. Adım</span>
+        <button onclick="downloadCard('img1', '1_adim_temel_frekans_ve_dtfs_periyodiklik.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Temel Frekans ve DTFS Katsayılarının Periyodikliği</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Verilen $x[n]$ ayrık zamanlı periyodik sinyalinin temel periyodu $N = 5$ örnektir. Temel açısal frekans $\omega_0$:
+        $$\omega_0 = \frac{2\pi}{N} = \frac{2\pi}{5} \text{ rad}$$
+        Ayrık zaman Fourier serisi katsayıları $N = 5$ periyodu ile periyodiktir ($a_{k+5} = a_k$). Sıfırdan farklı verilen katsayılar:
+        $$a_0 = 1, \quad a_2 = a_{-2}^* = e^{j\pi/4}, \quad a_4 = a_{-4}^* = 2e^{j\pi/3}$$
+        Periyodiklikten dolayı $a_{-1} = a_{-1+5} = a_4 = 2e^{j\pi/3}$ ve $a_1 = a_{1-5} = a_{-4} = 2e^{-j\pi/3}$ olur.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img1" class="w-full h-auto block" alt="1. Adım">
+      </div>
+    </div>
+
+    <!-- 2. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-semibold">2. Adım</span>
+        <button onclick="downloadCard('img2', '2_adim_reel_eslenik_simetri.png')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Reel Sinyallerde Eşlenik Simetrisi ($a_{-k} = a_k^*$)</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $x[n]$ gerçel değerli olduğundan ($x^*[n] = x[n]$), katsayılar eşlenik simetrisini sağlar:
+        $$x[n] \in \mathbb{R} \iff a_{-k} = a_k^*$$
+        - $k = 0$: $a_0 = 1$ (DC ortalama değer, saf reel).
+        - $k = 2$: $a_2 = e^{j\pi/4} \implies a_{-2} = a_2^* = e^{-j\pi/4}$ (Genlik $|a_2| = 1$, Faz $\angle a_2 = \pi/4$).
+        - $k = 4$: $a_4 = 2e^{j\pi/3} \implies a_{-4} = a_4^* = 2e^{-j\pi/3}$ (Genlik $|a_4| = 2$, Faz $\angle a_4 = \pi/3$).
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img2" class="w-full h-auto block" alt="2. Adım">
+      </div>
+    </div>
+
+    <!-- 3. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs font-semibold">3. Adım</span>
+        <button onclick="downloadCard('img3', '3_adim_dtfs_sentez_acilimi.png')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">DTFS Sentez Açılımı ve Eşlenik Çift Gruplama</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Ayrık zaman Fourier serisi sentez denklemi tek bir $N = 5$ periyodu üzerinden yazılır:
+        $$x[n] = \sum_{k=\langle 5 \rangle} a_k e^{j k \omega_0 n} = a_0 + \sum_{k=1, 2} \left( a_k e^{j k \omega_0 n} + a_{-k} e^{-j k \omega_0 n} \right)$$
+        Verilen katsayılar ile açılım:
+        $$x[n] = 1 + \left( e^{j\pi/4} e^{j 2\omega_0 n} + e^{-j\pi/4} e^{-j 2\omega_0 n} \right) + \left( 2e^{j\pi/3} e^{j 4\omega_0 n} + 2e^{-j\pi/3} e^{-j 4\omega_0 n} \right)$$
+        Euler özdeşliğine göre her karmaşık eşlenik çift bir kosinüs dalgasına karşılık gelir: $a_k e^{jk\omega_0 n} + a_k^* e^{-jk\omega_0 n} = 2|a_k|\cos(k\omega_0 n + \angle a_k)$.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img3" class="w-full h-auto block" alt="3. Adım">
+      </div>
+    </div>
+
+    <!-- 4. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold">4. Adım</span>
+        <button onclick="downloadCard('img4', '4_adim_k2_harmonik_sinus_donusumu.png')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">$k = \pm 2$ Harmonik Çiftinin Sinüs Dönüşümü</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $k = \pm 2$ terimleri birleştirilir:
+        $$x_2[n] = e^{j(2\omega_0 n + \pi/4)} + e^{-j(2\omega_0 n + \pi/4)} = 2\cos\left(2\omega_0 n + \frac{\pi}{4}\right) = 2\cos\left(\frac{4\pi}{5}n + \frac{\pi}{4}\right)$$
+        İstenen ifade sinüs formunda olduğundan $\cos\theta = \sin(\theta + \pi/2)$ özdeşliği uygulanır:
+        $$x_2[n] = 2\sin\left(\frac{4\pi}{5}n + \frac{\pi}{4} + \frac{\pi}{2}\right) = 2\sin\left(\frac{4\pi}{5}n + \frac{3\pi}{4}\right)$$
+        Parametreler: $A_2 = 2, \quad \omega_2 = \frac{4\pi}{5} \text{ rad}, \quad \phi_2 = \frac{3\pi}{4} \text{ rad (135°)}$.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img4" class="w-full h-auto block" alt="4. Adım">
+      </div>
+    </div>
+
+    <!-- 5. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-rose-100 text-rose-800 rounded-full text-xs font-semibold">5. Adım</span>
+        <button onclick="downloadCard('img5', '5_adim_k4_harmonik_sinus_donusumu.png')" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">$k = \pm 4$ Harmonik Çiftinin Sinüs Dönüşümü</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        $k = \pm 4$ terimleri birleştirilir:
+        $$x_4[n] = 2e^{j(4\omega_0 n + \pi/3)} + 2e^{-j(4\omega_0 n + \pi/3)} = 4\cos\left(4\omega_0 n + \frac{\pi}{3}\right) = 4\cos\left(\frac{8\pi}{5}n + \frac{\pi}{3}\right)$$
+        $\cos\theta = \sin(\theta + \pi/2)$ dönüşümü ile:
+        $$x_4[n] = 4\sin\left(\frac{8\pi}{5}n + \frac{\pi}{3} + \frac{\pi}{2}\right) = 4\sin\left(\frac{8\pi}{5}n + \frac{5\pi}{6}\right)$$
+        *(Alternatif eşdeğer frekans: $\frac{8\pi}{5} \equiv -\frac{2\pi}{5} \implies 4\cos(\frac{2\pi}{5}n - \frac{\pi}{3}) = 4\sin(\frac{2\pi}{5}n + \frac{\pi}{6})$)*
+        Parametreler: $A_4 = 4, \quad \omega_4 = \frac{8\pi}{5} \text{ rad}, \quad \phi_4 = \frac{5\pi}{6} \text{ rad (150°)}$.
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img5" class="w-full h-auto block" alt="5. Adım">
+      </div>
+    </div>
+
+    <!-- 6. ADIM KARTI -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-3">
+      <div class="flex justify-between items-center">
+        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-semibold">6. Adım</span>
+        <button onclick="downloadCard('img6', '6_adim_nihai_ayrik_sinus_serisi.png')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-medium transition shadow-sm">Resmi İndir (PNG)</button>
+      </div>
+      <h3 class="text-base font-bold text-slate-900">Toplam Çıkış Sinyali $x[n]$ ve Parametre Tablosu</h3>
+      <p class="text-xs text-slate-600 leading-relaxed">
+        İstenen $x[n] = A_0 + \sum_{k=1}^{\infty} A_k \sin(\omega_k n + \phi_k)$ formundaki nihai analitik bağıntı:
+        $$x[n] = 1 + 2\sin\left(\frac{4\pi}{5}n + \frac{3\pi}{4}\right) + 4\sin\left(\frac{8\pi}{5}n + \frac{5\pi}{6}\right)$$
+        veya temel frekans aralığında ($-\pi < \omega \le \pi$):
+        $$x[n] = 1 + 4\sin\left(\frac{2\pi}{5}n + \frac{\pi}{6}\right) + 2\sin\left(\frac{4\pi}{5}n + \frac{3\pi}{4}\right)$$
+      </p>
+      <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+        <img id="img6" class="w-full h-auto block" alt="6. Adım">
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const DPR = 2;
+
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      c.width = w * DPR;
+      c.height = h * DPR;
+      const ctx = c.getContext('2d');
+      ctx.scale(DPR, DPR);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function drawDiscreteAxis(ctx, w, h, ox, oy, minN, maxN, stepPx, labelX = "n", labelY = "Genlik") {
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, w, h);
+
+      // Kılavuz çizgileri
+      ctx.strokeStyle = "#f1f5f9";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (let y = 20; y < h; y += 25) { ctx.moveTo(25, y); ctx.lineTo(w - 25, y); }
+      ctx.stroke();
+
+      // Ana Eksenler
+      ctx.strokeStyle = "#334155";
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(25, oy); ctx.lineTo(w - 25, oy);
+      ctx.moveTo(ox, h - 20); ctx.lineTo(ox, 20);
+      ctx.stroke();
+
+      // Oklar
+      ctx.fillStyle = "#334155";
+      ctx.beginPath();
+      ctx.moveTo(w - 25, oy - 4); ctx.lineTo(w - 15, oy); ctx.lineTo(w - 25, oy + 4); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(ox - 4, 20); ctx.lineTo(ox, 12); ctx.lineTo(ox + 4, 20); ctx.fill();
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillText(labelX, w - 18, oy + 4);
+      ctx.fillText(labelY, ox - 35, 16);
+
+      // Çentikler
+      ctx.fillStyle = "#64748b";
+      ctx.font = "10px monospace";
+      for (let n = minN; n <= maxN; n++) {
+        const px = ox + n * stepPx;
+        if (px >= 30 && px <= w - 30) {
+          ctx.strokeStyle = "#cbd5e1";
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(px, oy - 3); ctx.lineTo(px, oy + 3);
+          ctx.stroke();
+          if (n % 2 === 0 || n === 0) {
+            ctx.fillText(n.toString(), px - (n < 0 ? 6 : 3), oy + 15);
+          }
+        }
+      }
+    }
+
+    function drawStem(ctx, px, oy, val, color, scaleY = 16, radius = 3.5) {
+      const py = oy - val * scaleY;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(px, oy);
+      ctx.lineTo(px, py);
+      ctx.stroke();
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px, py, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // --- KART 1: Temel Frekans ve Parametreler ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      drawDiscreteAxis(ctx, 860, 220, 200, 110, -3, 14, 40, "n", "x[n]");
+
+      // N=5 Periyot vurgusu [0, 4]
+      ctx.fillStyle = "rgba(99, 102, 241, 0.08)";
+      ctx.fillRect(200 - 15, 25, 5 * 40, 165);
+      ctx.strokeStyle = "#6366f1"; ctx.lineWidth = 1.2; ctx.setLineDash([4, 4]);
+      ctx.strokeRect(200 - 15, 25, 5 * 40, 165);
+      ctx.setLineDash([]);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#4f46e5"; ctx.fillText("1 Temel Periyot: N = 5 Örnek", 420, 45);
+      ctx.fillStyle = "#334155"; ctx.fillText("ω₀ = 2π / 5 rad ≈ 1.2566 rad", 420, 68);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#64748b"; ctx.fillText("Katsayı Periyodikliği: a_{k+5} = a_k", 420, 92);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("a₀ = 1,   a₂ = e^(jπ/4),   a₄ = 2e^(jπ/3)", 420, 116);
+
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 2: Reel Eşlenik Simetrisi ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, 860, 220);
+
+      // Sol: a_2 ve a_{-2}
+      const cx1 = 220, cy1 = 110;
+      ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(40, cy1); ctx.lineTo(380, cy1); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx1, 20); ctx.lineTo(cx1, 200); ctx.stroke();
+      ctx.fillStyle = "#64748b"; ctx.font = "10px sans-serif";
+      ctx.fillText("Re", 365, cy1 - 5); ctx.fillText("Im", cx1 + 5, 30);
+
+      // a2 = e^(jpi/4)
+      const r1 = 60;
+      const x1 = cx1 + r1 * Math.cos(Math.PI/4), y1 = cy1 - r1 * Math.sin(Math.PI/4);
+      ctx.strokeStyle = "#2563eb"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(cx1, cy1); ctx.lineTo(x1, y1); ctx.stroke();
+      ctx.fillStyle = "#2563eb"; ctx.beginPath(); ctx.arc(x1, y1, 4.5, 0, Math.PI * 2); ctx.fill();
+      ctx.font = "bold 11px sans-serif"; ctx.fillText("a₂ = e^(jπ/4)", x1 + 6, y1);
+
+      // a_{-2} = e^(-jpi/4)
+      const y1_ = cy1 + r1 * Math.sin(Math.PI/4);
+      ctx.strokeStyle = "#1d4ed8"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(cx1, cy1); ctx.lineTo(x1, y1_); ctx.stroke();
+      ctx.fillStyle = "#1d4ed8"; ctx.beginPath(); ctx.arc(x1, y1_, 4.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillText("a₋₂ = e^(-jπ/4) = a₂*", x1 + 6, y1_ + 10);
+
+      // Sağ: a_4 ve a_{-4}
+      const cx2 = 620, cy2 = 110;
+      ctx.strokeStyle = "#cbd5e1"; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(440, cy2); ctx.lineTo(780, cy2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx2, 20); ctx.lineTo(cx2, 200); ctx.stroke();
+      ctx.fillStyle = "#64748b"; ctx.fillText("Re", 765, cy2 - 5); ctx.fillText("Im", cx2 + 5, 30);
+
+      // a4 = 2e^(jpi/3)
+      const r2 = 75;
+      const x2 = cx2 + r2 * Math.cos(Math.PI/3), y2 = cy2 - r2 * Math.sin(Math.PI/3);
+      ctx.strokeStyle = "#e11d48"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(cx2, cy2); ctx.lineTo(x2, y2); ctx.stroke();
+      ctx.fillStyle = "#e11d48"; ctx.beginPath(); ctx.arc(x2, y2, 4.5, 0, Math.PI * 2); ctx.fill();
+      ctx.font = "bold 11px sans-serif"; ctx.fillText("a₄ = 2e^(jπ/3)", x2 + 6, y2);
+
+      // a_{-4} = 2e^(-jpi/3)
+      const y2_ = cy2 + r2 * Math.sin(Math.PI/3);
+      ctx.strokeStyle = "#be123c"; ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(cx2, cy2); ctx.lineTo(x2, y2_); ctx.stroke();
+      ctx.fillStyle = "#be123c"; ctx.beginPath(); ctx.arc(x2, y2_, 4.5, 0, Math.PI * 2); ctx.fill();
+      ctx.fillText("a₋₄ = 2e^(-jπ/3) = a₄*", x2 + 6, y2_ + 10);
+
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 3: DTFS Sentez ve Harmonik Gruplama ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      drawDiscreteAxis(ctx, 860, 220, 220, 110, -3, 13, 38, "n", "x[n]");
+
+      const w0 = 2 * Math.PI / 5;
+      for (let n = -3; n <= 13; n++) {
+        const px = 220 + n * 38;
+        const v2 = 2 * Math.cos(2 * w0 * n + Math.PI / 4);
+        const v4 = 4 * Math.cos(4 * w0 * n + Math.PI / 3);
+        drawStem(ctx, px - 3, 110, v2, "#2563eb", 12, 3);
+        drawStem(ctx, px + 3, 110, v4, "#e11d48", 12, 3);
+      }
+
+      ctx.font = "bold 11px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("■ k=±2 Çifti: 2 cos(4πn/5 + π/4)", 450, 45);
+      ctx.fillStyle = "#e11d48"; ctx.fillText("■ k=±4 Çifti: 4 cos(8πn/5 + π/3)", 450, 68);
+      ctx.fillStyle = "#334155"; ctx.fillText("DC Bileşeni: a₀ = 1", 450, 92);
+      ctx.fillStyle = "#0f172a"; ctx.fillText("x[n] = 1 + x₂[n] + x₄[n]", 450, 116);
+
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 4: k=2 Sinüs Dönüşümü ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      drawDiscreteAxis(ctx, 860, 220, 220, 110, -3, 13, 38, "n", "x₂[n]");
+
+      const w0 = 2 * Math.PI / 5;
+      for (let n = -3; n <= 13; n++) {
+        const px = 220 + n * 38;
+        const v = 2 * Math.sin(2 * w0 * n + 3 * Math.PI / 4);
+        drawStem(ctx, px, 110, v, "#2563eb", 22, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#2563eb"; ctx.fillText("x₂[n] = 2 sin(4πn/5 + 3π/4)", 420, 45);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#334155"; ctx.fillText("A₂ = 2,   ω₂ = 4π/5 rad,   φ₂ = 3π/4 rad (135°)", 420, 70);
+      ctx.fillStyle = "#64748b"; ctx.fillText("Özdeşlik: cos(θ) = sin(θ + π/2) ⟹ π/4 + π/2 = 3π/4", 420, 95);
+
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 5: k=4 Sinüs Dönüşümü ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      drawDiscreteAxis(ctx, 860, 220, 220, 110, -3, 13, 38, "n", "x₄[n]");
+
+      const w0 = 2 * Math.PI / 5;
+      for (let n = -3; n <= 13; n++) {
+        const px = 220 + n * 38;
+        const v = 4 * Math.sin(4 * w0 * n + 5 * Math.PI / 6);
+        drawStem(ctx, px, 110, v, "#e11d48", 14, 4);
+      }
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#e11d48"; ctx.fillText("x₄[n] = 4 sin(8πn/5 + 5π/6)", 420, 45);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#334155"; ctx.fillText("A₄ = 4,   ω₄ = 8π/5 rad,   φ₄ = 5π/6 rad (150°)", 420, 70);
+      ctx.fillStyle = "#64748b"; ctx.fillText("Özdeşlik: cos(θ) = sin(θ + π/2) ⟹ π/3 + π/2 = 5π/6", 420, 95);
+
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- KART 6: Toplam Sinyal ve Parametreler ---
+    (function() {
+      const { canvas, ctx } = createHiDPICanvas(860, 220);
+      drawDiscreteAxis(ctx, 860, 220, 220, 125, -3, 13, 38, "n", "x[n]");
+
+      const w0 = 2 * Math.PI / 5;
+      for (let n = -3; n <= 13; n++) {
+        const px = 220 + n * 38;
+        const v = 1 + 2 * Math.sin(2 * w0 * n + 3 * Math.PI / 4) + 4 * Math.sin(4 * w0 * n + 5 * Math.PI / 6);
+        drawStem(ctx, px, 125, v, "#0d9488", 12, 4);
+      }
+
+      // N=5 Periyot çizgisi
+      ctx.strokeStyle = "#6366f1"; ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
+      ctx.beginPath(); ctx.moveTo(220 + 5 * 38, 20); ctx.lineTo(220 + 5 * 38, 200); ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.font = "bold 12px sans-serif";
+      ctx.fillStyle = "#0d9488"; ctx.fillText("x[n] = 1 + 2 sin(4πn/5 + 3π/4) + 4 sin(8πn/5 + 5π/6)", 360, 35);
+      ctx.font = "11px sans-serif";
+      ctx.fillStyle = "#334155"; ctx.fillText("A₀ = 1 (DC Terim)", 360, 58);
+      ctx.fillStyle = "#334155"; ctx.fillText("k=2: A₂=2, ω₂=4π/5, φ₂=3π/4", 360, 78);
+      ctx.fillStyle = "#334155"; ctx.fillText("k=4: A₄=4, ω₄=8π/5, φ₄=5π/6", 360, 98);
+      ctx.fillStyle = "#64748b"; ctx.fillText("Örnek değerleri: x[0]≈4.41, x[1]≈2.94, x[2]≈3.20, x[3]≈-3.56, x[4]≈-1.99", 360, 118);
+
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    })();
+
+    // --- CANLI SİMÜLATÖR MOTORU ---
+    const kCanvas = document.getElementById('kCanvas');
+    const kCtx = kCanvas.getContext('2d');
+    const ynCanvas = document.getElementById('ynCanvas');
+    const yCtx = ynCanvas.getContext('2d');
+    const nSlider = document.getElementById('nSlider');
+    const nVal = document.getElementById('nVal');
+    const playBtn = document.getElementById('playBtn');
+    const simMath = document.getElementById('simMath');
+
+    const w0 = 2 * Math.PI / 5;
+
+    function evalX(n) {
+      return 1 + 2 * Math.sin(2 * w0 * n + 3 * Math.PI / 4) + 4 * Math.sin(4 * w0 * n + 5 * Math.PI / 6);
+    }
+
+    function updateSim() {
+      const n = parseInt(nSlider.value);
+      nVal.textContent = "n = " + n;
+
+      const w = 860, hK = 230, oxK = 220, oyK = 115, stepK = 38;
+      kCtx.clearRect(0, 0, w, hK);
+      drawDiscreteAxis(kCtx, w, hK, oxK, oyK, -5, 13, stepK, "n", "Harmonikler");
+
+      // Harmonik 2 (Mavi) ve Harmonik 4 (Kırmızı) stemleri
+      for (let i = -5; i <= 13; i++) {
+        const px = oxK + i * stepK;
+        const v2 = 2 * Math.sin(2 * w0 * i + 3 * Math.PI / 4);
+        const v4 = 4 * Math.sin(4 * w0 * i + 5 * Math.PI / 6);
+        drawStem(kCtx, px - 3, oyK, v2, "#2563eb", 12, 3);
+        drawStem(kCtx, px + 3, oyK, v4, "#e11d48", 12, 3);
+      }
+
+      // Seçili n dikey kırmızı çizgisi
+      const pPos = oxK + n * stepK;
+      kCtx.strokeStyle = "#dc2626"; kCtx.lineWidth = 1.4; kCtx.setLineDash([3, 3]);
+      kCtx.beginPath(); kCtx.moveTo(pPos, oyK + 25); kCtx.lineTo(pPos, 25); kCtx.stroke();
+      kCtx.setLineDash([]);
+      kCtx.fillStyle = "#dc2626"; kCtx.font = "bold 10px sans-serif";
+      kCtx.fillText("n = " + n, pPos - 12, 20);
+
+      // Sağ Bölüm: Dönen Fazör Dairesi
+      const pcX = w - 120, pcY = hK / 2;
+      kCtx.fillStyle = "#fafafa";
+      kCtx.fillRect(w - 220, 0, 220, hK);
+      kCtx.strokeStyle = "#e2e8f0"; kCtx.strokeRect(w - 220, 0, 220, hK);
+
+      kCtx.strokeStyle = "#cbd5e1"; kCtx.lineWidth = 1;
+      kCtx.beginPath(); kCtx.moveTo(w - 210, pcY); kCtx.lineTo(w - 30, pcY); kCtx.stroke();
+      kCtx.beginPath(); kCtx.moveTo(pcX, 20); kCtx.lineTo(pcX, hK - 20); kCtx.stroke();
+      kCtx.fillStyle = "#64748b"; kCtx.font = "9px sans-serif";
+      kCtx.fillText("Re", w - 40, pcY - 4); kCtx.fillText("Im", pcX + 4, 30);
+      kCtx.fillText("DTFS Fazörleri", w - 210, 20);
+
+      // Fazör 2: w2*n + pi/4
+      const th2 = 2 * w0 * n + Math.PI / 4;
+      const r2 = 30;
+      const p2X = pcX + r2 * Math.cos(th2), p2Y = pcY - r2 * Math.sin(th2);
+      kCtx.strokeStyle = "#2563eb"; kCtx.lineWidth = 2;
+      kCtx.beginPath(); kCtx.moveTo(pcX, pcY); kCtx.lineTo(p2X, p2Y); kCtx.stroke();
+      kCtx.fillStyle = "#2563eb"; kCtx.beginPath(); kCtx.arc(p2X, p2Y, 3.5, 0, Math.PI * 2); kCtx.fill();
+
+      // Fazör 4: w4*n + pi/3
+      const th4 = 4 * w0 * n + Math.PI / 3;
+      const r4 = 55;
+      const p4X = pcX + r4 * Math.cos(th4), p4Y = pcY - r4 * Math.sin(th4);
+      kCtx.strokeStyle = "#e11d48"; kCtx.lineWidth = 2;
+      kCtx.beginPath(); kCtx.moveTo(pcX, pcY); kCtx.lineTo(p4X, p4Y); kCtx.stroke();
+      kCtx.fillStyle = "#e11d48"; kCtx.beginPath(); kCtx.arc(p4X, p4Y, 3.5, 0, Math.PI * 2); kCtx.fill();
+
+      // Alt Kanvas: y[n] -> x[n] Sinyali
+      const hY = 180, oxY = 220, oyY = 120, stepY = 38;
+      yCtx.clearRect(0, 0, w, hY);
+      drawDiscreteAxis(yCtx, w, hY, oxY, oyY, -5, 13, stepY, "n", "x[n]");
+
+      // Periyot Vurgusu N=5
+      yCtx.fillStyle = "rgba(99, 102, 241, 0.08)";
+      yCtx.fillRect(oxY - 10, 20, 5 * stepY, hY - 35);
+      yCtx.strokeStyle = "#6366f1"; yCtx.lineWidth = 1; yCtx.setLineDash([4, 4]);
+      yCtx.strokeRect(oxY - 10, 20, 5 * stepY, hY - 35);
+      yCtx.setLineDash([]);
+
+      for (let i = -5; i <= 13; i++) {
+        const px = oxY + i * stepY;
+        const yVal = evalX(i);
+        drawStem(yCtx, px, oyY, yVal, "#0d9488", 12, 3.5);
+      }
+
+      // Seçili n vurgusu
+      const curX = evalX(n);
+      const curPx = oxY + n * stepY, curPy = oyY - curX * 12;
+      yCtx.strokeStyle = "#dc2626"; yCtx.lineWidth = 1.5; yCtx.setLineDash([3, 3]);
+      yCtx.beginPath(); yCtx.moveTo(curPx, oyY); yCtx.lineTo(curPx, curPy); yCtx.stroke();
+      yCtx.setLineDash([]);
+      yCtx.fillStyle = "#dc2626"; yCtx.beginPath(); yCtx.arc(curPx, curPy, 5.5, 0, Math.PI * 2); yCtx.fill();
+
+      // Durum paneli
+      const v2Cur = 2 * Math.sin(2 * w0 * n + 3 * Math.PI / 4);
+      const v4Cur = 4 * Math.sin(4 * w0 * n + 5 * Math.PI / 6);
+      simMath.innerHTML = `Durum: <b class="text-indigo-600">n = ${n}</b> &nbsp;|&nbsp; ` +
+                          `DC: <b>A₀ = 1</b> &nbsp;|&nbsp; ` +
+                          `k=2 Bileşeni: <b>x₂[${n}] = ${v2Cur.toFixed(3)}</b> &nbsp;|&nbsp; ` +
+                          `k=4 Bileşeni: <b>x₄[${n}] = ${v4Cur.toFixed(3)}</b> &nbsp;|&nbsp; ` +
+                          `Toplam Sinyal Değeri: <b class="text-teal-700">x[${n}] = ${curX.toFixed(4)}</b>`;
+    }
+
+    nSlider.addEventListener('input', updateSim);
+    updateSim();
+
+    let isPlaying = false;
+    let playInterval = null;
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? "Durdur" : "Oynat";
+      playBtn.className = isPlaying ? "px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-xs font-semibold" : "px-3 py-1 bg-slate-800 hover:bg-slate-700 text-white rounded text-xs font-semibold";
+
+      if (isPlaying) {
+        playInterval = setInterval(() => {
+          let v = parseInt(nSlider.value) + 1;
+          if (v > parseInt(nSlider.max)) v = parseInt(nSlider.min);
+          nSlider.value = v;
+          updateSim();
+        }, 650);
+      } else {
+        clearInterval(playInterval);
+      }
+    });
+
+    function downloadCard(imgId, filename) {
+      const link = document.createElement('a');
+      link.download = filename;
+      link.href = document.getElementById(imgId).src;
+      link.click();
+    }
+  </script>
+</body>
+</html>
