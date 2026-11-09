@@ -122,7 +122,7 @@
         <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
         <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
         <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
-        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (2)</button>
+        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (3)</button>
         <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
         <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
         <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
@@ -1200,7 +1200,7 @@ eq 0$ ile nedensellik ihlali.
           </div>
           <p class="text-xs text-slate-500 mt-1">Sürekli ve Ayrık Zaman Fourier Serisi (CTFS / DTFS), Katsayılar ($a_k$), Harmonik Bileşenler, Eşlenik Simetrisi ve Trigonometrik Dönüşümler.</p>
         </div>
-        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2</span>
+        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2 &bull; 3.3</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1233,6 +1233,22 @@ eq 0$ ile nedensellik ihlali.
           </p>
           <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
             <span class="text-emerald-600 font-medium font-bold">DT Stem &amp; DTFS Fazör Simülatörü</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+              <!-- 3.3 -->
+        <a href="problem_3_3_surekli_zaman_fourier_serisi_katsayilari.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.3 fourier serisi sürekli zaman ctfs periyodik sinyal katsayılar ak temel frekans w0 euler kosinüs sinüs oppenheim sayfa 282">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.3</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Serisi (CTFS)</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Temel Frekans $\omega_0$ ve Fourier Katsayıları</h3>
+          <p class="text-xs font-mono text-slate-700">$$x(t) = 2 + \cos(\frac{2\pi}{3}t) + 4\sin(\frac{5\pi}{3}t) \implies \omega_0 = \frac{\pi}{3}, a_0=2, a_{\pm 2}=\frac{1}{2}, a_5=-2j, a_{-5}=2j$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Frekansların EBOB'u ile temel açısal frekans $\omega_0 = \pi/3$ rad/s tespiti, Euler açılımları ile 2. ve 5. harmonik katsayılarının analitik çözümü.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">CT Harmonikler &amp; Fazör Simülatörü</span>
             <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
           </div>
         </a>
