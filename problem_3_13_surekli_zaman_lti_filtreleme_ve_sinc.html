@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.13: Sürekli Zaman LTI Filtreleme ve Sinc Frekans Yanıtı</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">Bölüm 3: Sürekli Zaman CTFS</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Problem 3.13</span>
+      </div>
+    </div>
+
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+          LTI Frekans Yanıtı $H(j\omega) = \frac{\sin(4\omega)}{\omega}$
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-rose-100 text-rose-800 rounded-full border border-rose-200">
+          Tam Harmonik Bastırma & Sıfır Çıkış
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 3.13: Sinc Frekans Yanıtlı LTI Sistemde Kare Dalga Çıkışı
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Frekans yanıtı $H(j\omega) = \frac{\sin(4\omega)}{\omega}$ olan sürekli zamanlı bir LTI sisteme $T = 8$ periyotlu parçalı kare dalga $x(t)$ uygulandığında tüm harmoniklerin filtrenin sıfır noktalarına denk gelmesiyle sistem çıkışının $y(t) = 0$ olarak sönümlenmesi.
+      </p>
+
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2">
+        <div class="font-bold text-slate-800">Sistem Modeli ve Çıkış:</div>
+        <div class="text-center font-mono text-sm py-1.5 text-blue-900 bg-white rounded-lg border border-slate-200">
+          $$H(jk\omega_0) = \frac{\sin(4 \cdot k\frac{\pi}{4})}{k\frac{\pi}{4}} = \frac{\sin(k\pi)}{k\frac{\pi}{4}} = 0 \quad (\forall k \ne 0), \quad a_0 = 0 \implies \mathbf{y(t) = 0}$$
+        </div>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🎯</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>Girdi:</strong> $T = 8$ periyotlu kare dalga ($0 \le t < 4$ için $-1$, $4 \le t < 8$ için $+1$).</li>
+          <li><strong>Sistem:</strong> Frekans yanıtı $H(j\omega) = \frac{\sin(4\omega)}{\omega}$ olan sürekli zaman LTI sistem.</li>
+          <li><strong>İstenen:</strong> Sistemin $y(t)$ zaman yanıtını bulmak.</li>
+          <li><strong>Kritik Fenomen:</strong> Filtrenin sıfır geçiş frekansları $\omega = \frac{m\pi}{4}$'tür; bu da tam olarak giriş sinyalinin harmonik frekanslarına eşittir!</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+          <li><strong>Giriş Temel Frekansı:</strong> $\omega_0 = 2\pi / 8 = \pi / 4$ rad/s.</li>
+          <li><strong>DC Bileşeni:</strong> $a_0 = \frac{1}{8}[\int_0^4 (-1)dt + \int_4^8 (1)dt] = 0$.</li>
+          <li><strong>Harmonik Yanıtları:</strong> $\omega_k = k\pi/4 \implies H(jk\pi/4) = \frac{\sin(k\pi)}{k\pi/4} = 0$ ($k \ne 0$).</li>
+          <li><strong>DC Kazancı:</strong> $H(j0) = \lim_{\omega \to 0} \frac{\sin(4\omega)}{\omega} = 4$.</li>
+          <li><strong>LTI Çıkış Sentezi:</strong> $y(t) = a_0 H(j0) + \sum_{k \ne 0} a_k H(jk\omega_0) e^{jk\omega_0 t} = 0 + 0 = 0$.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: $H(j\omega)$ Sinc Fonksiyonu ve Harmonik Bastırma</h2>
+          <p class="text-xs text-slate-500">Sinc eğrisini ve giriş sinyalinin harmonik çizgilerini inceleyin; tüm çizgilerin sıfır geçiş noktalarına düştüğünü görün.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Frekans Skalası ($\omega$ aralığı):</span>
+            <span id="wRangeVal" class="text-blue-600 font-mono font-bold">[-3π, 3π]</span>
+          </div>
+          <input id="wSlider" type="range" min="1" max="5" step="1" value="3" class="w-full slider-thumb accent-blue-600">
+        </div>
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Zaman Konumu ($t$):</span>
+            <span id="tVal" class="text-purple-600 font-mono font-bold">t = 0.0 s</span>
+          </div>
+          <input id="tSlider" type="range" min="0" max="8" step="0.1" value="0" class="w-full slider-thumb accent-purple-600">
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Frekans Domeni: $H(j\omega) = \frac{\sin(4\omega)}{\omega}$ ve Harmonik Noktaları $\omega = k\frac{\pi}{4}$</span>
+            <span class="text-rose-600 font-semibold">Tüm Harmoniklerde H(jkω₀) = 0</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="kCanvas" width="800" height="180" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Zaman Domeni: Giriş $x(t)$ (Mavi Kesikli) ve Çıkış $y(t) = 0$ (Kırmızı Düz Çizgi)</span>
+            <span class="text-emerald-600 font-semibold">Tam Sönümlenmiş Çıkış</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="ynCanvas" width="800" height="200" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div id="simMath" class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs font-mono text-blue-900">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">1. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Giriş Sinyalinin Temel Frekansı ve DC Değeri</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_3_13_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Temel periyot $T = 8$ saniye olduğundan:
+          $$\omega_0 = \frac{2\pi}{T} = \frac{2\pi}{8} = \frac{\pi}{4} \text{ rad/s}$$
+          Bir tam periyotluk ortalama değer (DC):
+          $$a_0 = \frac{1}{8} \left[ \int_0^4 (-1)dt + \int_4^8 (1)dt \right] = \frac{1}{8} [-4 + 4] = 0$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img1" class="w-full h-auto block" alt="1. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">2. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Sistemin Frekans Yanıtı $H(j\omega)$ İncelemesi</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_3_13_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sistem frekans yanıtı sinc formundadır:
+          $$H(j\omega) = \frac{\sin(4\omega)}{\omega}$$
+          $\omega = 0$ için limit: $\lim_{\omega \to 0} \frac{\sin(4\omega)}{\omega} = 4$.<br>
+          Sıfır geçişleri: $\sin(4\omega) = 0 \implies 4\omega = m\pi \implies \omega = \frac{m\pi}{4} \quad (m \ne 0)$.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img2" class="w-full h-auto block" alt="2. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">3. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Harmonik Frekanslarında Frekans Yanıtı</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_3_13_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Giriş sinyalinin harmonikleri $\omega_k = k\omega_0 = k\frac{\pi}{4}$ frekanslarındadır.<br>
+          $k \ne 0$ için sistem kazancı:
+          $$H(jk\omega_0) = H\left(j k\frac{\pi}{4}\right) = \frac{\sin\left(4 \cdot k\frac{\pi}{4}\right)}{k\frac{\pi}{4}} = \frac{\sin(k\pi)}{k\frac{\pi}{4}} = \mathbf{0}$$
+          Her $k \in \mathbb{Z} \setminus \{0\}$ için $\sin(k\pi) = 0$ olduğundan sistem TÜM harmonikleri tamamen sıfırlar!
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img3" class="w-full h-auto block" alt="3. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">4. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">DC Bileşeni Katkısı</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_3_13_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $\omega = 0$ noktasında sistem kazancı sıfır değildir ($H(j0) = 4$). Ancak giriş sinyalinin DC katsayısı:
+          $$a_0 = 0$$
+          olduğundan çıkıştaki DC terimi: $y_0 = a_0 H(j0) = 0 \cdot 4 = 0$ olur.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img4" class="w-full h-auto block" alt="4. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">5. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">LTI Çıkışının Süperpozisyon ile Toplanması</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_3_13_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          LTI sistem çıkış formülü:
+          $$y(t) = \sum_{k=-\infty}^{\infty} a_k H(jk\omega_0) e^{jk\omega_0 t} = a_0 H(j0) + \sum_{k \ne 0} a_k \underbrace{H(jk\pi/4)}_{0} e^{jk\pi/4 t} = 0 + 0 = \mathbf{0}$$
+          Çıkış tüm $t$ değerleri için sıfırdır: $\mathbf{y(t) = 0}$.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img5" class="w-full h-auto block" alt="5. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">6. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Zaman Domeni Sezgisi: Konvolüsyon Entegrali</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_3_13_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $H(j\omega) = \frac{\sin(4\omega)}{\omega}$ frekans yanıtının ters Fourier dönüşümü:
+          $$h(t) = \begin{cases} 1/2, & |t| < 4 \\ 0, & |t| > 4 \end{cases}$$
+          Yani sistem 8 saniye genişliğinde bir hareketli ortalama alıcıdır ($T = 8$). $x(t)$'nin 8 saniyelik bir tam periyotluk ortalaması özdeş olarak sıfır olduğundan, konvolüsyon integrali daima sıfır alan tarar ve çıkış sürekli sıfır kalır!
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img6" class="w-full h-auto block" alt="6. Adım"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2;
+      c.width = w * ratio; c.height = h * ratio;
+      c.style.width = w + 'px'; c.style.height = h + 'px';
+      const ctx = c.getContext('2d'); ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
+    const wSlider = document.getElementById('wSlider');
+    const tSlider = document.getElementById('tSlider');
+    const wRangeVal = document.getElementById('wRangeVal');
+    const tVal = document.getElementById('tVal');
+    const simMath = document.getElementById('simMath');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    function drawSimulator() {
+      const wScale = parseInt(wSlider.value);
+      const curT = parseFloat(tSlider.value);
+      wRangeVal.textContent = `[-${wScale}π, +${wScale}π]`;
+      tVal.textContent = `t = ${curT.toFixed(1)} s`;
+
+      // 1. kCanvas
+      const kw = kCanvas.width / 2; const kh = kCanvas.height / 2;
+      const kctx = kCanvas.getContext('2d');
+      kctx.setTransform(1, 0, 0, 1, 0, 0); kctx.scale(2, 2); kctx.clearRect(0, 0, kw, kh);
+      kctx.fillStyle = '#fafafa'; kctx.fillRect(0, 0, kw, kh);
+
+      const midY = kh / 2;
+      kctx.strokeStyle = '#cbd5e1'; kctx.beginPath(); kctx.moveTo(30, midY); kctx.lineTo(kw - 20, midY); kctx.stroke();
+
+      const maxW = wScale * Math.PI;
+      const scaleX = (kw - 60) / (2 * maxW);
+
+      // Plot H(jw) curve
+      kctx.strokeStyle = '#2563eb'; kctx.lineWidth = 2;
+      kctx.beginPath();
+      for (let px = 0; px <= kw - 60; px++) {
+        const w = -maxW + px / scaleX;
+        const hVal = (Math.abs(w) < 0.001) ? 4.0 : (Math.sin(4 * w) / w);
+        const py = midY - hVal * 15;
+        if (px === 0) kctx.moveTo(30 + px, py); else kctx.lineTo(30 + px, py);
+      }
+      kctx.stroke();
+
+      // Plot harmonics w_k = k * pi/4
+      const maxK = Math.floor(maxW / (Math.PI / 4));
+      for (let k = -maxK; k <= maxK; k++) {
+        const w = k * (Math.PI / 4);
+        const cx = 30 + (w + maxW) * scaleX;
+        const hVal = (k === 0) ? 4.0 : 0;
+
+        kctx.fillStyle = (k === 0) ? '#475569' : '#e11d48';
+        kctx.beginPath(); kctx.arc(cx, midY - hVal * 15, 3.5, 0, 2*Math.PI); kctx.fill();
+
+        if (Math.abs(k) <= 4 && k !== 0) {
+          kctx.fillStyle = '#e11d48'; kctx.font = '8px Inter'; kctx.textAlign = 'center';
+          kctx.fillText('k=' + k, cx, midY + 12);
+        }
+      }
+
+      kctx.fillStyle = '#1e293b'; kctx.font = 'bold 11px Inter'; kctx.textAlign = 'left';
+      kctx.fillText('H(jω) Sinc Eğrisi ve Giriş Harmonik Noktaları (Kırmızı Noktalar: H=0)', 30, 20);
+
+      // 2. ynCanvas
+      const yw = ynCanvas.width / 2; const yh = ynCanvas.height / 2;
+      const yctx = ynCanvas.getContext('2d');
+      yctx.setTransform(1, 0, 0, 1, 0, 0); yctx.scale(2, 2); yctx.clearRect(0, 0, yw, yh);
+      yctx.fillStyle = '#ffffff'; yctx.fillRect(0, 0, yw, yh);
+
+      const yMid = yh / 2;
+      yctx.strokeStyle = '#cbd5e1'; yctx.beginPath(); yctx.moveTo(30, yMid); yctx.lineTo(yw - 20, yMid); yctx.stroke();
+
+      const scaleT = (yw - 60) / 16;
+      // Plot input x(t) dashed
+      yctx.strokeStyle = 'rgba(37, 99, 235, 0.4)'; yctx.setLineDash([4, 4]); yctx.lineWidth = 1.5;
+      yctx.beginPath();
+      for (let px = 0; px <= yw - 60; px++) {
+        const t = (px / scaleT);
+        const modT = ((t % 8) + 8) % 8;
+        const xVal = (modT < 4) ? -1 : 1;
+        const py = yMid - xVal * 30;
+        if (px === 0) yctx.moveTo(30 + px, py); else yctx.lineTo(30 + px, py);
+      }
+      yctx.stroke();
+      yctx.setLineDash([]);
+
+      // Plot output y(t) = 0 solid red
+      yctx.strokeStyle = '#e11d48'; yctx.lineWidth = 3;
+      yctx.beginPath(); yctx.moveTo(30, yMid); yctx.lineTo(yw - 20, yMid); yctx.stroke();
+
+      yctx.fillStyle = '#e11d48'; yctx.font = 'bold 12px Inter';
+      yctx.fillText('y(t) = 0 (Tüm t için tam sıfır)', yw / 2 - 60, yMid - 10);
+
+      simMath.innerHTML = `Durum Analizi: Giriş Periyodu T = 8 s, w₀ = π/4 | Tüm k != 0 için H(jkπ/4) = sin(kπ) / (kπ/4) = 0 | a₀ = 0 | Nihai Çıkış y(t) = 0.000`;
+    }
+
+    wSlider.addEventListener('input', drawSimulator);
+    tSlider.addEventListener('input', drawSimulator);
+
+    function renderStep1() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('1. Adım: Frekans w0 ve DC Ortalama a0', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('T = 8 saniye  ===>  w0 = 2*pi / 8 = pi / 4 rad/s', 30, 65);
+      ctx.fillText('a_0 = (1/8) * [ INT_0^4 (-1)dt + INT_4^8 (1)dt ] = (1/8) * [-4 + 4] = 0', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('DC bileşen sıfırdır: a_0 = 0', 30, 135);
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep2() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('2. Adım: H(jw) = sin(4w)/w İncelemesi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('w -> 0 için H(j0) = 4 (DC kazancı)', 30, 65);
+      ctx.fillText('Sıfır geçişleri: sin(4w) = 0  ===>  4w = m*pi  ===>  w = m*pi / 4', 30, 95);
+      ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Sıfır noktaları m*pi/4 frekanslarında sıralanır.', 30, 135);
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep3() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('3. Adım: Harmonik Kazançlarının Hesaplanması', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('Harmonik frekansları: w_k = k * w0 = k * (pi/4)', 30, 65);
+      ctx.fillText('H(j * k*pi/4) = sin(4 * k*pi/4) / (k*pi/4) = sin(k*pi) / (k*pi/4)', 30, 95);
+      ctx.fillStyle = '#e11d48'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Her k in Z - {0} için sin(k*pi) = 0  ===>  H(j*k*w0) = 0', 30, 135);
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep4() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('4. Adım: DC Çıkışı ve Süperpozisyon', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('y_0 = a_0 * H(j0) = 0 * 4 = 0', 30, 65);
+      ctx.fillText('y(t) = a_0 * H(j0) + SUM_{k != 0} a_k * H(j*k*w0) * e^(j*k*w0*t)', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('y(t) = 0 + 0 = 0', 30, 135);
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep5() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('5. Adım: Zaman Domeninde Hareketli Ortalama Eşdeğeri', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('h(t) = 1/2 for |t| < 4, ve 0 for |t| > 4', 30, 65);
+      ctx.fillText('y(t) = (1/2) * INT_{t-4}^{t+4} x(tau) dtau (8 saniyelik tam periyot penceresi)', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Her t anında tam bir periyot entegre edilir, alan daima 0 çıkar.', 30, 135);
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep6() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('6. Adım: Nihai Çözüm Özeti', 25, 28);
+      ctx.fillStyle = '#e11d48'; ctx.font = 'bold 14px Inter';
+      ctx.fillText('y(t) = 0   (Tüm t in R için)', 40, 75);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('Sinc filtreleme kare dalganın tüm harmoniklerini kusursuz sönümler.', 40, 115);
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSimulator();
+      renderStep1();
+      renderStep2();
+      renderStep3();
+      renderStep4();
+      renderStep5();
+      renderStep6();
+    });
+  </script>
+</body>
+</html>

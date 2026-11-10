@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.14: Dürtü Katarı ve Ayrık Zaman LTI Frekans Yanıtı</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">Bölüm 3: Ayrık Zaman DTFS</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Problem 3.14</span>
+      </div>
+    </div>
+
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">
+          Ayrık Zaman LTI Frekans Yanıtı $H(e^{j\omega})$
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200">
+          Dürtü Katarı Girişi ($N = 4$)
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 3.14: Dürtü Katarı Yanıtından $H(e^{jk\pi/2})$ Değerlerinin Belirlenmesi
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        $x[n] = \sum \delta[n-4k]$ periyodik darbe katarı uygulandığında $y[n] = \cos(\frac{5\pi}{2}n + \frac{\pi}{4})$ çıkışı veren LTI sistemin $k = 0, 1, 2, 3$ için $H(e^{jk\pi/2})$ frekans yanıtı değerlerinin analitik hesabı.
+      </p>
+
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2">
+        <div class="font-bold text-slate-800">Bulunan Frekans Yanıtı Değerleri:</div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-center font-mono text-sm">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200"><span class="text-xs text-slate-500 block">k = 0</span><span class="font-bold text-slate-800">$$H(1) = 0$$</span></div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200"><span class="text-xs text-slate-500 block">k = 1</span><span class="font-bold text-indigo-600">$$2e^{j\pi/4} = \sqrt{2} + j\sqrt{2}$$</span></div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200"><span class="text-xs text-slate-500 block">k = 2</span><span class="font-bold text-slate-800">$$H(-1) = 0$$</span></div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200"><span class="text-xs text-slate-500 block">k = 3</span><span class="font-bold text-purple-600">$$2e^{-j\pi/4} = \sqrt{2} - j\sqrt{2}$$</span></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🎯</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>Girdi:</strong> Her 4 örnekte bir 1 olan darbe katarı ($N=4, a_k = 1/4$).</li>
+          <li><strong>Çıkış:</strong> $y[n] = \cos(\frac{5\pi}{2}n + \frac{\pi}{4}) = \cos(\frac{\pi}{2}n + \frac{\pi}{4})$.</li>
+          <li><strong>İstenen:</strong> $H(e^{jk\pi/2})$ değerleri ($k = 0, 1, 2, 3$).</li>
+          <li><strong>Temel LTI Kuralı:</strong> Periyodik girişe sahip LTI sistemde çıkış katsayıları $b_k = a_k H(e^{jk\omega_0})$ olur. Dolayısıyla $H(e^{jk\pi/2}) = b_k / a_k = 4 b_k$.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+          <li><strong>Giriş Katsayıları:</strong> $a_k = \frac{1}{4}\sum_{n=0}^3 \delta[n]e^{-jk\pi/2 n} = \frac{1}{4}$ ($\forall k$).</li>
+          <li><strong>Çıkış Frekans İndirgemesi:</strong> $\frac{5\pi}{2} = 2\pi + \frac{\pi}{2} \implies y[n] = \cos(\frac{\pi}{2}n + \frac{\pi}{4})$.</li>
+          <li><strong>Çıkış DTFS Katsayıları:</strong> $b_1 = \frac{1}{2}e^{j\pi/4}$, $b_3 = b_{-1} = \frac{1}{2}e^{-j\pi/4}$, $b_0 = b_2 = 0$.</li>
+          <li><strong>Frekans Yanıtı Eşitliği:</strong> $H(e^{jk\pi/2}) = 4 b_k$.</li>
+          <li><strong>Sayısal Değerler:</strong> $H(e^0)=0, H(e^{j\pi/2})=2e^{j\pi/4}, H(e^{j\pi})=0, H(e^{j3\pi/2})=2e^{-j\pi/4}$.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: DT LTI Frekans Yanıtı Fazörleri ve Çıkış Sentezi</h2>
+          <p class="text-xs text-slate-500">Harmonik indeksini seçerek karmaşık düzlemde $H(e^{jk\pi/2})$ fazörünü ve $y[n]$ dalga şeklini görüntüleyin.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Harmonik İndeksi ($k$):</span>
+            <span id="kVal" class="text-indigo-600 font-mono font-bold">k = 1</span>
+          </div>
+          <input id="kSlider" type="range" min="0" max="3" step="1" value="1" class="w-full slider-thumb accent-indigo-600">
+        </div>
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Filtre Faz Kayması:</span>
+            <span class="text-purple-600 font-mono font-bold">+π/4 (+45°)</span>
+          </div>
+          <div class="p-2 bg-white rounded-lg border border-slate-200 text-xs font-mono text-center text-slate-700">
+            $$H(e^{j\pi/2}) = 2 e^{j\pi/4} = \sqrt{2} + j\sqrt{2}$$
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Karmaşık Düzlem: $H(e^{jk\pi/2})$ Değerleri ($k = 0, 1, 2, 3$)</span>
+            <span class="text-slate-400 font-normal">Kutup/Sıfır Kazanç Noktaları</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="kCanvas" width="800" height="180" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Ayrık Zaman Domeni: Giriş $x[n]$ (Darbe Katarı) vs Çıkış $y[n] = \cos(\frac{\pi}{2}n + \frac{\pi}{4})$</span>
+            <span class="text-indigo-600 font-semibold">N = 4 Periyot</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="ynCanvas" width="800" height="200" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div id="simMath" class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs font-mono text-blue-900">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">1. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Giriş Dürtü Katarının DTFS Katsayıları</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_3_14_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x[n] = \sum_{k=-\infty}^{\infty} \delta[n - 4k]$ sinyali $N = 4$ periyotludur. Temel periyot içinde tek bir darbe vardır ($x[0] = 1, x[1]=x[2]=x[3]=0$):
+          $$a_k = \frac{1}{4} \sum_{n=0}^3 x[n] e^{-jk\frac{\pi}{2}n} = \frac{1}{4} \cdot 1 \cdot e^0 = \mathbf{\frac{1}{4}} \quad (\forall k \in \mathbb{Z})$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img1" class="w-full h-auto block" alt="1. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">2. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Çıkış Sinyalinin Frekans İndirgemesi</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_3_14_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Çıkış formülünde $\frac{5\pi}{2} n$ açısı yer almaktadır:
+          $$\frac{5\pi}{2} n = \left(2\pi + \frac{\pi}{2}\right) n = 2\pi n + \frac{\pi}{2} n$$
+          Ayrık zamanda $2\pi n$ periyodikliği nedeniyle:
+          $$y[n] = \cos\left(\frac{5\pi}{2} n + \frac{\pi}{4}\right) = \mathbf{\cos\left(\frac{\pi}{2} n + \frac{\pi}{4}\right)}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img2" class="w-full h-auto block" alt="2. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">3. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Çıkış Sinyalinin DTFS Katsayıları $b_k$</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_3_14_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Euler bağıntısıyla $y[n]$'i üstel bileşenlerine ayıralım:
+          $$y[n] = \frac{1}{2} e^{j\pi/4} e^{j\frac{\pi}{2}n} + \frac{1}{2} e^{-j\pi/4} e^{-j\frac{\pi}{2}n}$$
+          Burada $e^{-j\frac{\pi}{2}n} = e^{j\frac{3\pi}{2}n}$ olduğundan:
+          $$b_1 = \frac{1}{2} e^{j\pi/4}, \quad b_3 = \frac{1}{2} e^{-j\pi/4}, \quad b_0 = 0, \quad b_2 = 0$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img3" class="w-full h-auto block" alt="3. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">4. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">LTI Filtreleme Bağıntısı $b_k = a_k H(e^{jk\omega_0})$</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_3_14_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          LTI sistem özellikleri uyarınca:
+          $$b_k = a_k H\left(e^{jk\frac{\pi}{2}}\right) \implies H\left(e^{jk\frac{\pi}{2}}\right) = \frac{b_k}{a_k}$$
+          $a_k = 1/4$ olduğundan:
+          $$\mathbf{H\left(e^{jk\frac{\pi}{2}}\right) = 4 b_k}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img4" class="w-full h-auto block" alt="4. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">5. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">4 Frekans Yanıtı Değerinin Hesaplanması</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_3_14_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <ul class="list-disc list-inside space-y-1 mt-1 text-slate-700 font-mono text-xs">
+            <li><strong>k = 0:</strong> $H(e^{j0}) = 4 b_0 = 4(0) = \mathbf{0}$</li>
+            <li><strong>k = 1:</strong> $H(e^{j\pi/2}) = 4 b_1 = 4 \left(\frac{1}{2} e^{j\pi/4}\right) = 2 e^{j\pi/4} = \mathbf{\sqrt{2} + j\sqrt{2}}$</li>
+            <li><strong>k = 2:</strong> $H(e^{j\pi}) = 4 b_2 = 4(0) = \mathbf{0}$</li>
+            <li><strong>k = 3:</strong> $H(e^{j3\pi/2}) = 4 b_3 = 4 \left(\frac{1}{2} e^{-j\pi/4}\right) = 2 e^{-j\pi/4} = \mathbf{\sqrt{2} - j\sqrt{2}}$</li>
+          </ul>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img5" class="w-full h-auto block" alt="5. Adım"></div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">6. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Mühendislik Yorumu ve Sınav Tablosu</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_3_14_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sistem, giriş dürtü katarındaki $\omega = 0$ ve $\omega = \pi$ bileşenlerini tamamen sıfırlayan, yalnızca $\omega = \pm \pi/2$ temel harmoniklerini $2$ kazancı ve $\pm \pi/4$ faz kaymasıyla geçiren bir ayrık zaman bant geçiren filtre gibi davranmaktadır.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white"><img id="img6" class="w-full h-auto block" alt="6. Adım"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2;
+      c.width = w * ratio; c.height = h * ratio;
+      c.style.width = w + 'px'; c.style.height = h + 'px';
+      const ctx = c.getContext('2d'); ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src; a.download = filename;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    }
+
+    const kSlider = document.getElementById('kSlider');
+    const kVal = document.getElementById('kVal');
+    const simMath = document.getElementById('simMath');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    const hVals = [
+      { r: 0, i: 0, text: 'H(1) = 0' },
+      { r: Math.SQRT2, i: Math.SQRT2, text: 'H(j) = 2 e^{jπ/4} = √2 + j√2' },
+      { r: 0, i: 0, text: 'H(-1) = 0' },
+      { r: Math.SQRT2, i: -Math.SQRT2, text: 'H(-j) = 2 e^{-jπ/4} = √2 - j√2' }
+    ];
+
+    function drawSimulator() {
+      const selK = parseInt(kSlider.value);
+      kVal.textContent = 'k = ' + selK;
+
+      // 1. kCanvas
+      const kw = kCanvas.width / 2; const kh = kCanvas.height / 2;
+      const kctx = kCanvas.getContext('2d');
+      kctx.setTransform(1, 0, 0, 1, 0, 0); kctx.scale(2, 2); kctx.clearRect(0, 0, kw, kh);
+      kctx.fillStyle = '#fafafa'; kctx.fillRect(0, 0, kw, kh);
+
+      const cx = kw / 2; const cy = kh / 2;
+      const scaleR = 40;
+
+      // Axes
+      kctx.strokeStyle = '#cbd5e1';
+      kctx.beginPath();
+      kctx.moveTo(cx - 100, cy); kctx.lineTo(cx + 100, cy);
+      kctx.moveTo(cx, cy - 70); kctx.lineTo(cx, cy + 70);
+      kctx.stroke();
+
+      // Points for H values
+      for (let k = 0; k < 4; k++) {
+        const item = hVals[k];
+        const px = cx + item.r * scaleR;
+        const py = cy - item.i * scaleR;
+
+        const isCurrent = (k === selK);
+        kctx.fillStyle = isCurrent ? '#be123c' : '#4f46e5';
+        kctx.beginPath(); kctx.arc(px, py, isCurrent ? 5 : 3.5, 0, 2*Math.PI); kctx.fill();
+
+        if (item.r !== 0 || item.i !== 0) {
+          kctx.strokeStyle = isCurrent ? '#be123c' : 'rgba(79, 70, 229, 0.4)';
+          kctx.lineWidth = isCurrent ? 2.5 : 1;
+          kctx.beginPath(); kctx.moveTo(cx, cy); kctx.lineTo(px, py); kctx.stroke();
+        }
+
+        kctx.fillStyle = isCurrent ? '#be123c' : '#64748b';
+        kctx.font = isCurrent ? 'bold 10px Inter' : '9px Inter';
+        kctx.fillText('k=' + k, px + 8, py + 4);
+      }
+
+      kctx.fillStyle = '#1e293b'; kctx.font = 'bold 11px Inter'; kctx.textAlign = 'left';
+      kctx.fillText('H(e^{jkπ/2}) Karmaşık Düzlem Gösterimi (Kırmızı: Seçili Harmonik)', 30, 20);
+
+      // 2. ynCanvas
+      const yw = ynCanvas.width / 2; const yh = ynCanvas.height / 2;
+      const yctx = ynCanvas.getContext('2d');
+      yctx.setTransform(1, 0, 0, 1, 0, 0); yctx.scale(2, 2); yctx.clearRect(0, 0, yw, yh);
+      yctx.fillStyle = '#ffffff'; yctx.fillRect(0, 0, yw, yh);
+
+      const yMid = yh / 2;
+      yctx.strokeStyle = '#cbd5e1'; yctx.beginPath(); yctx.moveTo(30, yMid); yctx.lineTo(yw - 20, yMid); yctx.stroke();
+
+      const nMin = -4, nMax = 12;
+      const dxN = (yw - 60) / (nMax - nMin);
+
+      for (let n = nMin; n <= nMax; n++) {
+        const px = 30 + (n - nMin) * dxN;
+        const yVal = Math.cos((Math.PI / 2) * n + Math.PI / 4);
+
+        yctx.strokeStyle = '#2563eb'; yctx.lineWidth = 2;
+        yctx.beginPath(); yctx.moveTo(px, yMid); yctx.lineTo(px, yMid - yVal * 35); yctx.stroke();
+        yctx.fillStyle = '#2563eb';
+        yctx.beginPath(); yctx.arc(px, yMid - yVal * 35, 3.5, 0, 2*Math.PI); yctx.fill();
+
+        if (n % 4 === 0) {
+          yctx.fillStyle = '#64748b'; yctx.font = '8px Inter'; yctx.textAlign = 'center';
+          yctx.fillText('n=' + n, px, yMid + 14);
+        }
+      }
+
+      simMath.innerHTML = `Durum Analizi: Harmonik k = ${selK} | ${hVals[selK].text} | Giriş: a_${selK} = 0.25 | Çıkış Katsayısı: b_${selK} = a_${selK} * H(e^{j*${selK}*π/2})`;
+    }
+
+    kSlider.addEventListener('input', drawSimulator);
+
+    function renderStep1() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('1. Adım: Giriş Dürtü Katarının Katsayıları', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('x[n] = delta_4[n]  ===>  x[0] = 1, x[1]=x[2]=x[3]=0', 30, 65);
+      ctx.fillText('a_k = (1/4) * SUM x[n] e^(-jk pi/2 n) = 1/4 * 1 = 1/4', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Tüm k için a_k = 0.25', 30, 135);
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep2() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('2. Adım: 5pi/2 Açısının İndirgenmesi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('cos(5*pi/2 * n + pi/4) = cos( (2*pi + pi/2)*n + pi/4 )', 30, 65);
+      ctx.fillText('2*pi*n periyodikliği nedeniyle açı doğrudan pi/2 * n olur.', 30, 95);
+      ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('y[n] = cos(pi/2 * n + pi/4)', 30, 135);
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep3() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('3. Adım: Çıkış Katsayıları b_k', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('y[n] = (1/2)*e^(j*pi/4)*e^(j*pi/2*n) + (1/2)*e^(-j*pi/4)*e^(-j*pi/2*n)', 30, 65);
+      ctx.fillText('b_1 = 0.5 * e^(j*pi/4),  b_3 = 0.5 * e^(-j*pi/4)', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('b_0 = 0 ve b_2 = 0', 30, 135);
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep4() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('4. Adım: H(e^{jkpi/2}) = 4 * b_k Bağıntısı', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('b_k = a_k * H(e^(jk*pi/2)) = (1/4) * H(e^(jk*pi/2))', 30, 65);
+      ctx.fillText('H(e^(jk*pi/2)) = 4 * b_k', 30, 95);
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep5() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('5. Adım: 4 Frekans Yanıtı Değeri', 25, 28);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 12px Inter';
+      ctx.fillText('H(e^0)      = 0', 50, 65);
+      ctx.fillText('H(e^(j*pi/2))  = 2 * e^(j*pi/4) = sqrt(2) + j*sqrt(2)', 50, 95);
+      ctx.fillText('H(e^(j*pi))    = 0', 50, 125);
+      ctx.fillText('H(e^(j*3pi/2)) = 2 * e^(-j*pi/4) = sqrt(2) - j*sqrt(2)', 50, 155);
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep6() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('6. Adım: Nihai Çözüm Özeti', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('k = 0, 2 için sistem sıfır geçirgenliğe sahiptir.', 30, 65);
+      ctx.fillText('k = 1, 3 için genlik 2 ve faz +/- 45 derecedir.', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Bant Geçiren Filtre Modeli', 30, 135);
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSimulator();
+      renderStep1();
+      renderStep2();
+      renderStep3();
+      renderStep4();
+      renderStep5();
+      renderStep6();
+    });
+  </script>
+</body>
+</html>
