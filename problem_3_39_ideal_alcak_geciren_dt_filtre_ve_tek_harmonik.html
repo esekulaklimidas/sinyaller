@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.39: İdeal Alçak Geçiren Ayrık Filtre ve Tek Harmonikli Çıkış (N=3) - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        code, pre, .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .canvas-container { position: relative; width: 100%; height: 260px; }
+        canvas { display: block; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+    <!-- Ana Konteyner -->
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs font-mono bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200">
+                Oppenheim & Willsky Bölüm 3 / Problem 3.39
+            </span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <header class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-indigo-100/50 to-transparent rounded-bl-full pointer-events-none"></div>
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">İdeal Ayrık Filtreler</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Alçak Geçiren Filtre (LPF)</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">Tek Katsayılı Çıkış ($N=3$)</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Problem 3.39: İdeal Alçak Geçiren Ayrık Filtrede Tek Harmonikli Çıkış ($N=3$)
+            </h1>
+            <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+                Kesim frekansı $\omega_c = \pi/8$ olan ideal alçak geçiren ayrık zamanlı filtreye uygulanan $N=3$ periyotlu herhangi bir $x[n]$ sinyalinin, çıkışında ($y[n]$) periyot başına yalnızca tek bir sıfırdan farklı Fourier serisi katsayısına ($c_0$) sahip olduğunun analitik ispatı.
+            </p>
+            
+            <!-- Hızlı Parametre Özeti -->
+            <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Kesim Frekansı</span>
+                    <span class="text-xs sm:text-sm font-bold text-indigo-600 font-mono">$\omega_c = \pi / 8 \approx 0.393$</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Giriş Periyodu</span>
+                    <span class="text-xs sm:text-sm font-bold text-indigo-600 font-mono">$N = 3$</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Temel Frekans</span>
+                    <span class="text-xs sm:text-sm font-bold text-emerald-600 font-mono">$\omega_0 = 2\pi / 3 \approx 2.094$</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Sıfır Olmayan Çıkış</span>
+                    <span class="text-xs sm:text-sm font-bold text-purple-600 font-mono">Yalnızca $c_0 = a_0$</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 1. Kolon: Soru Bizden Ne İstiyor? -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="p-2 rounded-lg bg-amber-50 text-amber-600 font-bold text-lg">🎯</span>
+                        <h2 class="text-lg font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed space-y-2">
+                        Frekans yanıtı aşağıdaki gibi tanımlanan ayrık zamanlı bir LTI sistemi $S$ verilmiştir:
+                    </p>
+                    <div class="p-2.5 my-2 bg-slate-50 border border-slate-200 rounded-lg text-center font-mono text-xs text-slate-800">
+                        $$H(e^{j\omega}) = \begin{cases} 1, & |\omega| \le \frac{\pi}{8} \\ 0, & \frac{\pi}{8} < |\omega| < \pi \end{cases}, \quad H(e^{j(\omega+2\pi)}) = H(e^{j\omega})$$
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Sisteme uygulanan $x[n]$ girişinin temel periyodu $N = 3$ ise, çıkış $y[n]$'nin bir periyot içinde <strong>yalnızca tek bir sıfırdan farklı Fourier serisi katsayısına</strong> sahip olduğunu gösteriniz.
+                    </p>
+                </div>
+                <div class="mt-4 p-3 bg-amber-50/50 rounded-xl border border-amber-200/60 text-xs text-amber-900">
+                    <strong>İspatın Özü:</strong> $N=3$ sinyalinin harmonikleri $\omega = 0, \pm \frac{2\pi}{3}$'tür. $\frac{2\pi}{3} \approx 2.09$ radyan, filtrenin geçirme bandı olan $\frac{\pi}{8} \approx 0.39$ radyandan kat kat büyüktür! Dolayısıyla $k = \pm 1$ harmonikleri tamamen filtrelenir ($H=0$). Geriye sadece $k = 0$ (DC bileşen) kalır!
+                </div>
+            </div>
+
+            <!-- 2. Kolon: Adım Adım Çözüm Metodolojisi -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-lg">💡</span>
+                        <h2 class="text-lg font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+                    </div>
+                    <ol class="space-y-2.5 text-sm text-slate-700 list-decimal list-inside">
+                        <li><strong>Temel Frekans:</strong> $N = 3 \implies \omega_0 = \frac{2\pi}{3}$ rad/örnek olarak bulunur.</li>
+                        <li><strong>Harmonik Kümeleri:</strong> Temel periyotta $k \in \{-1, 0, 1\}$ (veya $k \in \{0, 1, 2\}$) seçilir. Frekanslar: $\omega = 0, \pm \frac{2\pi}{3}$.</li>
+                        <li><strong>Filtre Değerleri:</strong>
+                            <br>• $\omega = 0 \implies |0| \le \pi/8 \implies H(e^{j0}) = 1$
+                            <br>• $\omega = \pm 2\pi/3 \implies |2\pi/3| > \pi/8 \implies H(e^{\pm j2\pi/3}) = 0$
+                        </li>
+                        <li><strong>Çıkış DTFS Katsayıları:</strong> $c_k = a_k H(e^{jk\omega_0})$ gereği $c_0 = a_0 \cdot 1 = a_0$, $c_1 = 0$, $c_2 = 0$.</li>
+                        <li><strong>Zaman Düzlemi Karşılığı:</strong> $y[n] = c_0 = a_0 = \frac{1}{3}\sum_{n=0}^2 x[n]$ saf DC sabiti olur.</li>
+                    </ol>
+                </div>
+                <div class="mt-4 p-3 bg-indigo-50/50 rounded-xl border border-indigo-200/60 text-xs text-indigo-900 font-mono">
+                    Çıkış: $c_0 = a_0, \quad c_1 = 0, \quad c_2 = 0 \implies \text{Tam olarak 1 katsayı!}$
+                </div>
+            </div>
+        </section>
+
+        <!-- Canlı Simülatör Kartı (Dual Canvas) -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                        İnteraktif Kesim Frekansı & DTFS Harmonik İnceleme Simülatörü
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">
+                        Giriş örneklerini ($x[0], x[1], x[2]$) ve filtre kesim frekansı $\omega_c$'yi değiştirin; $\omega_c = 2\pi/3$ eşiği aşıldığında diğer harmoniklerin nasıl canlandığını gözlemleyin.
+                    </p>
+                </div>
+                <button id="resetBtn" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                    Varsayılan (ωc = π/8)
+                </button>
+            </div>
+
+            <!-- Kontroller -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">x[0]: <span id="v0" class="text-indigo-600 font-mono font-bold">1</span></label>
+                    <input id="s0" type="range" min="-3" max="3" step="0.5" value="1" class="w-full accent-indigo-600">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">x[1]: <span id="v1" class="text-indigo-600 font-mono font-bold">2</span></label>
+                    <input id="s1" type="range" min="-3" max="3" step="0.5" value="2" class="w-full accent-indigo-600">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">x[2]: <span id="v2" class="text-indigo-600 font-mono font-bold">0</span></label>
+                    <input id="s2" type="range" min="-3" max="3" step="0.5" value="0" class="w-full accent-indigo-600">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">Kesim $\omega_c$: <span id="wcVal" class="text-indigo-600 font-mono font-bold">0.39 rad (π/8)</span></label>
+                    <input id="wcSlider" type="range" min="0.1" max="2.8" step="0.05" value="0.3927" class="w-full accent-indigo-600">
+                </div>
+            </div>
+
+            <!-- Çift Çizim Alanı: Frekans Yanıtı ve Zaman Dalgası -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border border-slate-200 rounded-xl p-3 bg-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-700">Filtre Yanıtı $H(e^{j\omega})$ $[-\pi, \pi]$ & Harmonikler</span>
+                        <span class="text-[10px] font-mono text-slate-400">kCanvas</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div class="border border-slate-200 rounded-xl p-3 bg-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-700">Ayrık Sinyaller: Giriş $x[n]$ (mavi) vs Çıkış $y[n]$ (mor)</span>
+                        <span class="text-[10px] font-mono text-slate-400">ynCanvas</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Durum Kartı -->
+            <div id="simMath" class="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl text-center font-mono text-sm text-indigo-950 overflow-x-auto">
+                Hesaplanıyor...
+            </div>
+        </section>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+
+            <!-- 1. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm">1</span>
+                        <h3 class="text-lg font-bold text-slate-900">İdeal Alçak Geçiren Ayrık Filtre Tanımı</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Filtre Özellikleri</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sistem $S$, temel frekans aralığı $[-\pi, \pi]$ üzerinde tanımlanmış ve $2\pi$ periyodik ideal alçak geçiren filtredir (LPF):
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$H(e^{j\omega}) = \begin{cases} 1, & |\omega| \le \frac{\pi}{8} \quad \text{(Geçirme Bandı)} \\ 0, & \frac{\pi}{8} < |\omega| \le \pi \quad \text{(Durdurma Bandı)} \end{cases}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Kesim frekansı $\omega_c = \frac{\pi}{8} \approx 0.3927$ rad/örnektir. Bu frekansın ötesindeki tüm ayrık frekans bileşenleri sıfırlanır.
+                </p>
+                <div>
+                    <canvas id="cv1" class="hidden"></canvas>
+                    <img id="img1" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="1. Adım Görseli" />
+                    <button onclick="downloadCard('img1', 'problem_3_39_adim_1.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 2. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">2</span>
+                        <h3 class="text-lg font-bold text-slate-900">$N=3$ Periyotlu Giriş Sinyali ve Harmonik Frekansları</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Giriş Harmonikleri</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Giriş sinyali $x[n]$'in temel periyodu $N = 3$'tür. Temel açısal frekans:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$\omega_0 = \frac{2\pi}{N} = \frac{2\pi}{3} \approx 2.0944 \text{ rad/örnek}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Temel aralık $k \in \{-1, 0, 1\}$ seçildiğinde bu 3 harmoniğin frekansları:
+                    $$\omega = 0 \quad (k = 0), \quad \omega = \frac{2\pi}{3} \quad (k = 1), \quad \omega = -\frac{2\pi}{3} \quad (k = -1)$$
+                </p>
+                <div>
+                    <canvas id="cv2" class="hidden"></canvas>
+                    <img id="img2" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="2. Adım Görseli" />
+                    <button onclick="downloadCard('img2', 'problem_3_39_adim_2.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 3. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-sm">3</span>
+                        <h3 class="text-lg font-bold text-slate-900">Frekans Bantlarının Karşılaştırılması ve Eşitsizlik</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Bant Karşılaştırması</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Filtre kesim frekansı ile giriş harmonik frekanslarını açıkça kıyaslayalım:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>• $k = 0$: $|\omega| = 0 \le \frac{\pi}{8} \implies H(e^{j0}) = 1$ (Geçirme Bandı)</p>
+                    <p>• $k = 1$: $|\omega| = \frac{2\pi}{3} \approx 2.094 > \frac{\pi}{8} \approx 0.393 \implies H(e^{j2\pi/3}) = 0$ (Durdurma Bandı)</p>
+                    <p>• $k = -1$: $|\omega| = \left|-\frac{2\pi}{3}\right| > \frac{\pi}{8} \implies H(e^{-j2\pi/3}) = 0$ (Durdurma Bandı)</p>
+                </div>
+                <p class="text-slate-600 text-sm text-indigo-700 font-semibold leading-relaxed">
+                    Girişin sıfırdan farklı tüm harmonikleri ($k \ne 0$) filtrenin durdurma bandında kalmaktadır!
+                </p>
+                <div>
+                    <canvas id="cv3" class="hidden"></canvas>
+                    <img id="img3" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="3. Adım Görseli" />
+                    <button onclick="downloadCard('img3', 'problem_3_39_adim_3.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 4. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm">4</span>
+                        <h3 class="text-lg font-bold text-slate-900">Çıkış Fourier Katsayılarının ($c_k$) Belirlenmesi (İspat)</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Analitik İspat</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    LTI sistem filtreleme bağıntısını $c_k = a_k H(e^{j k \omega_0})$ uygulayalım ($k = 0, 1, 2$):
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>$$c_0 = a_0 H(e^{j0}) = a_0 \cdot 1 = a_0$$</p>
+                    <p>$$c_1 = a_1 H(e^{j 2\pi/3}) = a_1 \cdot 0 = 0$$</p>
+                    <p>$$c_2 = c_{-1} = a_2 H(e^{j 4\pi/3}) = a_2 H(e^{-j 2\pi/3}) = a_2 \cdot 0 = 0$$</p>
+                </div>
+                <p class="text-slate-600 text-sm text-emerald-700 font-bold leading-relaxed">
+                    Böylece tek bir periyot ($N=3$) içinde katsayılardan yalnızca biri ($c_0$) sıfırdan farklı olabilir:
+                    $$c = [a_0, 0, 0] \implies \text{Periyot başına tam olarak TEK bir sıfır olmayan katsayı!}$$
+                </p>
+                <div>
+                    <canvas id="cv4" class="hidden"></canvas>
+                    <img id="img4" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="4. Adım Görseli" />
+                    <button onclick="downloadCard('img4', 'problem_3_39_adim_4.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 5. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 font-bold flex items-center justify-center text-sm">5</span>
+                        <h3 class="text-lg font-bold text-slate-900">Zaman Düzleminde Çıkış Sinyali: Saf Sabit (DC)</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Zaman Karşılığı</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Bulunan Fourier katsayılarını DTFS sentez denklemine yerleştirelim:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$y[n] = \sum_{k=0}^2 c_k e^{j k (2\pi/3) n} = c_0 + 0 + 0 = c_0 = a_0$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    $a_0$ değeri giriş sinyalinin tek periyottaki ortalama (DC) değeridir:
+                    $$a_0 = \frac{1}{3}\sum_{n=0}^2 x[n] = \frac{x[0] + x[1] + x[2]}{3}$$
+                    Dolayısıyla çıkış sinyali tüm $n$ anlarında sabit bir gerçel sayıya eşittir: $y[n] = \text{sabit}$.
+                </p>
+                <div>
+                    <canvas id="cv5" class="hidden"></canvas>
+                    <img id="img5" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="5. Adım Görseli" />
+                    <button onclick="downloadCard('img5', 'problem_3_39_adim_5.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 6. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 font-bold flex items-center justify-center text-sm">6</span>
+                        <h3 class="text-lg font-bold text-slate-900">Genelleştirilmiş Kesim Frekansı Koşulu ($\omega_c < 2\pi/N$)</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Genel Teorem</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Bu sonucun geçerli olabilmesi için genel koşul:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$\omega_c < \omega_0 = \frac{2\pi}{N}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    $N = 3$ için bu sınır $\frac{2\pi}{3} \approx 2.094$ radyandır. Filtrenin kesim frekansı $\frac{\pi}{8} \approx 0.393$ radyan olduğundan bu koşul fazlasıyla ($0.393 < 2.094$) sağlanır. Eğer kesim frekansı $2\pi/3$'ü aşsaydı $k = \pm 1$ harmonikleri de çıkışa geçecek ve çıkışta 3 katsayı birden bulunacaktı.
+                </p>
+                <div>
+                    <canvas id="cv6" class="hidden"></canvas>
+                    <img id="img6" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="6. Adım Görseli" />
+                    <button onclick="downloadCard('img6', 'problem_3_39_adim_6.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+        </div>
+
+    </main>
+
+    <script>
+        function createHiDPICanvas(canvas, width, height) {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return ctx;
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = img.src;
+            link.click();
+        }
+
+        const s0 = document.getElementById('s0');
+        const s1 = document.getElementById('s1');
+        const s2 = document.getElementById('s2');
+        const wcSlider = document.getElementById('wcSlider');
+        const v0 = document.getElementById('v0');
+        const v1 = document.getElementById('v1');
+        const v2 = document.getElementById('v2');
+        const wcVal = document.getElementById('wcVal');
+        const resetBtn = document.getElementById('resetBtn');
+        const simMath = document.getElementById('simMath');
+
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+
+        function drawSim() {
+            const x = [parseFloat(s0.value), parseFloat(s1.value), parseFloat(s2.value)];
+            const wc = parseFloat(wcSlider.value);
+            v0.textContent = x[0];
+            v1.textContent = x[1];
+            v2.textContent = x[2];
+            wcVal.textContent = `${wc.toFixed(2)} rad (${(wc / Math.PI).toFixed(2)}π)`;
+
+            // DTFS for N = 3
+            // a0 = (x0 + x1 + x2)/3
+            // a1 = (x0 + x1 e^{-j2pi/3} + x2 e^{-j4pi/3})/3
+            // a2 = a1*
+            const a0 = (x[0] + x[1] + x[2]) / 3;
+            const cos1 = Math.cos(2 * Math.PI / 3);
+            const sin1 = -Math.sin(2 * Math.PI / 3);
+            const a1_re = (x[0] + x[1] * cos1 + x[2] * Math.cos(4 * Math.PI / 3)) / 3;
+            const a1_im = (x[1] * sin1 - x[2] * Math.sin(4 * Math.PI / 3)) / 3;
+
+            const w0 = 2 * Math.PI / 3;
+
+            // Filter pass condition
+            const pass0 = (0 <= wc);
+            const pass1 = (w0 <= wc);
+            const pass2 = (w0 <= wc);
+
+            const c0 = pass0 ? a0 : 0;
+            const c1_re = pass1 ? a1_re : 0;
+            const c1_im = pass1 ? a1_im : 0;
+            const c2_re = pass2 ? a1_re : 0;
+            const c2_im = pass2 ? -a1_im : 0;
+
+            const nonZeroCount = (Math.abs(c0) > 0.001 ? 1 : 0) + (Math.hypot(c1_re, c1_im) > 0.001 ? 1 : 0) + (Math.hypot(c2_re, c2_im) > 0.001 ? 1 : 0);
+
+            simMath.innerHTML = `
+                <b>Kesim:</b> $\\omega_c = ${wc.toFixed(2)}$ rad (Sınır $\\omega_0 = 2\\pi/3 \\approx 2.09$ rad) | 
+                <b>c₀:</b> ${c0.toFixed(3)} | 
+                <b>c₁:</b> ${c1_re.toFixed(3)}${c1_im >= 0 ? '+' : ''}${c1_im.toFixed(3)}j | 
+                <b>c₂:</b> ${c2_re.toFixed(3)}${c2_im >= 0 ? '+' : ''}${c2_im.toFixed(3)}j | 
+                <span class="${nonZeroCount === 1 ? 'text-emerald-700 font-bold' : 'text-amber-700 font-bold'}">Sıfır Olmayan Katsayı Sayısı: ${nonZeroCount}</span>
+            `;
+
+            // Draw kCanvas: Filter response H(e^{jw}) on [-pi, pi] + Harmonics
+            const kw = kCanvas.parentElement.clientWidth;
+            const kh = 260;
+            const kctx = createHiDPICanvas(kCanvas, kw, kh);
+
+            kctx.fillStyle = '#ffffff';
+            kctx.fillRect(0, 0, kw, kh);
+
+            const padL = 35, padR = 25, padT = 30, padB = 40;
+            const plotW = kw - padL - padR;
+            const plotH = kh - padT - padB;
+            const yPass = padT + 20;
+            const yStop = kh - padB;
+
+            // Axis
+            kctx.strokeStyle = '#e2e8f0';
+            kctx.lineWidth = 1;
+            kctx.beginPath();
+            kctx.moveTo(padL, yStop);
+            kctx.lineTo(kw - padR, yStop);
+            kctx.stroke();
+
+            // Center (w = 0)
+            const cx0 = padL + plotW / 2;
+            kctx.strokeStyle = '#cbd5e1';
+            kctx.setLineDash([2, 2]);
+            kctx.beginPath();
+            kctx.moveTo(cx0, padT);
+            kctx.lineTo(cx0, yStop);
+            kctx.stroke();
+            kctx.setLineDash([]);
+
+            // Passband Box [-wc, wc]
+            const xL = cx0 - (wc / Math.PI) * (plotW / 2);
+            const xR = cx0 + (wc / Math.PI) * (plotW / 2);
+
+            kctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+            kctx.fillRect(Math.max(padL, xL), padT, Math.min(plotW, xR - xL), plotH);
+
+            // Filter line
+            kctx.strokeStyle = '#6366f1';
+            kctx.lineWidth = 3;
+            kctx.beginPath();
+            kctx.moveTo(padL, yStop);
+            if (xL > padL) {
+                kctx.lineTo(xL, yStop);
+                kctx.lineTo(xL, yPass);
+            } else {
+                kctx.moveTo(padL, yPass);
+            }
+            kctx.lineTo(Math.min(kw - padR, xR), yPass);
+            if (xR < kw - padR) {
+                kctx.lineTo(xR, yStop);
+                kctx.lineTo(kw - padR, yStop);
+            }
+            kctx.stroke();
+
+            // Harmonics at w = 0, -2pi/3, +2pi/3
+            const harm = [
+                { k: 0, w: 0, label: 'k=0 (DC)' },
+                { k: 1, w: w0, label: 'k=1' },
+                { k: -1, w: -w0, label: 'k=-1' }
+            ];
+
+            harm.forEach(hItem => {
+                const hx = cx0 + (hItem.w / Math.PI) * (plotW / 2);
+                const isPassed = Math.abs(hItem.w) <= wc;
+
+                kctx.strokeStyle = isPassed ? '#10b981' : '#f43f5e';
+                kctx.lineWidth = 2.5;
+                kctx.beginPath();
+                kctx.moveTo(hx, yStop);
+                kctx.lineTo(hx, isPassed ? yPass : yStop - 30);
+                kctx.stroke();
+
+                kctx.fillStyle = isPassed ? '#059669' : '#e11d48';
+                kctx.beginPath();
+                kctx.arc(hx, isPassed ? yPass : yStop - 30, 4.5, 0, Math.PI * 2);
+                kctx.fill();
+
+                kctx.fillStyle = '#0f172a';
+                kctx.font = '10px JetBrains Mono';
+                kctx.textAlign = 'center';
+                kctx.fillText(hItem.label, hx, yStop + 15);
+                kctx.fillStyle = isPassed ? '#059669' : '#e11d48';
+                kctx.fillText(isPassed ? 'Geçti' : 'Sıfır', hx, isPassed ? yPass - 8 : yStop - 38);
+            });
+
+            // Labels
+            kctx.fillStyle = '#64748b';
+            kctx.font = '10px JetBrains Mono';
+            kctx.textAlign = 'center';
+            kctx.fillText('-π', padL, yStop + 15);
+            kctx.fillText('0', cx0, yStop + 15);
+            kctx.fillText('+π', kw - padR, yStop + 15);
+
+            // Draw ynCanvas: Discrete stems x[n] and y[n]
+            const yw = ynCanvas.parentElement.clientWidth;
+            const yh = 260;
+            const yctx = createHiDPICanvas(ynCanvas, yw, yh);
+
+            yctx.fillStyle = '#ffffff';
+            yctx.fillRect(0, 0, yw, yh);
+
+            const yMid = yh / 2;
+            yctx.strokeStyle = '#e2e8f0';
+            yctx.lineWidth = 1;
+            yctx.beginPath();
+            yctx.moveTo(30, yMid);
+            yctx.lineTo(yw - 20, yMid);
+            yctx.stroke();
+
+            const nTotal = 12;
+            const spN = (yw - 60) / nTotal;
+
+            const x_pts = [], y_pts = [];
+            for (let n = -3; n <= 8; n++) {
+                const idx = ((n % 3) + 3) % 3;
+                const xn = x[idx];
+                // y[n] = c0 + 2 * Re(c1 * e^{jw0 n})
+                let yn = c0;
+                if (pass1) {
+                    yn += 2 * (c1_re * Math.cos(w0 * n) - c1_im * Math.sin(w0 * n));
+                }
+                x_pts.push({ n, val: xn });
+                y_pts.push({ n, val: yn });
+            }
+
+            const maxYVal = Math.max(2.5, ...x_pts.map(o => Math.abs(o.val)), ...y_pts.map(o => Math.abs(o.val)));
+            const scaleY = (yh / 2 - 35) / maxYVal;
+
+            y_pts.forEach((item, idx) => {
+                const cx = 35 + idx * spN;
+                const cy = yMid - item.val * scaleY;
+
+                yctx.strokeStyle = '#7c3aed';
+                yctx.lineWidth = 2.5;
+                yctx.beginPath();
+                yctx.moveTo(cx, yMid);
+                yctx.lineTo(cx, cy);
+                yctx.stroke();
+
+                yctx.fillStyle = '#6d28d9';
+                yctx.beginPath();
+                yctx.arc(cx, cy, 4, 0, Math.PI * 2);
+                yctx.fill();
+
+                if (idx % 2 === 0) {
+                    yctx.fillStyle = '#94a3b8';
+                    yctx.font = '9px JetBrains Mono';
+                    yctx.textAlign = 'center';
+                    yctx.fillText(item.n, cx, yMid + (item.val >= 0 ? 14 : -6));
+                }
+            });
+
+            // Legend
+            yctx.font = '11px JetBrains Mono';
+            yctx.fillStyle = '#7c3aed';
+            yctx.fillText(`y[n] Çıkışı (Sabit DC Seviyesi = ${c0.toFixed(2)})`, 40, 25);
+        }
+
+        [s0, s1, s2, wcSlider].forEach(el => el.addEventListener('input', drawSim));
+        resetBtn.addEventListener('click', () => {
+            s0.value = 1; s1.value = 2; s2.value = 0; wcSlider.value = 0.3927;
+            drawSim();
+        });
+
+        function renderAllSteps() {
+            const steps = [
+                { id: 'cv1', imgId: 'img1', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '14px JetBrains Mono'; ctx.fillStyle = '#1e293b'; ctx.textAlign = 'center';
+                    ctx.fillText('İdeal Alçak Geçiren Ayrık Filtre (DT-LPF)', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#475569';
+                    ctx.fillText('H(e^{jω}) = 1  (|ω| ≤ π/8),    H(e^{jω}) = 0  (π/8 < |ω| ≤ π)', w/2, 75);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('Kesim Frekansı: ω_c = π/8 ≈ 0.3927 rad/örnek', w/2, 115);
+                    ctx.fillStyle = '#2563eb';
+                    ctx.fillText('Periyodiklik: H(e^{j(ω + 2π)}) = H(e^{jω})', w/2, 155);
+                }},
+                { id: 'cv2', imgId: 'img2', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#4338ca'; ctx.textAlign = 'center';
+                    ctx.fillText('N = 3 Periyotlu Giriş Sinyali Harmonik Dağılımı', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('Temel Frekans: ω₀ = 2π / 3 ≈ 2.0944 rad/örnek', w/2, 75);
+                    ctx.fillText('Temel Aralık [-π, π] İçi Frekanslar:', w/2, 110);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('k = 0 ==> ω = 0 | k = 1 ==> ω = +2π/3 | k = -1 ==> ω = -2π/3', w/2, 150);
+                }},
+                { id: 'cv3', imgId: 'img3', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#2563eb'; ctx.textAlign = 'center';
+                    ctx.fillText('Frekans Bantlarının Kıyaslanması', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('Filtre Geçirme Sınırı: ω_c = π/8 ≈ 0.393 rad/örnek', w/2, 75);
+                    ctx.fillText('Harmonik Frekansı: 2π/3 ≈ 2.094 rad/örnek', w/2, 110);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fillText('0.393 < 2.094  ==>  |±2π/3| > ω_c  (Durdurma Bandında!)', w/2, 150);
+                }},
+                { id: 'cv4', imgId: 'img4', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '14px JetBrains Mono'; ctx.fillStyle = '#059669'; ctx.textAlign = 'center';
+                    ctx.fillText('Çıkış DTFS Katsayıları İspatı: c_k = a_k · H', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('k = 0: c₀ = a₀ · H(e^{j0}) = a₀ · 1 = a₀', w/2, 75);
+                    ctx.fillText('k = 1: c₁ = a₁ · H(e^{j2π/3}) = a₁ · 0 = 0', w/2, 110);
+                    ctx.fillText('k = 2: c₂ = a₂ · H(e^{j4π/3}) = a₂ · 0 = 0', w/2, 140);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('==> Periyot başına yalnızca TEK bir sıfır olmayan katsayı (c₀) kalır!', w/2, 175);
+                }},
+                { id: 'cv5', imgId: 'img5', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#7c3aed'; ctx.textAlign = 'center';
+                    ctx.fillText('Zaman Düzleminde Çıkış Sinyali Davranışı', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('DTFS Sentezi: y[n] = c₀ e^{j0·n} + c₁ e^{j(2π/3)n} + c₂ e^{j(4π/3)n}', w/2, 75);
+                    ctx.fillText('y[n] = a₀ + 0 + 0 = a₀ = sabit', w/2, 115);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('a₀ = (x[0] + x[1] + x[2]) / 3 (Girişin Ortalama Değeri)', w/2, 155);
+                }},
+                { id: 'cv6', imgId: 'img6', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#be123c'; ctx.textAlign = 'center';
+                    ctx.fillText('Genelleştirilmiş Kesim Frekansı Teoremi', w/2, 35);
+                    ctx.font = '11px JetBrains Mono'; ctx.fillStyle = '#334155';
+                    ctx.fillText('Tek katsayı kalma genel şartı: ω_c < 2π / N', w/2, 75);
+                    ctx.fillText('N = 3 için sınır: ω_c < 2.094 rad/örnek', w/2, 110);
+                    ctx.fillText('Verilen filtrede ω_c = π/8 ≈ 0.393 < 2.094 (Şart tam sağlanır)', w/2, 140);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('Filtre tüm AC dalgalanmaları yok ederek saf DC üretir.', w/2, 175);
+                }}
+            ];
+
+            steps.forEach(s => {
+                const cv = document.getElementById(s.id);
+                const img = document.getElementById(s.imgId);
+                const w = 700, h = 200;
+                const ctx = createHiDPICanvas(cv, w, h);
+                s.draw(ctx, w, h);
+                img.src = cv.toDataURL('image/png');
+            });
+        }
+
+        window.addEventListener('load', () => {
+            drawSim();
+            renderAllSteps();
+        });
+        window.addEventListener('resize', drawSim);
+    </script>
+</body>
+</html>

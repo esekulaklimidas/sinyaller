@@ -122,7 +122,7 @@
         <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
         <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
         <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
-        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (31)</button>
+        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (39)</button>
         <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
         <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
         <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
@@ -1729,7 +1729,151 @@ eq 0$ ile nedensellik ihlali.
           </div>
         </a>
 
-      </div>
+      
+        <!-- Problem 3.32 -->
+        <a href="problem_3_32_lineer_denklem_sistemi_ve_dtfs_matrisi.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.32</span>
+              <span class="text-[10px] font-mono text-slate-400">N=4 • Lineer Denklem</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">4 Bilinmeyenli Denklem Sistemi ve DTFS Matris Analizi</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Sentez bağıntısını 4 bilinmeyenli denklem sistemine dönüştürüp $a_k$ çözümü ve DTFS analizi ile doğrulama.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Matrisel Sentez &amp; Vandermonde</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.33 -->
+        <a href="problem_3_33_ct_lti_diferansiyel_denklem_ve_frekans_yaniti.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.33</span>
+              <span class="text-[10px] font-mono text-slate-400">CT LTI • Dif. Denklem</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">Diferansiyel Denklem ile Tanımlı LTI Sistemde Fourier Çıkışı</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              $y'(t) + 4y(t) = x(t)$ sisteminde $H(j\omega)$ frekans yanıtı ve harmonik girişler için çıkış Fourier serisi hesabı.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Alçak Geçiren Filtreleme</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.34 -->
+        <a href="problem_3_34_cift_tarafli_ustel_durtu_yaniti_ve_ct_filtreleme.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.34</span>
+              <span class="text-[10px] font-mono text-slate-400">CT LTI • Sıfır Faz</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">$h(t) = e^{-4|t|}$ Dürtü Yanıtlı Sistemde Fourier Serisi Çıkışı</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Çift taraflı üstel dürtü yanıtı için gerçel $H(j\omega) = rac{8}{16+\omega^2}$ yanıtı ve 3 farklı periyodik giriş analizi.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Sıfır Faz &amp; Pürüzsüzleştirme</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.35 -->
+        <a href="problem_3_35_ideal_yuksek_geciren_filtre_ve_harmonik_bastirma.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.35</span>
+              <span class="text-[10px] font-mono text-slate-400">İdeal HPF • Sıfır Harmonikler</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">İdeal Yüksek Geçiren Filtrede Çıkışın Girişe Özdeşliği</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              $\omega_c = 250$ rad/s filtreden geçen $T = \pi/7$ periyotlu sinyalde $y(t)=x(t)$ için $|k| \le 17$ katsayılarının sıfırlanma ispatı.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Durdurma Bandı &amp; 35 Sıfır</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.36 -->
+        <a href="problem_3_36_ayrik_zaman_fark_denklemi_ve_dtfs_cikisi.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.36</span>
+              <span class="text-[10px] font-mono text-slate-400">DT LTI • Fark Denklemi</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">$y[n] - rac{1}{4}y[n-1] = x[n]$ Fark Denklemi ve DTFS Çıkışı</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Birinci derece nedensel ayrık LTI filtrede $H(e^{j\omega})$ transfer fonksiyonu ve sinüzoidal girişlerin DTFS çıkışları.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Ayrık Frekans Yanıtı &amp; N=8</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.37 -->
+        <a href="problem_3_37_cift_tarafli_ayrik_ustel_ve_dt_lti_yaniti.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.37</span>
+              <span class="text-[10px] font-mono text-slate-400">DT LTI • h[n]=(1/2)^|n|</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">$h[n] = (1/2)^{|n|}$ Dürtü Yanıtlı Sistemde DTFS Çıkış Analizi</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              Çift taraflı geometrik diziden $H(e^{j\omega}) = rac{3}{5-4\cos\omega}$ yanıtı, $N=4$ darbe katarı ve $N=6$ darbe çıkışları.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Sıfır Fazlı Ayrık Filtre</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.38 -->
+        <a href="problem_3_38_sonlu_durtu_yanitli_dt_sistem_ve_dtfs.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.38</span>
+              <span class="text-[10px] font-mono text-slate-400">DT FIR • Periyodik Konvolüsyon</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">Parçalı Tanımlı FIR Sistemde DTFS Katsayılarının Hesaplanması</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              5 örnekli sonlu dürtü yanıtında frekans yanıtı $H(e^{j\omega})$ ve periyodik konvolüsyon yöntemleriyle çıkış DTFS katsayıları.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">FIR Filtreleme &amp; Eşlenik Simetrisi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- Problem 3.39 -->
+        <a href="problem_3_39_ideal_alcak_geciren_dt_filtre_ve_tek_harmonik.html" class="group bg-white rounded-2xl p-5 shadow-sm border border-slate-200 hover:shadow-md hover:border-indigo-300 transition-all flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-mono font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 border border-indigo-200">Problem 3.39</span>
+              <span class="text-[10px] font-mono text-slate-400">İdeal LPF • Tek Harmonik</span>
+            </div>
+            <h4 class="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors mb-1.5">İdeal Alçak Geçiren Ayrık Filtrede Tek Harmonikli Çıkış ($N=3$)</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4">
+              $\omega_c = \pi/8$ kesim frekanslı filtrede $N=3$ periyotlu sinyalin $k=\pm 1$ harmoniklerinin yok edilip yalnızca $c_0$ kalmasının ispatı.
+            </p>
+          </div>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Saf DC Çıkış &amp; Kesim Teoremi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+</div>
     </section>
 
   </main>
