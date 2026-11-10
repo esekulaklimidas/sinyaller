@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.23: Fourier Katsayılarından Sürekli Zaman Sinyalinin Sentezi - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .canvas-container { position: relative; width: 100%; height: 260px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease-in-out; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-mono">Bölüm 3 • Problem 3.23</span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">Sürekli Zaman</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800">CTFS Sentez Denklemi</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">Darbe Katarı & Sinc Özellikleri</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Problem 3.23: Fourier Serisi Katsayılarından Periyodik Sinyal $x(t)$'nin Belirlenmesi</h1>
+            <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
+                Temel periyodu $T = 4$ ($\omega_0 = \pi/2\text{ rad/s}$) olan sürekli zamanlı sinyallerin (a), (b), (c) ve (d) şıklarında tanımlanan $a_k$ Fourier katsayılarından faydalanarak zaman bölgesi fonksiyonu $x(t)$'yi analitik olarak elde ediniz.
+            </p>
+            <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono">
+                Oppenheim & Willsky • Signals & Systems 2nd Ed. Sayfa 287 • CTFS Ters Dönüşüm ve Özellikleri
+            </div>
+        </div>
+
+        <!-- Soru Analizi ve Mini Konu Anlatımı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs">🎯</span>
+                    Soru Bizden Ne İstiyor?
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li>Temel periyot $T = 4 \implies \omega_0 = 2\pi/4 = \pi/2\text{ rad/s}$.</li>
+                    <li>(a) $a_k = (j)^k \frac{\sin(k\pi/4)}{k\pi}$ ($a_0=0$) katsayılarını dikdörtgen dalgaya dönüştürmek.</li>
+                    <li>(b) $a_k = (-1)^k \frac{\sin(k\pi/8)}{2k\pi}$ ($a_0 = 1/16$) katsayılarını kaydırılmış darbe katarına bağlamak.</li>
+                    <li>(c) Sonlu sayıdaki katsayılardan ($|k|<3$) trigonometrik sinüs serisini toplamak.</li>
+                    <li>(d) $k$ çift için 1, tek için 2 olan katsayıları Dirac dürtü dizisine dönüştürmek.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs">💡</span>
+                    Adım Adım Çözüm Metodolojisi
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li><strong>Sentez Denklemi:</strong> $x(t) = \sum_{k=-\infty}^\infty a_k e^{j k \frac{\pi}{2} t}$.</li>
+                    <li><strong>Zaman Kayması:</strong> $e^{j k \omega_0 t_0} \longleftrightarrow x(t + t_0)$. $(j)^k = e^{jk\pi/2} \implies t_0 = 1$.</li>
+                    <li><strong>Trigonometrik Eşleştirme:</strong> $a_k$ saf sanal ise sinüs terimleri toplanır: $a_k - a_{-k} = 2j \text{Im}\{a_k\}$.</li>
+                    <li><strong>Dürtü Özelliği:</strong> $a_k = \text{sabit} \longleftrightarrow$ Dirac tarak fonksiyonu $\sum \delta(t - nT)$.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canlı Simülatör Kartı -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Sentezlenen Sinyal $x(t)$ ve Spektrum Canlı Simülatörü</h2>
+                    <p class="text-xs text-slate-500">Şıkları seçerek Fourier katsayılarının zaman bölgesinde ürettiği dalga şekillerini inceleyin.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnPartA" class="text-xs px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm">Şık (a)</button>
+                    <button id="btnPartB" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Şık (b)</button>
+                    <button id="btnPartC" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Şık (c)</button>
+                    <button id="btnPartD" class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Şık (d)</button>
+                </div>
+            </div>
+
+            <!-- Çift Tuval -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Verilen Katsayılar Spektrumu $a_k$</span>
+                        <span id="lblPartBadge" class="text-[10px] text-blue-600 font-bold">Şık (a): Sinc & Faz Kayması</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Zaman Bölgesi Sentez Çıkışı $x(t)$ (Periyot $T = 4$)</span>
+                        <span class="text-[10px] text-slate-500">t ∈ [-4, 4]</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Çıkarım Paneli -->
+            <div id="simMath" class="p-3 bg-purple-50 rounded-lg border border-purple-200 text-xs font-mono text-purple-900">
+                Yükleniyor...
+            </div>
+        </div>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white text-sm">6</span>
+                Adım Adım Matematiksel Çözüm ve İspat
+            </h2>
+
+            <!-- 1. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">1. Adım: Temel Periyot, Frekans ve Sentez Tanımı</span>
+                    <button onclick="downloadCard('img1', 'Problem_3_23_Adim_1.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sinyal periyodu $T = 4$ olarak sabitlenmiştir. Sürekli zaman Fourier serisi temel açısal frekansı:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\omega_0 = \frac{2\pi}{T} = \frac{2\pi}{4} = \frac{\pi}{2}\text{ rad/s}$$
+                    </div>
+                    <p>Fourier serisi sentez denklemi her bir şık için şu yapıdadır:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$x(t) = \sum_{k=-\infty}^{\infty} a_k e^{j k \frac{\pi}{2} t}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img1" class="w-full rounded-lg border border-slate-200" alt="1. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 2. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">2. Adım: (a) Şıkkı Çözümü — Kaydırılmış Dikdörtgen Dalga</span>
+                    <button onclick="downloadCard('img2', 'Problem_3_23_Adim_2.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Verilen katsayı: $a_k = (j)^k \frac{\sin(k\pi/4)}{k\pi} = e^{j k \pi/2} \frac{\sin(k\pi/4)}{k\pi}$ ($k \neq 0$) ve $a_0 = 0$.</p>
+                    <p>Orijin merkezli, $T_1 = 1/2$ genişliğinde bir kare dalganın katsayıları $\tilde{a}_k = \frac{\sin(k\pi/4)}{k\pi}$'dir ve $\tilde{a}_0 = 2T_1/T = 1/4$'tür. $e^{jk\pi/2}$ çarpanı $t_0 = 1$ birimlik sol zaman kaymasını gösterir:</p>
+                    <div class="p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center font-mono text-sm text-indigo-900">
+                        $$x(t) = \tilde{x}(t + 1) - \tilde{a}_0$$
+                        $$x(t) = \begin{cases} 3/4, & -1.5 < t < -0.5 \\ -1/4, & \text{diğer yerlerde } (-2 \le t \le 2) \end{cases}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img2" class="w-full rounded-lg border border-slate-200" alt="2. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 3. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">3. Adım: (b) Şıkkı Çözümü — Dar Darbe Katarı</span>
+                    <button onclick="downloadCard('img3', 'Problem_3_23_Adim_3.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Verilen katsayı: $a_k = (-1)^k \frac{\sin(k\pi/8)}{2k\pi} = \frac{1}{2} e^{jk\pi} \frac{\sin(k\pi/8)}{k\pi}$ ve $a_0 = \frac{1}{16}$.</p>
+                    <p>$k\omega_0 T_1 = k(\pi/2)T_1 = k\pi/8 \implies T_1 = 1/4$. $e^{jk\pi} = e^{jk\omega_0(2)}$ terimi $t=2$ noktasına kaymayı temsil eder. Genlik $1/2$'dir:</p>
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-center font-mono text-sm text-emerald-900">
+                        $$a_0 = \frac{1}{4} \int_{2 - 1/4}^{2 + 1/4} \frac{1}{2} dt = \frac{1}{16} \quad \checkmark$$
+                        $$x(t) = \begin{cases} 1/2, & 1.75 < t < 2.25 \\ 0, & \text{diğer yerlerde } (0 \le t \le 4) \end{cases}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img3" class="w-full rounded-lg border border-slate-200" alt="3. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 4. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">4. Adım: (c) Şıkkı Çözümü — Sonlu Harmonik Sinüs Toplamı</span>
+                    <button onclick="downloadCard('img4', 'Problem_3_23_Adim_4.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Verilen katsayılar: $a_k = jk$ ($|k| < 3$) ve diğer yerlerde 0. Katsayıları tek tek yazalım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$a_0 = 0, \quad a_1 = j, \quad a_{-1} = -j, \quad a_2 = 2j, \quad a_{-2} = -2j$$
+                    </div>
+                    <p>Sentez formülü ile doğrudan toplayalım:</p>
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center font-mono text-base text-amber-900 font-bold">
+                        $$x(t) = j e^{j\frac{\pi}{2}t} - j e^{-j\frac{\pi}{2}t} + 2j e^{j\pi t} - 2j e^{-j\pi t}$$
+                        $$x(t) = -2 \sin\left(\frac{\pi}{2}t\right) - 4 \sin(\pi t)$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img4" class="w-full rounded-lg border border-slate-200" alt="4. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 5. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">5. Adım: (d) Şıkkı Çözümü — Dirac Dürtü Katarı</span>
+                    <button onclick="downloadCard('img5', 'Problem_3_23_Adim_5.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Verilen katsayılar: $a_k = 1$ ($k$ çift) ve $a_k = 2$ ($k$ tek). Bu katsayıları sabit ve alterne terimlere ayrıştıralım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$a_k = \frac{3}{2} - \frac{1}{2} (-1)^k = \frac{3}{2} - \frac{1}{2} e^{-jk\pi}$$
+                    </div>
+                    <p>Periyodu $T = 4$ olan dürtü katarı katsayısı $\delta(t) \longleftrightarrow 1/4$'tür. Buradan genlikleri 4 ile çarparak sinyali buluruz:</p>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg text-center font-mono text-base text-rose-900 font-bold">
+                        $$x(t) = 6 \sum_{m=-\infty}^{\infty} \delta(t - 4m) - 2 \sum_{m=-\infty}^{\infty} \delta(t - 2 - 4m)$$
+                    </div>
+                    <p class="text-xs text-slate-600">Her 4 saniyede bir $t=0, 4, 8\dots$'de $+6$ şiddetinde, $t=2, 6, 10\dots$'da $-2$ şiddetinde Dirac dürtüleri üretilir.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img5" class="w-full rounded-lg border border-slate-200" alt="5. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 6. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">6. Adım: Tüm Şıkların Nihai Fonksiyonel Özeti</span>
+                    <button onclick="downloadCard('img6', 'Problem_3_23_Adim_6.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <div class="p-4 bg-teal-50 border border-teal-200 rounded-lg">
+                        <h4 class="font-bold text-teal-900 mb-2">Problem 3.23 Nihai Çözüm Özeti ($T = 4$):</h4>
+                        <div class="space-y-2 font-mono text-xs text-teal-900">
+                            <div><strong>(a)</strong> $x(t) = 3/4$ ($-1.5 < t < -0.5$), $-1/4$ (diğer yerlerde).</div>
+                            <div><strong>(b)</strong> $x(t) = 1/2$ ($1.75 < t < 2.25$), $0$ (diğer yerlerde).</div>
+                            <div><strong>(c)</strong> $x(t) = -2\sin(\frac{\pi}{2}t) - 4\sin(\pi t)$.</div>
+                            <div><strong>(d)</strong> $x(t) = 6\sum_m \delta(t - 4m) - 2\sum_m \delta(t - 2 - 4m)$.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img6" class="w-full rounded-lg border border-slate-200" alt="6. Adım Çizimi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHiDPICanvas(w, h) {
+            const canvas = document.createElement('canvas');
+            const dpr = window.devicePixelRatio || 2;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+            const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+            return { canvas, ctx };
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const a = document.createElement('a');
+            a.href = img.src; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        }
+
+        function renderStepImages() {
+            // Adım 1
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#1e3a8a'; ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('CTFS Sentez Bağıntısı: T = 4 s  ===>  ω₀ = 2π / 4 = π/2 rad/s', 50, 45);
+                ctx.fillStyle = '#1e293b'; ctx.font = '14px monospace';
+                ctx.fillText('x(t) = ∑ a_k · e^{j k (π/2) t}', 70, 95);
+                document.getElementById('img1').src = canvas.toDataURL('image/png');
+            }
+            // Adım 2: (a)
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#4338ca'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Şık (a): a_k = e^{jkπ/2} sin(kπ/4)/(kπ)  ===>  t₀ = 1 birim sola kayma, DC = -1/4', 50, 40);
+                ctx.fillStyle = '#1e293b'; ctx.font = '13px monospace';
+                ctx.fillText('x(t) = 3/4  (-1.5 < t < -0.5),   x(t) = -1/4 (diğer yerlerde)', 70, 90);
+                document.getElementById('img2').src = canvas.toDataURL('image/png');
+            }
+            // Adım 3: (b)
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#065f46'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Şık (b): a_k = 0.5 e^{jkπ} sin(kπ/8)/(kπ),  a₀ = 1/16', 50, 40);
+                ctx.fillStyle = '#1e293b'; ctx.font = '13px monospace';
+                ctx.fillText('x(t) = 1/2  (1.75 < t < 2.25, t = 2 merkezli),   0 (diğer)', 70, 90);
+                document.getElementById('img3').src = canvas.toDataURL('image/png');
+            }
+            // Adım 4: (c)
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#b45309'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Şık (c): a_1 = j, a_{-1} = -j, a_2 = 2j, a_{-2} = -2j', 50, 40);
+                ctx.fillStyle = '#d97706'; ctx.font = 'bold 16px monospace';
+                ctx.fillText('x(t) = -2 sin(πt/2) - 4 sin(πt)', 70, 95);
+                document.getElementById('img4').src = canvas.toDataURL('image/png');
+            }
+            // Adım 5: (d)
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#991b1b'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Şık (d): a_k = 1.5 - 0.5 (-1)ᵏ  ===>  Dürtü Katarı', 50, 40);
+                ctx.fillStyle = '#dc2626'; ctx.font = 'bold 16px monospace';
+                ctx.fillText('x(t) = 6 ∑ δ(t - 4m) - 2 ∑ δ(t - 2 - 4m)', 70, 95);
+                document.getElementById('img5').src = canvas.toDataURL('image/png');
+            }
+            // Adım 6: Özet
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 200);
+                ctx.fillStyle = '#0f766e'; ctx.fillRect(40, 20, 720, 160);
+                ctx.fillStyle = '#ffffff'; ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('PROBLEM 3.23 NİHAİ ÇÖZÜM ÖZETİ', 60, 55);
+                ctx.font = '13px monospace';
+                ctx.fillText('(a) x(t) = { 3/4 (-1.5<t<-0.5), -1/4 (diğer) }', 60, 90);
+                ctx.fillText('(b) x(t) = { 1/2 (1.75<t<2.25), 0 (diğer) }', 60, 115);
+                ctx.fillText('(c) x(t) = -2 sin(πt/2) - 4 sin(πt)', 60, 140);
+                ctx.fillText('(d) x(t) = 6 ∑ δ(t-4m) - 2 ∑ δ(t-2-4m)', 60, 165);
+                document.getElementById('img6').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        let curPart = 'A';
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+        const simMath = document.getElementById('simMath');
+        const lblPartBadge = document.getElementById('lblPartBadge');
+
+        const btnA = document.getElementById('btnPartA');
+        const btnB = document.getElementById('btnPartB');
+        const btnC = document.getElementById('btnPartC');
+        const btnD = document.getElementById('btnPartD');
+
+        function setPart(p) {
+            curPart = p;
+            [btnA, btnB, btnC, btnD].forEach(b => {
+                b.className = 'text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200';
+            });
+
+            if (p === 'A') {
+                btnA.className = 'text-xs px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm';
+                lblPartBadge.textContent = 'Şık (a): Sinc & Faz Kayması';
+                simMath.innerHTML = `<div><strong>Şık (a):</strong> $a_k = (j)^k \\frac{\\sin(k\\pi/4)}{k\\pi}$ ($a_0 = 0$) $\\implies x(t) = 3/4$ ($-1.5 < t < -0.5$), $-1/4$ (diğer yerlerde).</div>`;
+            } else if (p === 'B') {
+                btnB.className = 'text-xs px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm';
+                lblPartBadge.textContent = 'Şık (b): t=2 Merkezli Darbe';
+                simMath.innerHTML = `<div><strong>Şık (b):</strong> $a_k = (-1)^k \\frac{\\sin(k\\pi/8)}{2k\\pi}$ ($a_0 = 1/16$) $\\implies x(t) = 1/2$ ($1.75 < t < 2.25$), $0$ (diğer).</div>`;
+            } else if (p === 'C') {
+                btnC.className = 'text-xs px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm';
+                lblPartBadge.textContent = 'Şık (c): İki Sinüs Terimi';
+                simMath.innerHTML = `<div><strong>Şık (c):</strong> $a_1=j, a_2=2j$ $\\implies x(t) = -2\\sin(\\frac{\\pi}{2}t) - 4\\sin(\\pi t)$.</div>`;
+            } else {
+                btnD.className = 'text-xs px-2.5 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm';
+                lblPartBadge.textContent = 'Şık (d): Dürtü Katarı';
+                simMath.innerHTML = `<div><strong>Şık (d):</strong> $a_k = 1.5 - 0.5(-1)^k \\implies x(t) = 6\\sum \\delta(t-4m) - 2\\sum \\delta(t-2-4m)$.</div>`;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            drawAk();
+            drawXt();
+        }
+
+        function drawAk() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = kCanvas.parentElement.clientWidth;
+            const h = kCanvas.parentElement.clientHeight;
+            kCanvas.width = w * dpr; kCanvas.height = h * dpr;
+            const ctx = kCanvas.getContext('2d'); ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2 + 10; const cx = w / 2;
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 25); ctx.lineTo(cx, h - 15); ctx.stroke();
+
+            const step = (w - 60) / 14;
+
+            for (let k = -6; k <= 6; k++) {
+                const x = cx + k * step;
+                let val = 0;
+                if (curPart === 'A') {
+                    val = k === 0 ? 0 : Math.sin(k * Math.PI / 4) / (k * Math.PI);
+                } else if (curPart === 'B') {
+                    val = k === 0 ? 1/16 : Math.pow(-1, k) * Math.sin(k * Math.PI / 8) / (2 * k * Math.PI);
+                } else if (curPart === 'C') {
+                    val = Math.abs(k) < 3 ? Math.abs(k) : 0;
+                } else {
+                    val = k % 2 === 0 ? 1 : 2;
+                }
+
+                const y = cy - val * 45;
+                ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(x, cy); ctx.lineTo(x, y); ctx.stroke();
+                ctx.fillStyle = '#2563eb';
+                ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#64748b'; ctx.font = '9px sans-serif';
+                ctx.fillText(`${k}`, x - 3, cy + 14);
+            }
+        }
+
+        function drawXt() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = ynCanvas.parentElement.clientWidth;
+            const h = ynCanvas.parentElement.clientHeight;
+            ynCanvas.width = w * dpr; ynCanvas.height = h * dpr;
+            const ctx = ynCanvas.getContext('2d'); ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2; const cx = w / 2;
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 20); ctx.lineTo(cx, h - 20); ctx.stroke();
+
+            const scaleT = (w - 60) / 8;
+
+            ctx.strokeStyle = '#059669'; ctx.lineWidth = 2.5; ctx.beginPath();
+            if (curPart === 'A') {
+                for (let px = 25; px <= w - 25; px++) {
+                    const t = (px - cx) / scaleT;
+                    let tau = ((t + 2) % 4 + 4) % 4 - 2;
+                    let val = (tau > -1.5 && tau < -0.5) ? 0.75 : -0.25;
+                    const py = cy - val * 60;
+                    if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            } else if (curPart === 'B') {
+                for (let px = 25; px <= w - 25; px++) {
+                    const t = (px - cx) / scaleT;
+                    let tau = (t % 4 + 4) % 4;
+                    let val = (tau > 1.75 && tau < 2.25) ? 0.5 : 0;
+                    const py = cy - val * 90;
+                    if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            } else if (curPart === 'C') {
+                for (let px = 25; px <= w - 25; px++) {
+                    const t = (px - cx) / scaleT;
+                    const val = -2 * Math.sin(Math.PI * t / 2) - 4 * Math.sin(Math.PI * t);
+                    const py = cy - val * 16;
+                    if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            } else {
+                // Impulses
+                for (let m = -2; m <= 2; m++) {
+                    const x1 = cx + m * 4 * scaleT;
+                    const x2 = x1 + 2 * scaleT;
+                    if (x1 >= 25 && x1 <= w - 25) {
+                        ctx.moveTo(x1, cy); ctx.lineTo(x1, cy - 80);
+                    }
+                    if (x2 >= 25 && x2 <= w - 25) {
+                        ctx.moveTo(x2, cy); ctx.lineTo(x2, cy + 35);
+                    }
+                }
+            }
+            ctx.stroke();
+        }
+
+        btnA.addEventListener('click', () => setPart('A'));
+        btnB.addEventListener('click', () => setPart('B'));
+        btnC.addEventListener('click', () => setPart('C'));
+        btnD.addEventListener('click', () => setPart('D'));
+
+        window.addEventListener('load', () => {
+            renderStepImages();
+            setPart('A');
+        });
+        window.addEventListener('resize', () => {
+            drawAk();
+            drawXt();
+        });
+    </script>
+</body>
+</html>

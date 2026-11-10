@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.24: Türev Özelliği ve Üçgen Dalga Fourier Serisi - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .canvas-container { position: relative; width: 100%; height: 260px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease-in-out; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-mono">Bölüm 3 • Problem 3.24</span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">Sürekli Zaman</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800">Türev Özelliği (Differentiation)</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">Üçgen Dalga & 1/k² Azalımı</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Problem 3.24: Türev Özelliği ile Üçgen Dalgadan Kare Dalgaya ve $a_k$ Çıkarımı</h1>
+            <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
+                Temel periyodu $T = 2$ olan $x(t) = \begin{cases} t, & 0 \le t \le 1 \\ 2 - t, & 1 \le t \le 2 \end{cases}$ üçgen dalgası için $a_0$ değerini, türevi $dx(t)/dt$'nin Fourier serisini ve türev özelliğini ($b_k = j k \omega_0 a_k$) kullanarak $a_k$ katsayılarını belirleyiniz.
+            </p>
+            <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono">
+                Oppenheim & Willsky • Signals & Systems 2nd Ed. Sayfa 287 • CTFS Türev Alma Özelliği ve Spektrum Azalım Hızı
+            </div>
+        </div>
+
+        <!-- Soru Analizi ve Mini Konu Anlatımı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs">🎯</span>
+                    Soru Bizden Ne İstiyor?
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li>(a) DC ortalama bileşeni $a_0 = \frac{1}{2} \int_0^2 x(t) dt$'yi hesaplamak.</li>
+                    <li>(b) $y(t) = dx/dt$ türev sinyalini elde edip kare dalga Fourier katsayıları $b_k$'yı bulmak.</li>
+                    <li>(c) $b_k = j k \pi a_k \implies a_k = \frac{b_k}{j k \pi}$ ilişkisi ile $a_k$'yı integrasyonsuz çözmek.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs">💡</span>
+                    Adım Adım Çözüm Metodolojisi
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li><strong>Alan Hesabı:</strong> Tabanı 2, yüksekliği 1 olan üçgenin alanı $1 \implies a_0 = 1/2$.</li>
+                    <li><strong>Türev:</strong> $0 < t < 1$ için $+1$, $1 < t < 2$ için $-1$. Sürekli olduğundan dürtü içermez!</li>
+                    <li><strong>Türev Katsayıları:</strong> $b_k = \frac{1 - (-1)^k}{jk\pi}$ ($k$ tek için $-2j/(k\pi)$, çift için 0).</li>
+                    <li><strong>$a_k$ Formülü:</strong> $a_k = \frac{b_k}{jk\pi} = -\frac{2}{k^2\pi^2}$ ($k$ tek), $0$ ($k$ çift, $k\ne 0$).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canlı Simülatör Kartı -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Üçgen Dalga ve Türevi Canlı Simülatörü</h2>
+                    <p class="text-xs text-slate-500">Harmonik sayısını ($N_{harm}$) değiştirerek Fourier serisi kısmi toplamının üçgen dalgaya yakınsamasını inceleyin.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnResetN" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200">Varsayılan (N=5)</button>
+                </div>
+            </div>
+
+            <!-- Kontroller -->
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                    <span>Harmonik Sayısı ($N_{harm}$):</span>
+                    <span id="lblN" class="text-blue-600 font-mono">5</span>
+                </div>
+                <input id="sliderN" type="range" min="1" max="15" step="2" value="5" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+            </div>
+
+            <!-- Çift Tuval -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Orijinal Üçgen Dalga $x(t)$ & Fourier Yaklaşımı</span>
+                        <span class="text-[10px] text-blue-600 font-bold">1/k² Hızlı Yakınsama</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Türev Sinyali $dx(t)/dt$ (Kare Dalga)</span>
+                        <span class="text-[10px] text-emerald-600 font-bold">b_k = j k π a_k</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Çıkarım Paneli -->
+            <div id="simMath" class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs font-mono text-amber-900">
+                Yükleniyor...
+            </div>
+        </div>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white text-sm">6</span>
+                Adım Adım Matematiksel Çözüm ve İspat
+            </h2>
+
+            <!-- 1. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">1. Adım: (a) Şıkkı Çözümü — DC Bileşeni $a_0$ Hesabı</span>
+                    <button onclick="downloadCard('img1', 'Problem_3_24_Adim_1.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sinyal periyodu $T = 2$'dir. DC ortalama bileşeni $a_0$, sinyalin bir periyotluk alanının periyoda oranıdır:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$a_0 = \frac{1}{T} \int_{0}^{T} x(t) dt = \frac{1}{2} \left[ \int_{0}^{1} t dt + \int_{1}^{2} (2 - t) dt \right]$$
+                        $$a_0 = \frac{1}{2} \left[ \left. \frac{t^2}{2} \right|_0^1 + \left. \left(2t - \frac{t^2}{2}\right) \right|_1^2 \right] = \frac{1}{2} \left[ \frac{1}{2} + \frac{1}{2} \right] = \frac{1}{2}$$
+                    </div>
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg text-center font-mono text-base text-blue-900 font-bold">
+                        $$a_0 = \frac{1}{2}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img1" class="w-full rounded-lg border border-slate-200" alt="1. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 2. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">2. Adım: (b) Şıkkı Çözümü — Türev Sinyali $dx(t)/dt$ Tanımı</span>
+                    <button onclick="downloadCard('img2', 'Problem_3_24_Adim_2.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Üçgen dalga $x(t)$ her yerde süreklidir; $t=1$'de tepe yapar ($x(1)=1$), $t=0$ ve $t=2$'de sıfırdır. Süreksizlik noktası (atlama) bulunmadığı için türevde Dirac dürtüleri ($\delta(t)$) oluşmaz!</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y(t) = \frac{dx(t)}{dt} = \begin{cases} \frac{d}{dt}(t) = +1, & 0 < t < 1 \\ \frac{d}{dt}(2 - t) = -1, & 1 < t < 2 \end{cases}$$
+                    </div>
+                    <p class="text-xs text-slate-600">Bu sinyal, genliği $\pm 1$, periyodu $T = 2$ ve ortalama değeri sıfır olan periyodik bir kare dalgadır.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img2" class="w-full rounded-lg border border-slate-200" alt="2. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 3. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">3. Adım: Kare Dalganın Fourier Katsayıları $b_k$</span>
+                    <button onclick="downloadCard('img3', 'Problem_3_24_Adim_3.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>$y(t)$'nin Fourier serisi katsayıları $b_k$ ($\omega_0 = \pi$):</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$b_0 = \frac{1}{2} \int_0^2 y(t) dt = \frac{1 - 1}{2} = 0$$
+                        $$b_k = \frac{1}{2} \left[ \int_0^1 (+1) e^{-jk\pi t} dt + \int_1^2 (-1) e^{-jk\pi t} dt \right] = \frac{1 - (-1)^k}{j k \pi}$$
+                    </div>
+                    <p>$(-1)^k$ çarpanına göre:</p>
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-center font-mono text-base text-emerald-900 font-bold">
+                        $$b_k = \begin{cases} 0, & k \text{ çift} \\ \frac{2}{j k \pi} = -j \frac{2}{k\pi}, & k \text{ tek} \end{cases}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img3" class="w-full rounded-lg border border-slate-200" alt="3. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 4. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">4. Adım: (c) Şıkkı Çözümü — Türev Özelliği ile $a_k$'nın Çıkarımı</span>
+                    <button onclick="downloadCard('img4', 'Problem_3_24_Adim_4.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sürekli zaman Fourier serisinde türev alma özelliği şu şekildedir:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\frac{dx(t)}{dt} \longleftrightarrow j k \omega_0 a_k \implies b_k = j k \pi a_k \quad (k \neq 0)$$
+                    </div>
+                    <p>Buradan $a_k$'yı yalnız bırakırsak:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$a_k = \frac{b_k}{j k \pi} = \frac{\frac{1 - (-1)^k}{j k \pi}}{j k \pi} = \frac{1 - (-1)^k}{j^2 k^2 \pi^2} = -\frac{1 - (-1)^k}{k^2 \pi^2}$$
+                    </div>
+                    <p>$k$ çift olduğunda pay sıfır olur; $k$ tek olduğunda $1 - (-1) = 2$ olur:</p>
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center font-mono text-base text-amber-900 font-bold">
+                        $$a_k = \begin{cases} -\frac{2}{k^2 \pi^2}, & k \text{ tek} \\ 0, & k \text{ çift} \ (k \neq 0) \end{cases}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img4" class="w-full rounded-lg border border-slate-200" alt="4. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 5. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">5. Adım: Kosinüs Sentezi ve $1/k^2$ Azalım Hızı Analizi</span>
+                    <button onclick="downloadCard('img5', 'Problem_3_24_Adim_5.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Bulunan $a_k$ katsayıları gerçel ve çifttir ($a_{-k} = a_k$). Trigonometrik kosinüs formunu kuralım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$x(t) = a_0 + \sum_{k=1, 3, 5\dots}^{\infty} 2 a_k \cos(k\pi t) = \frac{1}{2} - \frac{4}{\pi^2} \sum_{m=0}^{\infty} \frac{\cos\big((2m+1)\pi t\big)}{(2m+1)^2}$$
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        <strong>Mühendislik Yorumu:</strong> Kare dalganın katsayıları $1/k$ ile sönümlenirken (süreksizlik sebebiyle), üçgen dalga sürekli bir fonksiyon olduğu için katsayıları $1/k^2$ ile çok daha hızlı sönümlenir. Türev alma işlemi katsayıları $k$ ile çarptığından azalım hızı $1/k^2$'den $1/k$'ya düşmüştür.
+                    </p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img5" class="w-full rounded-lg border border-slate-200" alt="5. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 6. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">6. Adım: Noktasal Sağlama ve Nihai Çözüm Özeti</span>
+                    <button onclick="downloadCard('img6', 'Problem_3_24_Adim_6.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Seriyi $t = 0$ ve $t = 1$ kritik noktalarında test edelim ($\sum_{m=0}^\infty \frac{1}{(2m+1)^2} = \frac{\pi^2}{8}$):</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 font-mono text-xs">
+                        $$x(0) = \frac{1}{2} - \frac{4}{\pi^2} \left(\frac{\pi^2}{8}\right) = \frac{1}{2} - \frac{1}{2} = 0 \quad \checkmark$$
+                        $$x(1) = \frac{1}{2} - \frac{4}{\pi^2} (-1) \left(\frac{\pi^2}{8}\right) = \frac{1}{2} + \frac{1}{2} = 1 \quad \checkmark$$
+                    </div>
+                    <div class="p-4 bg-teal-50 border border-teal-200 rounded-lg mt-3">
+                        <h4 class="font-bold text-teal-900 mb-2">Problem 3.24 Nihai Çözüm Özeti:</h4>
+                        <div class="space-y-1 font-mono text-xs text-teal-900">
+                            <div><strong>(a)</strong> $a_0 = \frac{1}{2}$</div>
+                            <div><strong>(b)</strong> $\frac{dx(t)}{dt} \longleftrightarrow b_k = \begin{cases} \frac{2}{jk\pi}, & k \text{ tek} \\ 0, & k \text{ çift} \end{cases}$</div>
+                            <div><strong>(c)</strong> $a_k = \begin{cases} 1/2, & k = 0 \\ -\frac{2}{k^2\pi^2}, & k \text{ tek} \\ 0, & k \text{ çift} \ (k \neq 0) \end{cases}$</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img6" class="w-full rounded-lg border border-slate-200" alt="6. Adım Çizimi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHiDPICanvas(w, h) {
+            const canvas = document.createElement('canvas');
+            const dpr = window.devicePixelRatio || 2;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+            const ctx = canvas.getContext('2d'); ctx.scale(dpr, dpr);
+            return { canvas, ctx };
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const a = document.createElement('a');
+            a.href = img.src; a.download = filename;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        }
+
+        function renderStepImages() {
+            // Adım 1: a0
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#1e3a8a'; ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('DC Ortalama Değer Hesabı (a₀):', 50, 45);
+                ctx.fillStyle = '#1e293b'; ctx.font = '14px monospace';
+                ctx.fillText('a₀ = (1/T) ∫ x(t) dt = (1/2) · [ (1/2) + (1/2) ] = 1/2', 70, 95);
+                document.getElementById('img1').src = canvas.toDataURL('image/png');
+            }
+            // Adım 2: dx/dt
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#4338ca'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Türev Sinyali: y(t) = dx(t)/dt = { +1 (0 < t < 1),  -1 (1 < t < 2) }', 50, 45);
+                ctx.fillStyle = '#1e293b'; ctx.font = '13px sans-serif';
+                ctx.fillText('x(t) sürekli olduğundan türevde Dirac darbesi yoktur, saf kare dalgadır.', 70, 95);
+                document.getElementById('img2').src = canvas.toDataURL('image/png');
+            }
+            // Adım 3: b_k
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#065f46'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Kare Dalganın Fourier Katsayıları b_k:', 50, 45);
+                ctx.fillStyle = '#047857'; ctx.font = 'bold 16px monospace';
+                ctx.fillText('b_k = [1 - (-1)ᵏ] / (jkπ) = { -2j/(kπ) (k tek),  0 (k çift) }', 70, 95);
+                document.getElementById('img3').src = canvas.toDataURL('image/png');
+            }
+            // Adım 4: Türev Özelliği
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#b45309'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Türev Özelliği: b_k = j k π a_k  ===>  a_k = b_k / (jkπ)', 50, 45);
+                ctx.fillStyle = '#d97706'; ctx.font = 'bold 16px monospace';
+                ctx.fillText('a_k = -2 / (k²π²)   (k tek sayılar için)', 70, 95);
+                document.getElementById('img4').src = canvas.toDataURL('image/png');
+            }
+            // Adım 5: 1/k^2
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 180);
+                ctx.fillStyle = '#991b1b'; ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Katsayıların 1/k² Hızında Hızlı Azalımı:', 50, 40);
+                ctx.fillStyle = '#1e293b'; ctx.font = '13px monospace';
+                ctx.fillText('a_1 = -2/π² ≈ -0.2026,   a_3 = -2/(9π²) ≈ -0.0225,   a_5 ≈ -0.0081', 70, 85);
+                ctx.fillText('x(t) = 1/2 - (4/π²) ∑ cos((2m+1)πt) / (2m+1)²', 70, 125);
+                document.getElementById('img5').src = canvas.toDataURL('image/png');
+            }
+            // Adım 6: Özet
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 800, 200);
+                ctx.fillStyle = '#0f766e'; ctx.fillRect(40, 20, 720, 160);
+                ctx.fillStyle = '#ffffff'; ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('PROBLEM 3.24 NİHAİ ÇÖZÜM ÖZETİ', 60, 55);
+                ctx.font = 'bold 14px monospace';
+                ctx.fillText('(a) a₀ = 1/2', 60, 90);
+                ctx.fillText('(b) b_k = 2 / (jkπ)  (k tek),   0 (k çift)', 60, 115);
+                ctx.fillText('(c) a_k = -2 / (k²π²)  (k tek),   0 (k çift, k≠0)', 60, 140);
+                document.getElementById('img6').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+        const sliderN = document.getElementById('sliderN');
+        const lblN = document.getElementById('lblN');
+        const simMath = document.getElementById('simMath');
+        const btnResetN = document.getElementById('btnResetN');
+
+        function updateSimulation() {
+            const numHarm = parseInt(sliderN.value);
+            lblN.textContent = numHarm;
+
+            simMath.innerHTML = `
+                <div><strong>Harmonik Sayısı:</strong> $N = ${numHarm}$ (Tek harmonikler: $k = 1, 3, \\dots, ${numHarm}$)</div>
+                <div class="mt-1 font-mono text-amber-900">$$x_{apx}(t) = \\frac{1}{2} - \\frac{4}{\\pi^2} \\sum_{m=0}^{${Math.floor(numHarm/2)}} \\frac{\\cos((2m+1)\\pi t)}{(2m+1)^2}$$</div>
+                <div class="mt-1 text-slate-600">$1/k^2$ sönümleme hızı sayesinde Gibbs salınımı görülmez ve seri çok hızlı yakınsar.</div>
+            `;
+            if (window.renderMathInElement) {
+                renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            drawTriangleCanvas(numHarm);
+            drawSquareCanvas();
+        }
+
+        function drawTriangleCanvas(numHarm) {
+            const dpr = window.devicePixelRatio || 2;
+            const w = kCanvas.parentElement.clientWidth;
+            const h = kCanvas.parentElement.clientHeight;
+            kCanvas.width = w * dpr; kCanvas.height = h * dpr;
+            const ctx = kCanvas.getContext('2d'); ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h - 35; const cx = w / 2;
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 25); ctx.lineTo(cx, cy + 10); ctx.stroke();
+
+            const scaleT = 55; const scaleY = 160;
+
+            // İdeal üçgen dalga
+            ctx.strokeStyle = '#94a3b8'; ctx.lineWidth = 1.5; ctx.setLineDash([3, 3]); ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - cx) / scaleT;
+                let tau = (t % 2 + 2) % 2;
+                let val = tau <= 1 ? tau : 2 - tau;
+                const py = cy - val * scaleY;
+                if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke(); ctx.setLineDash([]);
+
+            // Fourier Serisi Yaklaşımı
+            ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - cx) / scaleT;
+                let sum = 0.5;
+                for (let k = 1; k <= numHarm; k += 2) {
+                    sum -= (4 / (Math.PI * Math.PI * k * k)) * Math.cos(k * Math.PI * t);
+                }
+                const py = cy - sum * scaleY;
+                if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+
+        function drawSquareCanvas() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = ynCanvas.parentElement.clientWidth;
+            const h = ynCanvas.parentElement.clientHeight;
+            ynCanvas.width = w * dpr; ynCanvas.height = h * dpr;
+            const ctx = ynCanvas.getContext('2d'); ctx.scale(dpr, dpr);
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2; const cx = w / 2;
+            ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+            ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 25); ctx.lineTo(cx, h - 20); ctx.stroke();
+
+            const scaleT = 55; const scaleY = 70;
+
+            ctx.strokeStyle = '#059669'; ctx.lineWidth = 2.5; ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - cx) / scaleT;
+                let tau = (t % 2 + 2) % 2;
+                let val = (tau > 0 && tau < 1) ? 1 : -1;
+                const py = cy - val * scaleY;
+                if (px === 25 || Math.abs(tau - 1) < 0.03 || Math.abs(tau) < 0.03) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+
+        sliderN.addEventListener('input', updateSimulation);
+        btnResetN.addEventListener('click', () => { sliderN.value = 5; updateSimulation(); });
+
+        window.addEventListener('load', () => {
+            renderStepImages();
+            updateSimulation();
+        });
+        window.addEventListener('resize', updateSimulation);
+    </script>
+</body>
+</html>
