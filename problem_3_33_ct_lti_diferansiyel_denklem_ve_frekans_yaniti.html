@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.33: CT LTI Diferansiyel Denklem ve Frekans Yanıtı - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        code, pre, .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .canvas-container { position: relative; width: 100%; height: 260px; }
+        canvas { display: block; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+    <!-- Ana Konteyner -->
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs font-mono bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200">
+                Oppenheim & Willsky Bölüm 3 / Problem 3.33
+            </span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <header class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-indigo-100/50 to-transparent rounded-bl-full pointer-events-none"></div>
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">Sürekli Zaman LTI Sistemler</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">Diferansiyel Denklem</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Frekans Yanıtı $H(j\omega)$</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Problem 3.33: Diferansiyel Denklem ile Tanımlı LTI Sistemde Fourier Serisi Çıkışı
+            </h1>
+            <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+                $\frac{dy(t)}{dt} + 4y(t) = x(t)$ diferansiyel denklemi ile tanımlanan nedensel sürekli zamanlı LTI sistemin frekans yanıtının elde edilmesi ve periyodik harmonik girişler altındaki Fourier serisi katsayılarının bulunması.
+            </p>
+            
+            <!-- Hızlı Parametre Özeti -->
+            <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Sistem Denklemi</span>
+                    <span class="text-xs sm:text-sm font-bold text-indigo-600 font-mono">$y'(t) + 4y(t) = x(t)$</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Frekans Yanıtı</span>
+                    <span class="text-xs sm:text-sm font-bold text-indigo-600 font-mono">$H(j\omega) = \frac{1}{4+j\omega}$</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Kutup Noktası</span>
+                    <span class="text-xs sm:text-sm font-bold text-emerald-600 font-mono">$s = -4$ (Kararlı)</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Sistem Tipi</span>
+                    <span class="text-xs sm:text-sm font-bold text-purple-600 font-mono">1. Derece Alçak Geçiren</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 1. Kolon: Soru Bizden Ne İstiyor? -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="p-2 rounded-lg bg-amber-50 text-amber-600 font-bold text-lg">🎯</span>
+                        <h2 class="text-lg font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed space-y-2">
+                        Girişi $x(t)$, çıkışı $y(t)$ olan nedensel sürekli zamanlı LTI sistem $\frac{d}{dt}y(t) + 4y(t) = x(t)$ denklemini sağlamaktadır. Aşağıdaki her bir giriş için çıkış $y(t)$'nin Fourier serisi temsilini belirleyiniz:
+                    </p>
+                    <ul class="mt-3 space-y-2 text-sm text-slate-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 font-bold mt-0.5">•</span>
+                            <span><strong>(a) Şıkkı:</strong> $x(t) = \cos(2\pi t)$. Tek bir harmonik frekans ($\omega_0 = 2\pi$) içeren saf kosinüs dalgası.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-indigo-600 font-bold mt-0.5">•</span>
+                            <span><strong>(b) Şıkkı:</strong> $x(t) = \sin(4\pi t) + \cos(6\pi t + \pi/4)$. Ortak periyodu $T=1$ ($\omega_0 = 2\pi$) olan ve $2\omega_0$ ile $3\omega_0$ harmoniklerini içeren sinyal.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mt-4 p-3 bg-amber-50/50 rounded-xl border border-amber-200/60 text-xs text-amber-900">
+                    <strong>Temel Kural:</strong> LTI sistemlerde karmaşık üsteller özfonksiyondur ($e^{jk\omega_0 t} \xrightarrow{\mathcal{H}} H(jk\omega_0) e^{jk\omega_0 t}$). Girişin katsayıları $a_k$ ise çıkış katsayıları doğrudan $c_k = a_k \cdot H(jk\omega_0)$ olur!
+                </div>
+            </div>
+
+            <!-- 2. Kolon: Adım Adım Çözüm Metodolojisi -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-lg">💡</span>
+                        <h2 class="text-lg font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+                    </div>
+                    <ol class="space-y-2.5 text-sm text-slate-700 list-decimal list-inside">
+                        <li><strong>Frekans Yanıtı Bulma:</strong> $x(t) = e^{j\omega t} \implies y(t) = H(j\omega)e^{j\omega t}$ koyarak $j\omega H(j\omega) + 4H(j\omega) = 1 \implies H(j\omega) = \frac{1}{4+j\omega}$ elde etme.</li>
+                        <li><strong>(a) Şıkkı Giriş Katsayıları:</strong> $\cos(2\pi t) = \frac{1}{2}e^{j2\pi t} + \frac{1}{2}e^{-j2\pi t} \implies a_1 = 1/2, a_{-1} = 1/2$.</li>
+                        <li><strong>(a) Şıkkı Çıkış Katsayıları:</strong> $c_1 = a_1 H(j2\pi) = \frac{1}{2(4+j2\pi)}$ ve $c_{-1} = c_1^*$ hesaplama.</li>
+                        <li><strong>(b) Şıkkı Ortak Temel Frekans:</strong> $\operatorname{EBOB}(4\pi, 6\pi) = 2\pi \implies \omega_0 = 2\pi$. $4\pi = 2\omega_0$ ($k=\pm 2$), $6\pi = 3\omega_0$ ($k=\pm 3$).</li>
+                        <li><strong>(b) Şıkkı Çıkış Katsayıları:</strong> $c_2 = a_2 H(j4\pi)$ ve $c_3 = a_3 H(j6\pi)$ değerlerini genlik-faz ve kartezyen formda bulma.</li>
+                    </ol>
+                </div>
+                <div class="mt-4 p-3 bg-indigo-50/50 rounded-xl border border-indigo-200/60 text-xs text-indigo-900 font-mono">
+                    Genel Çıkış: $y(t) = \sum_{k} a_k H(jk\omega_0) e^{jk\omega_0 t}$
+                </div>
+            </div>
+        </section>
+
+        <!-- Canlı Simülatör Kartı (Dual Canvas) -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                        İnteraktif Frekans Yanıtı & Sinyal Filtreleme Simülatörü
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">
+                        Giriş modunu (a şıkkı, b şıkkı) ve sistem parametresi $a$'yı değiştirerek $H(j\omega)$ frekans yanıtını ve filtrelenmiş dalga formunu canlı inceleyin.
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <select id="modeSelect" class="text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
+                        <option value="a">Şık (a): cos(2πt)</option>
+                        <option value="b">Şık (b): sin(4πt) + cos(6πt + π/4)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Kontroller -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">Sistem Kutup Katsayısı ($a$ in $y' + a y = x$): <span id="poleVal" class="text-indigo-600 font-mono font-bold">4.0</span></label>
+                    <input id="poleSlider" type="range" min="1" max="10" step="0.5" value="4" class="w-full accent-indigo-600">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">Zaman Kaydırma / Faz İnceleme ($t_0$): <span id="phaseVal" class="text-indigo-600 font-mono font-bold">0.00 s</span></label>
+                    <input id="phaseSlider" type="range" min="0" max="1" step="0.05" value="0" class="w-full accent-indigo-600">
+                </div>
+            </div>
+
+            <!-- Çift Çizim Alanı: Frekans Yanıtı ve Zaman Dalga Formu -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border border-slate-200 rounded-xl p-3 bg-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-700">Sistem Genlik Yanıtı $|H(j\omega)|$ & Harmonikler</span>
+                        <span class="text-[10px] font-mono text-slate-400">kCanvas</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div class="border border-slate-200 rounded-xl p-3 bg-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-700">Zaman Dalgası: Giriş $x(t)$ (kesikli) vs Çıkış $y(t)$ (katı)</span>
+                        <span class="text-[10px] font-mono text-slate-400">ynCanvas</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Durum Kartı -->
+            <div id="simMath" class="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl text-center font-mono text-sm text-indigo-950 overflow-x-auto">
+                Hesaplanıyor...
+            </div>
+        </section>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+
+            <!-- 1. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm">1</span>
+                        <h3 class="text-lg font-bold text-slate-900">Sürekli Zaman Diferansiyel Denklemi ve Özfonksiyonlar</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Temel Teori</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sistem $\frac{d}{dt}y(t) + 4y(t) = x(t)$ diferansiyel denklemi ile tanımlanmıştır. LTI sistemlerin en temel özelliği karmaşık üstel sinyallerin ($e^{st}$) birer özfonksiyon olmasıdır:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$x(t) = e^{j\omega t} \implies y(t) = H(j\omega) e^{j\omega t}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Bu ifadeyi diferansiyel denklemde yerine koyalım: $\frac{d}{dt}\left[H(j\omega)e^{j\omega t}\right] + 4 H(j\omega)e^{j\omega t} = e^{j\omega t}$. Buradan $[j\omega H(j\omega) + 4 H(j\omega)] e^{j\omega t} = e^{j\omega t}$ elde edilir.
+                </p>
+                <div>
+                    <canvas id="cv1" class="hidden"></canvas>
+                    <img id="img1" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="1. Adım Görseli" />
+                    <button onclick="downloadCard('img1', 'problem_3_33_adim_1.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 2. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">2</span>
+                        <h3 class="text-lg font-bold text-slate-900">Frekans Yanıtı $H(j\omega)$ ve Kutup Analizi</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Transfer Fonksiyonu</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Önceki adımdaki parantez içi terimlerden frekans yanıtı doğrudan çekilir:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$H(j\omega) = \frac{1}{4 + j\omega} = \frac{4 - j\omega}{16 + \omega^2}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Genlik ve faz yanıtı formülleri:
+                    $$|H(j\omega)| = \frac{1}{\sqrt{16 + \omega^2}}, \quad \angle H(j\omega) = -\arctan\left(\frac{\omega}{4}\right)$$
+                    Sistemin tek kutbu $s = -4$ sol yarı düzlemdedir; dolayısıyla nedensel sistem BIBO kararlıdır ve birinci derece alçak geçiren filtre davranışı sergiler.
+                </p>
+                <div>
+                    <canvas id="cv2" class="hidden"></canvas>
+                    <img id="img2" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="2. Adım Görseli" />
+                    <button onclick="downloadCard('img2', 'problem_3_33_adim_2.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 3. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-sm">3</span>
+                        <h3 class="text-lg font-bold text-slate-900">(a) Şıkkı Çözümü: $x(t) = \cos(2\pi t)$</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Tek Harmonik Giriş</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    $x(t) = \cos(2\pi t)$ sinyalinin temel frekansı $\omega_0 = 2\pi$ rad/s ve temel periyodu $T = 1$ saniyedir. Euler açılımı:
+                    $$x(t) = \frac{1}{2}e^{j2\pi t} + \frac{1}{2}e^{-j2\pi t} \implies a_1 = \frac{1}{2}, \quad a_{-1} = \frac{1}{2}, \quad a_k = 0 \ (|k| \neq 1)$$
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>$$c_1 = a_1 H(j2\pi) = \frac{1}{2(4 + j2\pi)} = \frac{4 - j2\pi}{2(16 + 4\pi^2)} = \frac{2 - j\pi}{16 + 4\pi^2}$$</p>
+                    <p>$$c_{-1} = c_1^* = \frac{2 + j\pi}{16 + 4\pi^2}, \quad c_k = 0 \ (|k| \ne 1)$$</p>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sayısal olarak: $c_1 \approx 0.0360 - 0.0566j$, $|c_1| \approx 0.0671$, $\angle c_1 \approx -57.52^\circ$.<br>
+                    Zaman dalgası: $y(t) = \frac{1}{\sqrt{16 + 4\pi^2}}\cos(2\pi t - \arctan(\pi/2))$.
+                </p>
+                <div>
+                    <canvas id="cv3" class="hidden"></canvas>
+                    <img id="img3" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="3. Adım Görseli" />
+                    <button onclick="downloadCard('img3', 'problem_3_33_adim_3.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 4. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm">4</span>
+                        <h3 class="text-lg font-bold text-slate-900">(b) Şıkkı Giriş Analizi: Harmonik Spektrumu</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Çoklu Harmonik</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    $x(t) = \sin(4\pi t) + \cos(6\pi t + \pi/4)$ iki bileşenden oluşur. $\omega_1 = 4\pi$ ($T_1 = 1/2$) ve $\omega_2 = 6\pi$ ($T_2 = 1/3$). Ortak periyot $T = 1 \implies \omega_0 = 2\pi$ rad/s'dir:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>• $\sin(4\pi t) = \frac{e^{j4\pi t} - e^{-j4\pi t}}{2j} = -\frac{j}{2}e^{j2(2\pi)t} + \frac{j}{2}e^{-j2(2\pi)t} \implies a_2 = -\frac{j}{2}, \ a_{-2} = \frac{j}{2}$</p>
+                    <p>• $\cos(6\pi t + \pi/4) = \frac{1}{2}e^{j\pi/4}e^{j3(2\pi)t} + \frac{1}{2}e^{-j\pi/4}e^{-j3(2\pi)t} \implies a_3 = \frac{1}{2}e^{j\pi/4}, \ a_{-3} = \frac{1}{2}e^{-j\pi/4}$</p>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Giriş katsayıları sadece $k = \pm 2$ ve $k = \pm 3$ için sıfırdan farklıdır. Diğer tüm $a_k = 0$'dır.
+                </p>
+                <div>
+                    <canvas id="cv4" class="hidden"></canvas>
+                    <img id="img4" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="4. Adım Görseli" />
+                    <button onclick="downloadCard('img4', 'problem_3_33_adim_4.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 5. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 font-bold flex items-center justify-center text-sm">5</span>
+                        <h3 class="text-lg font-bold text-slate-900">(b) Şıkkı Çıkış Katsayıları $c_k = a_k H(jk\omega_0)$</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Spektral Filtreleme</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sistem frekans yanıtını $k=2$ ($\omega = 4\pi$) ve $k=3$ ($\omega = 6\pi$) frekanslarında değerlendirip giriş katsayıları ile çarpalım:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-3 font-mono text-xs sm:text-sm text-slate-800">
+                    <div>
+                        <p class="text-indigo-700 font-bold">k = ±2 Harmonikleri:</p>
+                        <p>$$c_2 = a_2 H(j4\pi) = \left(-\frac{j}{2}\right)\frac{1}{4 + j4\pi} = \frac{-j}{8(1 + j\pi)} = \frac{-\pi - j}{8(1 + \pi^2)}$$</p>
+                        <p>$$c_{-2} = c_2^* = \frac{-\pi + j}{8(1 + \pi^2)}$$</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200">
+                        <p class="text-indigo-700 font-bold">k = ±3 Harmonikleri:</p>
+                        <p>$$c_3 = a_3 H(j6\pi) = \left(\frac{e^{j\pi/4}}{2}\right)\frac{1}{4 + j6\pi} = \frac{e^{j\pi/4}}{4(2 + j3\pi)}$$</p>
+                        <p>$$c_{-3} = c_3^* = \frac{e^{-j\pi/4}}{4(2 - j3\pi)}$$</p>
+                    </div>
+                </div>
+                <p class="text-slate-600 text-sm text-slate-700 leading-relaxed">
+                    Diğer tüm $k$ değerleri için $c_k = 0$'dır.
+                </p>
+                <div>
+                    <canvas id="cv5" class="hidden"></canvas>
+                    <img id="img5" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="5. Adım Görseli" />
+                    <button onclick="downloadCard('img5', 'problem_3_33_adim_5.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 6. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 font-bold flex items-center justify-center text-sm">6</span>
+                        <h3 class="text-lg font-bold text-slate-900">Alçak Geçiren Filtre Zayıflatması ve Faz Gecikmesi</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Mühendislik Yorumu</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sistemin köşe frekansı $\omega_c = 4$ rad/s'dir. Giriş frekansları:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-1 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>• (a) şıkkı: $\omega = 2\pi \approx 6.28 > 4 \implies |H(j2\pi)| \approx 0.134$ (Genlik %86.6 oranında zayıflar, faz $-57.5^\circ$ kayar).</p>
+                    <p>• (b) şıkkı: $\omega = 4\pi \approx 12.57 \implies |H(j4\pi)| \approx 0.076$ (%92.4 zayıflama).</p>
+                    <p>• (b) şıkkı: $\omega = 6\pi \approx 18.85 \implies |H(j6\pi)| \approx 0.052$ (%94.8 zayıflama).</p>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Frekans arttıkça genlik dramatik şekilde bastırılmakta ve faz açısı $-90^\circ$'ye yaklaşmaktadır. Bu durum alçak geçiren filtrenin yüksek harmonikleri pürüzsüzleştirme özelliğini somut olarak gösterir.
+                </p>
+                <div>
+                    <canvas id="cv6" class="hidden"></canvas>
+                    <img id="img6" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="6. Adım Görseli" />
+                    <button onclick="downloadCard('img6', 'problem_3_33_adim_6.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+        </div>
+
+    </main>
+
+    <script>
+        function createHiDPICanvas(canvas, width, height) {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return ctx;
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = img.src;
+            link.click();
+        }
+
+        const modeSelect = document.getElementById('modeSelect');
+        const poleSlider = document.getElementById('poleSlider');
+        const phaseSlider = document.getElementById('phaseSlider');
+        const poleVal = document.getElementById('poleVal');
+        const phaseVal = document.getElementById('phaseVal');
+        const simMath = document.getElementById('simMath');
+
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+
+        function H_val(w, a) {
+            const mag = 1 / Math.hypot(a, w);
+            const phase = -Math.atan2(w, a);
+            return { mag, phase, re: a / (a*a + w*w), im: -w / (a*a + w*w) };
+        }
+
+        function drawSim() {
+            const mode = modeSelect.value;
+            const a = parseFloat(poleSlider.value);
+            const t0 = parseFloat(phaseSlider.value);
+            poleVal.textContent = a.toFixed(1);
+            phaseVal.textContent = t0.toFixed(2) + ' s';
+
+            // Math State
+            if (mode === 'a') {
+                const H2pi = H_val(2 * Math.PI, a);
+                const c1_mag = 0.5 * H2pi.mag;
+                const c1_phase_deg = (H2pi.phase * 180 / Math.PI).toFixed(1);
+                simMath.innerHTML = `
+                    <b>Mod (a): x(t) = cos(2πt)</b> | 
+                    |H(j2π)| = ${H2pi.mag.toFixed(4)}, ∠H = ${c1_phase_deg}° | 
+                    c₁ = ${c1_mag.toFixed(4)} ∠${c1_phase_deg}° | 
+                    y(t) = ${(2*c1_mag).toFixed(4)} cos(2πt ${c1_phase_deg}°)
+                `;
+            } else {
+                const H4pi = H_val(4 * Math.PI, a);
+                const H6pi = H_val(6 * Math.PI, a);
+                simMath.innerHTML = `
+                    <b>Mod (b): sin(4πt) + cos(6πt + π/4)</b> | 
+                    |c₂| = ${(0.5 * H4pi.mag).toFixed(4)} | 
+                    |c₃| = ${(0.5 * H6pi.mag).toFixed(4)} | 
+                    ω₀ = 2π rad/s (T = 1.0 s)
+                `;
+            }
+
+            // Draw kCanvas: |H(jω)| frequency curve + input/output harmonic stems
+            const kw = kCanvas.parentElement.clientWidth;
+            const kh = 260;
+            const kctx = createHiDPICanvas(kCanvas, kw, kh);
+
+            kctx.fillStyle = '#ffffff';
+            kctx.fillRect(0, 0, kw, kh);
+
+            const maxW = 25; // rad/s
+            const paddingLeft = 40, paddingRight = 20, paddingTop = 25, paddingBottom = 40;
+            const plotW = kw - paddingLeft - paddingRight;
+            const plotH = kh - paddingTop - paddingBottom;
+
+            // Axes
+            kctx.strokeStyle = '#e2e8f0';
+            kctx.lineWidth = 1;
+            kctx.beginPath();
+            kctx.moveTo(paddingLeft, paddingTop);
+            kctx.lineTo(paddingLeft, kh - paddingBottom);
+            kctx.lineTo(kw - paddingRight, kh - paddingBottom);
+            kctx.stroke();
+
+            // Frequency curve |H(jw)|
+            kctx.strokeStyle = '#6366f1';
+            kctx.lineWidth = 2.5;
+            kctx.beginPath();
+            const maxH = 1 / a;
+            for (let px = 0; px <= plotW; px++) {
+                const w = (px / plotW) * maxW;
+                const hw = H_val(w, a).mag;
+                const py = kh - paddingBottom - (hw / maxH) * plotH;
+                if (px === 0) kctx.moveTo(paddingLeft + px, py);
+                else kctx.lineTo(paddingLeft + px, py);
+            }
+            kctx.stroke();
+
+            // Harmonic Markers
+            const freqs = mode === 'a' ? [2 * Math.PI] : [4 * Math.PI, 6 * Math.PI];
+            freqs.forEach(wf => {
+                if (wf <= maxW) {
+                    const cx = paddingLeft + (wf / maxW) * plotW;
+                    const hw = H_val(wf, a).mag;
+                    const cy = kh - paddingBottom - (hw / maxH) * plotH;
+
+                    kctx.strokeStyle = '#ef4444';
+                    kctx.lineWidth = 2;
+                    kctx.setLineDash([3, 3]);
+                    kctx.beginPath();
+                    kctx.moveTo(cx, kh - paddingBottom);
+                    kctx.lineTo(cx, cy);
+                    kctx.stroke();
+                    kctx.setLineDash([]);
+
+                    kctx.fillStyle = '#dc2626';
+                    kctx.beginPath();
+                    kctx.arc(cx, cy, 4.5, 0, Math.PI * 2);
+                    kctx.fill();
+
+                    kctx.fillStyle = '#0f172a';
+                    kctx.font = '10px JetBrains Mono';
+                    kctx.textAlign = 'center';
+                    kctx.fillText(`ω=${wf.toFixed(1)}`, cx, kh - paddingBottom + 15);
+                    kctx.fillText(`|H|=${hw.toFixed(3)}`, cx, cy - 8);
+                }
+            });
+
+            kctx.fillStyle = '#64748b';
+            kctx.font = '10px JetBrains Mono';
+            kctx.textAlign = 'left';
+            kctx.fillText('0', paddingLeft - 15, kh - paddingBottom);
+            kctx.fillText(maxH.toFixed(2), paddingLeft - 30, paddingTop + 10);
+            kctx.fillText('ω (rad/s)', kw - paddingRight - 50, kh - paddingBottom + 25);
+
+            // Draw ynCanvas: Continuous wave x(t) vs y(t)
+            const yw = ynCanvas.parentElement.clientWidth;
+            const yh = 260;
+            const yctx = createHiDPICanvas(ynCanvas, yw, yh);
+
+            yctx.fillStyle = '#ffffff';
+            yctx.fillRect(0, 0, yw, yh);
+
+            const yMid = yh / 2;
+            yctx.strokeStyle = '#e2e8f0';
+            yctx.lineWidth = 1;
+            yctx.beginPath();
+            yctx.moveTo(30, yMid);
+            yctx.lineTo(yw - 20, yMid);
+            yctx.stroke();
+
+            // Time range: t from 0 to 2 seconds
+            const tMax = 2.0;
+            const x_vals = [], y_vals = [];
+            const N_pts = 300;
+
+            for (let i = 0; i < N_pts; i++) {
+                const t = (i / (N_pts - 1)) * tMax + t0;
+                let xt = 0, yt = 0;
+                if (mode === 'a') {
+                    xt = Math.cos(2 * Math.PI * t);
+                    const H1 = H_val(2 * Math.PI, a);
+                    yt = H1.mag * Math.cos(2 * Math.PI * t + H1.phase);
+                } else {
+                    xt = Math.sin(4 * Math.PI * t) + Math.cos(6 * Math.PI * t + Math.PI / 4);
+                    const H2 = H_val(4 * Math.PI, a);
+                    const H3 = H_val(6 * Math.PI, a);
+                    yt = H2.mag * Math.sin(4 * Math.PI * t + H2.phase) + H3.mag * Math.cos(6 * Math.PI * t + Math.PI / 4 + H3.phase);
+                }
+                x_vals.push(xt);
+                y_vals.push(yt);
+            }
+
+            const scaleY = 35; // px per amplitude unit
+
+            // Plot x(t) dashed slate
+            yctx.strokeStyle = '#94a3b8';
+            yctx.lineWidth = 1.5;
+            yctx.setLineDash([4, 4]);
+            yctx.beginPath();
+            for (let i = 0; i < N_pts; i++) {
+                const px = 30 + (i / (N_pts - 1)) * (yw - 50);
+                const py = yMid - x_vals[i] * scaleY;
+                if (i === 0) yctx.moveTo(px, py); else yctx.lineTo(px, py);
+            }
+            yctx.stroke();
+            yctx.setLineDash([]);
+
+            // Plot y(t) solid emerald
+            yctx.strokeStyle = '#059669';
+            yctx.lineWidth = 2.5;
+            yctx.beginPath();
+            for (let i = 0; i < N_pts; i++) {
+                const px = 30 + (i / (N_pts - 1)) * (yw - 50);
+                const py = yMid - y_vals[i] * scaleY * (mode === 'a' ? 5 : 4); // scale up for visibility
+                if (i === 0) yctx.moveTo(px, py); else yctx.lineTo(px, py);
+            }
+            yctx.stroke();
+
+            // Legend
+            yctx.font = '11px JetBrains Mono';
+            yctx.fillStyle = '#64748b';
+            yctx.fillText('x(t) Giriş (Geniş)', 40, 25);
+            yctx.fillStyle = '#059669';
+            yctx.fillText('y(t) Çıkış (Filtrelenmiş & Zayıflamış)', 40, 42);
+        }
+
+        [modeSelect, poleSlider, phaseSlider].forEach(el => el.addEventListener('input', drawSim));
+
+        function renderAllSteps() {
+            const steps = [
+                { id: 'cv1', imgId: 'img1', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '14px JetBrains Mono'; ctx.fillStyle = '#1e293b'; ctx.textAlign = 'center';
+                    ctx.fillText('LTI Sistemlerde Karmaşık Üstel Özfonksiyonu', w/2, 40);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#475569';
+                    ctx.fillText('x(t) = e^{jωt}  ───►  [ y\'(t) + 4y(t) = x(t) ]  ───►  y(t) = H(jω) e^{jωt}', w/2, 90);
+                    ctx.fillStyle = '#2563eb';
+                    ctx.fillText('Türev Özelliği: d/dt [H(jω)e^{jωt}] = jω H(jω) e^{jωt}', w/2, 130);
+                    ctx.fillText('(jω + 4) H(jω) = 1  ==>  H(jω) = 1 / (4 + jω)', w/2, 160);
+                }},
+                { id: 'cv2', imgId: 'img2', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    // Draw Pole-Zero Plot in s-plane
+                    const cx = w/2, cy = h/2;
+                    ctx.strokeStyle = '#cbd5e1'; ctx.beginPath();
+                    ctx.moveTo(cx - 140, cy); ctx.lineTo(cx + 140, cy);
+                    ctx.moveTo(cx, cy - 80); ctx.lineTo(cx, cy + 80);
+                    ctx.stroke();
+                    // Pole at -4
+                    const poleX = cx - 70;
+                    ctx.strokeStyle = '#dc2626'; ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(poleX - 6, cy - 6); ctx.lineTo(poleX + 6, cy + 6);
+                    ctx.moveTo(poleX + 6, cy - 6); ctx.lineTo(poleX - 6, cy + 6);
+                    ctx.stroke();
+                    ctx.fillStyle = '#dc2626'; ctx.font = '12px JetBrains Mono'; ctx.textAlign = 'center';
+                    ctx.fillText('Kutup: s = -4', poleX, cy - 14);
+                    ctx.fillStyle = '#64748b'; ctx.fillText('Re(s)', cx + 130, cy + 15); ctx.fillText('Im(s)', cx + 15, cy - 70);
+                    ctx.fillStyle = '#059669'; ctx.fillText('Sol Yarı Düzlem ==> Kararlı LTI Sistem', cx, h - 20);
+                }},
+                { id: 'cv3', imgId: 'img3', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#4338ca'; ctx.textAlign = 'center';
+                    ctx.fillText('(a) Şıkkı Katsayıları: x(t) = cos(2πt)', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('a₁ = 0.5, a₋₁ = 0.5 (T = 1, ω₀ = 2π)', w/2, 70);
+                    ctx.fillText('H(j2π) = 1 / (4 + j2π) = (4 - j2π) / (16 + 4π²)', w/2, 105);
+                    ctx.fillText('c₁ = a₁ H(j2π) = (2 - jπ) / (16 + 4π²) ≈ 0.0360 - 0.0566j', w/2, 140);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('|c₁| = 0.0671,  ∠c₁ = -57.52°', w/2, 175);
+                }},
+                { id: 'cv4', imgId: 'img4', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#047857'; ctx.textAlign = 'center';
+                    ctx.fillText('(b) Şıkkı Giriş Spektrumu: x(t) = sin(4πt) + cos(6πt + π/4)', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('Ortak Temel Frekans: ω₀ = EBOB(4π, 6π) = 2π rad/s', w/2, 75);
+                    ctx.fillText('k = ±2: a₂ = -j/2 = -0.5j,  a₋₂ = +j/2 = 0.5j', w/2, 115);
+                    ctx.fillText('k = ±3: a₃ = 0.5 e^{jπ/4},  a₋₃ = 0.5 e^{-jπ/4}', w/2, 155);
+                }},
+                { id: 'cv5', imgId: 'img5', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#b45309'; ctx.textAlign = 'center';
+                    ctx.fillText('(b) Şıkkı Çıkış Fourier Katsayıları', w/2, 35);
+                    ctx.font = '11px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('c₂ = a₂ · H(j4π) = (-j/2) / (4 + j4π) = (-π - j) / [8(1 + π²)]', w/2, 75);
+                    ctx.fillText('c₋₂ = c₂* = (-π + j) / [8(1 + π²)]', w/2, 105);
+                    ctx.fillText('c₃ = a₃ · H(j6π) = (0.5 e^{jπ/4}) / (4 + j6π) = e^{jπ/4} / [4(2 + j3π)]', w/2, 140);
+                    ctx.fillText('c₋₃ = c₃* = e^{-jπ/4} / [4(2 - j3π)],   (diğer tüm k için c_k = 0)', w/2, 170);
+                }},
+                { id: 'cv6', imgId: 'img6', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#be123c'; ctx.textAlign = 'center';
+                    ctx.fillText('Alçak Geçiren Filtre Zayıflatma & Faz Karşılaştırması', w/2, 35);
+                    ctx.font = '11px JetBrains Mono'; ctx.fillStyle = '#334155';
+                    ctx.fillText('ω = 0.0 rad/s (DC)  ==> |H| = 0.250 (0 dB ref) , ∠H =   0.0°', w/2, 70);
+                    ctx.fillText('ω = 2π ≈ 6.28 rad/s ==> |H| = 0.134 (-5.4 dB) , ∠H = -57.5°', w/2, 100);
+                    ctx.fillText('ω = 4π ≈ 12.57 rad/s ==> |H| = 0.076 (-10.3 dB), ∠H = -72.3°', w/2, 130);
+                    ctx.fillText('ω = 6π ≈ 18.85 rad/s ==> |H| = 0.052 (-13.6 dB), ∠H = -78.0°', w/2, 160);
+                }}
+            ];
+
+            steps.forEach(s => {
+                const cv = document.getElementById(s.id);
+                const img = document.getElementById(s.imgId);
+                const w = 700, h = 200;
+                const ctx = createHiDPICanvas(cv, w, h);
+                s.draw(ctx, w, h);
+                img.src = cv.toDataURL('image/png');
+            });
+        }
+
+        window.addEventListener('load', () => {
+            drawSim();
+            renderAllSteps();
+        });
+        window.addEventListener('resize', drawSim);
+    </script>
+</body>
+</html>

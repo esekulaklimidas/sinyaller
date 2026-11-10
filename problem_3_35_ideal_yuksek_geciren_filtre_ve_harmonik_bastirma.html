@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.35: İdeal Yüksek Geçiren Filtre ve Harmonik Bastırma - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        code, pre, .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .canvas-container { position: relative; width: 100%; height: 260px; }
+        canvas { display: block; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+    <!-- Ana Konteyner -->
+    <main class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs font-mono bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200">
+                Oppenheim & Willsky Bölüm 3 / Problem 3.35
+            </span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <header class="bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-indigo-100/50 to-transparent rounded-bl-full pointer-events-none"></div>
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">İdeal Filtreler</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">Yüksek Geçiren Filtre (HPF)</span>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 border border-purple-200">Harmonik Sıfırlanma Şartı</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
+                Problem 3.35: İdeal Yüksek Geçiren Filtrede Çıkışın Girişe Özdeşliği ($y(t) = x(t)$)
+            </h1>
+            <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+                Kesim frekansı $\omega_c = 250$ rad/s olan ideal yüksek geçiren filtreden geçen $T = \pi/7$ periyotlu bir periyodik sinyalin çıkışının girişe tamamen özdeş ($y(t) = x(t)$) kalabilmesi için kesinlikle sıfır olması gereken Fourier serisi katsayılarının ($a_k = 0$) bulunması.
+            </p>
+            
+            <!-- Hızlı Parametre Özeti -->
+            <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Kesim Frekansı</span>
+                    <span class="text-base font-bold text-indigo-600 font-mono">$\omega_c = 250$ rad/s</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Temel Periyot</span>
+                    <span class="text-base font-bold text-indigo-600 font-mono">$T = \pi / 7$ s</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Temel Frekans</span>
+                    <span class="text-base font-bold text-indigo-600 font-mono">$\omega_0 = 14$ rad/s</span>
+                </div>
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100 text-center">
+                    <span class="text-xs text-slate-500 font-medium block">Sıfır Katsayılar</span>
+                    <span class="text-base font-bold text-rose-600 font-mono">$|k| \le 17$ (35 adet)</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- 1. Kolon: Soru Bizden Ne İstiyor? -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="p-2 rounded-lg bg-amber-50 text-amber-600 font-bold text-lg">🎯</span>
+                        <h2 class="text-lg font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed space-y-2">
+                        Frekans yanıtı aşağıdaki gibi tanımlanan sürekli zamanlı LTI sistem verilmiştir:
+                    </p>
+                    <div class="p-2.5 my-2 bg-slate-50 border border-slate-200 rounded-lg text-center font-mono text-xs text-slate-800">
+                        $$H(j\omega) = \begin{cases} 1, & |\omega| \ge 250 \\ 0, & \text{diğer durumlarda} \end{cases}$$
+                    </div>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Sisteme temel periyodu $T = \pi/7$ ve Fourier katsayıları $a_k$ olan $x(t)$ sinyali uygulandığında, çıkışın girişe tamamen eşit olduğu ($y(t) = x(t)$) görülmektedir. Hangi $k$ değerleri için $a_k = 0$ olması garanti edilir?
+                    </p>
+                </div>
+                <div class="mt-4 p-3 bg-amber-50/50 rounded-xl border border-amber-200/60 text-xs text-amber-900">
+                    <strong>Mantıksal Çıkarım:</strong> Filtre durdurma bandındaki ($|\omega| < 250$) tüm frekansları tamamen yok eder ($H(jk\omega_0) = 0$). Eğer giriş bu bantta sıfırdan farklı bir harmoniğe sahip olsaydı, o harmonik çıkışta yok olur ve $y(t) = x(t)$ eşitliği bozulurdu!
+                </div>
+            </div>
+
+            <!-- 2. Kolon: Adım Adım Çözüm Metodolojisi -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="p-2 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-lg">💡</span>
+                        <h2 class="text-lg font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+                    </div>
+                    <ol class="space-y-2.5 text-sm text-slate-700 list-decimal list-inside">
+                        <li><strong>Temel Frekans Hesabı:</strong> $\omega_0 = \frac{2\pi}{T} = \frac{2\pi}{\pi/7} = 14$ rad/s olarak bulunur.</li>
+                        <li><strong>LTI Çıkış Eşitliği:</strong> $y(t) = \sum a_k H(jk\omega_0) e^{jk\omega_0 t}$ bağıntısı yazılır.</li>
+                        <li><strong>Özdeşlik Şartı:</strong> $y(t) = x(t) \iff a_k H(jk\omega_0) = a_k$ her $k$ için sağlanmalıdır.</li>
+                        <li><strong>Durdurma Bandı Şartı:</strong> $H(jk\omega_0) = 0$ olan aralıkta $a_k \cdot 0 = a_k \implies a_k = 0$ olmalıdır.</li>
+                        <li><strong>Eşitsizlik Çözümü:</strong> $|k\omega_0| < 250 \implies 14|k| < 250 \implies |k| < 17.857$.</li>
+                        <li><strong>Tamsayı Çözüm Kümesi:</strong> $|k| \le 17 \iff -17 \le k \le 17$.</li>
+                    </ol>
+                </div>
+                <div class="mt-4 p-3 bg-indigo-50/50 rounded-xl border border-indigo-200/60 text-xs text-indigo-900 font-mono">
+                    Garanti Edilen Sıfırlar: $k \in \{-17, -16, \dots, 0, \dots, 16, 17\}$
+                </div>
+            </div>
+        </section>
+
+        <!-- Canlı Simülatör Kartı (Dual Canvas) -->
+        <section class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></span>
+                        İnteraktif Kesim Frekansı & Harmonik Filtreleme Simülatörü
+                    </h2>
+                    <p class="text-sm text-slate-500 mt-1">
+                        Filtre kesim frekansı $\omega_c$'yi ve temel frekans katsayısını değiştirerek bastırılan harmonikleri spektrumda kırmızı, geçenleri yeşil olarak izleyin.
+                    </p>
+                </div>
+                <button id="resetBtn" class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                    Varsayılan (ωc=250, T=π/7)
+                </button>
+            </div>
+
+            <!-- Kontroller -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">Filtre Kesim Frekansı ($\omega_c$ rad/s): <span id="wcVal" class="text-indigo-600 font-mono font-bold">250</span></label>
+                    <input id="wcSlider" type="range" min="50" max="400" step="10" value="250" class="w-full accent-indigo-600">
+                </div>
+                <div>
+                    <label class="text-xs font-semibold text-slate-600 block mb-1">Temel Frekans ($\omega_0$ rad/s): <span id="w0Val" class="text-indigo-600 font-mono font-bold">14 (T = π/7)</span></label>
+                    <input id="w0Slider" type="range" min="5" max="30" step="1" value="14" class="w-full accent-indigo-600">
+                </div>
+            </div>
+
+            <!-- Çift Çizim Alanı: Frekans Yanıtı ve Harmonik Dağılımı -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border border-slate-200 rounded-xl p-3 bg-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-700">İdeal Yüksek Geçiren Filtre Yanıtı $H(j\omega)$</span>
+                        <span class="text-[10px] font-mono text-slate-400">kCanvas</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div class="border border-slate-200 rounded-xl p-3 bg-white">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold text-slate-700">Harmonik Analizi: Sıfırlanan ($a_k=0$) vs Geçenler</span>
+                        <span class="text-[10px] font-mono text-slate-400">ynCanvas</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Durum Kartı -->
+            <div id="simMath" class="p-4 bg-indigo-50/70 border border-indigo-200 rounded-xl text-center font-mono text-sm text-indigo-950 overflow-x-auto">
+                Hesaplanıyor...
+            </div>
+        </section>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+
+            <!-- 1. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-sm">1</span>
+                        <h3 class="text-lg font-bold text-slate-900">İdeal Yüksek Geçiren Filtre Karakteristiği</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Filtre Tanımı</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sistem $H(j\omega)$ frekans yanıtı aşağıdaki parçalı fonksiyon ile tanımlanan ideal bir yüksek geçiren filtredir (HPF):
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$H(j\omega) = \begin{cases} 1, & |\omega| \ge 250 \quad \text{(Geçirme Bandı)} \\ 0, & |\omega| < 250 \quad \text{(Durdurma Bandı)} \end{cases}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Filtre, frekansı $250$ rad/s'den düşük olan tüm sinyal bileşenlerini tamamen sıfıra indirgerken, $250$ rad/s ve üzerindeki bileşenleri genlik ve fazında hiçbir bozulma olmadan ($1 \cdot e^{j0}$) geçirir.
+                </p>
+                <div>
+                    <canvas id="cv1" class="hidden"></canvas>
+                    <img id="img1" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="1. Adım Görseli" />
+                    <button onclick="downloadCard('img1', 'problem_3_35_adim_1.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 2. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm">2</span>
+                        <h3 class="text-lg font-bold text-slate-900">Giriş Sinyalinin Temel Periyodu ve Açısal Frekansı</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Periyot & Frekans</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Giriş sinyali $x(t)$, $T = \frac{\pi}{7}$ temel periyoduna sahip periyodik bir sinyaldir. Temel açısal frekans $\omega_0$:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$\omega_0 = \frac{2\pi}{T} = \frac{2\pi}{\pi / 7} = 14 \text{ rad/s}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Fourier serisi açılımında $x(t)$ sinyali yalnızca $k \cdot \omega_0 = 14 k$ frekanslarındaki harmoniklerden oluşur:
+                    $$x(t) = \sum_{k=-\infty}^\infty a_k e^{j (14 k) t}$$
+                </p>
+                <div>
+                    <canvas id="cv2" class="hidden"></canvas>
+                    <img id="img2" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="2. Adım Görseli" />
+                    <button onclick="downloadCard('img2', 'problem_3_35_adim_2.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 3. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-sm">3</span>
+                        <h3 class="text-lg font-bold text-slate-900">Çıkışın Girişe Özdeş Olması Koşulu ($y(t) = x(t)$)</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Spektral Şart</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sistem doğrusal ve zamanla değişmez olduğundan çıkışın Fourier serisi katsayıları $c_k = a_k H(jk\omega_0)$ bağıntısıyla verilir. Çıkış sinyali:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-sm text-slate-800">
+                    $$y(t) = \sum_{k=-\infty}^\infty c_k e^{jk\omega_0 t} = \sum_{k=-\infty}^\infty a_k H(j 14 k) e^{j 14 k t}$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Soruda $y(t) = x(t)$ olduğu belirtilmiştir. Fourier serisi katsayılarının tekliği gereği:
+                    $$c_k = a_k \iff a_k H(j 14 k) = a_k \quad (\forall k \in \mathbb{Z})$$
+                </p>
+                <div>
+                    <canvas id="cv3" class="hidden"></canvas>
+                    <img id="img3" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="3. Adım Görseli" />
+                    <button onclick="downloadCard('img3', 'problem_3_35_adim_3.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 4. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-sm">4</span>
+                        <h3 class="text-lg font-bold text-slate-900">Durdurma Bandındaki Harmonikler ve Sıfırlanma Zorunluluğu</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Eşitsizlik Analizi</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    $a_k [H(j 14 k) - 1] = 0$ denklemini inceleyelim. İki durum mümkündür:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>• Eğer $|14 k| \ge 250$ ise, $H(j 14 k) = 1$ olur. Bu durumda $a_k (1 - 1) = 0$ kendiliğinden sağlanır. $a_k$ sıfır olmak zorunda değildir.</p>
+                    <p>• Eğer $|14 k| < 250$ ise, $H(j 14 k) = 0$ olur. Bu durumda $a_k (0 - 1) = -a_k = 0 \implies a_k = 0$ olmak ZORUNDADIR!</p>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Dolayısıyla, filtrenin durdurma bandına düşen tüm harmoniklerin katsayıları kesinlikle sıfır olmalıdır.
+                </p>
+                <div>
+                    <canvas id="cv4" class="hidden"></canvas>
+                    <img id="img4" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="4. Adım Görseli" />
+                    <button onclick="downloadCard('img4', 'problem_3_35_adim_4.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 5. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 font-bold flex items-center justify-center text-sm">5</span>
+                        <h3 class="text-lg font-bold text-slate-900">Tamsayı Çözüm Kümesi: $|k| \le 17$ (Nihai Sonuç)</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Kesin Çözüm</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Harmonik eşitsizliğini çözelim:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center font-mono text-xs sm:text-sm text-slate-800">
+                    $$14 |k| < 250 \implies |k| < \frac{250}{14} \approx 17.8571$$
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    $k$ bir tamsayı ($k \in \mathbb{Z}$) olduğundan bu koşulu sağlayan en büyük tamsayı $17$'dir:
+                </p>
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-center font-mono text-sm font-bold text-emerald-900">
+                    $$|k| \le 17 \iff k \in \{-17, -16, -15, \dots, -1, 0, 1, \dots, 15, 16, 17\}$$
+                </div>
+                <p class="text-slate-600 text-sm text-emerald-700 font-semibold leading-relaxed">
+                    Toplam 35 harmonik indeksi için $a_k = 0$ olması GARANTİDİR!
+                </p>
+                <div>
+                    <canvas id="cv5" class="hidden"></canvas>
+                    <img id="img5" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="5. Adım Görseli" />
+                    <button onclick="downloadCard('img5', 'problem_3_35_adim_5.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+            <!-- 6. Adım -->
+            <article class="step-card bg-white rounded-2xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-xl bg-rose-100 text-rose-700 font-bold flex items-center justify-center text-sm">6</span>
+                        <h3 class="text-lg font-bold text-slate-900">Sınır Değer Doğrulaması ve DC Bileşen</h3>
+                    </div>
+                    <span class="text-xs font-mono text-slate-400">Doğrulama & Analiz</span>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Sınır harmonik frekanslarını kontrol edelim:
+                </p>
+                <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2 font-mono text-xs sm:text-sm text-slate-800">
+                    <p>• $k = 0$ (DC Bileşen): $\omega = 0 < 250 \implies H(j0) = 0 \implies a_0 = 0$ (Sinyalin ortalama değeri sıfırdır).</p>
+                    <p>• $k = 17$: $\omega_{17} = 17 \times 14 = 238 \text{ rad/s} < 250 \implies H(j238) = 0 \implies a_{17} = 0$.</p>
+                    <p>• $k = 18$: $\omega_{18} = 18 \times 14 = 252 \text{ rad/s} > 250 \implies H(j252) = 1 \implies a_{18}$ serbesttir (sıfır olmak zorunda değildir!).</p>
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Bu analiz, $x(t)$ sinyalinin yalnızca yüksek frekanslı bileşenlerden ($|\omega| \ge 252$ rad/s) oluştuğunu ve düşük frekans ile DC bileşen barındırmadığını kanıtlar.
+                </p>
+                <div>
+                    <canvas id="cv6" class="hidden"></canvas>
+                    <img id="img6" class="w-full rounded-xl border border-slate-200 shadow-md my-4" alt="6. Adım Görseli" />
+                    <button onclick="downloadCard('img6', 'problem_3_35_adim_6.png')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+            </article>
+
+        </div>
+
+    </main>
+
+    <script>
+        function createHiDPICanvas(canvas, width, height) {
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return ctx;
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = img.src;
+            link.click();
+        }
+
+        const wcSlider = document.getElementById('wcSlider');
+        const w0Slider = document.getElementById('w0Slider');
+        const wcVal = document.getElementById('wcVal');
+        const w0Val = document.getElementById('w0Val');
+        const resetBtn = document.getElementById('resetBtn');
+        const simMath = document.getElementById('simMath');
+
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+
+        function drawSim() {
+            const wc = parseFloat(wcSlider.value);
+            const w0 = parseFloat(w0Slider.value);
+            wcVal.textContent = wc.toFixed(0);
+            w0Val.textContent = `${w0.toFixed(0)} (T = ${(2*Math.PI/w0).toFixed(4)} s)`;
+
+            const kMaxZero = Math.floor(wc / w0 - 0.0001);
+
+            simMath.innerHTML = `
+                <b>Kesim Frekansı:</b> $\\omega_c = ${wc}$ rad/s | 
+                <b>Temel Frekans:</b> $\\omega_0 = ${w0}$ rad/s | 
+                <b>Koşul:</b> $|k| < \\frac{${wc}}{${w0}} = ${(wc/w0).toFixed(2)}$ $\\implies$ 
+                <span class="text-rose-700 font-bold">$|k| \\le ${kMaxZero}$ için $a_k = 0$</span> (Toplam ${2*kMaxZero + 1} harmonik)
+            `;
+
+            // Draw kCanvas: Ideal HPF response H(jw)
+            const kw = kCanvas.parentElement.clientWidth;
+            const kh = 260;
+            const kctx = createHiDPICanvas(kCanvas, kw, kh);
+
+            kctx.fillStyle = '#ffffff';
+            kctx.fillRect(0, 0, kw, kh);
+
+            const padL = 40, padR = 20, padT = 30, padB = 40;
+            const plotW = kw - padL - padR;
+            const plotH = kh - padT - padB;
+            const maxW = Math.max(350, wc * 1.4);
+
+            // Axes
+            kctx.strokeStyle = '#e2e8f0';
+            kctx.lineWidth = 1;
+            kctx.beginPath();
+            kctx.moveTo(padL, padT);
+            kctx.lineTo(padL, kh - padB);
+            kctx.lineTo(kw - padR, kh - padB);
+            kctx.stroke();
+
+            // HPF step
+            const xCutoff = padL + (wc / maxW) * plotW;
+            const yPass = padT + 20;
+            const yStop = kh - padB;
+
+            // Stopband
+            kctx.fillStyle = 'rgba(244, 63, 94, 0.08)';
+            kctx.fillRect(padL, padT, xCutoff - padL, plotH);
+
+            // Passband
+            kctx.fillStyle = 'rgba(16, 185, 129, 0.08)';
+            kctx.fillRect(xCutoff, padT, kw - padR - xCutoff, plotH);
+
+            // Filter response line
+            kctx.strokeStyle = '#4f46e5';
+            kctx.lineWidth = 3;
+            kctx.beginPath();
+            kctx.moveTo(padL, yStop);
+            kctx.lineTo(xCutoff, yStop);
+            kctx.lineTo(xCutoff, yPass);
+            kctx.lineTo(kw - padR, yPass);
+            kctx.stroke();
+
+            // Labels
+            kctx.fillStyle = '#64748b';
+            kctx.font = '10px JetBrains Mono';
+            kctx.fillText('0', padL - 15, yStop + 4);
+            kctx.fillText('1.0', padL - 25, yPass + 4);
+            kctx.fillText(`ωc=${wc.toFixed(0)}`, xCutoff - 15, yStop + 18);
+            kctx.fillText('ω (rad/s)', kw - padR - 55, yStop + 28);
+
+            // Band text
+            kctx.fillStyle = '#e11d48';
+            kctx.font = '11px Inter';
+            kctx.fillText('Durdurma (H=0)', padL + 15, yPass + 50);
+            kctx.fillStyle = '#059669';
+            kctx.fillText('Geçirme (H=1)', xCutoff + 20, yPass + 50);
+
+            // Draw ynCanvas: Discrete harmonics k=0..30
+            const yw = ynCanvas.parentElement.clientWidth;
+            const yh = 260;
+            const yctx = createHiDPICanvas(ynCanvas, yw, yh);
+
+            yctx.fillStyle = '#ffffff';
+            yctx.fillRect(0, 0, yw, yh);
+
+            yctx.strokeStyle = '#e2e8f0';
+            yctx.lineWidth = 1;
+            yctx.beginPath();
+            yctx.moveTo(35, yh - 40);
+            yctx.lineTo(yw - 20, yh - 40);
+            yctx.stroke();
+
+            const kMaxDisp = 25;
+            const spK = (yw - 70) / kMaxDisp;
+
+            for (let k = 0; k <= kMaxDisp; k++) {
+                const cx = 40 + k * spK;
+                const wk = k * w0;
+                const isZero = (k <= kMaxZero);
+
+                const cy = isZero ? (yh - 40) : (yh - 40 - 120);
+
+                yctx.strokeStyle = isZero ? '#f43f5e' : '#10b981';
+                yctx.lineWidth = isZero ? 2 : 2.5;
+
+                yctx.beginPath();
+                yctx.moveTo(cx, yh - 40);
+                yctx.lineTo(cx, isZero ? yh - 40 : cy);
+                yctx.stroke();
+
+                yctx.fillStyle = isZero ? '#e11d48' : '#059669';
+                yctx.beginPath();
+                yctx.arc(cx, isZero ? yh - 40 : cy, isZero ? 3.5 : 4.5, 0, Math.PI * 2);
+                yctx.fill();
+
+                if (k % 5 === 0 || k === kMaxZero || k === kMaxZero + 1) {
+                    yctx.fillStyle = '#64748b';
+                    yctx.font = '9px JetBrains Mono';
+                    yctx.textAlign = 'center';
+                    yctx.fillText(`k=${k}`, cx, yh - 24);
+                }
+            }
+
+            // Legend
+            yctx.font = '11px JetBrains Mono';
+            yctx.fillStyle = '#e11d48';
+            yctx.textAlign = 'left';
+            yctx.fillText(`● |k| ≤ ${kMaxZero} için a_k = 0 (Zorunlu)`, 40, 30);
+            yctx.fillStyle = '#059669';
+            yctx.fillText(`● |k| ≥ ${kMaxZero + 1} için a_k Serbest (H = 1)`, 40, 50);
+        }
+
+        [wcSlider, w0Slider].forEach(el => el.addEventListener('input', drawSim));
+        resetBtn.addEventListener('click', () => {
+            wcSlider.value = 250;
+            w0Slider.value = 14;
+            drawSim();
+        });
+
+        function renderAllSteps() {
+            const steps = [
+                { id: 'cv1', imgId: 'img1', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '14px JetBrains Mono'; ctx.fillStyle = '#1e293b'; ctx.textAlign = 'center';
+                    ctx.fillText('İdeal Yüksek Geçiren Filtre (Brick-Wall HPF)', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#475569';
+                    ctx.fillText('H(jω) = 1 (|ω| ≥ 250 rad/s),   H(jω) = 0 (|ω| < 250 rad/s)', w/2, 75);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('Geçirme Bandı: Frekans bileşeni aynen korunur: y_k(t) = x_k(t)', w/2, 115);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fillText('Durdurma Bandı: Frekans bileşeni tamamen yok edilir: y_k(t) = 0', w/2, 145);
+                }},
+                { id: 'cv2', imgId: 'img2', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#2563eb'; ctx.textAlign = 'center';
+                    ctx.fillText('Giriş Sinyali Temel Frekans Analizi', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('Temel Periyot: T = π / 7 saniye', w/2, 75);
+                    ctx.fillText('Açısal Frekans: ω₀ = 2π / T = 2π / (π/7) = 14 rad/s', w/2, 110);
+                    ctx.fillStyle = '#4f46e5';
+                    ctx.fillText('Harmonik Frekansları: ω_k = k · ω₀ = 14 · k  (k ∈ Z)', w/2, 150);
+                }},
+                { id: 'cv3', imgId: 'img3', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#4338ca'; ctx.textAlign = 'center';
+                    ctx.fillText('Çıkış Özdeşliği Denklemi: y(t) = x(t)', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('LTI Çıkış Katsayıları: c_k = a_k · H(j 14 k)', w/2, 75);
+                    ctx.fillText('Özdeşlik Şartı: a_k · H(j 14 k) = a_k  ==>  a_k [ 1 - H(j 14 k) ] = 0', w/2, 115);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('H(j 14 k) = 0 olan tüm k değerlerinde a_k = 0 olmalıdır!', w/2, 155);
+                }},
+                { id: 'cv4', imgId: 'img4', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#b45309'; ctx.textAlign = 'center';
+                    ctx.fillText('Durdurma Bandı Eşitsizliğinin Çözümü', w/2, 35);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('Filtrenin sıfır olduğu aralık: |ω| < 250 rad/s', w/2, 75);
+                    ctx.fillText('|14 k| < 250  ==>  |k| < 250 / 14', w/2, 115);
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fillText('250 / 14 = 17.85714...  ==>  |k| < 17.857', w/2, 155);
+                }},
+                { id: 'cv5', imgId: 'img5', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '14px JetBrains Mono'; ctx.fillStyle = '#059669'; ctx.textAlign = 'center';
+                    ctx.fillText('Nihai Tamsayı Çözüm Kümesi', w/2, 35);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#dc2626';
+                    ctx.fillText('|k| ≤ 17  <==>  -17 ≤ k ≤ +17', w/2, 80);
+                    ctx.font = '12px JetBrains Mono'; ctx.fillStyle = '#1e293b';
+                    ctx.fillText('Bu aralıktaki tüm k için a_k = 0 olması GARANTİDİR.', w/2, 120);
+                    ctx.fillStyle = '#475569';
+                    ctx.fillText('Toplam 35 harmonik: { -17, -16, ..., 0, ..., 16, 17 }', w/2, 155);
+                }},
+                { id: 'cv6', imgId: 'img6', draw: (ctx, w, h) => {
+                    ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h);
+                    ctx.font = '13px JetBrains Mono'; ctx.fillStyle = '#be123c'; ctx.textAlign = 'center';
+                    ctx.fillText('Sınır Harmonikleri ve Fiziksel Çıkarım', w/2, 35);
+                    ctx.font = '11px JetBrains Mono'; ctx.fillStyle = '#334155';
+                    ctx.fillText('k = 0: DC bileşen sıfırdır: a₀ = 0 (Ortalama değer = 0)', w/2, 70);
+                    ctx.fillText('k = 17: ω = 17 · 14 = 238 rad/s < 250  ==>  a₁₇ = 0', w/2, 100);
+                    ctx.fillText('k = 18: ω = 18 · 14 = 252 rad/s > 250  ==>  a₁₈ serbesttir (H=1)', w/2, 130);
+                    ctx.fillStyle = '#059669';
+                    ctx.fillText('Sinyal saf yüksek frekanslı bileşenlerden (|k| ≥ 18) oluşmaktadır.', w/2, 165);
+                }}
+            ];
+
+            steps.forEach(s => {
+                const cv = document.getElementById(s.id);
+                const img = document.getElementById(s.imgId);
+                const w = 700, h = 200;
+                const ctx = createHiDPICanvas(cv, w, h);
+                s.draw(ctx, w, h);
+                img.src = cv.toDataURL('image/png');
+            });
+        }
+
+        window.addEventListener('load', () => {
+            drawSim();
+            renderAllSteps();
+        });
+        window.addEventListener('resize', drawSim);
+    </script>
+</body>
+</html>
