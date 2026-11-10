@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.18: Ayrık Zamanlı LTI Sistemlerde Özfonksiyon Testi - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .canvas-container { position: relative; width: 100%; height: 260px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease-in-out; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-mono">Bölüm 3 • Problem 3.18</span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">Ayrık Zaman (DT)</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">Özfonksiyon İlkesi & 2π Periyodikliği</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-rose-100 text-rose-800">LTI Karar Analizi</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Problem 3.18: DT LTI Sistemlerin Özfonksiyon Testi ($S_1, S_2, S_3$)</h1>
+            <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
+                $x[n] = e^{j(\pi/2)n}$ girişi uygulandığında çıkışları sırasıyla $y_1[n] = e^{j(\pi/2)n} u[n]$, $y_2[n] = e^{j(3\pi/2)n}$ ve $y_3[n] = 2 e^{j(5\pi/2)n}$ olan üç sistem için, verilen bilgilerin sistemin <strong>kesinlikle LTI olmadığını</strong> iddia etmek için yeterli olup olmadığını belirleyiniz.
+            </p>
+            <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono">
+                Oppenheim & Willsky • Signals & Systems 2nd Ed. Sayfa 285 • Ayrık Zamanlı LTI Sistem Özfonksiyon Kriterleri
+            </div>
+        </div>
+
+        <!-- Soru Analizi ve Mini Konu Anlatımı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs">🎯</span>
+                    Soru Bizden Ne İstiyor?
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li>DT LTI sistemlerde $x[n] = z^n$ girişi için çıkış $y[n] = H(z) z^n$ olmalıdır.</li>
+                    <li>$z = e^{j\pi/2}$ için çıkış $y[n] = H(e^{j\pi/2}) e^{j(\pi/2)n}$ biçiminde bir sabit ile çarpılmalıdır.</li>
+                    <li>$S_1$: $u[n]$ çarpanı $n$'e bağlıdır (sabit değil).</li>
+                    <li>$S_2$: $3\pi/2 \equiv -\pi/2 \pmod{2\pi}$, frekans değişmiştir.</li>
+                    <li>$S_3$: $5\pi/2 = 2\pi + \pi/2 \equiv \pi/2 \pmod{2\pi}$, frekans aynı kalmış ve sabit 2 ile çarpılmıştır.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs">💡</span>
+                    Adım Adım Çözüm Metodolojisi
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li><strong>$S_1$ Testi:</strong> $y_1[n]/x[n] = u[n] \neq \text{sabit} \implies$ Kesinlikle LTI Değildir (Yeterli).</li>
+                    <li><strong>$S_2$ Testi:</strong> $y_2[n]/x[n] = e^{j\pi n} = (-1)^n \neq \text{sabit} \implies$ Kesinlikle LTI Değildir (Yeterli).</li>
+                    <li><strong>$S_3$ Testi:</strong> $2e^{j(5\pi/2)n} = 2e^{j(\pi/2)n} \implies H(e^{j\pi/2}) = 2 = \text{sabit} \implies$ LTI Olabilir (Yetersiz).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canlı Simülatör Kartı -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">DT Sistem Çıkışı ve Fazör Analiz Simülatörü</h2>
+                    <p class="text-xs text-slate-500">Sistemleri seçerek ayrık zaman örneklerini ve karmaşık düzlemdeki frekans yönünü inceleyin.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnDTS1" class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition">S₁: e^{jπn/2} u[n]</button>
+                    <button id="btnDTS2" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">S₂: e^{j3πn/2}</button>
+                    <button id="btnDTS3" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">S₃: 2·e^{j5πn/2}</button>
+                </div>
+            </div>
+
+            <!-- Çift Tuval -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Birim Çemberde Frekans Fazörü $\omega$</span>
+                        <span id="lblCircBadge" class="text-[10px] text-rose-600 font-bold">Zamana Bağımlı Genlik</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Ayrık Zaman Çıkışı $\text{Re}\{y[n]\}$ (Stem Plot)</span>
+                        <span class="text-[10px] text-slate-500">n ∈ [-6, 6]</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Çıkarım Paneli -->
+            <div id="simMath" class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs font-mono text-amber-900">
+                Yükleniyor...
+            </div>
+        </div>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white text-sm">6</span>
+                Adım Adım Matematiksel Çözüm ve İspat
+            </h2>
+
+            <!-- 1. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">1. Adım: Ayrık Zamanlı LTI Sistemlerde Özfonksiyon Teoremi</span>
+                    <button onclick="downloadCard('img1', 'Problem_3_18_Adim_1.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Ayrık zamanlı bir LTI sistemin birim dürtü yanıtı $h[n]$ olsun. Sisteme $x[n] = z^n$ (burada $z = e^{j\omega_0}$) girişi uygulandığında konvolüsyon toplamı:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y[n] = \sum_{k=-\infty}^{\infty} h[k] x[n - k] = \sum_{k=-\infty}^{\infty} h[k] z^{n - k} = z^n \sum_{k=-\infty}^{\infty} h[k] z^{-k} = H(z) z^n$$
+                    </div>
+                    <p>Birim çember üzerinde $z = e^{j\pi/2}$ için sistem çıkışı mutlaka şu formda olmalıdır:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y[n] = H(e^{j\pi/2}) e^{j\frac{\pi}{2} n}$$
+                    </div>
+                    <p>Burada $H(e^{j\pi/2})$ zamana bağlı olmayan bir <strong>karmaşık sabittir</strong>. Ayrıca çıkış sinyalinin frekansı giriş frekansı ile $2\pi$ modülosunda tam olarak uyuşmalıdır.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img1" class="w-full rounded-lg border border-slate-200" alt="1. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 2. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">2. Adım: Sistem $S_1$ Analizi — $y_1[n] = e^{j(\pi/2)n} u[n]$</span>
+                    <button onclick="downloadCard('img2', 'Problem_3_18_Adim_2.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sistem $S_1$ için çıkış ifadesi:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y_1[n] = u[n] \cdot e^{j\frac{\pi}{2}n}$$
+                    </div>
+                    <p>Çıkışın girişe oranına bakarsak:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\frac{y_1[n]}{x[n]} = \frac{u[n] e^{j\frac{\pi}{2}n}}{e^{j\frac{\pi}{2}n}} = u[n] = \begin{cases} 1, & n \ge 0 \\ 0, & n < 0 \end{cases}$$
+                    </div>
+                    <p>Görüldüğü üzere oran sabit bir sayı değil, $n$'e bağlı bir fonksiyondur ($u[n]$). Bu durum özfonksiyon ilkesiyle doğrudan çelişir.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img2" class="w-full rounded-lg border border-slate-200" alt="2. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 3. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">3. Adım: Sistem $S_1$ Kararı — KESİNLİKLE LTI DEĞİLDİR</span>
+                    <button onclick="downloadCard('img3', 'Problem_3_18_Adim_3.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg">
+                        <h4 class="font-bold text-rose-900 mb-1">Sistem $S_1$ Kararı:</h4>
+                        <p class="text-rose-800 font-semibold">
+                            Verilen bilgi, $S_1$ sisteminin KESİNLİKLE LTI OLMADIĞINI iddia etmek için YETERLİDİR (Sufficient to conclude that $S_1$ is not LTI).
+                        </p>
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        <strong>Neden?</strong> Eğer sistem zamanla değişmez olsaydı, negatif zamanlarda sıfır olan çıkışın pozitif zamanlarda da aynı sabit katsayıyla devam etmesi gerekirdi. Çıkışın aniden $n=0$'da açılması zamanla değişmezlik (time-invariance) özelliğinin çiğnendiğini gösterir.
+                    </p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img3" class="w-full rounded-lg border border-slate-200" alt="3. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 4. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">4. Adım: Sistem $S_2$ Analizi — Frekans Değişimi & Karar</span>
+                    <button onclick="downloadCard('img4', 'Problem_3_18_Adim_4.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sistem $S_2$ için çıkış $y_2[n] = e^{j\frac{3\pi}{2}n}$ olarak verilmiştir. $2\pi$ periyodikliği ile sadeleştirelim:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$e^{j\frac{3\pi}{2}n} = e^{j(2\pi - \frac{\pi}{2})n} = e^{j 2\pi n} \cdot e^{-j\frac{\pi}{2}n} = 1 \cdot e^{-j\frac{\pi}{2}n} = e^{-j\frac{\pi}{2}n}$$
+                    </div>
+                    <p>Giriş sinyalinin frekansı $\omega = +\pi/2$ iken çıkışın frekansı $\omega = -\pi/2$'dir. Orana bakarsak:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\frac{y_2[n]}{x[n]} = \frac{e^{-j\frac{\pi}{2}n}}{e^{j\frac{\pi}{2}n}} = e^{-j\pi n} = (-1)^n$$
+                    </div>
+                    <p>$(-1)^n$ sabit bir sayı değildir ($n$ çiftken $+1$, tekken $-1$). LTI sistemler frekansı tersine çeviremez veya yeni frekans yaratamaz.</p>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg">
+                        <h4 class="font-bold text-rose-900 mb-1">Sistem $S_2$ Kararı:</h4>
+                        <p class="text-rose-800 font-semibold">
+                            Verilen bilgi, $S_2$ sisteminin KESİNLİKLE LTI OLMADIĞINI iddia etmek için YETERLİDİR (Sufficient to conclude that $S_2$ is not LTI).
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img4" class="w-full rounded-lg border border-slate-200" alt="4. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 5. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">5. Adım: Sistem $S_3$ Analizi — $5\pi/2 \equiv \pi/2$ Modülo $2\pi$</span>
+                    <button onclick="downloadCard('img5', 'Problem_3_18_Adim_5.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sistem $S_3$ için çıkış $y_3[n] = 2 e^{j\frac{5\pi}{2}n}$ olarak verilmiştir. Üstel terimi $2\pi$ cinsinden ayıralım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$e^{j\frac{5\pi}{2}n} = e^{j(2\pi + \frac{\pi}{2})n} = e^{j 2\pi n} \cdot e^{j\frac{\pi}{2}n} = (1)^n \cdot e^{j\frac{\pi}{2}n} = e^{j\frac{\pi}{2}n}$$
+                    </div>
+                    <p>Bu eşitliği yerine koyduğumuzda çıkış şu şekle gelir:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono text-emerald-700 font-bold">
+                        $$y_3[n] = 2 e^{j\frac{\pi}{2}n} = H(e^{j\pi/2}) e^{j\frac{\pi}{2}n} \quad \implies \quad H(e^{j\pi/2}) = 2$$
+                    </div>
+                    <p>Burada $H(e^{j\pi/2}) = 2$ zamana bağlı olmayan bir <strong>skaler sabittir</strong>. Giriş ve çıkış frekansları birebir aynıdır ($\omega = \pi/2$).</p>
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                        <h4 class="font-bold text-emerald-900 mb-1">Sistem $S_3$ Kararı:</h4>
+                        <p class="text-emerald-800 font-semibold">
+                            Verilen bilgi, $S_3$ sisteminin LTI olmadığını iddia etmek için YETERSİZDİR (NOT sufficient to conclude that $S_3$ is not LTI).
+                        </p>
+                        <p class="text-xs text-emerald-700 mt-1">Örnek: $y[n] = 2x[n]$ kazanç sistemi doğrusal ve zamanla değişmez (LTI) olup dürtü yanıtı $h[n] = 2\delta[n]$ ve $H(e^{j\pi/2}) = 2$'dir.</p>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img5" class="w-full rounded-lg border border-slate-200" alt="5. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 6. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">6. Adım: Karşılaştırmalı Özet ve DT Karar Tablosu</span>
+                    <button onclick="downloadCard('img6', 'Problem_3_18_Adim_6.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+                            <thead class="bg-slate-100 text-slate-700 font-bold">
+                                <tr>
+                                    <th class="p-3 border-b">Sistem</th>
+                                    <th class="p-3 border-b">Giriş $x[n]$</th>
+                                    <th class="p-3 border-b">Çıkış $y[n]$</th>
+                                    <th class="p-3 border-b">Oran $y[n]/x[n]$</th>
+                                    <th class="p-3 border-b">LTI Değildir İddiası Yeterli mi?</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="bg-rose-50/50">
+                                    <td class="p-3 font-bold font-mono">$S_1$</td>
+                                    <td class="p-3 font-mono">$e^{j\pi n / 2}$</td>
+                                    <td class="p-3 font-mono">$e^{j\pi n / 2} u[n]$</td>
+                                    <td class="p-3 text-rose-700 font-mono">$u[n]$ (Zamana bağlı)</td>
+                                    <td class="p-3 font-bold text-rose-700">EVET (Yeterli, LTI değil)</td>
+                                </tr>
+                                <tr class="bg-rose-50/50">
+                                    <td class="p-3 font-bold font-mono">$S_2$</td>
+                                    <td class="p-3 font-mono">$e^{j\pi n / 2}$</td>
+                                    <td class="p-3 font-mono">$e^{j3\pi n / 2} = e^{-j\pi n / 2}$</td>
+                                    <td class="p-3 text-rose-700 font-mono">$(-1)^n$ (Frekans değişti)</td>
+                                    <td class="p-3 font-bold text-rose-700">EVET (Yeterli, LTI değil)</td>
+                                </tr>
+                                <tr class="bg-emerald-50/50">
+                                    <td class="p-3 font-bold font-mono">$S_3$</td>
+                                    <td class="p-3 font-mono">$e^{j\pi n / 2}$</td>
+                                    <td class="p-3 font-mono">$2 e^{j5\pi n / 2} = 2 e^{j\pi n / 2}$</td>
+                                    <td class="p-3 text-emerald-700 font-mono">$2$ (Sabit sayı!)</td>
+                                    <td class="p-3 font-bold text-emerald-700">HAYIR (Yetersiz, LTI olabilir)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img6" class="w-full rounded-lg border border-slate-200" alt="6. Adım Çizimi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHiDPICanvas(w, h) {
+            const canvas = document.createElement('canvas');
+            const dpr = window.devicePixelRatio || 2;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx };
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function renderStepImages() {
+            // Adım 1: Teorem
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.strokeStyle = '#2563eb';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(300, 60, 200, 80);
+
+                ctx.fillStyle = '#1e3a8a';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('DT LTI Sistem h[n]', 335, 105);
+
+                ctx.beginPath();
+                ctx.moveTo(100, 100); ctx.lineTo(300, 100);
+                ctx.moveTo(500, 100); ctx.lineTo(700, 100);
+                ctx.stroke();
+
+                ctx.fillStyle = '#059669';
+                ctx.font = 'bold 14px monospace';
+                ctx.fillText('x[n] = e^{j(π/2)n}', 130, 90);
+
+                ctx.fillStyle = '#7c3aed';
+                ctx.fillText('y[n] = H(e^{jπ/2}) e^{j(π/2)n}', 510, 90);
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Zorunlu Koşul: H(e^{jπ/2}) katsayısı n\'den bağımsız bir sabit olmak zorundadır!', 160, 175);
+
+                document.getElementById('img1').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 2: S1 Analizi
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Sistem S₁: y₁[n] = e^{j(π/2)n} · u[n]', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '14px monospace';
+                ctx.fillText('y₁[n] / x[n] = u[n] = { 1 (n ≥ 0),  0 (n < 0) }', 70, 90);
+
+                ctx.fillStyle = '#dc2626';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Katsayı u[n] zamana bağlıdır (sabit değil). Negatif n için sıfırlanma LTI ile çelişir.', 70, 135);
+
+                document.getElementById('img2').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 3: S1 Karar
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#fef2f2';
+                ctx.fillRect(40, 25, 720, 130);
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(40, 25, 720, 130);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('SİSTEM S₁: KESİNLİKLE LTI DEĞİLDİR (DEFINITELY NOT LTI)', 60, 65);
+
+                ctx.fillStyle = '#7f1d1d';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Verilen bilgi, sistemin LTI olmadığını söylemek için YETERLİDİR (Sufficient).', 60, 105);
+
+                document.getElementById('img3').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 4: S2 Analizi ve Karar
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Sistem S₂: y₂[n] = e^{j(3π/2)n} = e^{-j(π/2)n}', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '14px monospace';
+                ctx.fillText('y₂[n] / x[n] = e^{-jπ n} = (-1)ⁿ  (Zamana göre salınır!)', 70, 85);
+
+                ctx.fillStyle = '#fef2f2';
+                ctx.fillRect(40, 110, 720, 70);
+                ctx.strokeStyle = '#ef4444';
+                ctx.strokeRect(40, 110, 720, 70);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('SİSTEM S₂: KESİNLİKLE LTI DEĞİLDİR (Frekans değişti, katsayı (-1)ⁿ)', 60, 140);
+                ctx.font = '12px sans-serif';
+                ctx.fillText('LTI sistemler girişte olmayan negatif frekansı tek başına üretemez.', 60, 165);
+
+                document.getElementById('img4').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 5: S3 Analizi ve Karar
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Sistem S₃: y₃[n] = 2 e^{j(5π/2)n} = 2 e^{j(2π + π/2)n} = 2 e^{j(π/2)n}', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '14px monospace';
+                ctx.fillText('y₃[n] / x[n] = 2  ===>  H(e^{jπ/2}) = 2  (Mükemmel Sabit!)', 70, 85);
+
+                ctx.fillStyle = '#ecfdf5';
+                ctx.fillRect(40, 110, 720, 70);
+                ctx.strokeStyle = '#10b981';
+                ctx.strokeRect(40, 110, 720, 70);
+
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('SİSTEM S₃: LTI OLMADIĞINI SÖYLEMEK İÇİN YETERSİZDİR (LTI Olabilir)', 60, 140);
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Örnek: y[n] = 2x[n] ideal yükselteç sistemi bir LTI sistemdir.', 60, 165);
+
+                document.getElementById('img5').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 6: Özet
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#0f766e';
+                ctx.fillRect(40, 25, 720, 150);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('PROBLEM 3.18 NİHAİ ÇÖZÜM ÖZETİ', 60, 60);
+
+                ctx.font = '14px monospace';
+                ctx.fillText('S₁: YETERLİ (Kesinlikle LTI Değil - Katsayı zamana bağımlı u[n])', 60, 95);
+                ctx.fillText('S₂: YETERLİ (Kesinlikle LTI Değil - Frekans değişti, katsayı (-1)ⁿ)', 60, 125);
+                ctx.fillText('S₃: YETERSİZ (LTI Olabilir - Katsayı sabit 2, kazanç sistemi)', 60, 155);
+
+                document.getElementById('img6').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        // İnteraktif Tuval Yönetimi
+        let currentSystem = '1';
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+        const btnDTS1 = document.getElementById('btnDTS1');
+        const btnDTS2 = document.getElementById('btnDTS2');
+        const btnDTS3 = document.getElementById('btnDTS3');
+        const simMath = document.getElementById('simMath');
+        const lblCircBadge = document.getElementById('lblCircBadge');
+
+        function setSystem(sys) {
+            currentSystem = sys;
+            [btnDTS1, btnDTS2, btnDTS3].forEach(b => {
+                b.className = 'text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition';
+            });
+
+            if (sys === '1') {
+                btnDTS1.className = 'text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition';
+                lblCircBadge.textContent = 'LTI Kuralını Bozuyor (u[n] çarpanı)';
+                lblCircBadge.className = 'text-[10px] text-rose-600 font-bold';
+                simMath.innerHTML = `
+                    <div><strong>Sistem S₁:</strong> $y_1[n] = e^{j(\\pi/2)n} u[n]$</div>
+                    <div class="mt-1">Oran: $y_1[n]/x[n] = u[n]$ (sabit değil, negatif $n$ için sıfır).</div>
+                    <div class="mt-1 text-rose-700 font-bold">Karar: Bilgi YETERLİDİR. $S_1$ kesinlikle LTI DEĞİLDİR.</div>
+                `;
+            } else if (sys === '2') {
+                btnDTS2.className = 'text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition';
+                lblCircBadge.textContent = 'LTI Kuralını Bozuyor (Frekans ters döndü)';
+                lblCircBadge.className = 'text-[10px] text-rose-600 font-bold';
+                simMath.innerHTML = `
+                    <div><strong>Sistem S₂:</strong> $y_2[n] = e^{j(3\\pi/2)n} = e^{-j(\\pi/2)n}$</div>
+                    <div class="mt-1">Giriş $\\omega = +\\pi/2$, çıkış $\\omega = -\\pi/2$. Oran: $(-1)^n$.</div>
+                    <div class="mt-1 text-rose-700 font-bold">Karar: Bilgi YETERLİDİR. $S_2$ kesinlikle LTI DEĞİLDİR.</div>
+                `;
+            } else {
+                btnDTS3.className = 'text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition';
+                lblCircBadge.textContent = 'LTI İle Uyumlu (Sabit kazanç 2)';
+                lblCircBadge.className = 'text-[10px] text-emerald-600 font-bold';
+                simMath.innerHTML = `
+                    <div><strong>Sistem S₃:</strong> $y_3[n] = 2 e^{j(5\\pi/2)n} = 2 e^{j(\\pi/2)n}$</div>
+                    <div class="mt-1">Oran: $y_3[n]/x[n] = 2$ (zamandan bağımsız sabit).</div>
+                    <div class="mt-1 text-emerald-700 font-bold">Karar: Bilgi YETERSİZDİR. $S_3$ bir LTI kazanç sistemi ($y[n]=2x[n]$) olabilir.</div>
+                `;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            drawCircleInteractive();
+            drawStemInteractive();
+        }
+
+        function drawCircleInteractive() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = kCanvas.parentElement.clientWidth;
+            const h = kCanvas.parentElement.clientHeight;
+            kCanvas.width = w * dpr;
+            kCanvas.height = h * dpr;
+            const ctx = kCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cx = w / 2;
+            const cy = h / 2;
+            const r = 70;
+
+            // Eksenler
+            ctx.strokeStyle = '#e2e8f0';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(cx - 100, cy); ctx.lineTo(cx + 100, cy);
+            ctx.moveTo(cx, cy - 100); ctx.lineTo(cx, cy + 100);
+            ctx.stroke();
+
+            // Birim çember
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Giriş frekansı: w = pi/2 (üst nokta)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy - r); ctx.stroke();
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath(); ctx.arc(cx, cy - r, 4, 0, Math.PI * 2); ctx.fill();
+
+            ctx.fillStyle = '#1e3a8a';
+            ctx.font = '10px sans-serif';
+            ctx.fillText('Giriş: ω = π/2', cx + 10, cy - r + 5);
+
+            if (currentSystem === '1') {
+                ctx.fillStyle = '#dc2626';
+                ctx.fillText('n < 0 için nokta (0,0)\'a düşüyor!', cx - 80, cy + 85);
+            } else if (currentSystem === '2') {
+                // Çıkış frekansı: w = -pi/2 (alt nokta)
+                ctx.strokeStyle = '#dc2626';
+                ctx.lineWidth = 2;
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy + r); ctx.stroke();
+                ctx.fillStyle = '#dc2626';
+                ctx.beginPath(); ctx.arc(cx, cy + r, 4, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#991b1b';
+                ctx.fillText('Çıkış: ω = -π/2 (Farklı!)', cx + 10, cy + r + 5);
+            } else {
+                // Çıkış frekansı: w = pi/2 ile aynı, r=2r
+                ctx.strokeStyle = '#059669';
+                ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy - r * 1.3); ctx.stroke();
+                ctx.fillStyle = '#059669';
+                ctx.beginPath(); ctx.arc(cx, cy - r * 1.3, 5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#065f46';
+                ctx.fillText('Çıkış: ω = π/2 (R = 2.0)', cx + 10, cy - r * 1.3 + 5);
+            }
+        }
+
+        function drawStemInteractive() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = ynCanvas.parentElement.clientWidth;
+            const h = ynCanvas.parentElement.clientHeight;
+            ynCanvas.width = w * dpr;
+            ynCanvas.height = h * dpr;
+            const ctx = ynCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2;
+            const cx = w / 2;
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.stroke();
+
+            // n in [-6, 6]
+            const step = (w - 60) / 13;
+
+            for (let n = -6; n <= 6; n++) {
+                const x = cx + n * step;
+                let val = 0;
+
+                if (currentSystem === '1') {
+                    // Re{e^{j pi n / 2} u[n]} = cos(pi n / 2) * u[n]
+                    val = (n >= 0) ? Math.cos(Math.PI * n / 2) : 0;
+                } else if (currentSystem === '2') {
+                    // Re{e^{j 3 pi n / 2}} = cos(3 pi n / 2) = cos(-pi n / 2) = cos(pi n / 2)
+                    val = Math.cos(3 * Math.PI * n / 2);
+                } else {
+                    // Re{2 e^{j 5 pi n / 2}} = 2 cos(pi n / 2)
+                    val = 2 * Math.cos(Math.PI * n / 2);
+                }
+
+                const y = cy - val * 45;
+
+                const color = (currentSystem === '3') ? '#059669' : '#dc2626';
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath(); ctx.moveTo(x, cy); ctx.lineTo(x, y); ctx.stroke();
+
+                ctx.fillStyle = color;
+                ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '9px sans-serif';
+                ctx.fillText(`${n}`, x - 3, cy + 15);
+            }
+        }
+
+        btnDTS1.addEventListener('click', () => setSystem('1'));
+        btnDTS2.addEventListener('click', () => setSystem('2'));
+        btnDTS3.addEventListener('click', () => setSystem('3'));
+
+        window.addEventListener('load', () => {
+            renderStepImages();
+            setSystem('1');
+        });
+        window.addEventListener('resize', () => {
+            drawCircleInteractive();
+            drawStemInteractive();
+        });
+    </script>
+</body>
+</html>

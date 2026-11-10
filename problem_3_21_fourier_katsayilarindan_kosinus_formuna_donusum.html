@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.21: Fourier Serisi Katsayılarından Kosinüs Formuna Dönüşüm - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .canvas-container { position: relative; width: 100%; height: 260px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease-in-out; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-mono">Bölüm 3 • Problem 3.21</span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">Sürekli Zaman</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-800">Fourier Serisi Sentezi</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">Kosinüs Formu Rekonstrüksiyonu</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Problem 3.21: Fourier Serisi Katsayılarından Kosinüs Formuna Dönüşüm</h1>
+            <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
+                Temel periyodu $T = 8$ olan gerçel değerli periyodik bir $x(t)$ sinyalinin sıfırdan farklı Fourier serisi katsayıları $a_1 = a_{-1}^* = j$ ve $a_5 = a_{-5} = 2$ olarak verilmiştir. $x(t)$ sinyalini $x(t) = \sum_{k=0}^\infty A_k \cos(\omega_k t + \phi_k)$ formunda ifade ediniz.
+            </p>
+            <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono">
+                Oppenheim & Willsky • Signals & Systems 2nd Ed. Sayfa 286 • Fourier Serisi Dönüşümleri ve Eşlenik Simetrisi
+            </div>
+        </div>
+
+        <!-- Soru Analizi ve Mini Konu Anlatımı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs">🎯</span>
+                    Soru Bizden Ne İstiyor?
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li>Temel periyot $T = 8 \implies \omega_0 = 2\pi/8 = \pi/4\text{ rad/s}$.</li>
+                    <li>Sıfırdan farklı katsayılar: $a_1 = j$, $a_{-1} = -j$, $a_5 = 2$, $a_{-5} = 2$.</li>
+                    <li>Karmaşık üstel terimleri eşlenik çiftler halinde gruplayıp kosinüs formuna getirmek.</li>
+                    <li>$A_k \ge 0$, $\omega_k$ ve $\phi_k$ parametrelerini eksiksiz belirlemek.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs">💡</span>
+                    Adım Adım Çözüm Metodolojisi
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li><strong>Genel Kural:</strong> $a_k e^{jk\omega_0 t} + a_{-k} e^{-jk\omega_0 t} = 2|a_k|\cos(k\omega_0 t + \angle a_k)$.</li>
+                    <li><strong>1. Harmonik ($k=1$):</strong> $a_1 = j = 1 e^{j\pi/2} \implies 2 \cdot 1 \cos(\frac{\pi}{4}t + \frac{\pi}{2}) = -2\sin(\frac{\pi}{4}t)$.</li>
+                    <li><strong>5. Harmonik ($k=5$):</strong> $a_5 = 2 = 2 e^{j 0} \implies 2 \cdot 2 \cos(\frac{5\pi}{4}t + 0) = 4\cos(\frac{5\pi}{4}t)$.</li>
+                    <li><strong>Nihai Toplam:</strong> $x(t) = 2\cos(\frac{\pi}{4}t + \frac{\pi}{2}) + 4\cos(\frac{5\pi}{4}t)$.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canlı Simülatör Kartı -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Harmonik Bileşenler ve Bileşke Sinyal Simülatörü</h2>
+                    <p class="text-xs text-slate-500">1. ve 5. harmonik genliklerini interaktif olarak ayarlayarak oluşturulan bileşke $x(t)$ dalga şeklini inceleyin.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnResetHarmonics" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">Orijinal Katsayılar (A₁=2, A₅=4)</button>
+                </div>
+            </div>
+
+            <!-- Kontroller -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <div>
+                    <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                        <span>1. Harmonik Genliği ($A_1$):</span>
+                        <span id="lblA1" class="text-blue-600 font-mono">2.0</span>
+                    </div>
+                    <input id="sliderA1" type="range" min="0" max="6" step="0.5" value="2" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                </div>
+                <div>
+                    <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                        <span>5. Harmonik Genliği ($A_5$):</span>
+                        <span id="lblA5" class="text-emerald-600 font-mono">4.0</span>
+                    </div>
+                    <input id="sliderA5" type="range" min="0" max="8" step="0.5" value="4" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                </div>
+            </div>
+
+            <!-- Çift Tuval -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Ayrık Fourier Serisi Çizgi Spektrumu $|a_k|$</span>
+                        <span class="text-[10px] text-slate-400">|a₁|=1, |a₅|=2</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Zaman Bölgesi Dalga Şekli $x(t)$ (Periyot $T = 8$)</span>
+                        <span class="text-[10px] text-slate-500">t ∈ [0, 16]</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Çıkarım Paneli -->
+            <div id="simMath" class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-xs font-mono text-emerald-900">
+                Yükleniyor...
+            </div>
+        </div>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white text-sm">6</span>
+                Adım Adım Matematiksel Çözüm ve İspat
+            </h2>
+
+            <!-- 1. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">1. Adım: Temel Periyot ve Temel Frekansın Hesaplanması</span>
+                    <button onclick="downloadCard('img1', 'Problem_3_21_Adim_1.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sinyal periyodik olup temel periyodu $T = 8$ olarak verilmiştir. Sürekli zaman Fourier serisi açılımı için temel açısal frekans $\omega_0$ şu formülle hesaplanır:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\omega_0 = \frac{2\pi}{T} = \frac{2\pi}{8} = \frac{\pi}{4}\text{ rad/s}$$
+                    </div>
+                    <p>Buna göre sinyalin $k$. harmonik bileşenlerinin açısal frekansı $\omega_k = k\omega_0 = k \frac{\pi}{4}$ olacaktır.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img1" class="w-full rounded-lg border border-slate-200" alt="1. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 2. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">2. Adım: Gerçel Değerli Sinyallerde Eşlenik Simetrisi</span>
+                    <button onclick="downloadCard('img2', 'Problem_3_21_Adim_2.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sinyal gerçel değerli olduğu için Fourier katsayıları eşlenik simetrisi özelliğini sağlamak zorundadır: $a_{-k} = a_k^*$.</p>
+                    <p>Soruda verilen değerler bu özelliği tam olarak doğrular:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$a_1 = j \implies a_{-1} = a_1^* = -j$$
+                        $$a_5 = 2 \implies a_{-5} = a_5^* = 2$$
+                    </div>
+                    <p class="text-xs text-slate-600">Diğer tüm Fourier katsayıları $a_k = 0$'dır (örneğin ortalama değer / DC bileşen $a_0 = 0$).</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img2" class="w-full rounded-lg border border-slate-200" alt="2. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 3. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">3. Adım: Karmaşık Üstelden Kosinüs Formuna Dönüşüm Bağıntısı</span>
+                    <button onclick="downloadCard('img3', 'Problem_3_21_Adim_3.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Fourier serisinin sentez denkleminde eşlenik harmonik çiftlerini bir araya getirelim. Herhangi bir $k > 0$ için katsayıyı kutupsal formda $a_k = |a_k| e^{j \theta_k}$ yazarsak:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$a_k e^{j k \omega_0 t} + a_{-k} e^{-j k \omega_0 t} = |a_k| e^{j\theta_k} e^{j k \omega_0 t} + |a_k| e^{-j\theta_k} e^{-j k \omega_0 t}$$
+                        $$= |a_k| \Big[ e^{j(k\omega_0 t + \theta_k)} + e^{-j(k\omega_0 t + \theta_k)} \Big] = 2 |a_k| \cos(k\omega_0 t + \theta_k)$$
+                    </div>
+                    <p>İstenen form $x(t) = \sum_{k=0}^\infty A_k \cos(\omega_k t + \phi_k)$ olduğuna göre parametre eşleştirmesi şöyledir:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$A_k = 2|a_k|, \quad \omega_k = k\omega_0, \quad \phi_k = \angle a_k$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img3" class="w-full rounded-lg border border-slate-200" alt="3. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 4. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">4. Adım: 1. Harmonik Bileşeninin Dönüştürülmesi ($k = 1$)</span>
+                    <button onclick="downloadCard('img4', 'Problem_3_21_Adim_4.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>$k = 1$ için verilen katsayı $a_1 = j$'dir. Kutupsal biçimde:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$|a_1| = |j| = 1, \quad \angle a_1 = \frac{\pi}{2}\text{ rad} \implies a_1 = 1 \cdot e^{j\pi/2}$$
+                    </div>
+                    <p>3. Adımdaki formüle yerleştirirsek:</p>
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg text-center font-mono text-base text-amber-900 font-bold">
+                        $$A_1 = 2|a_1| = 2 \cdot 1 = 2, \quad \omega_1 = 1 \cdot \frac{\pi}{4} = \frac{\pi}{4}, \quad \phi_1 = \frac{\pi}{2}$$
+                        $$\text{Bileşen: } 2 \cos\left(\frac{\pi}{4}t + \frac{\pi}{2}\right) = -2\sin\left(\frac{\pi}{4}t\right)$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img4" class="w-full rounded-lg border border-slate-200" alt="4. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 5. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">5. Adım: 5. Harmonik Bileşeninin Dönüştürülmesi ($k = 5$)</span>
+                    <button onclick="downloadCard('img5', 'Problem_3_21_Adim_5.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>$k = 5$ için verilen katsayı $a_5 = 2$'dir. Kutupsal biçimde:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$|a_5| = 2, \quad \angle a_5 = 0\text{ rad} \implies a_5 = 2 \cdot e^{j 0}$$
+                    </div>
+                    <p>Dönüşüm formülü uygulandığında:</p>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg text-center font-mono text-base text-rose-900 font-bold">
+                        $$A_5 = 2|a_5| = 2 \cdot 2 = 4, \quad \omega_5 = 5 \cdot \frac{\pi}{4} = \frac{5\pi}{4}, \quad \phi_5 = 0$$
+                        $$\text{Bileşen: } 4 \cos\left(\frac{5\pi}{4}t\right)$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img5" class="w-full rounded-lg border border-slate-200" alt="5. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 6. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">6. Adım: Nihai Dalga Formu $x(t)$ ve Parametre Tablosu</span>
+                    <button onclick="downloadCard('img6', 'Problem_3_21_Adim_6.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Tüm sıfırdan farklı bileşenler toplandığında sürekli zaman periyodik sinyali $x(t)$ elde edilir:</p>
+                    <div class="p-4 bg-teal-50 border border-teal-200 rounded-lg text-center font-mono text-base text-teal-900 font-bold">
+                        $$x(t) = 2 \cos\left(\frac{\pi}{4}t + \frac{\pi}{2}\right) + 4 \cos\left(\frac{5\pi}{4}t\right)$$
+                    </div>
+                    <p class="text-xs text-slate-600">Eşdeğer sinüs ifadesi: $x(t) = -2\sin\left(\frac{\pi}{4}t\right) + 4\cos\left(\frac{5\pi}{4}t\right)$.</p>
+
+                    <div class="overflow-x-auto mt-3">
+                        <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+                            <thead class="bg-slate-100 text-slate-700 font-bold">
+                                <tr>
+                                    <th class="p-2.5 border-b">Harmonik $k$</th>
+                                    <th class="p-2.5 border-b">Katsayı $a_k$</th>
+                                    <th class="p-2.5 border-b">Genlik $A_k = 2|a_k|$</th>
+                                    <th class="p-2.5 border-b">Frekans $\omega_k$</th>
+                                    <th class="p-2.5 border-b">Faz $\phi_k$</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 font-mono">
+                                <tr>
+                                    <td class="p-2.5 font-bold">k = 1</td>
+                                    <td class="p-2.5">j</td>
+                                    <td class="p-2.5 text-blue-700 font-bold">2</td>
+                                    <td class="p-2.5">π/4 rad/s</td>
+                                    <td class="p-2.5">π/2 (+90°)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-bold">k = 5</td>
+                                    <td class="p-2.5">2</td>
+                                    <td class="p-2.5 text-emerald-700 font-bold">4</td>
+                                    <td class="p-2.5">5π/4 rad/s</td>
+                                    <td class="p-2.5">0 (0°)</td>
+                                </tr>
+                                <tr class="text-slate-400">
+                                    <td class="p-2.5">Diğer tüm k</td>
+                                    <td class="p-2.5">0</td>
+                                    <td class="p-2.5">0</td>
+                                    <td class="p-2.5">kπ/4</td>
+                                    <td class="p-2.5">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img6" class="w-full rounded-lg border border-slate-200" alt="6. Adım Çizimi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHiDPICanvas(w, h) {
+            const canvas = document.createElement('canvas');
+            const dpr = window.devicePixelRatio || 2;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx };
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function renderStepImages() {
+            // Adım 1: Temel Frekans
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#1e3a8a';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Temel Periyot: T = 8  ===>  Temel Açısal Frekans: ω₀ = 2π / 8 = π/4 rad/s', 50, 45);
+
+                ctx.fillStyle = '#334155';
+                ctx.font = '13px monospace';
+                ctx.fillText('k = 1 için frekans: ω₁ = 1 · (π/4) = π/4 rad/s', 80, 90);
+                ctx.fillText('k = 5 için frekans: ω₅ = 5 · (π/4) = 5π/4 rad/s', 80, 120);
+
+                document.getElementById('img1').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 2: Simetri
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Gerçel Sinyallerde Eşlenik Simetrisi: a_{-k} = a_k*', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '14px monospace';
+                ctx.fillText('a₁ = j    ===>  a_{-1} = -j   (Eşlenik sanal)', 80, 85);
+                ctx.fillText('a₅ = 2    ===>  a_{-5} = 2    (Eşlenik gerçel)', 80, 115);
+                ctx.fillText('a₀ = 0    (DC bileşeni yoktur)', 80, 145);
+
+                document.getElementById('img2').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 3: Dönüşüm Formülü
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#0f766e';
+                ctx.fillRect(40, 20, 720, 140);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('GENEL KOSİNÜS SENTEZ FORMÜLÜ', 60, 50);
+
+                ctx.font = 'bold 16px monospace';
+                ctx.fillText('a_k e^{jkω₀t} + a_{-k} e^{-jkω₀t} = 2|a_k| · cos(kω₀t + ∠a_k)', 60, 90);
+
+                ctx.font = '13px sans-serif';
+                ctx.fillText('A_k = 2|a_k|,   ω_k = kω₀,   φ_k = ∠a_k', 60, 130);
+
+                document.getElementById('img3').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 4: 1. Harmonik
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#b45309';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('k = 1 Harmonik Dönüşümü:', 50, 40);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px monospace';
+                ctx.fillText('a₁ = j = 1 · e^{jπ/2}  ===>  |a₁| = 1,  ∠a₁ = π/2', 80, 75);
+                ctx.fillText('A₁ = 2 · 1 = 2,  ω₁ = π/4,  φ₁ = π/2', 80, 105);
+
+                ctx.fillStyle = '#d97706';
+                ctx.font = 'bold 16px monospace';
+                ctx.fillText('Terim 1 = 2 · cos(πt/4 + π/2) = -2 · sin(πt/4)', 80, 145);
+
+                document.getElementById('img4').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 5: 5. Harmonik
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('k = 5 Harmonik Dönüşümü:', 50, 40);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px monospace';
+                ctx.fillText('a₅ = 2 = 2 · e^{j 0}  ===>  |a₅| = 2,  ∠a₅ = 0', 80, 75);
+                ctx.fillText('A₅ = 2 · 2 = 4,  ω₅ = 5π/4,  φ₅ = 0', 80, 105);
+
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 16px monospace';
+                ctx.fillText('Terim 2 = 4 · cos(5πt/4)', 80, 145);
+
+                document.getElementById('img5').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 6: Özet
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#0f766e';
+                ctx.fillRect(40, 20, 720, 160);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('PROBLEM 3.21 NİHAİ KOSİNÜS FORMU', 60, 55);
+
+                ctx.font = 'bold 18px monospace';
+                ctx.fillText('x(t) = 2 cos(πt/4 + π/2) + 4 cos(5πt/4)', 60, 95);
+
+                ctx.font = '13px sans-serif';
+                ctx.fillText('A₁ = 2,  ω₁ = π/4,  φ₁ = π/2 (+90°)', 60, 130);
+                ctx.fillText('A₅ = 4,  ω₅ = 5π/4, φ₅ = 0 (0°),  diğer tüm A_k = 0', 60, 155);
+
+                document.getElementById('img6').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        // İnteraktif Tuval Yönetimi
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+        const sliderA1 = document.getElementById('sliderA1');
+        const sliderA5 = document.getElementById('sliderA5');
+        const lblA1 = document.getElementById('lblA1');
+        const lblA5 = document.getElementById('lblA5');
+        const simMath = document.getElementById('simMath');
+        const btnResetHarmonics = document.getElementById('btnResetHarmonics');
+
+        function updateSimulation() {
+            const a1Val = parseFloat(sliderA1.value);
+            const a5Val = parseFloat(sliderA5.value);
+
+            lblA1.textContent = a1Val.toFixed(1);
+            lblA5.textContent = a5Val.toFixed(1);
+
+            simMath.innerHTML = `
+                <div><strong>Kosinüs Açılımı:</strong> $x(t) = ${a1Val.toFixed(1)} \\cos\\left(\\frac{\\pi}{4}t + \\frac{\\pi}{2}\\right) + ${a5Val.toFixed(1)} \\cos\\left(\\frac{5\\pi}{4}t\\right)$</div>
+                <div class="mt-1">Eşdeğer Form: $x(t) = ${(-a1Val).toFixed(1)} \\sin\\left(\\frac{\\pi}{4}t\\right) + ${a5Val.toFixed(1)} \\cos\\left(\\frac{5\\pi}{4}t\\right)$</div>
+                <div class="mt-1 text-emerald-800 font-bold">Temel Periyot: $T = 8\\text{ s}$, Temel Frekans: $\\omega_0 = \\pi/4\\text{ rad/s}$</div>
+            `;
+            if (window.renderMathInElement) {
+                renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            drawSpectrumInteractive(a1Val / 2, a5Val / 2);
+            drawWaveInteractive(a1Val, a5Val);
+        }
+
+        function drawSpectrumInteractive(mag1, mag5) {
+            const dpr = window.devicePixelRatio || 2;
+            const w = kCanvas.parentElement.clientWidth;
+            const h = kCanvas.parentElement.clientHeight;
+            kCanvas.width = w * dpr;
+            kCanvas.height = h * dpr;
+            const ctx = kCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h - 35;
+            const cx = w / 2;
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 25); ctx.lineTo(cx, cy + 10);
+            ctx.stroke();
+
+            const step = (w - 60) / 14;
+            const scaleY = (cy - 40) / 2.5;
+
+            for (let k = -6; k <= 6; k++) {
+                const x = cx + k * step;
+                let m = 0;
+                let col = '#94a3b8';
+
+                if (Math.abs(k) === 1) {
+                    m = mag1;
+                    col = '#2563eb';
+                } else if (Math.abs(k) === 5) {
+                    m = mag5;
+                    col = '#059669';
+                }
+
+                if (m > 0) {
+                    const y = cy - m * scaleY;
+                    ctx.strokeStyle = col;
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath(); ctx.moveTo(x, cy); ctx.lineTo(x, y); ctx.stroke();
+                    ctx.fillStyle = col;
+                    ctx.beginPath(); ctx.arc(x, y, 3.5, 0, Math.PI * 2); ctx.fill();
+                }
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '9px sans-serif';
+                ctx.fillText(`${k}`, x - 3, cy + 15);
+            }
+
+            ctx.fillStyle = '#2563eb';
+            ctx.font = '10px sans-serif';
+            ctx.fillText(`|a₁| = ${mag1.toFixed(1)}`, cx + step - 10, 30);
+
+            ctx.fillStyle = '#059669';
+            ctx.fillText(`|a₅| = ${mag5.toFixed(1)}`, cx + 5 * step - 10, 30);
+        }
+
+        function drawWaveInteractive(a1, a5) {
+            const dpr = window.devicePixelRatio || 2;
+            const w = ynCanvas.parentElement.clientWidth;
+            const h = ynCanvas.parentElement.clientHeight;
+            ynCanvas.width = w * dpr;
+            ynCanvas.height = h * dpr;
+            const ctx = ynCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2;
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.stroke();
+
+            // t in [0, 16] (2 tam periyot)
+            const scaleT = (w - 50) / 16;
+            const scaleY = 16;
+
+            // 1. Harmonik (Kesikli çizgi)
+            ctx.strokeStyle = 'rgba(37, 99, 235, 0.4)';
+            ctx.lineWidth = 1.5;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - 25) / scaleT;
+                const v1 = a1 * Math.cos(Math.PI * t / 4 + Math.PI / 2);
+                const py = cy - v1 * scaleY;
+                if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Bileşke sinyal x(t)
+            ctx.strokeStyle = '#0f766e';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - 25) / scaleT;
+                const val = a1 * Math.cos(Math.PI * t / 4 + Math.PI / 2) + a5 * Math.cos(5 * Math.PI * t / 4);
+                const py = cy - val * scaleY;
+                if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // Periyot işaretleri T = 8, 16
+            [8, 16].forEach(pt => {
+                const x = 25 + pt * scaleT;
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 1;
+                ctx.setLineDash([2, 2]);
+                ctx.beginPath(); ctx.moveTo(x, 20); ctx.lineTo(x, h - 20); ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#b45309';
+                ctx.font = '10px sans-serif';
+                ctx.fillText(`t=${pt}s`, x - 12, h - 8);
+            });
+
+            ctx.fillStyle = '#0f766e';
+            ctx.font = '11px sans-serif';
+            ctx.fillText('x(t) Bileşke Sinyali', 30, 25);
+        }
+
+        sliderA1.addEventListener('input', updateSimulation);
+        sliderA5.addEventListener('input', updateSimulation);
+        btnResetHarmonics.addEventListener('click', () => {
+            sliderA1.value = 2;
+            sliderA5.value = 4;
+            updateSimulation();
+        });
+
+        window.addEventListener('load', () => {
+            renderStepImages();
+            updateSimulation();
+        });
+        window.addEventListener('resize', updateSimulation);
+    </script>
+</body>
+</html>

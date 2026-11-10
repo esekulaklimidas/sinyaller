@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.17: LTI Sistemlerin Özfonksiyon Özelliği ve Sistem Testi - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .canvas-container { position: relative; width: 100%; height: 260px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease-in-out; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-mono">Bölüm 3 • Problem 3.17</span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">Sürekli Zaman</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">Özfonksiyon (Eigenfunction) İlkesi</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-rose-100 text-rose-800">LTI Doğrulama & İspat</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Problem 3.17: LTI Sistemlerin Özfonksiyon Testi ($S_1, S_2, S_3$ Sistemleri)</h1>
+            <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
+                $x(t) = e^{j5t}$ karmaşık üstel girişi uygulandığında çıkışları sırasıyla $y_1(t) = t e^{j5t}$, $y_2(t) = e^{j5(t-1)}$ ve $y_3(t) = \cos(5t)$ olan üç farklı sistem için, verilen bilgilerin sistemin <strong>kesinlikle LTI olmadığını</strong> iddia etmek için yeterli olup olmadığını belirleyiniz.
+            </p>
+            <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono">
+                Oppenheim & Willsky • Signals & Systems 2nd Ed. Sayfa 285 • LTI Sistemlerin Temel Özfonksiyon Özelliği
+            </div>
+        </div>
+
+        <!-- Soru Analizi ve Mini Konu Anlatımı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs">🎯</span>
+                    Soru Bizden Ne İstiyor?
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li>Giriş $x(t) = e^{j5t}$ iken LTI sistem çıkışı mutlaka $y(t) = H(j5) e^{j5t}$ biçiminde olmalıdır.</li>
+                    <li>$H(j5)$ çarpanı zamandan bağımsız bir <strong>karmaşık sabit</strong> olmalıdır.</li>
+                    <li>Çıkışta orijinal frekans $5\text{ rad/s}$ haricinde yeni hiçbir frekans bileşeni üretilemez.</li>
+                    <li>$S_1, S_2, S_3$ çıkışlarını bu iki zorunlu koşula göre denetlemek.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs">💡</span>
+                    Adım Adım Çözüm Metodolojisi
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li><strong>$S_1$:</strong> $y_1(t) = t e^{j5t} \implies$ katsayı $t$ zamana bağlıdır (sabit değil) $\implies$ Kesinlikle LTI Değildir.</li>
+                    <li><strong>$S_2$:</strong> $y_2(t) = e^{-j5} e^{j5t} \implies$ katsayı $e^{-j5}$ bir sabittir ($H(j5)=e^{-j5}$) $\implies$ LTI Olabilir (Yetersiz).</li>
+                    <li><strong>$S_3$:</strong> $y_3(t) = \frac{1}{2}e^{j5t} + \frac{1}{2}e^{-j5t} \implies$ yeni $\omega=-5$ frekansı üretilmiştir $\implies$ Kesinlikle LTI Değildir.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canlı Simülatör Kartı -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">Sistem Çıkışı ve Özfonksiyon Karşılaştırma Simülatörü</h2>
+                    <p class="text-xs text-slate-500">İncelemek istediğiniz sistemi seçerek dalga şeklini ve frekans spektrumunu gözlemleyin.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnS1" class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition">Sistem S₁: t·e^{j5t}</button>
+                    <button id="btnS2" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">Sistem S₂: e^{j5(t-1)}</button>
+                    <button id="btnS3" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition">Sistem S₃: cos(5t)</button>
+                </div>
+            </div>
+
+            <!-- Çift Tuval -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Frekans Spektrumu / Bileşen Dağılımı</span>
+                        <span id="lblSpecBadge" class="text-[10px] text-rose-600 font-bold">LTI Kuralını Bozuyor</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Zaman Bölgesi Gerçel Kısmı $\text{Re}\{y(t)\}$</span>
+                        <span id="lblTimeBadge" class="text-[10px] text-slate-500">t ∈ [-2, 2]</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Çıkarım Paneli -->
+            <div id="simMath" class="p-3 bg-amber-50 rounded-lg border border-amber-200 text-xs font-mono text-amber-900">
+                Yükleniyor...
+            </div>
+        </div>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white text-sm">6</span>
+                Adım Adım Matematiksel Çözüm ve İspat
+            </h2>
+
+            <!-- 1. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">1. Adım: LTI Sistemlerin Özfonksiyon Teoremi</span>
+                    <button onclick="downloadCard('img1', 'Problem_3_17_Adim_1.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sürekli zamanlı bir LTI sistemin dürtü yanıtı $h(t)$ olsun. Giriş sinyali $x(t) = e^{s t}$ karmaşık üstel fonksiyonu olduğunda sistem çıkışı konvolüsyon integrali ile verilir:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y(t) = \int_{-\infty}^{\infty} h(\tau) x(t - \tau) d\tau = \int_{-\infty}^{\infty} h(\tau) e^{s(t - \tau)} d\tau = e^{st} \int_{-\infty}^{\infty} h(\tau) e^{-s\tau} d\tau$$
+                    </div>
+                    <p>Buradaki integral zaman $t$'den tamamen bağımsız bir karmaşık sabittir ve sistemin transfer fonksiyonu / frekans yanıtı $H(s)$ olarak adlandırılır:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y(t) = H(s) e^{st} \quad \text{veya} \quad s = j\omega_0 \implies y(t) = H(j\omega_0) e^{j\omega_0 t}$$
+                    </div>
+                    <p class="text-xs text-slate-600"><strong>Zorunlu İki Sonuç:</strong> (1) Çarpan $H(j\omega_0)$ zamanla değişmeyen bir sabit olmalıdır. (2) Çıkış yalnızca girişteki $\omega_0$ frekansını içermeli, yeni hiçbir frekans bileşeni oluşturmamalıdır.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img1" class="w-full rounded-lg border border-slate-200" alt="1. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 2. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">2. Adım: Sistem $S_1$ Analizi — $y_1(t) = t e^{j5t}$</span>
+                    <button onclick="downloadCard('img2', 'Problem_3_17_Adim_2.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sistem $S_1$ için giriş $x(t) = e^{j5t}$ uygulandığında elde edilen çıkış:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y_1(t) = t e^{j5t}$$
+                    </div>
+                    <p>Bu çıkışı $y_1(t) = K(t) e^{j5t}$ biçiminde yazarsak kazanç çarpanı $K(t) = t$ olur. Fakat bir LTI sistemde bu çarpanın <strong>zamandan bağımsız bir sabit</strong> $H(j5)$ olması gerekirdi.</p>
+                    <p>$K(t) = t$ fonksiyonu zamanla değiştiğinden, $e^{j5t}$ bu sistemin bir özfonksiyonu değildir. Özfonksiyon özelliğini sağlamayan hiçbir sistem LTI olamaz.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img2" class="w-full rounded-lg border border-slate-200" alt="2. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 3. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">3. Adım: Sistem $S_1$ İçin Karar — KESİNLİKLE LTI DEĞİLDİR</span>
+                    <button onclick="downloadCard('img3', 'Problem_3_17_Adim_3.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg">
+                        <h4 class="font-bold text-rose-900 mb-1">Sistem $S_1$ Kararı:</h4>
+                        <p class="text-rose-800 font-semibold">
+                            Verilen bilgi, $S_1$ sisteminin KESİNLİKLE LTI OLMADIĞINI iddia etmek için YETERLİDİR (Sufficient to conclude that $S_1$ is not LTI).
+                        </p>
+                    </div>
+                    <p class="text-xs text-slate-600">
+                        <strong>Neden?</strong> LTI sistemlerde karmaşık üstel girişe verilen yanıt yalnızca o üstel sinyalin sabit bir karmaşık sayı ile ölçeklenmiş hali olabilir. Çıkışta beliren $t$ çarpanı sistemin zamanla değişen (time-varying) bir yapıya sahip olduğunu kesin olarak kanıtlar.
+                    </p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img3" class="w-full rounded-lg border border-slate-200" alt="3. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 4. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">4. Adım: Sistem $S_2$ Analizi — $y_2(t) = e^{j5(t-1)}$ (LTI Olabilir)</span>
+                    <button onclick="downloadCard('img4', 'Problem_3_17_Adim_4.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sistem $S_2$ için çıkış ifadesini üslerin özellikleri yardımıyla çarpanlarına ayıralım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y_2(t) = e^{j5(t - 1)} = e^{j5t - j5} = e^{-j5} \cdot e^{j5t}$$
+                    </div>
+                    <p>Burada $e^{-j5}$ bir karmaşık sayıdır ve zamana bağlı DEĞİLDİR (sabit bir büyüklük $|e^{-j5}|=1$ ve sabit bir faz $\angle = -5\text{ rad}$ taşır). Dolayısıyla:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y_2(t) = H(j5) e^{j5t} \quad \text{burada} \quad H(j5) = e^{-j5}$$
+                    </div>
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                        <h4 class="font-bold text-emerald-900 mb-1">Sistem $S_2$ Kararı:</h4>
+                        <p class="text-emerald-800 font-semibold">
+                            Verilen bilgi, $S_2$ sisteminin LTI olmadığını iddia etmek için YETERSİZDİR (NOT sufficient to conclude that $S_2$ is not LTI).
+                        </p>
+                        <p class="text-xs text-emerald-700 mt-1">Örneğin 1 saniyelik ideal gecikme sistemi $y(t) = x(t-1)$ bir LTI sistemdir ve dürtü yanıtı $h(t) = \delta(t-1)$, frekans yanıtı $H(j\omega) = e^{-j\omega}$ olup $H(j5) = e^{-j5}$ koşulunu mükemmel şekilde sağlar.</p>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img4" class="w-full rounded-lg border border-slate-200" alt="4. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 5. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">5. Adım: Sistem $S_3$ Analizi — $y_3(t) = \cos(5t)$ (Yeni Frekans)</span>
+                    <button onclick="downloadCard('img5', 'Problem_3_17_Adim_5.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Sistem $S_3$ için çıkış $y_3(t) = \cos(5t)$ olarak verilmiştir. Euler formülü ile açalım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y_3(t) = \cos(5t) = \frac{1}{2} e^{j5t} + \frac{1}{2} e^{-j5t}$$
+                    </div>
+                    <p>Girişte yalnızca tek bir karmaşık üstel sinyal ($e^{j5t}$, frekansı $\omega = +5\text{ rad/s}$) varken, çıkışta hem $\omega = +5$ hem de $\omega = -5\text{ rad/s}$ bileşenleri yer almaktadır.</p>
+                    <p>LTI sistemler girişte bulunmayan yeni frekans bileşenleri <strong>kesinlikle üretemezler</strong>. $e^{-j5t}$ bileşeninin ortaya çıkması sistemin kesinlikle LTI olmadığını gösterir (Örneğin gerçel kısım alma sistemi $y(t) = \text{Re}\{x(t)\}$ bu çıkışı verir ancak karmaşık sayılarda homojenlik kuralını bozduğu için doğrusal değildir).</p>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg">
+                        <h4 class="font-bold text-rose-900 mb-1">Sistem $S_3$ Kararı:</h4>
+                        <p class="text-rose-800 font-semibold">
+                            Verilen bilgi, $S_3$ sisteminin KESİNLİKLE LTI OLMADIĞINI iddia etmek için YETERLİDİR (Sufficient to conclude that $S_3$ is not LTI).
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img5" class="w-full rounded-lg border border-slate-200" alt="5. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 6. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">6. Adım: Karşılaştırmalı Sonuç Özeti ve Tablo</span>
+                    <button onclick="downloadCard('img6', 'Problem_3_17_Adim_6.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border border-slate-200 rounded-lg overflow-hidden">
+                            <thead class="bg-slate-100 text-slate-700 font-bold">
+                                <tr>
+                                    <th class="p-3 border-b">Sistem</th>
+                                    <th class="p-3 border-b">Giriş $x(t)$</th>
+                                    <th class="p-3 border-b">Çıkış $y(t)$</th>
+                                    <th class="p-3 border-b">Özfonksiyon Uyumu</th>
+                                    <th class="p-3 border-b">LTI Değildir İddiası Yeterli mi?</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr class="bg-rose-50/50">
+                                    <td class="p-3 font-bold font-mono">$S_1$</td>
+                                    <td class="p-3 font-mono">$e^{j5t}$</td>
+                                    <td class="p-3 font-mono">$t e^{j5t}$</td>
+                                    <td class="p-3 text-rose-700">Bozuldu ($t$ zamana bağlı)</td>
+                                    <td class="p-3 font-bold text-rose-700">EVET (Yeterli, LTI değil)</td>
+                                </tr>
+                                <tr class="bg-emerald-50/50">
+                                    <td class="p-3 font-bold font-mono">$S_2$</td>
+                                    <td class="p-3 font-mono">$e^{j5t}$</td>
+                                    <td class="p-3 font-mono">$e^{j5(t-1)} = e^{-j5} e^{j5t}$</td>
+                                    <td class="p-3 text-emerald-700">Sağlandı ($H(j5)=e^{-j5}$)</td>
+                                    <td class="p-3 font-bold text-emerald-700">HAYIR (Yetersiz, LTI olabilir)</td>
+                                </tr>
+                                <tr class="bg-rose-50/50">
+                                    <td class="p-3 font-bold font-mono">$S_3$</td>
+                                    <td class="p-3 font-mono">$e^{j5t}$</td>
+                                    <td class="p-3 font-mono">$\cos(5t) = \frac{1}{2}e^{j5t}+\frac{1}{2}e^{-j5t}$</td>
+                                    <td class="p-3 text-rose-700">Bozuldu (Yeni $\omega=-5$ üretildi)</td>
+                                    <td class="p-3 font-bold text-rose-700">EVET (Yeterli, LTI değil)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img6" class="w-full rounded-lg border border-slate-200" alt="6. Adım Çizimi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHiDPICanvas(w, h) {
+            const canvas = document.createElement('canvas');
+            const dpr = window.devicePixelRatio || 2;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx };
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function renderStepImages() {
+            // Adım 1: Özfonksiyon Diyagramı
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.strokeStyle = '#2563eb';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(300, 60, 200, 80);
+
+                ctx.fillStyle = '#1e3a8a';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('LTI Sistem h(t)', 340, 105);
+
+                // Oklar
+                ctx.beginPath();
+                ctx.moveTo(100, 100); ctx.lineTo(300, 100);
+                ctx.moveTo(500, 100); ctx.lineTo(700, 100);
+                ctx.stroke();
+
+                ctx.fillStyle = '#059669';
+                ctx.font = 'bold 14px monospace';
+                ctx.fillText('x(t) = e^{s t}', 140, 90);
+
+                ctx.fillStyle = '#7c3aed';
+                ctx.fillText('y(t) = H(s) · e^{s t}', 530, 90);
+
+                ctx.fillStyle = '#64748b';
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Özfonksiyon İlkesi: Çıkışta frekans değişmez, sadece sabit H(s) ile ölçeklenir!', 160, 175);
+
+                document.getElementById('img1').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 2: S1 Analizi
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Sistem S₁: y₁(t) = t · e^{j5t}', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '14px sans-serif';
+                ctx.fillText('Özdeşlik Karşılaştırması:', 50, 85);
+                ctx.font = '14px monospace';
+                ctx.fillText('H(j5) olması gereken çarpan = t  (Zamana Bağımlı!)', 70, 115);
+
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 13px sans-serif';
+                ctx.fillText('Sabitlik Şartı Bozuldu! t bir skaler sabit değildir, zamanla değişir.', 70, 155);
+
+                document.getElementById('img2').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 3: S1 Karar
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#fef2f2';
+                ctx.fillRect(40, 25, 720, 130);
+                ctx.strokeStyle = '#ef4444';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(40, 25, 720, 130);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('SİSTEM S₁: KESİNLİKLE LTI DEĞİLDİR (DEFINITELY NOT LTI)', 60, 65);
+
+                ctx.fillStyle = '#7f1d1d';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Verilen bilgi, sistemin LTI olmadığını söylemek için YETERLİDİR (Sufficient).', 60, 105);
+
+                document.getElementById('img3').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 4: S2 Analizi ve Karar
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Sistem S₂: y₂(t) = e^{j5(t-1)} = e^{-j5} · e^{j5t}', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Çarpan Analizi: H(j5) = e^{-j5}  ==>  |H(j5)| = 1, ∠H(j5) = -5 rad (Sabit Karmaşık Sayı!)', 50, 85);
+
+                ctx.fillStyle = '#ecfdf5';
+                ctx.fillRect(40, 110, 720, 70);
+                ctx.strokeStyle = '#10b981';
+                ctx.strokeRect(40, 110, 720, 70);
+
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('SİSTEM S₂: LTI OLMADIĞINI SÖYLEMEK İÇİN YETERSİZDİR (LTI Olabilir)', 60, 140);
+                ctx.font = '12px sans-serif';
+                ctx.fillText('Örnek: 1 saniyelik gecikme sistemi y(t) = x(t-1) tam olarak bir LTI sistemdir.', 60, 165);
+
+                document.getElementById('img4').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 5: S3 Analizi ve Karar
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('Sistem S₃: y₃(t) = cos(5t) = 0.5 e^{j5t} + 0.5 e^{-j5t}', 50, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px sans-serif';
+                ctx.fillText('Girişte yalnızca ω = +5 rad/s frekansı vardı.', 50, 80);
+                ctx.fillText('Çıkışta hem ω = +5 hem de YENİ bir frekans olan ω = -5 rad/s ortaya çıkmıştır.', 50, 105);
+
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('SİSTEM S₃: KESİNLİKLE LTI DEĞİLDİR (Yeni frekans üretilemez!)', 50, 150);
+
+                document.getElementById('img5').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 6: Özet
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#0f766e';
+                ctx.fillRect(40, 25, 720, 150);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('PROBLEM 3.17 NİHAİ ÇÖZÜM ÖZETİ', 60, 60);
+
+                ctx.font = '14px monospace';
+                ctx.fillText('S₁: YETERLİ (Kesinlikle LTI Değil - Katsayı zamana bağımlı t)', 60, 95);
+                ctx.fillText('S₂: YETERSİZ (LTI Olabilir - Katsayı sabit e^{-j5}, ideal gecikme)', 60, 125);
+                ctx.fillText('S₃: YETERLİ (Kesinlikle LTI Değil - Çıkışta yeni frekans ω=-5 var)', 60, 155);
+
+                document.getElementById('img6').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        // İnteraktif Tuval Yönetimi
+        let currentSystem = '1';
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+        const btnS1 = document.getElementById('btnS1');
+        const btnS2 = document.getElementById('btnS2');
+        const btnS3 = document.getElementById('btnS3');
+        const simMath = document.getElementById('simMath');
+        const lblSpecBadge = document.getElementById('lblSpecBadge');
+
+        function setSystem(sys) {
+            currentSystem = sys;
+            [btnS1, btnS2, btnS3].forEach(b => {
+                b.className = 'text-xs px-3 py-1.5 rounded-lg bg-slate-100 text-slate-700 font-semibold hover:bg-slate-200 transition';
+            });
+
+            if (sys === '1') {
+                btnS1.className = 'text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition';
+                lblSpecBadge.textContent = 'LTI Kuralını Bozuyor (t bağımlı)';
+                lblSpecBadge.className = 'text-[10px] text-rose-600 font-bold';
+                simMath.innerHTML = `
+                    <div><strong>Sistem S₁:</strong> $y_1(t) = t e^{j5t}$</div>
+                    <div class="mt-1">Giriş: $e^{j5t}$. Çıkış katsayısı: $K(t) = t$. Katsayı zamana bağlıdır.</div>
+                    <div class="mt-1 text-rose-700 font-bold">Karar: Bilgi YETERLİDİR. $S_1$ kesinlikle LTI DEĞİLDİR.</div>
+                `;
+            } else if (sys === '2') {
+                btnS2.className = 'text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition';
+                lblSpecBadge.textContent = 'LTI İle Uyumlu (Sabit gecikme)';
+                lblSpecBadge.className = 'text-[10px] text-emerald-600 font-bold';
+                simMath.innerHTML = `
+                    <div><strong>Sistem S₂:</strong> $y_2(t) = e^{j5(t-1)} = e^{-j5} e^{j5t}$</div>
+                    <div class="mt-1">Giriş: $e^{j5t}$. Katsayı: $H(j5) = e^{-j5}$ (zamandan bağımsız karmaşık sabit).</div>
+                    <div class="mt-1 text-emerald-700 font-bold">Karar: Bilgi YETERSİZDİR. $S_2$ bir LTI gecikme sistemi olabilir ($y(t)=x(t-1)$).</div>
+                `;
+            } else {
+                btnS3.className = 'text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition';
+                lblSpecBadge.textContent = 'LTI Kuralını Bozuyor (Yeni frekans)';
+                lblSpecBadge.className = 'text-[10px] text-rose-600 font-bold';
+                simMath.innerHTML = `
+                    <div><strong>Sistem S₃:</strong> $y_3(t) = \\cos(5t) = 0.5 e^{j5t} + 0.5 e^{-j5t}$</div>
+                    <div class="mt-1">Giriş tek frekanslıdır ($\\omega = 5$). Çıkışta $\\omega = -5$ frekansı türetilmiştir.</div>
+                    <div class="mt-1 text-rose-700 font-bold">Karar: Bilgi YETERLİDİR. $S_3$ kesinlikle LTI DEĞİLDİR.</div>
+                `;
+            }
+
+            if (window.renderMathInElement) {
+                renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            drawSpectrumInteractive();
+            drawTimeInteractive();
+        }
+
+        function drawSpectrumInteractive() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = kCanvas.parentElement.clientWidth;
+            const h = kCanvas.parentElement.clientHeight;
+            kCanvas.width = w * dpr;
+            kCanvas.height = h * dpr;
+            const ctx = kCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h - 45;
+            const cx = w / 2;
+
+            // Eksen
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 25); ctx.lineTo(cx, cy + 10);
+            ctx.stroke();
+
+            const scaleX = (w / 2 - 40) / 8;
+
+            if (currentSystem === '1') {
+                // S1: Frekans çizgisi yerine dağılmış spektrum
+                const x = cx + 5 * scaleX;
+                ctx.strokeStyle = '#dc2626';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath(); ctx.moveTo(x, cy); ctx.lineTo(x, 60); ctx.stroke();
+                ctx.fillStyle = '#dc2626';
+                ctx.beginPath(); ctx.arc(x, 60, 4, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText('ω = 5 (t ile genlik patlaması)', x - 70, 45);
+            } else if (currentSystem === '2') {
+                // S2: Tek temiz spektrum çizgisi
+                const x = cx + 5 * scaleX;
+                ctx.strokeStyle = '#059669';
+                ctx.lineWidth = 3;
+                ctx.beginPath(); ctx.moveTo(x, cy); ctx.lineTo(x, 50); ctx.stroke();
+                ctx.fillStyle = '#059669';
+                ctx.beginPath(); ctx.arc(x, 50, 4, 0, Math.PI * 2); ctx.fill();
+
+                ctx.fillStyle = '#059669';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText('ω = 5 (Kazanç: e^{-j5})', x - 40, 40);
+            } else {
+                // S3: İki spektrum çizgisi (+5 ve -5)
+                const x1 = cx + 5 * scaleX;
+                const x2 = cx - 5 * scaleX;
+
+                ctx.strokeStyle = '#059669';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath(); ctx.moveTo(x1, cy); ctx.lineTo(x1, 70); ctx.stroke();
+                ctx.fillStyle = '#059669';
+                ctx.beginPath(); ctx.arc(x1, 70, 3.5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.strokeStyle = '#dc2626';
+                ctx.beginPath(); ctx.moveTo(x2, cy); ctx.lineTo(x2, 70); ctx.stroke();
+                ctx.fillStyle = '#dc2626';
+                ctx.beginPath(); ctx.arc(x2, 70, 3.5, 0, Math.PI * 2); ctx.fill();
+
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillStyle = '#059669';
+                ctx.fillText('ω = +5 (1/2)', x1 - 25, 55);
+                ctx.fillStyle = '#dc2626';
+                ctx.fillText('ω = -5 (YENİ!)', x2 - 30, 55);
+            }
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.fillText('-5', cx - 5 * scaleX - 6, cy + 18);
+            ctx.fillText('0', cx - 3, cy + 18);
+            ctx.fillText('+5', cx + 5 * scaleX - 6, cy + 18);
+        }
+
+        function drawTimeInteractive() {
+            const dpr = window.devicePixelRatio || 2;
+            const w = ynCanvas.parentElement.clientWidth;
+            const h = ynCanvas.parentElement.clientHeight;
+            ynCanvas.width = w * dpr;
+            ynCanvas.height = h * dpr;
+            const ctx = ynCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2;
+            const cx = w / 2;
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 20); ctx.lineTo(cx, h - 20);
+            ctx.stroke();
+
+            // t in [-2, 2]
+            const scaleT = (w / 2 - 40) / 2;
+
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            if (currentSystem === '1') {
+                ctx.strokeStyle = '#dc2626';
+                for (let px = 25; px <= w - 25; px++) {
+                    const t = (px - cx) / scaleT;
+                    // Re{t * e^{j5t}} = t * cos(5t)
+                    const val = t * Math.cos(5 * t);
+                    const py = cy - val * 45;
+                    if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            } else if (currentSystem === '2') {
+                ctx.strokeStyle = '#059669';
+                for (let px = 25; px <= w - 25; px++) {
+                    const t = (px - cx) / scaleT;
+                    // Re{e^{j5(t-1)}} = cos(5(t-1))
+                    const val = Math.cos(5 * (t - 1));
+                    const py = cy - val * 60;
+                    if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            } else {
+                ctx.strokeStyle = '#7c3aed';
+                for (let px = 25; px <= w - 25; px++) {
+                    const t = (px - cx) / scaleT;
+                    // cos(5t)
+                    const val = Math.cos(5 * t);
+                    const py = cy - val * 60;
+                    if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.fillText('-2s', cx - 2 * scaleT - 10, cy + 15);
+            ctx.fillText('+2s', cx + 2 * scaleT - 5, cy + 15);
+            ctx.fillText('0', cx + 4, cy + 15);
+        }
+
+        btnS1.addEventListener('click', () => setSystem('1'));
+        btnS2.addEventListener('click', () => setSystem('2'));
+        btnS3.addEventListener('click', () => setSystem('3'));
+
+        window.addEventListener('load', () => {
+            renderStepImages();
+            setSystem('1');
+        });
+        window.addEventListener('resize', () => {
+            drawSpectrumInteractive();
+            drawTimeInteractive();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3.20: Seri RLC Devresi Diferansiyel Denklemi, Frekans Yanıtı ve Rezonans - Sinyaller ve Sistemler</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+    <style>
+        .canvas-container { position: relative; width: 100%; height: 260px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 0.5rem; }
+        canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+        .step-card { transition: all 0.2s ease-in-out; }
+        .step-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+    <div class="max-w-4xl mx-auto px-4 py-8 space-y-8">
+        <!-- Navigasyon -->
+        <div class="flex items-center justify-between">
+            <a href="index.html" class="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+            </a>
+            <span class="text-xs bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full font-mono">Bölüm 3 • Problem 3.20</span>
+        </div>
+
+        <!-- Başlık Kartı -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8">
+            <div class="flex flex-wrap gap-2 mb-3">
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">Sürekli Zaman</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-rose-100 text-rose-800">Seri RLC Devresi</span>
+                <span class="px-2.5 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-800">2. Derece Frekans Yanıtı & Rezonans</span>
+            </div>
+            <h1 class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">Problem 3.20: Seri RLC Devresinde 2. Derece Diferansiyel Denklem ve Sinüzoidal Giriş Yanıtı</h1>
+            <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">
+                Şekil P3.20'de verilen devrede $R = 1\ \Omega$, $L = 1\text{ H}$ ve $C = 1\text{ F}$ seri bağlanmıştır. Giriş gerilim kaynağı $x(t)$, çıkış ise kondansatör üzerindeki gerilim $y(t) = v_C(t)$'dir. Sistemin diferansiyel denklemini, frekans yanıtı $H(j\omega)$'yı ve $x(t) = \sin(t)$ girişi için kararlı durum çıkışını bulunuz.
+            </p>
+            <div class="mt-4 p-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500 font-mono">
+                Oppenheim & Willsky • Signals & Systems 2nd Ed. Sayfa 285 • Şekil P3.20 • 2. Derece Dinamik Sistemler ve Rezonans Analizi
+            </div>
+        </div>
+
+        <!-- Soru Analizi ve Mini Konu Anlatımı -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-blue-100 text-blue-700 text-xs">🎯</span>
+                    Soru Bizden Ne İstiyor?
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li>(a) KVL ve eleman bağıntılarını kullanarak $y(t)=v_C(t)$ ile $x(t)$ arasındaki 2. derece diferansiyel denklemi türetmek.</li>
+                    <li>(b) $s = j\omega$ dönüşümüyle sistemin frekans yanıtı $H(j\omega)$ ifadesini çıkarmak.</li>
+                    <li>(c) $x(t) = \sin(t)$ ($\omega_0 = 1\text{ rad/s}$) rezonans frekansındaki çıkış sinyalini tam analitik olarak belirlemek.</li>
+                </ul>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2 mb-2">
+                    <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 text-xs">💡</span>
+                    Adım Adım Çözüm Metodolojisi
+                </h3>
+                <ul class="text-xs text-slate-600 space-y-1.5 list-disc list-inside leading-relaxed">
+                    <li><strong>Akım Tanımı:</strong> $i(t) = C \frac{dy}{dt} = \frac{dy}{dt}$. Direnç: $v_R = \frac{dy}{dt}$. Endüktans: $v_L = \frac{d^2y}{dt^2}$.</li>
+                    <li><strong>KVL Döngüsü:</strong> $v_L + v_R + v_C = x(t) \implies \frac{d^2 y}{dt^2} + \frac{dy}{dt} + y(t) = x(t)$.</li>
+                    <li><strong>Frekans Yanıtı:</strong> $[(j\omega)^2 + j\omega + 1]H(j\omega) = 1 \implies H(j\omega) = \frac{1}{1 - \omega^2 + j\omega}$.</li>
+                    <li><strong>Rezonans Hesabı:</strong> $\omega = 1 \implies H(j1) = \frac{1}{0 + j} = -j = e^{-j\pi/2} \implies y(t) = \sin(t - \pi/2) = -\cos(t)$.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canlı Simülatör Kartı -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-slate-100 gap-2">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">2. Derece Seri RLC Rezonans ve Dalga Simülatörü</h2>
+                    <p class="text-xs text-slate-500">Frekansı $\omega = 1\text{ rad/s}$ rezonans noktasına ayarlayarak $90^\circ$ faz farkını ve dalga şekillerini inceleyin.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="btnSetOmega1" class="text-xs px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold shadow-sm hover:bg-blue-700 transition">Rezonans Noktası (ω = 1 rad/s)</button>
+                </div>
+            </div>
+
+            <!-- Kontroller -->
+            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                <div class="flex justify-between text-xs font-semibold text-slate-700 mb-1">
+                    <span>Giriş Açısal Frekansı ($\omega$):</span>
+                    <span id="lblOmega" class="text-blue-600 font-mono">1.00 rad/s</span>
+                </div>
+                <input id="sliderOmega" type="range" min="0.1" max="3.0" step="0.05" value="1.0" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+            </div>
+
+            <!-- Çift Tuval -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>2. Derece Genlik Yanıtı $|H(j\omega)|$</span>
+                        <span id="lblMagBadge" class="text-[10px] text-blue-600 font-bold">|H(j1)| = 1.000</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="kCanvas"></canvas>
+                    </div>
+                </div>
+                <div>
+                    <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                        <span>Zaman Bölgesi: $x(t) = \sin(t)$ (Mavi) vs $y(t) = -\cos(t)$ (Kırmızı)</span>
+                        <span id="lblPhaseBadge" class="text-[10px] text-rose-600 font-bold">Faz: -90.0°</span>
+                    </div>
+                    <div class="canvas-container">
+                        <canvas id="ynCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Matematiksel Çıkarım Paneli -->
+            <div id="simMath" class="p-3 bg-rose-50 rounded-lg border border-rose-200 text-xs font-mono text-rose-900">
+                Yükleniyor...
+            </div>
+        </div>
+
+        <!-- 6 Adım Detaylı Çözüm Kartları -->
+        <div class="space-y-6">
+            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <span class="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-600 text-white text-sm">6</span>
+                Adım Adım Matematiksel Çözüm ve İspat
+            </h2>
+
+            <!-- 1. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-800">1. Adım: Devre Şeması ve Eleman Bağıntıları</span>
+                    <button onclick="downloadCard('img1', 'Problem_3_20_Adim_1.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Seri bağlı bir RLC devresinde tüm elemanlardan aynı devre akımı $i(t)$ geçer. Çıkış değişkeni kondansatör gerilimi $y(t) = v_C(t)$ olarak tanımlanmıştır.</p>
+                    <p>Kondansatörün temel akım-gerilim bağıntısı devre akımını doğrudan verir:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$i(t) = C \frac{d v_C(t)}{dt} = 1 \cdot \frac{dy(t)}{dt} = \frac{dy(t)}{dt}$$
+                    </div>
+                    <p>Direnç ve endüktans gerilimleri bu akım cinsinden şöyle ifade edilir:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$v_R(t) = R \cdot i(t) = 1 \cdot \frac{dy(t)}{dt} = \frac{dy(t)}{dt}$$
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$v_L(t) = L \frac{d i(t)}{dt} = 1 \cdot \frac{d}{dt}\left[\frac{dy(t)}{dt}\right] = \frac{d^2 y(t)}{dt^2}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img1" class="w-full rounded-lg border border-slate-200" alt="1. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 2. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">2. Adım: (a) Şıkkı Çözümü — 2. Derece Diferansiyel Denklemin Kurulması</span>
+                    <button onclick="downloadCard('img2', 'Problem_3_20_Adim_2.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Seri devre döngüsüne Kirchhoff Gerilim Yasası (KVL) uygulayalım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$v_L(t) + v_R(t) + v_C(t) = x(t)$$
+                    </div>
+                    <p>Tüm gerilimleri çıkış değişkeni $y(t)$ cinsinden yerine yazarsak:</p>
+                    <div class="p-4 bg-indigo-50 border border-indigo-200 rounded-lg text-center font-mono text-base text-indigo-900 font-bold">
+                        $$\frac{d^2 y(t)}{dt^2} + \frac{dy(t)}{dt} + y(t) = x(t)$$
+                    </div>
+                    <p class="text-xs text-slate-600">Bu denklem sistemi tanımlayan 2. dereceden sabit katsayılı doğrusal diferansiyel denklemdir.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img2" class="w-full rounded-lg border border-slate-200" alt="2. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 3. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">3. Adım: (b) Şıkkı Çözümü — Frekans Yanıtı $H(j\omega)$ Çıkarımı</span>
+                    <button onclick="downloadCard('img3', 'Problem_3_20_Adim_3.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Giriş $x(t) = e^{j\omega t}$ iken sistem çıkışı $y(t) = H(j\omega) e^{j\omega t}$ olur. Türevlerin Fourier karşılıkları:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\frac{dy}{dt} = j\omega H(j\omega) e^{j\omega t}, \quad \frac{d^2 y}{dt^2} = (j\omega)^2 H(j\omega) e^{j\omega t} = -\omega^2 H(j\omega) e^{j\omega t}$$
+                    </div>
+                    <p>Diferansiyel denklemde yerine koyup $e^{j\omega t}$ terimlerini sadeleştirelim:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$\Big[ -\omega^2 + j\omega + 1 \Big] H(j\omega) = 1 \implies \Big[ (1 - \omega^2) + j\omega \Big] H(j\omega) = 1$$
+                    </div>
+                    <div class="p-4 bg-emerald-50 border border-emerald-200 rounded-lg text-center font-mono text-base text-emerald-900 font-bold">
+                        $$H(j\omega) = \frac{1}{1 - \omega^2 + j\omega}$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img3" class="w-full rounded-lg border border-slate-200" alt="3. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 4. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800">4. Adım: Rezonans Frekansı ve $\omega = 1\text{ rad/s}$ Noktası</span>
+                    <button onclick="downloadCard('img4', 'Problem_3_20_Adim_4.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Devrenin doğal rezonans açısal frekansı $\omega_0 = 1/\sqrt{LC} = 1/\sqrt{1 \cdot 1} = 1\text{ rad/s}$'dir. Bu frekansta paydanın gerçel kısmı sıfırlanır:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$1 - \omega^2 = 1 - 1^2 = 0$$
+                    </div>
+                    <p>Frekans yanıtı $\omega = 1$ için son derece basit ve zarif bir saf sanal sayıya dönüşür:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$H(j 1) = \frac{1}{0 + j \cdot 1} = \frac{1}{j} = -j = 1 \cdot e^{-j\pi/2}$$
+                    </div>
+                    <p>Genlik $|H(j1)| = 1$ ve faz açısı $\angle H(j1) = -\pi/2\text{ rad} = -90^\circ$'dir.</p>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img4" class="w-full rounded-lg border border-slate-200" alt="4. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 5. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">5. Adım: (c) Şıkkı Çözümü — $x(t) = \sin(t)$ Girişi ve Çıkış Yanıtı</span>
+                    <button onclick="downloadCard('img5', 'Problem_3_20_Adim_5.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Giriş sinyali $x(t) = \sin(t)$'nin açısal frekansı $\omega = 1\text{ rad/s}$'dir. LTI sistemlerin sinüzoidal giriş özelliği uygulanırsa:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 text-center font-mono">
+                        $$y(t) = |H(j1)| \sin\Big( t + \angle H(j1) \Big) = 1 \cdot \sin\left( t - \frac{\pi}{2} \right)$$
+                    </div>
+                    <p>Trigonometrik özdeşlik $\sin(t - \pi/2) = -\cos(t)$ kullanılarak nihai çıkış elde edilir:</p>
+                    <div class="p-4 bg-rose-50 border border-rose-200 rounded-lg text-center font-mono text-base text-rose-900 font-bold">
+                        $$y(t) = -\cos(t)$$
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img5" class="w-full rounded-lg border border-slate-200" alt="5. Adım Çizimi">
+                </div>
+            </div>
+
+            <!-- 6. Adım -->
+            <div class="step-card bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">6. Adım: Fiziksel Rezonans İspatı ve Nihai Çözüm Özeti</span>
+                    <button onclick="downloadCard('img6', 'Problem_3_20_Adim_6.png')" class="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Resmi İndir (PNG)
+                    </button>
+                </div>
+                <div class="text-sm text-slate-700 space-y-3 leading-relaxed">
+                    <p>Bulunan $y(t) = -\cos(t)$ çözümünü diferansiyel denklemde doğrudan doğrulayalım:</p>
+                    <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 font-mono text-xs">
+                        $$y(t) = -\cos(t) \implies \frac{dy}{dt} = \sin(t) \implies \frac{d^2 y}{dt^2} = \cos(t)$$
+                        $$\frac{d^2 y}{dt^2} + \frac{dy}{dt} + y(t) = \cos(t) + \sin(t) - \cos(t) = \sin(t) = x(t) \quad \checkmark$$
+                    </div>
+                    <div class="p-4 bg-teal-50 border border-teal-200 rounded-lg mt-3">
+                        <h4 class="font-bold text-teal-900 mb-2">Problem 3.20 Nihai Çözüm Özeti:</h4>
+                        <div class="space-y-1 font-mono text-xs text-teal-900">
+                            <div><strong>(a) Diferansiyel Denklem:</strong> $\frac{d^2 y(t)}{dt^2} + \frac{dy(t)}{dt} + y(t) = x(t)$</div>
+                            <div><strong>(b) Frekans Yanıtı:</strong> $H(j\omega) = \frac{1}{1 - \omega^2 + j\omega}$</div>
+                            <div><strong>(c) Kararlı Durum Çıkışı:</strong> $y(t) = \sin\left(t - \frac{\pi}{2}\right) = -\cos(t)$</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 border-t border-slate-100 pt-3">
+                    <img id="img6" class="w-full rounded-lg border border-slate-200" alt="6. Adım Çizimi">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function createHiDPICanvas(w, h) {
+            const canvas = document.createElement('canvas');
+            const dpr = window.devicePixelRatio || 2;
+            canvas.width = w * dpr;
+            canvas.height = h * dpr;
+            canvas.style.width = w + 'px';
+            canvas.style.height = h + 'px';
+            const ctx = canvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+            return { canvas, ctx };
+        }
+
+        function downloadCard(imgId, filename) {
+            const img = document.getElementById(imgId);
+            const a = document.createElement('a');
+            a.href = img.src;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        function renderStepImages() {
+            // Adım 1: RLC Seri Devre
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.strokeStyle = '#334155';
+                ctx.lineWidth = 2;
+
+                // Seri döngü
+                ctx.strokeRect(150, 40, 500, 120);
+
+                // Kaynak x(t) sol kolda
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(140, 80, 20, 40);
+                ctx.beginPath(); ctx.arc(150, 100, 18, 0, Math.PI * 2); ctx.stroke();
+                ctx.fillStyle = '#1e3a8a';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText('x(t)', 105, 105);
+
+                // R = 1 üstte sol
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(230, 30, 60, 20);
+                ctx.strokeRect(230, 32, 60, 16);
+                ctx.fillStyle = '#b45309';
+                ctx.fillText('R = 1 Ω', 235, 25);
+
+                // L = 1 üstte sağ
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(370, 30, 60, 20);
+                ctx.strokeRect(370, 32, 60, 16);
+                ctx.fillStyle = '#047857';
+                ctx.fillText('L = 1 H', 375, 25);
+
+                // C = 1 sağ kolda
+                ctx.fillStyle = '#ffffff'; ctx.fillRect(640, 85, 20, 30);
+                ctx.beginPath();
+                ctx.moveTo(635, 95); ctx.lineTo(665, 95);
+                ctx.moveTo(635, 105); ctx.lineTo(665, 105);
+                ctx.stroke();
+                ctx.fillStyle = '#dc2626';
+                ctx.fillText('C = 1 F', 670, 95);
+                ctx.fillText('y(t) = v_C(t)', 670, 115);
+
+                document.getElementById('img1').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 2: 2. Derece Diferansiyel Denklem
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('KVL Döngü Eşitliği:  v_L(t) + v_R(t) + v_C(t) = x(t)', 60, 45);
+
+                ctx.font = '13px monospace';
+                ctx.fillText('v_C(t) = y(t),   i(t) = C dy/dt = dy/dt', 80, 80);
+                ctx.fillText('v_R(t) = R i(t) = dy/dt,   v_L(t) = L di/dt = d²y/dt²', 80, 105);
+
+                ctx.fillStyle = '#4f46e5';
+                ctx.font = 'bold 18px monospace';
+                ctx.fillText('d²y(t)/dt² + dy(t)/dt + y(t) = x(t)', 80, 150);
+
+                document.getElementById('img2').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 3: H(jw)
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 180);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 180);
+
+                ctx.fillStyle = '#065f46';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Türev Alma İşlemi: d/dt ===> jω,   d²/dt² ===> -ω²', 60, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px monospace';
+                ctx.fillText('[-ω² + jω + 1] H(jω) = 1', 80, 85);
+                ctx.fillText('[(1 - ω²) + jω] H(jω) = 1', 80, 115);
+
+                ctx.fillStyle = '#059669';
+                ctx.font = 'bold 18px monospace';
+                ctx.fillText('H(jω) = 1 / [ (1 - ω²) + jω ]', 80, 155);
+
+                document.getElementById('img3').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 4: Rezonans ω = 1
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#b45309';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('Rezonans Durumu (ω = 1 rad/s):', 60, 40);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px monospace';
+                ctx.fillText('Paydanın Gerçel Kısmı: 1 - 1² = 0', 80, 75);
+                ctx.fillText('H(j1) = 1 / (0 + j) = 1/j = -j', 80, 105);
+
+                ctx.fillStyle = '#d97706';
+                ctx.font = 'bold 16px monospace';
+                ctx.fillText('|H(j1)| = 1.0,    ∠H(j1) = -π/2 (-90°)', 80, 145);
+
+                document.getElementById('img4').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 5: x(t) = sin(t) Yanıtı
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#991b1b';
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText('x(t) = sin(t) Girişi (ω₀ = 1 rad/s):', 60, 45);
+
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px monospace';
+                ctx.fillText('y(t) = 1 · sin(t - π/2)', 80, 85);
+
+                ctx.fillStyle = '#dc2626';
+                ctx.font = 'bold 20px monospace';
+                ctx.fillText('y(t) = -cos(t)', 80, 135);
+
+                ctx.fillStyle = '#475569';
+                ctx.font = '12px sans-serif';
+                ctx.fillText('90° faz gecikmesi sinüs fonksiyonunu tam olarak -kosinüse dönüştürür.', 80, 170);
+
+                document.getElementById('img5').src = canvas.toDataURL('image/png');
+            }
+
+            // Adım 6: Özet
+            {
+                const { canvas, ctx } = createHiDPICanvas(800, 200);
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, 800, 200);
+
+                ctx.fillStyle = '#0f766e';
+                ctx.fillRect(40, 20, 720, 160);
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText('PROBLEM 3.20 NİHAİ ÇÖZÜM ÖZETİ', 60, 55);
+
+                ctx.font = 'bold 15px monospace';
+                ctx.fillText('(a) d²y(t)/dt² + dy(t)/dt + y(t) = x(t)', 60, 90);
+                ctx.fillText('(b) H(jω) = 1 / [ 1 - ω² + jω ]', 60, 120);
+                ctx.fillText('(c) y(t) = -cos(t)', 60, 150);
+
+                document.getElementById('img6').src = canvas.toDataURL('image/png');
+            }
+        }
+
+        // İnteraktif Tuval Yönetimi
+        const kCanvas = document.getElementById('kCanvas');
+        const ynCanvas = document.getElementById('ynCanvas');
+        const sliderOmega = document.getElementById('sliderOmega');
+        const lblOmega = document.getElementById('lblOmega');
+        const lblMagBadge = document.getElementById('lblMagBadge');
+        const lblPhaseBadge = document.getElementById('lblPhaseBadge');
+        const simMath = document.getElementById('simMath');
+        const btnSetOmega1 = document.getElementById('btnSetOmega1');
+
+        function updateSimulation() {
+            const wVal = parseFloat(sliderOmega.value);
+            lblOmega.textContent = `${wVal.toFixed(2)} rad/s`;
+
+            const realDen = 1.0 - wVal * wVal;
+            const imagDen = wVal;
+            const denMag = Math.sqrt(realDen * realDen + imagDen * imagDen);
+            const mag = 1.0 / denMag;
+            const phaseRad = -Math.atan2(imagDen, realDen);
+            const phaseDeg = phaseRad * 180 / Math.PI;
+
+            lblMagBadge.textContent = `|H(j${wVal.toFixed(2)})| = ${mag.toFixed(3)}`;
+            lblPhaseBadge.textContent = `Faz: ${phaseDeg.toFixed(1)}° (${phaseRad.toFixed(3)} rad)`;
+
+            simMath.innerHTML = `
+                <div><strong>Açısal Frekans:</strong> $\\omega = ${wVal.toFixed(2)}\\text{ rad/s}$</div>
+                <div class="mt-1">Payda: $(1 - ${wVal.toFixed(2)}^2) + j(${wVal.toFixed(2)}) = ${realDen.toFixed(3)} + j(${imagDen.toFixed(3)})$</div>
+                <div class="mt-1">Genlik: $|H(j\\omega)| = ${mag.toFixed(4)}$, Faz: $\\angle H(j\\omega) = ${phaseRad.toFixed(4)}\\text{ rad} = ${phaseDeg.toFixed(1)}^\\circ$</div>
+                <div class="mt-1 text-rose-700 font-bold">Çıkış: $y(t) = ${mag.toFixed(3)} \\sin\\left(${wVal.toFixed(2)}t ${phaseRad >= 0 ? '+' : ''}${phaseRad.toFixed(3)}\\right)$ ${Math.abs(wVal - 1.0) < 0.01 ? '$\\equiv -\\cos(t)$' : ''}</div>
+            `;
+            if (window.renderMathInElement) {
+                renderMathInElement(simMath, {delimiters: [{left: '$', right: '$', display: false}]});
+            }
+
+            drawMagCanvas(wVal, mag);
+            drawWavesCanvas(wVal, mag, phaseRad);
+        }
+
+        function drawMagCanvas(wVal, currentMag) {
+            const dpr = window.devicePixelRatio || 2;
+            const w = kCanvas.parentElement.clientWidth;
+            const h = kCanvas.parentElement.clientHeight;
+            kCanvas.width = w * dpr;
+            kCanvas.height = h * dpr;
+            const ctx = kCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h - 35;
+            const cx = 45;
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(cx, 20); ctx.lineTo(cx, cy);
+            ctx.lineTo(w - 20, cy);
+            ctx.stroke();
+
+            const scaleW = (w - cx - 40) / 3.0;
+            const scaleY = (cy - 30) / 1.3;
+
+            // Eğri |H(jw)|
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let px = cx; px <= w - 20; px++) {
+                const om = (px - cx) / scaleW;
+                const rD = 1 - om * om;
+                const iD = om;
+                const m = 1.0 / Math.sqrt(rD * rD + iD * iD);
+                const py = cy - m * scaleY;
+                if (px === cx) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // Geçerli nokta
+            const curX = cx + wVal * scaleW;
+            const curY = cy - currentMag * scaleY;
+
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([3, 3]);
+            ctx.beginPath();
+            ctx.moveTo(curX, cy); ctx.lineTo(curX, curY); ctx.lineTo(cx, curY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath(); ctx.arc(curX, curY, 4, 0, Math.PI * 2); ctx.fill();
+
+            ctx.fillStyle = '#64748b';
+            ctx.font = '10px sans-serif';
+            ctx.fillText('1.0', cx - 22, cy - 1.0 * scaleY + 4);
+            ctx.fillText('0', cx - 12, cy + 12);
+            ctx.fillText('ω = 1 (Rezonans)', cx + 1.0 * scaleW - 25, cy + 15);
+            ctx.fillText('ω = 2', cx + 2.0 * scaleW - 10, cy + 15);
+        }
+
+        function drawWavesCanvas(wVal, mag, phase) {
+            const dpr = window.devicePixelRatio || 2;
+            const w = ynCanvas.parentElement.clientWidth;
+            const h = ynCanvas.parentElement.clientHeight;
+            ynCanvas.width = w * dpr;
+            ynCanvas.height = h * dpr;
+            const ctx = ynCanvas.getContext('2d');
+            ctx.scale(dpr, dpr);
+
+            ctx.clearRect(0, 0, w, h);
+
+            const cy = h / 2;
+            const cx = w / 2;
+
+            ctx.strokeStyle = '#cbd5e1';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(20, cy); ctx.lineTo(w - 20, cy);
+            ctx.moveTo(cx, 20); ctx.lineTo(cx, h - 20);
+            ctx.stroke();
+
+            // t in [-6, 6]
+            const scaleT = (w / 2 - 30) / 6;
+
+            // Giriş x(t) = sin(w*t)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - cx) / scaleT;
+                const val = Math.sin(wVal * t);
+                const py = cy - val * 55;
+                if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            // Çıkış y(t) = mag * sin(w*t + phase)
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let px = 25; px <= w - 25; px++) {
+                const t = (px - cx) / scaleT;
+                const val = mag * Math.sin(wVal * t + phase);
+                const py = cy - val * 55;
+                if (px === 25) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = '#3b82f6';
+            ctx.font = '11px sans-serif';
+            ctx.fillText('x(t) = sin(ωt) (Mavi)', 30, 30);
+
+            ctx.fillStyle = '#dc2626';
+            ctx.fillText('y(t) Çıkış (Kırmızı)', 30, 45);
+        }
+
+        sliderOmega.addEventListener('input', updateSimulation);
+        btnSetOmega1.addEventListener('click', () => {
+            sliderOmega.value = 1.0;
+            updateSimulation();
+        });
+
+        window.addEventListener('load', () => {
+            renderStepImages();
+            updateSimulation();
+        });
+        window.addEventListener('resize', updateSimulation);
+    </script>
+</body>
+</html>

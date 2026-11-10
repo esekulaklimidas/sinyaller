@@ -122,7 +122,7 @@
         <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
         <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
         <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
-        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (10)</button>
+        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (21)</button>
         <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
         <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
         <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
@@ -937,6 +937,193 @@ eq b$ ve $a = b$ durumları, $t e^{-at}u(t)$ çıkışı.</p>
             Dürtü yanıtı $h[n]$, doğrudan iterasyon vs. $h[n-1]+2h[n-2]$ konvolüsyon sağlaması ve 4 temel sistem özelliği (bellek, doğrusallık, nedensellik, kararlılık).
           </p>
         </a>
+        <!-- 3.11 -->
+        <a href="problem_3_11_parseval_ve_kosinus_rekonstruksiyonu.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.11 fourier serisi ayrık zaman dtfs parseval enerjisi kosinüs rekonstrüksiyon a1 a11 çift gerçel oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.11</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Parseval &amp; Kosinüs</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">DTFS Parseval İlişkisi ve Kosinüs Rekonstrüksiyonu</h3>
+          <p class="text-xs font-mono text-slate-700">$$N = 10, a_1 = a_{-1} = 5 \implies x[n] = 10\cos(\frac{\pi}{5}n)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Gerçel ve çift periyodik sinyalde Parseval eşitliği ve harmonik katsayılarından $A=10, B=\pi/5, C=0$ parametrelerinin analitik çözümü.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-purple-600 font-medium font-bold">Parseval &amp; Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.12 -->
+        <a href="problem_3_12_ayrik_zaman_carpma_ozelligi_dtfs.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.12 fourier serisi ayrık zaman dtfs çarpma özelliği periyodik konvolüsyon a0 b0 ck oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.12</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DTFS Çarpma Özelliği</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Fourier Serisinde Çarpma ve Periyodik Konvolüsyon</h3>
+          <p class="text-xs font-mono text-slate-700">$$c_k = \sum_{l=0}^{3} a_l b_{k-l} = 6 \quad (\forall k \in \mathbb{Z})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            İki periyodik dizinin çarpımı $g[n]=x_1[n]x_2[n]$ sinyalinin DTFS katsayılarının periyodik konvolüsyon ile doğrudan hesabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">c_k = 6 Sabit Spektrum</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.13 -->
+        <a href="problem_3_13_surekli_zaman_lti_filtreleme_ve_sinc.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.13 fourier serisi sürekli zaman lti filtreleme sinc frekans yanıtı kare dalga y(t)=0 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.13</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; LTI Filtreleme &amp; Sinc</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sürekli Zaman LTI Filtreleme ve Çıkışın Sıfırlanması</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(jk\omega_0) = 0 \ (\forall k \neq 0), \ a_0 = 0 \implies y(t) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Frekans yanıtı $H(j\omega)=\frac{\sin(4\omega)}{\omega}$ olan filtreye uygulanan kare dalganın tüm harmoniklerinin filtrelenerek $y(t)=0$ çıkışı vermesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Tam Harmonik Bastırma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.14 -->
+        <a href="problem_3_14_durtu_katari_ve_dt_lti_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.14 fourier serisi ayrık zaman dtfs dürtü katarı frekans yanıtı hejw kosinüs çıkışı oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.14</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Dürtü Katarı &amp; Frekans Yanıtı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Dürtü Katarı Girişi ve LTI Frekans Yanıtı</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(e^{j\pi/2}) = \sqrt{2}+j\sqrt{2}, \quad H(e^{j0}) = H(e^{j\pi}) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Periyodik dürtü katarı uygulanan DT LTI sistemin kosinüs çıkışından frekans yanıtı $H(e^{j\omega})$'nın 4 temel frekanstaki değerlerinin belirlenmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">H(e^{jk\pi/2}) Ayrık Noktaları</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.15 -->
+        <a href="problem_3_15_ideal_alcak_geciren_filtre_ve_harmonikler.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.15 fourier serisi sürekli zaman ideal alçak geçiren filtre lpf kesim frekansı y(t)=x(t) ak=0 k>=9 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.15</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; İdeal LPF &amp; Bant Sınırı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">İdeal Alçak Geçiren Filtre ve Katsayıların Sıfırlanma Koşulu</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(t) = x(t) \implies a_k = 0 \quad (\text{için } |k| \ge 9)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $\omega_c=100\text{ rad/s}$ kesimli LPF çıkışında $y(t)=x(t)$ olması için $T=\pi/6$ sinyalinin hangi harmoniklerinin kesinlikle sıfır olması gerektiğinin ispatı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-blue-600 font-medium font-bold">|k| &ge; 9 Durdurma Bandı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.16 -->
+        <a href="problem_3_16_ayrik_zaman_bant_geciren_filtre_cikisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.16 fourier serisi ayrık zaman ideal bant geçiren filtre bpf sekil p3.16 y1 y2 y3 oppenheim sayfa 284 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.16</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Bant Geçiren Filtre</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı İdeal BPF ve Üç Farklı Sinyal Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$y_1[n] = 0, \quad y_2[n] = \sin(\frac{3\pi}{8}n+\frac{\pi}{4}), \quad y_3[n] = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $[\pi/3, 5\pi/12]$ geçirme bandına sahip DT filtrede $(-1)^n$, sinüzoidal ofsetli sinyal ve $N=4$ periyotlu sinyalin süzülme analizi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Filtre Geçirme/Durdurma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.17 -->
+        <a href="problem_3_17_ozfonksiyon_ozelligi_ve_ct_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.17 fourier serisi sürekli zaman lti özfonksiyon eigenfunction s1 s2 s3 zamanla değişmezlik oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.17</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Özfonksiyon İlkesi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">LTI Özfonksiyon İlkesi ve Sürekli Zaman Sistem Testi</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Olabilir}, \quad S_3: \text{LTI Değil}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x(t)=e^{j5t}$ girişine verilen $te^{j5t}$, $e^{j5(t-1)}$ ve $\cos(5t)$ çıkışlarının LTI sistem özfonksiyon kriterleri ile doğrulanması.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-amber-600 font-medium font-bold">Özfonksiyon Kriterleri</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.18 -->
+        <a href="problem_3_18_ayrik_zaman_ozfonksiyon_ve_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.18 fourier serisi ayrık zaman dt lti özfonksiyon eigenfunction s1 s2 s3 modulo 2pi oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.18</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DT Özfonksiyon &amp; Modulo 2π</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı LTI Sistemlerde Özfonksiyon Doğrulaması</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Değil}, \quad S_3: \text{LTI Olabilir}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x[n]=e^{j(\pi/2)n}$ girişine verilen $e^{j(\pi/2)n}u[n]$, $e^{j(3\pi/2)n}$ ve $2e^{j(5\pi/2)n}$ yanıtlarının DTFS özfonksiyon incelemesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">DT LTI Testi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.19 -->
+        <a href="problem_3_19_rl_devresi_diferansiyel_denklem_ve_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.19 fourier serisi sürekli zaman paralel rl devresi diferansiyel denklem frekans yanıtı kosinüs çıkışı sekil p3.19 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.19</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Paralel RL Devresi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Paralel RL Devresinde Diferansiyel Denklem ve Kararlı Durum Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{dy}{dt} + y(t) = x(t) \implies y(t) = \frac{1}{\sqrt{2}}\cos(t - \frac{\pi}{4})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}$ paralel devresinin KCL diferansiyel denklemi, frekans yanıtı ve $x(t)=\cos(t)$ sinüzoidal uyarımına cevabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">1. Derece RL Yanıtı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.20 -->
+        <a href="problem_3_20_rlc_devresi_ikinci_derece_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.20 fourier serisi sürekli zaman seri rlc devresi ikinci derece rezonans diferansiyel denklem sinüs çıkışı sekil p3.20 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.20</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Seri RLC &amp; Rezonans</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Seri RLC Devresinde 2. Derece Sistem Analizi ve Rezonans</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{d^2y}{dt^2} + \frac{dy}{dt} + y(t) = x(t) \implies y(t) = -\cos(t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}, C=1\text{ F}$ seri devresinin KVL denklemi, frekans yanıtı ve $\omega_0=1\text{ rad/s}$ rezonansında $x(t)=\sin(t)$ çıkışı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Rezonans: y(t) = -cos(t)</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.21 -->
+        <a href="problem_3_21_fourier_katsayilarindan_kosinus_formuna_donusum.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.21 fourier serisi sürekli zaman ctfs kosinüs formu rekonstrüksiyon a1=j a5=2 t=8 fazör oppenheim sayfa 286">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.21</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Kosinüs Sentezi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Fourier Serisi Katsayılarından Kosinüs Formuna Dönüşüm</h3>
+          <p class="text-xs font-mono text-slate-700">$$x(t) = 2\cos(\frac{\pi}{4}t + \frac{\pi}{2}) + 4\cos(\frac{5\pi}{4}t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $T=8$, $a_1=j$, $a_5=2$ katsayılarından eşlenik simetrisi ve kutupsal dönüşüm ile $\sum A_k\cos(\omega_k t+\phi_k)$ formunun elde edilmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Tam Trigonometrik Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
       </div>
     </section>
 
@@ -1023,6 +1210,193 @@ eq y_2 \approx -0.43 e^{-2t}$ çıktısı vererek sistemin geleceği hissettiği
 eq 0$ ile nedensellik ihlali.
           </p>
         </a>
+        <!-- 3.11 -->
+        <a href="problem_3_11_parseval_ve_kosinus_rekonstruksiyonu.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.11 fourier serisi ayrık zaman dtfs parseval enerjisi kosinüs rekonstrüksiyon a1 a11 çift gerçel oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.11</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Parseval &amp; Kosinüs</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">DTFS Parseval İlişkisi ve Kosinüs Rekonstrüksiyonu</h3>
+          <p class="text-xs font-mono text-slate-700">$$N = 10, a_1 = a_{-1} = 5 \implies x[n] = 10\cos(\frac{\pi}{5}n)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Gerçel ve çift periyodik sinyalde Parseval eşitliği ve harmonik katsayılarından $A=10, B=\pi/5, C=0$ parametrelerinin analitik çözümü.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-purple-600 font-medium font-bold">Parseval &amp; Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.12 -->
+        <a href="problem_3_12_ayrik_zaman_carpma_ozelligi_dtfs.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.12 fourier serisi ayrık zaman dtfs çarpma özelliği periyodik konvolüsyon a0 b0 ck oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.12</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DTFS Çarpma Özelliği</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Fourier Serisinde Çarpma ve Periyodik Konvolüsyon</h3>
+          <p class="text-xs font-mono text-slate-700">$$c_k = \sum_{l=0}^{3} a_l b_{k-l} = 6 \quad (\forall k \in \mathbb{Z})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            İki periyodik dizinin çarpımı $g[n]=x_1[n]x_2[n]$ sinyalinin DTFS katsayılarının periyodik konvolüsyon ile doğrudan hesabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">c_k = 6 Sabit Spektrum</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.13 -->
+        <a href="problem_3_13_surekli_zaman_lti_filtreleme_ve_sinc.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.13 fourier serisi sürekli zaman lti filtreleme sinc frekans yanıtı kare dalga y(t)=0 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.13</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; LTI Filtreleme &amp; Sinc</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sürekli Zaman LTI Filtreleme ve Çıkışın Sıfırlanması</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(jk\omega_0) = 0 \ (\forall k \neq 0), \ a_0 = 0 \implies y(t) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Frekans yanıtı $H(j\omega)=\frac{\sin(4\omega)}{\omega}$ olan filtreye uygulanan kare dalganın tüm harmoniklerinin filtrelenerek $y(t)=0$ çıkışı vermesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Tam Harmonik Bastırma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.14 -->
+        <a href="problem_3_14_durtu_katari_ve_dt_lti_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.14 fourier serisi ayrık zaman dtfs dürtü katarı frekans yanıtı hejw kosinüs çıkışı oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.14</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Dürtü Katarı &amp; Frekans Yanıtı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Dürtü Katarı Girişi ve LTI Frekans Yanıtı</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(e^{j\pi/2}) = \sqrt{2}+j\sqrt{2}, \quad H(e^{j0}) = H(e^{j\pi}) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Periyodik dürtü katarı uygulanan DT LTI sistemin kosinüs çıkışından frekans yanıtı $H(e^{j\omega})$'nın 4 temel frekanstaki değerlerinin belirlenmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">H(e^{jk\pi/2}) Ayrık Noktaları</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.15 -->
+        <a href="problem_3_15_ideal_alcak_geciren_filtre_ve_harmonikler.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.15 fourier serisi sürekli zaman ideal alçak geçiren filtre lpf kesim frekansı y(t)=x(t) ak=0 k>=9 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.15</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; İdeal LPF &amp; Bant Sınırı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">İdeal Alçak Geçiren Filtre ve Katsayıların Sıfırlanma Koşulu</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(t) = x(t) \implies a_k = 0 \quad (\text{için } |k| \ge 9)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $\omega_c=100\text{ rad/s}$ kesimli LPF çıkışında $y(t)=x(t)$ olması için $T=\pi/6$ sinyalinin hangi harmoniklerinin kesinlikle sıfır olması gerektiğinin ispatı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-blue-600 font-medium font-bold">|k| &ge; 9 Durdurma Bandı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.16 -->
+        <a href="problem_3_16_ayrik_zaman_bant_geciren_filtre_cikisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.16 fourier serisi ayrık zaman ideal bant geçiren filtre bpf sekil p3.16 y1 y2 y3 oppenheim sayfa 284 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.16</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Bant Geçiren Filtre</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı İdeal BPF ve Üç Farklı Sinyal Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$y_1[n] = 0, \quad y_2[n] = \sin(\frac{3\pi}{8}n+\frac{\pi}{4}), \quad y_3[n] = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $[\pi/3, 5\pi/12]$ geçirme bandına sahip DT filtrede $(-1)^n$, sinüzoidal ofsetli sinyal ve $N=4$ periyotlu sinyalin süzülme analizi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Filtre Geçirme/Durdurma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.17 -->
+        <a href="problem_3_17_ozfonksiyon_ozelligi_ve_ct_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.17 fourier serisi sürekli zaman lti özfonksiyon eigenfunction s1 s2 s3 zamanla değişmezlik oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.17</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Özfonksiyon İlkesi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">LTI Özfonksiyon İlkesi ve Sürekli Zaman Sistem Testi</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Olabilir}, \quad S_3: \text{LTI Değil}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x(t)=e^{j5t}$ girişine verilen $te^{j5t}$, $e^{j5(t-1)}$ ve $\cos(5t)$ çıkışlarının LTI sistem özfonksiyon kriterleri ile doğrulanması.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-amber-600 font-medium font-bold">Özfonksiyon Kriterleri</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.18 -->
+        <a href="problem_3_18_ayrik_zaman_ozfonksiyon_ve_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.18 fourier serisi ayrık zaman dt lti özfonksiyon eigenfunction s1 s2 s3 modulo 2pi oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.18</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DT Özfonksiyon &amp; Modulo 2π</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı LTI Sistemlerde Özfonksiyon Doğrulaması</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Değil}, \quad S_3: \text{LTI Olabilir}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x[n]=e^{j(\pi/2)n}$ girişine verilen $e^{j(\pi/2)n}u[n]$, $e^{j(3\pi/2)n}$ ve $2e^{j(5\pi/2)n}$ yanıtlarının DTFS özfonksiyon incelemesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">DT LTI Testi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.19 -->
+        <a href="problem_3_19_rl_devresi_diferansiyel_denklem_ve_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.19 fourier serisi sürekli zaman paralel rl devresi diferansiyel denklem frekans yanıtı kosinüs çıkışı sekil p3.19 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.19</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Paralel RL Devresi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Paralel RL Devresinde Diferansiyel Denklem ve Kararlı Durum Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{dy}{dt} + y(t) = x(t) \implies y(t) = \frac{1}{\sqrt{2}}\cos(t - \frac{\pi}{4})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}$ paralel devresinin KCL diferansiyel denklemi, frekans yanıtı ve $x(t)=\cos(t)$ sinüzoidal uyarımına cevabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">1. Derece RL Yanıtı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.20 -->
+        <a href="problem_3_20_rlc_devresi_ikinci_derece_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.20 fourier serisi sürekli zaman seri rlc devresi ikinci derece rezonans diferansiyel denklem sinüs çıkışı sekil p3.20 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.20</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Seri RLC &amp; Rezonans</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Seri RLC Devresinde 2. Derece Sistem Analizi ve Rezonans</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{d^2y}{dt^2} + \frac{dy}{dt} + y(t) = x(t) \implies y(t) = -\cos(t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}, C=1\text{ F}$ seri devresinin KVL denklemi, frekans yanıtı ve $\omega_0=1\text{ rad/s}$ rezonansında $x(t)=\sin(t)$ çıkışı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Rezonans: y(t) = -cos(t)</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.21 -->
+        <a href="problem_3_21_fourier_katsayilarindan_kosinus_formuna_donusum.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.21 fourier serisi sürekli zaman ctfs kosinüs formu rekonstrüksiyon a1=j a5=2 t=8 fazör oppenheim sayfa 286">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.21</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Kosinüs Sentezi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Fourier Serisi Katsayılarından Kosinüs Formuna Dönüşüm</h3>
+          <p class="text-xs font-mono text-slate-700">$$x(t) = 2\cos(\frac{\pi}{4}t + \frac{\pi}{2}) + 4\cos(\frac{5\pi}{4}t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $T=8$, $a_1=j$, $a_5=2$ katsayılarından eşlenik simetrisi ve kutupsal dönüşüm ile $\sum A_k\cos(\omega_k t+\phi_k)$ formunun elde edilmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Tam Trigonometrik Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
       </div>
     </section>
 
@@ -1068,6 +1442,193 @@ eq 0$ ile nedensellik ihlali.
             Gürültü büyümesini önlemek için türev yerine integratör ($\int$) kullanımı. En yüksek türev teriminin ($\frac{dy}{dt}$) toplayıcı çıkışına bağlandığı analog simülasyon diyagramları ve canlı sürekli yanıt simülatörü.
           </p>
         </a>
+        <!-- 3.11 -->
+        <a href="problem_3_11_parseval_ve_kosinus_rekonstruksiyonu.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.11 fourier serisi ayrık zaman dtfs parseval enerjisi kosinüs rekonstrüksiyon a1 a11 çift gerçel oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.11</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Parseval &amp; Kosinüs</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">DTFS Parseval İlişkisi ve Kosinüs Rekonstrüksiyonu</h3>
+          <p class="text-xs font-mono text-slate-700">$$N = 10, a_1 = a_{-1} = 5 \implies x[n] = 10\cos(\frac{\pi}{5}n)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Gerçel ve çift periyodik sinyalde Parseval eşitliği ve harmonik katsayılarından $A=10, B=\pi/5, C=0$ parametrelerinin analitik çözümü.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-purple-600 font-medium font-bold">Parseval &amp; Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.12 -->
+        <a href="problem_3_12_ayrik_zaman_carpma_ozelligi_dtfs.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.12 fourier serisi ayrık zaman dtfs çarpma özelliği periyodik konvolüsyon a0 b0 ck oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.12</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DTFS Çarpma Özelliği</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Fourier Serisinde Çarpma ve Periyodik Konvolüsyon</h3>
+          <p class="text-xs font-mono text-slate-700">$$c_k = \sum_{l=0}^{3} a_l b_{k-l} = 6 \quad (\forall k \in \mathbb{Z})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            İki periyodik dizinin çarpımı $g[n]=x_1[n]x_2[n]$ sinyalinin DTFS katsayılarının periyodik konvolüsyon ile doğrudan hesabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">c_k = 6 Sabit Spektrum</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.13 -->
+        <a href="problem_3_13_surekli_zaman_lti_filtreleme_ve_sinc.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.13 fourier serisi sürekli zaman lti filtreleme sinc frekans yanıtı kare dalga y(t)=0 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.13</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; LTI Filtreleme &amp; Sinc</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sürekli Zaman LTI Filtreleme ve Çıkışın Sıfırlanması</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(jk\omega_0) = 0 \ (\forall k \neq 0), \ a_0 = 0 \implies y(t) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Frekans yanıtı $H(j\omega)=\frac{\sin(4\omega)}{\omega}$ olan filtreye uygulanan kare dalganın tüm harmoniklerinin filtrelenerek $y(t)=0$ çıkışı vermesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Tam Harmonik Bastırma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.14 -->
+        <a href="problem_3_14_durtu_katari_ve_dt_lti_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.14 fourier serisi ayrık zaman dtfs dürtü katarı frekans yanıtı hejw kosinüs çıkışı oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.14</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Dürtü Katarı &amp; Frekans Yanıtı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Dürtü Katarı Girişi ve LTI Frekans Yanıtı</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(e^{j\pi/2}) = \sqrt{2}+j\sqrt{2}, \quad H(e^{j0}) = H(e^{j\pi}) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Periyodik dürtü katarı uygulanan DT LTI sistemin kosinüs çıkışından frekans yanıtı $H(e^{j\omega})$'nın 4 temel frekanstaki değerlerinin belirlenmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">H(e^{jk\pi/2}) Ayrık Noktaları</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.15 -->
+        <a href="problem_3_15_ideal_alcak_geciren_filtre_ve_harmonikler.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.15 fourier serisi sürekli zaman ideal alçak geçiren filtre lpf kesim frekansı y(t)=x(t) ak=0 k>=9 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.15</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; İdeal LPF &amp; Bant Sınırı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">İdeal Alçak Geçiren Filtre ve Katsayıların Sıfırlanma Koşulu</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(t) = x(t) \implies a_k = 0 \quad (\text{için } |k| \ge 9)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $\omega_c=100\text{ rad/s}$ kesimli LPF çıkışında $y(t)=x(t)$ olması için $T=\pi/6$ sinyalinin hangi harmoniklerinin kesinlikle sıfır olması gerektiğinin ispatı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-blue-600 font-medium font-bold">|k| &ge; 9 Durdurma Bandı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.16 -->
+        <a href="problem_3_16_ayrik_zaman_bant_geciren_filtre_cikisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.16 fourier serisi ayrık zaman ideal bant geçiren filtre bpf sekil p3.16 y1 y2 y3 oppenheim sayfa 284 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.16</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Bant Geçiren Filtre</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı İdeal BPF ve Üç Farklı Sinyal Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$y_1[n] = 0, \quad y_2[n] = \sin(\frac{3\pi}{8}n+\frac{\pi}{4}), \quad y_3[n] = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $[\pi/3, 5\pi/12]$ geçirme bandına sahip DT filtrede $(-1)^n$, sinüzoidal ofsetli sinyal ve $N=4$ periyotlu sinyalin süzülme analizi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Filtre Geçirme/Durdurma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.17 -->
+        <a href="problem_3_17_ozfonksiyon_ozelligi_ve_ct_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.17 fourier serisi sürekli zaman lti özfonksiyon eigenfunction s1 s2 s3 zamanla değişmezlik oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.17</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Özfonksiyon İlkesi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">LTI Özfonksiyon İlkesi ve Sürekli Zaman Sistem Testi</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Olabilir}, \quad S_3: \text{LTI Değil}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x(t)=e^{j5t}$ girişine verilen $te^{j5t}$, $e^{j5(t-1)}$ ve $\cos(5t)$ çıkışlarının LTI sistem özfonksiyon kriterleri ile doğrulanması.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-amber-600 font-medium font-bold">Özfonksiyon Kriterleri</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.18 -->
+        <a href="problem_3_18_ayrik_zaman_ozfonksiyon_ve_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.18 fourier serisi ayrık zaman dt lti özfonksiyon eigenfunction s1 s2 s3 modulo 2pi oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.18</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DT Özfonksiyon &amp; Modulo 2π</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı LTI Sistemlerde Özfonksiyon Doğrulaması</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Değil}, \quad S_3: \text{LTI Olabilir}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x[n]=e^{j(\pi/2)n}$ girişine verilen $e^{j(\pi/2)n}u[n]$, $e^{j(3\pi/2)n}$ ve $2e^{j(5\pi/2)n}$ yanıtlarının DTFS özfonksiyon incelemesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">DT LTI Testi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.19 -->
+        <a href="problem_3_19_rl_devresi_diferansiyel_denklem_ve_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.19 fourier serisi sürekli zaman paralel rl devresi diferansiyel denklem frekans yanıtı kosinüs çıkışı sekil p3.19 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.19</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Paralel RL Devresi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Paralel RL Devresinde Diferansiyel Denklem ve Kararlı Durum Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{dy}{dt} + y(t) = x(t) \implies y(t) = \frac{1}{\sqrt{2}}\cos(t - \frac{\pi}{4})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}$ paralel devresinin KCL diferansiyel denklemi, frekans yanıtı ve $x(t)=\cos(t)$ sinüzoidal uyarımına cevabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">1. Derece RL Yanıtı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.20 -->
+        <a href="problem_3_20_rlc_devresi_ikinci_derece_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.20 fourier serisi sürekli zaman seri rlc devresi ikinci derece rezonans diferansiyel denklem sinüs çıkışı sekil p3.20 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.20</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Seri RLC &amp; Rezonans</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Seri RLC Devresinde 2. Derece Sistem Analizi ve Rezonans</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{d^2y}{dt^2} + \frac{dy}{dt} + y(t) = x(t) \implies y(t) = -\cos(t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}, C=1\text{ F}$ seri devresinin KVL denklemi, frekans yanıtı ve $\omega_0=1\text{ rad/s}$ rezonansında $x(t)=\sin(t)$ çıkışı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Rezonans: y(t) = -cos(t)</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.21 -->
+        <a href="problem_3_21_fourier_katsayilarindan_kosinus_formuna_donusum.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.21 fourier serisi sürekli zaman ctfs kosinüs formu rekonstrüksiyon a1=j a5=2 t=8 fazör oppenheim sayfa 286">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.21</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Kosinüs Sentezi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Fourier Serisi Katsayılarından Kosinüs Formuna Dönüşüm</h3>
+          <p class="text-xs font-mono text-slate-700">$$x(t) = 2\cos(\frac{\pi}{4}t + \frac{\pi}{2}) + 4\cos(\frac{5\pi}{4}t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $T=8$, $a_1=j$, $a_5=2$ katsayılarından eşlenik simetrisi ve kutupsal dönüşüm ile $\sum A_k\cos(\omega_k t+\phi_k)$ formunun elde edilmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Tam Trigonometrik Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
       </div>
     </section>
 
@@ -1200,7 +1761,7 @@ eq 0$ ile nedensellik ihlali.
           </div>
           <p class="text-xs text-slate-500 mt-1">Sürekli ve Ayrık Zaman Fourier Serisi (CTFS / DTFS), Katsayılar ($a_k$), Harmonik Bileşenler, Eşlenik Simetrisi ve Trigonometrik Dönüşümler.</p>
         </div>
-        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2 &bull; 3.3 &bull; 3.4 &bull; 3.5 &bull; 3.6 &bull; 3.7 &bull; 3.8 &bull; 3.9 &bull; 3.10</span>
+        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2 &bull; 3.3 &bull; 3.4 &bull; 3.5 &bull; 3.6 &bull; 3.7 &bull; 3.8 &bull; 3.9 &bull; 3.10 &bull; 3.11 &bull; 3.12 &bull; 3.13 &bull; 3.14 &bull; 3.15 &bull; 3.16 &bull; 3.17 &bull; 3.18 &bull; 3.19 &bull; 3.20 &bull; 3.21</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1371,6 +1932,193 @@ eq 0$ ile nedensellik ihlali.
             <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
           </div>
         </a>
+        <!-- 3.11 -->
+        <a href="problem_3_11_parseval_ve_kosinus_rekonstruksiyonu.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.11 fourier serisi ayrık zaman dtfs parseval enerjisi kosinüs rekonstrüksiyon a1 a11 çift gerçel oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.11</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Parseval &amp; Kosinüs</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">DTFS Parseval İlişkisi ve Kosinüs Rekonstrüksiyonu</h3>
+          <p class="text-xs font-mono text-slate-700">$$N = 10, a_1 = a_{-1} = 5 \implies x[n] = 10\cos(\frac{\pi}{5}n)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Gerçel ve çift periyodik sinyalde Parseval eşitliği ve harmonik katsayılarından $A=10, B=\pi/5, C=0$ parametrelerinin analitik çözümü.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-purple-600 font-medium font-bold">Parseval &amp; Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.12 -->
+        <a href="problem_3_12_ayrik_zaman_carpma_ozelligi_dtfs.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.12 fourier serisi ayrık zaman dtfs çarpma özelliği periyodik konvolüsyon a0 b0 ck oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.12</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DTFS Çarpma Özelliği</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Fourier Serisinde Çarpma ve Periyodik Konvolüsyon</h3>
+          <p class="text-xs font-mono text-slate-700">$$c_k = \sum_{l=0}^{3} a_l b_{k-l} = 6 \quad (\forall k \in \mathbb{Z})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            İki periyodik dizinin çarpımı $g[n]=x_1[n]x_2[n]$ sinyalinin DTFS katsayılarının periyodik konvolüsyon ile doğrudan hesabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">c_k = 6 Sabit Spektrum</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.13 -->
+        <a href="problem_3_13_surekli_zaman_lti_filtreleme_ve_sinc.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.13 fourier serisi sürekli zaman lti filtreleme sinc frekans yanıtı kare dalga y(t)=0 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.13</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; LTI Filtreleme &amp; Sinc</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sürekli Zaman LTI Filtreleme ve Çıkışın Sıfırlanması</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(jk\omega_0) = 0 \ (\forall k \neq 0), \ a_0 = 0 \implies y(t) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Frekans yanıtı $H(j\omega)=\frac{\sin(4\omega)}{\omega}$ olan filtreye uygulanan kare dalganın tüm harmoniklerinin filtrelenerek $y(t)=0$ çıkışı vermesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Tam Harmonik Bastırma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.14 -->
+        <a href="problem_3_14_durtu_katari_ve_dt_lti_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.14 fourier serisi ayrık zaman dtfs dürtü katarı frekans yanıtı hejw kosinüs çıkışı oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.14</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Dürtü Katarı &amp; Frekans Yanıtı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Dürtü Katarı Girişi ve LTI Frekans Yanıtı</h3>
+          <p class="text-xs font-mono text-slate-700">$$H(e^{j\pi/2}) = \sqrt{2}+j\sqrt{2}, \quad H(e^{j0}) = H(e^{j\pi}) = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Periyodik dürtü katarı uygulanan DT LTI sistemin kosinüs çıkışından frekans yanıtı $H(e^{j\omega})$'nın 4 temel frekanstaki değerlerinin belirlenmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">H(e^{jk\pi/2}) Ayrık Noktaları</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.15 -->
+        <a href="problem_3_15_ideal_alcak_geciren_filtre_ve_harmonikler.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.15 fourier serisi sürekli zaman ideal alçak geçiren filtre lpf kesim frekansı y(t)=x(t) ak=0 k>=9 oppenheim sayfa 284">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.15</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; İdeal LPF &amp; Bant Sınırı</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">İdeal Alçak Geçiren Filtre ve Katsayıların Sıfırlanma Koşulu</h3>
+          <p class="text-xs font-mono text-slate-700">$$y(t) = x(t) \implies a_k = 0 \quad (\text{için } |k| \ge 9)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $\omega_c=100\text{ rad/s}$ kesimli LPF çıkışında $y(t)=x(t)$ olması için $T=\pi/6$ sinyalinin hangi harmoniklerinin kesinlikle sıfır olması gerektiğinin ispatı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-blue-600 font-medium font-bold">|k| &ge; 9 Durdurma Bandı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.16 -->
+        <a href="problem_3_16_ayrik_zaman_bant_geciren_filtre_cikisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.16 fourier serisi ayrık zaman ideal bant geçiren filtre bpf sekil p3.16 y1 y2 y3 oppenheim sayfa 284 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.16</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Bant Geçiren Filtre</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı İdeal BPF ve Üç Farklı Sinyal Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$y_1[n] = 0, \quad y_2[n] = \sin(\frac{3\pi}{8}n+\frac{\pi}{4}), \quad y_3[n] = 0$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $[\pi/3, 5\pi/12]$ geçirme bandına sahip DT filtrede $(-1)^n$, sinüzoidal ofsetli sinyal ve $N=4$ periyotlu sinyalin süzülme analizi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Filtre Geçirme/Durdurma</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.17 -->
+        <a href="problem_3_17_ozfonksiyon_ozelligi_ve_ct_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.17 fourier serisi sürekli zaman lti özfonksiyon eigenfunction s1 s2 s3 zamanla değişmezlik oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.17</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Özfonksiyon İlkesi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">LTI Özfonksiyon İlkesi ve Sürekli Zaman Sistem Testi</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Olabilir}, \quad S_3: \text{LTI Değil}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x(t)=e^{j5t}$ girişine verilen $te^{j5t}$, $e^{j5(t-1)}$ ve $\cos(5t)$ çıkışlarının LTI sistem özfonksiyon kriterleri ile doğrulanması.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-amber-600 font-medium font-bold">Özfonksiyon Kriterleri</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.18 -->
+        <a href="problem_3_18_ayrik_zaman_ozfonksiyon_ve_lti_testi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.18 fourier serisi ayrık zaman dt lti özfonksiyon eigenfunction s1 s2 s3 modulo 2pi oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.18</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DT Özfonksiyon &amp; Modulo 2π</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zamanlı LTI Sistemlerde Özfonksiyon Doğrulaması</h3>
+          <p class="text-xs font-mono text-slate-700">$$S_1: \text{LTI Değil}, \quad S_2: \text{LTI Değil}, \quad S_3: \text{LTI Olabilir}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x[n]=e^{j(\pi/2)n}$ girişine verilen $e^{j(\pi/2)n}u[n]$, $e^{j(3\pi/2)n}$ ve $2e^{j(5\pi/2)n}$ yanıtlarının DTFS özfonksiyon incelemesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">DT LTI Testi</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.19 -->
+        <a href="problem_3_19_rl_devresi_diferansiyel_denklem_ve_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.19 fourier serisi sürekli zaman paralel rl devresi diferansiyel denklem frekans yanıtı kosinüs çıkışı sekil p3.19 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.19</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Paralel RL Devresi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Paralel RL Devresinde Diferansiyel Denklem ve Kararlı Durum Çıkışı</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{dy}{dt} + y(t) = x(t) \implies y(t) = \frac{1}{\sqrt{2}}\cos(t - \frac{\pi}{4})$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}$ paralel devresinin KCL diferansiyel denklemi, frekans yanıtı ve $x(t)=\cos(t)$ sinüzoidal uyarımına cevabı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">1. Derece RL Yanıtı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.20 -->
+        <a href="problem_3_20_rlc_devresi_ikinci_derece_frekans_yaniti.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.20 fourier serisi sürekli zaman seri rlc devresi ikinci derece rezonans diferansiyel denklem sinüs çıkışı sekil p3.20 oppenheim sayfa 285">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.20</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Seri RLC &amp; Rezonans</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Seri RLC Devresinde 2. Derece Sistem Analizi ve Rezonans</h3>
+          <p class="text-xs font-mono text-slate-700">$$\frac{d^2y}{dt^2} + \frac{dy}{dt} + y(t) = x(t) \implies y(t) = -\cos(t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $R=1\ \Omega, L=1\text{ H}, C=1\text{ F}$ seri devresinin KVL denklemi, frekans yanıtı ve $\omega_0=1\text{ rad/s}$ rezonansında $x(t)=\sin(t)$ çıkışı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Rezonans: y(t) = -cos(t)</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.21 -->
+        <a href="problem_3_21_fourier_katsayilarindan_kosinus_formuna_donusum.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.21 fourier serisi sürekli zaman ctfs kosinüs formu rekonstrüksiyon a1=j a5=2 t=8 fazör oppenheim sayfa 286">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.21</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Kosinüs Sentezi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Fourier Serisi Katsayılarından Kosinüs Formuna Dönüşüm</h3>
+          <p class="text-xs font-mono text-slate-700">$$x(t) = 2\cos(\frac{\pi}{4}t + \frac{\pi}{2}) + 4\cos(\frac{5\pi}{4}t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $T=8$, $a_1=j$, $a_5=2$ katsayılarından eşlenik simetrisi ve kutupsal dönüşüm ile $\sum A_k\cos(\omega_k t+\phi_k)$ formunun elde edilmesi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Tam Trigonometrik Sentez</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
       </div>
     </section>
 
