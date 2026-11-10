@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.6: Fourier Serisi Simetri, Gerçellik ve Çiftlik Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- Üst Gezinme Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">Bölüm 3: Fourier Serisi</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Problem 3.6</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+          Fourier Serisi Simetri Özellikleri • Tablo 3.1
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full border border-emerald-200">
+          Eşlenik Simetrisi & Çiftlik Kriterleri
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 3.6: Fourier Serisi ile Gerçellik ve Çiftlik Tespiti
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Üç farklı periyodik sinyalin ($x_1(t), x_2(t), x_3(t)$) Fourier serisi katsayıları incelenerek hangi sinyallerin gerçel değerli ve hangi sinyallerin çift fonksiyon olduğunun Fourier dönüşüm simetri özellikleri ile kesin kanıtı.
+      </p>
+
+      <!-- Matematiksel Model Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2">
+        <div class="font-bold text-slate-800">Verilen Sinyaller:</div>
+        <div class="text-xs font-mono py-1.5 space-y-1 text-slate-800 bg-white p-3 rounded-lg border border-slate-200">
+          <div>$x_1(t) = \sum_{k=0}^{100} (1/2)^k e^{jk\frac{2\pi}{50}t}$</div>
+          <div>$x_2(t) = \sum_{k=-100}^{100} \cos(k\pi) e^{jk\frac{2\pi}{50}t}$</div>
+          <div>$x_3(t) = \sum_{k=-100}^{100} j\sin(k\pi/2) e^{jk\frac{2\pi}{50}t}$</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="font-bold text-blue-700">(a) Gerçel Değerli Sinyaller:</span>
+            <div class="text-slate-800 font-mono font-bold mt-0.5">$$x_2(t) \text{ ve } x_3(t)$$</div>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="font-bold text-emerald-700">(b) Çift Fonksiyon Olan Sinyaller:</span>
+            <div class="text-slate-800 font-mono font-bold mt-0.5">$$\text{Yalnızca } x_2(t)$$</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🎯</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>(a) Şıkkı:</strong> Hangi sinyaller gerçeldir ($x(t) \in \mathbb{R}$)? Teorem: $x(t) \text{ gerçel} \iff a_k = a_{-k}^*$.</li>
+          <li><strong>(b) Şıkkı:</strong> Hangi sinyaller çifttir ($x(-t) = x(t)$)? Teorem: $x(t) \text{ çift} \iff a_k = a_{-k}$.</li>
+          <li><strong>Kritik İncelik:</strong> Zaman domeninde integrasyon yapmaya gerek yoktur. Frekans domenindeki katsayıların eşlenik ve çiftlik simetrilerini kontrol etmek yeterlidir.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+          <li><strong>Simetri Kriterleri:</strong> Gerçellik ($a_k = a_{-k}^*$), Çiftlik ($a_k = a_{-k}$), Teklik ($a_k = -a_{-k}$).</li>
+          <li><strong>$x_1(t)$ Analizi:</strong> $k < 0$ için katsayılar sıfırdır; negatif ve pozitif katsayılar eşleşmez $\implies$ Ne gerçel ne çifttir.</li>
+          <li><strong>$x_2(t)$ Analizi:</strong> $a_k = \cos(k\pi) = (-1)^k$ gerçel ve çifttir $\implies$ Hem gerçel hem çifttir.</li>
+          <li><strong>$x_3(t)$ Analizi:</strong> $a_k = j\sin(k\pi/2)$ saf sanal ve tektir. $a_{-k}^* = a_k$ sağlandığından gerçeldir, ancak tektir (çift değildir).</li>
+          <li><strong>Sonuçların Karşılaştırılması:</strong> Karar tablosunun hazırlanması.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: Harmonik Katsayı Simetrileri ve Zaman Dalgası</h2>
+          <p class="text-xs text-slate-500">Sinyali seçerek Fourier serisi katsayılarının simetri eksenini ve zaman domenindeki simetri yapısını test edin.</p>
+        </div>
+      </div>
+
+      <!-- Sinyal Seçici Butonlar -->
+      <div class="flex flex-wrap gap-2">
+        <button id="btnSig1" class="px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors">
+          x₁(t): Tek Yönlü (1/2)ᵏ
+        </button>
+        <button id="btnSig2" class="px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg border border-blue-600 shadow-sm transition-colors">
+          x₂(t): cos(kπ) [Gerçel & Çift]
+        </button>
+        <button id="btnSig3" class="px-3 py-1.5 bg-slate-100 hover:bg-emerald-50 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors">
+          x₃(t): j sin(kπ/2) [Gerçel & Tek]
+        </button>
+      </div>
+
+      <!-- Çift Kanvas Alanı -->
+      <div class="space-y-3">
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Frekans Domeni: $a_k$ (Mavi: Gerçel Kısım, Kırmızı: Sanal Kısım)</span>
+            <span id="specStatus" class="text-blue-600 font-semibold">Simetrik Gerçel Spektrum</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="kCanvas" width="800" height="180" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Zaman Domeni: $x(t)$ (Mor: Gerçel Bileşen, Gri Kesikli: Sanal Bileşen)</span>
+            <span id="timeStatus" class="text-emerald-600 font-semibold">Sanal Kısım = 0 (Tam Gerçel)</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="ynCanvas" width="800" height="200" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Paneli -->
+      <div id="simMath" class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs font-mono text-blue-900">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 6 Adım Kartları -->
+    <div class="space-y-6">
+      <!-- 1. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">1. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Fourier Serisi Simetri Teoremleri (Tablo 3.1)</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_3_6_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Periyodik bir $x(t)$ sinyalinin katsayıları $a_k$ olsun:
+          <ul class="list-disc list-inside space-y-1 mt-1 text-slate-700">
+            <li><strong>Gerçel Sinyal Özelliği:</strong> $x(t) \in \mathbb{R} \iff a_{-k} = a_k^*$ (Eşlenik Simetrisi / Conjugate Symmetry).</li>
+            <li><strong>Çift Fonksiyon Özelliği:</strong> $x(-t) = x(t) \iff a_{-k} = a_k$ (Çift Spektrum).</li>
+            <li><strong>Tek Fonksiyon Özelliği:</strong> $x(-t) = -x(t) \iff a_{-k} = -a_k$ (Tek Spektrum) ve $a_0 = 0$.</li>
+            <li><strong>Gerçel ve Çift:</strong> $a_k \in \mathbb{R}$ ve $a_{-k} = a_k$.</li>
+            <li><strong>Gerçel ve Tek:</strong> $a_k$ saf sanaldır ($a_k^* = -a_k$) ve $a_{-k} = -a_k$.</li>
+          </ul>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img1" class="w-full h-auto block" alt="1. Adım">
+        </div>
+      </div>
+
+      <!-- 2. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">2. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">$x_1(t)$ Analizi: Tek Yönlü Spektrum</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_3_6_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x_1(t) = \sum_{k=0}^{100} (1/2)^k e^{jk\frac{2\pi}{50}t}$ sinyalinde katsayılar:
+          $$a_k = \begin{cases} (1/2)^k, & 0 \le k \le 100 \\ 0, & k < 0 \end{cases}$$
+          $k = 1$ için $a_1 = 1/2$, ancak $a_{-1} = 0$'dır.<br>
+          Eşlenik simetrisi: $a_{-1}^* = 0^* = 0 \ne a_1 \implies \mathbf{x_1(t) \text{ gerçel değildir}}.$<br>
+          Çiftlik simetrisi: $a_{-1} = 0 \ne a_1 \implies \mathbf{x_1(t) \text{ çift değildir}}.$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img2" class="w-full h-auto block" alt="2. Adım">
+        </div>
+      </div>
+
+      <!-- 3. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">3. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">$x_2(t)$ Analizi: Gerçellik ve Çiftlik Kanıtı</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_3_6_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x_2(t) = \sum_{k=-100}^{100} \cos(k\pi) e^{jk\frac{2\pi}{50}t}$ sinyalinde:
+          $$a_k = \cos(k\pi) = (-1)^k \quad (-100 \le k \le 100)$$
+          1. <strong>Gerçellik Kontrolü:</strong> $a_{-k} = \cos(-k\pi) = \cos(k\pi) = a_k$. $a_k$ gerçel sayı olduğundan $a_{-k}^* = a_k^* = a_k$. Dolayısıyla $\mathbf{x_2(t) \text{ gerçeldir}}.$<br>
+          2. <strong>Çiftlik Kontrolü:</strong> $a_{-k} = \cos(-k\pi) = \cos(k\pi) = a_k$. Katsayılar çift simetrilidir, dolayısıyla $\mathbf{x_2(t) \text{ çifttir}}.$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img3" class="w-full h-auto block" alt="3. Adım">
+        </div>
+      </div>
+
+      <!-- 4. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">4. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">$x_3(t)$ Analizi: Saf Sanal Tek Spektrum</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_3_6_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x_3(t) = \sum_{k=-100}^{100} j\sin(k\pi/2) e^{jk\frac{2\pi}{50}t}$ sinyalinde:
+          $$a_k = j\sin(k\pi/2) \quad (-100 \le k \le 100)$$
+          1. <strong>Gerçellik Kontrolü:</strong>
+          $$a_{-k} = j\sin(-k\pi/2) = -j\sin(k\pi/2)$$
+          $$a_{-k}^* = (-j\sin(k\pi/2))^* = +j\sin(k\pi/2) = a_k$$
+          $a_{-k}^* = a_k$ sağlandığından $\mathbf{x_3(t) \text{ gerçeldir}}.$<br>
+          2. <strong>Çiftlik Kontrolü:</strong>
+          $$a_{-k} = -j\sin(k\pi/2) = -a_k \ne a_k$$
+          Katsayılar tek simetriye sahiptir. Dolayısıyla $\mathbf{x_3(t) \text{ tek fonksiyondur, çift değildir}}.$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img4" class="w-full h-auto block" alt="4. Adım">
+        </div>
+      </div>
+
+      <!-- 5. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">5. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Trigonometrik Karşılıklar ile Sağlama</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_3_6_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Euler bağıntısıyla $k$ ve $-k$ terimlerini eşleştirelim:
+          $$x_2(t) = a_0 + \sum_{k=1}^{100} \cos(k\pi) [e^{jk\omega_0 t} + e^{-jk\omega_0 t}] = 1 + 2\sum_{k=1}^{100} (-1)^k \cos(k\omega_0 t)$$
+          Kosinüs fonksiyonları gerçel ve çift olduğundan $x_2(t)$ kesinlikle gerçel ve çifttir.<br>
+          $$x_3(t) = \sum_{k=1}^{100} j\sin(k\pi/2) [e^{jk\omega_0 t} - e^{-jk\omega_0 t}] = -2\sum_{k=1}^{100} \sin(k\pi/2)\sin(k\omega_0 t)$$
+          Sinüs fonksiyonları gerçel ve tek olduğundan $x_3(t)$ kesinlikle gerçel ve tektir!
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img5" class="w-full h-auto block" alt="5. Adım">
+        </div>
+      </div>
+
+      <!-- 6. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">6. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Soru Cevaplarının Kesin Özeti</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_3_6_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          <table class="w-full text-left border-collapse border border-slate-200 text-xs">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="p-2 border border-slate-200">Sinyal</th>
+                <th class="p-2 border border-slate-200">Katsayı $a_k$</th>
+                <th class="p-2 border border-slate-200">(a) Gerçel Değerli mi?</th>
+                <th class="p-2 border border-slate-200">(b) Çift Fonksiyon mu?</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600">
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">$x_1(t)$</td>
+                <td class="p-2 border border-slate-200 font-mono">$(1/2)^k u[k]$</td>
+                <td class="p-2 border border-slate-200 text-rose-600 font-bold">HAYIR ($a_k \ne a_{-k}^*$)</td>
+                <td class="p-2 border border-slate-200 text-rose-600 font-bold">HAYIR ($a_k \ne a_{-k}$)</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">$x_2(t)$</td>
+                <td class="p-2 border border-slate-200 font-mono">$\cos(k\pi)$</td>
+                <td class="p-2 border border-slate-200 text-emerald-600 font-bold">EVET ($a_k = a_{-k}^*$)</td>
+                <td class="p-2 border border-slate-200 text-emerald-600 font-bold">EVET ($a_k = a_{-k}$)</td>
+              </tr>
+              <tr>
+                <td class="p-2 border border-slate-200 font-bold">$x_3(t)$</td>
+                <td class="p-2 border border-slate-200 font-mono">$j\sin(k\pi/2)$</td>
+                <td class="p-2 border border-slate-200 text-emerald-600 font-bold">EVET ($a_k = a_{-k}^*$)</td>
+                <td class="p-2 border border-slate-200 text-rose-600 font-bold">HAYIR (TEK: $a_k = -a_{-k}$)</td>
+              </tr>
+            </tbody>
+          </table>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img6" class="w-full h-auto block" alt="6. Adım">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2;
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    let activeSig = 2; // Default x2(t)
+    const btnSig1 = document.getElementById('btnSig1');
+    const btnSig2 = document.getElementById('btnSig2');
+    const btnSig3 = document.getElementById('btnSig3');
+    const specStatus = document.getElementById('specStatus');
+    const timeStatus = document.getElementById('timeStatus');
+    const simMath = document.getElementById('simMath');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    function selectSignal(s) {
+      activeSig = s;
+      btnSig1.className = s === 1 ? 'px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg border border-blue-600 shadow-sm transition-colors' : 'px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors';
+      btnSig2.className = s === 2 ? 'px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg border border-blue-600 shadow-sm transition-colors' : 'px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors';
+      btnSig3.className = s === 3 ? 'px-3 py-1.5 bg-blue-600 text-white text-xs font-bold rounded-lg border border-blue-600 shadow-sm transition-colors' : 'px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 text-xs font-bold rounded-lg border border-slate-200 transition-colors';
+      drawSimulator();
+    }
+
+    function drawSimulator() {
+      // 1. Draw Spectrum Canvas
+      const kw = kCanvas.width / 2;
+      const kh = kCanvas.height / 2;
+      const kctx = kCanvas.getContext('2d');
+      kctx.setTransform(1, 0, 0, 1, 0, 0);
+      kctx.scale(2, 2);
+      kctx.clearRect(0, 0, kw, kh);
+
+      kctx.fillStyle = '#fafafa';
+      kctx.fillRect(0, 0, kw, kh);
+
+      const midY = kh / 2;
+      kctx.strokeStyle = '#cbd5e1';
+      kctx.beginPath();
+      kctx.moveTo(30, midY); kctx.lineTo(kw - 20, midY);
+      kctx.stroke();
+
+      const maxK = 8;
+      const x0 = kw / 2;
+      const dx = (kw - 80) / (2 * maxK + 1);
+
+      for (let k = -maxK; k <= maxK; k++) {
+        const cx = x0 + k * dx;
+        let realA = 0, imagA = 0;
+        if (activeSig === 1) {
+          if (k >= 0) realA = Math.pow(0.5, k);
+        } else if (activeSig === 2) {
+          realA = Math.cos(k * Math.PI);
+        } else if (activeSig === 3) {
+          imagA = Math.sin(k * Math.PI / 2);
+        }
+
+        // Stem for real (blue)
+        if (Math.abs(realA) > 0.001) {
+          kctx.strokeStyle = '#2563eb'; kctx.lineWidth = 2.5;
+          kctx.beginPath(); kctx.moveTo(cx, midY); kctx.lineTo(cx, midY - realA * 45); kctx.stroke();
+          kctx.fillStyle = '#2563eb';
+          kctx.beginPath(); kctx.arc(cx, midY - realA * 45, 3, 0, 2*Math.PI); kctx.fill();
+        }
+
+        // Stem for imag (red)
+        if (Math.abs(imagA) > 0.001) {
+          kctx.strokeStyle = '#e11d48'; kctx.lineWidth = 2.5;
+          kctx.beginPath(); kctx.moveTo(cx, midY); kctx.lineTo(cx, midY - imagA * 45); kctx.stroke();
+          kctx.fillStyle = '#e11d48';
+          kctx.beginPath(); kctx.arc(cx, midY - imagA * 45, 3, 0, 2*Math.PI); kctx.fill();
+        }
+
+        if (k % 2 === 0) {
+          kctx.fillStyle = '#64748b'; kctx.font = '9px Inter'; kctx.textAlign = 'center';
+          kctx.fillText(k, cx, midY + (realA < 0 || imagA < 0 ? -12 : 14));
+        }
+      }
+
+      // 2. Draw Waveform Canvas
+      const yw = ynCanvas.width / 2;
+      const yh = ynCanvas.height / 2;
+      const yctx = ynCanvas.getContext('2d');
+      yctx.setTransform(1, 0, 0, 1, 0, 0);
+      yctx.scale(2, 2);
+      yctx.clearRect(0, 0, yw, yh);
+
+      yctx.fillStyle = '#ffffff';
+      yctx.fillRect(0, 0, yw, yh);
+
+      const yMid = yh / 2;
+      const tMin = -25, tMax = 25;
+      const scaleX = (yw - 60) / (tMax - tMin);
+
+      yctx.strokeStyle = '#cbd5e1';
+      yctx.beginPath(); yctx.moveTo(30, yMid); yctx.lineTo(yw - 20, yMid); yctx.stroke();
+
+      // Plot Real Part of x(t)
+      yctx.strokeStyle = '#7c3aed'; yctx.lineWidth = 2.5;
+      yctx.beginPath();
+      for (let px = 0; px <= yw - 50; px++) {
+        const t = tMin + px / scaleX;
+        let rVal = 0;
+        const w0 = 2 * Math.PI / 50;
+        if (activeSig === 1) {
+          for (let k = 0; k <= 10; k++) rVal += Math.pow(0.5, k) * Math.cos(k * w0 * t);
+          rVal *= 0.5;
+        } else if (activeSig === 2) {
+          rVal = 1;
+          for (let k = 1; k <= 10; k++) rVal += 2 * Math.cos(k * Math.PI) * Math.cos(k * w0 * t);
+          rVal *= 0.25;
+        } else if (activeSig === 3) {
+          for (let k = 1; k <= 10; k++) rVal += -2 * Math.sin(k * Math.PI / 2) * Math.sin(k * w0 * t);
+          rVal *= 0.35;
+        }
+        const py = yMid - rVal * 25;
+        if (px === 0) yctx.moveTo(30 + px, py); else yctx.lineTo(30 + px, py);
+      }
+      yctx.stroke();
+
+      if (activeSig === 1) {
+        specStatus.textContent = 'Tek Taraflı Spektrum (Simetrisiz)';
+        timeStatus.textContent = 'Karmaşık Değerli (Gerçel Değil, Çift Değil)';
+        simMath.innerHTML = 'x₁(t) Analizi: k < 0 için a_k = 0 olduğundan a₋ₖ* ≠ a_k (Gerçel Değil) ve a₋ₖ ≠ a_k (Çift Değil).';
+      } else if (activeSig === 2) {
+        specStatus.textContent = 'Çift ve Gerçel Spektrum (a_k = cos(kπ))';
+        timeStatus.textContent = 'Gerçel ve Çift Fonksiyon: x(-t) = x(t)';
+        simMath.innerHTML = 'x₂(t) Analizi: a₋ₖ* = a_k (Gerçel Değerli) ve a₋ₖ = a_k (Çift Fonksiyon). Her iki koşulu da sağlar!';
+      } else {
+        specStatus.textContent = 'Saf Sanal ve Tek Spektrum (a_k = j sin(kπ/2))';
+        timeStatus.textContent = 'Gerçel ve Tek Fonksiyon: x(-t) = -x(t)';
+        simMath.innerHTML = 'x₃(t) Analizi: a₋ₖ* = a_k (Gerçel Değerli!), ancak a₋ₖ = -a_k olduğundan TEKTİR (Çift Değildir).';
+      }
+    }
+
+    btnSig1.addEventListener('click', () => selectSignal(1));
+    btnSig2.addEventListener('click', () => selectSignal(2));
+    btnSig3.addEventListener('click', () => selectSignal(3));
+
+    function renderStep1() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('1. Adım: Teorem Referansı (Tablo 3.1 Simetri Özellikleri)', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('1. Gerçel Sinyal Kriteri: x(t) in R  <===>  a_{-k} = a_k* (Eşlenik Simetrisi)', 30, 65);
+      ctx.fillText('2. Çift Fonksiyon Kriteri: x(-t) = x(t)  <===>  a_{-k} = a_k', 30, 95);
+      ctx.fillText('3. Tek Fonksiyon Kriteri: x(-t) = -x(t)  <===>  a_{-k} = -a_k', 30, 125);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 12px Inter';
+      ctx.fillText('Sonuç: x(t) Gerçel + Çift ise a_k Gerçel + Çift olmalıdır.', 30, 155);
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep2() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('2. Adım: x1(t) İncelenmesi (Tek Yönlü Toplam)', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('a_k = (1/2)^k for k >= 0, ve a_k = 0 for k < 0.', 30, 65);
+      ctx.fillText('Örnek k = 1 için: a_1 = 0.5 iken a_{-1} = 0 olur.', 30, 95);
+      ctx.fillStyle = '#e11d48'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_{-1}* = 0 != a_1 (Gerçel Değil) ve a_{-1} = 0 != a_1 (Çift Değil)', 30, 135);
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep3() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('3. Adım: x2(t) İncelenmesi (Kosinüs Katsayısı)', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('a_k = cos(k*pi) = (-1)^k. Bu katsayılar tamamen GERÇELDİR.', 30, 65);
+      ctx.fillText('a_{-k} = cos(-k*pi) = cos(k*pi) = a_k sağlandığından katsayılar ÇİFTTİR.', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('x2(t) HEM GERÇEL HEM DE ÇİFTTİR!', 30, 135);
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep4() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('4. Adım: x3(t) İncelenmesi (Saf Sanal ve Tek Katsayı)', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('a_k = j * sin(k*pi/2) saf sanaldır. a_{-k} = j * sin(-k*pi/2) = -j * sin(k*pi/2).', 30, 65);
+      ctx.fillText('Eşlenik simetrisi: a_{-k}* = (-j*sin(k*pi/2))* = +j*sin(k*pi/2) = a_k (GERÇEL!).', 30, 95);
+      ctx.fillStyle = '#d97706'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Fakat a_{-k} = -a_k olduğundan x3(t) TEKTİR (Çift Değildir).', 30, 135);
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep5() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('5. Adım: Trigonometrik Eşleştirme Sağlaması', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('x2(t) = 1 + 2 * SUM { (-1)^k * cos(k*w0*t) }  ===> Tamamen cos(t) içerir (Gerçel + Çift).', 30, 70);
+      ctx.fillText('x3(t) = -2 * SUM { sin(k*pi/2) * sin(k*w0*t) } ===> Tamamen sin(t) içerir (Gerçel + Tek).', 30, 110);
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep6() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('6. Adım: Nihai Cevap Özeti', 25, 28);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('(a) Gerçel Değerli Sinyaller: x2(t) ve x3(t)', 40, 75);
+      ctx.fillStyle = '#059669';
+      ctx.fillText('(b) Çift Fonksiyon Olan Sinyaller: Yalnızca x2(t)', 40, 120);
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSimulator();
+      renderStep1();
+      renderStep2();
+      renderStep3();
+      renderStep4();
+      renderStep5();
+      renderStep6();
+    });
+  </script>
+</body>
+</html>

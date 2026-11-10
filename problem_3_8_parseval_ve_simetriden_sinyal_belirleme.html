@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.8: Parseval Teoremi ve Simetriden Sinyal Rekonstrüksiyonu</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- Üst Gezinme Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">Bölüm 3: Fourier Serisi</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Problem 3.8</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-blue-100 text-blue-800 rounded-full border border-blue-200">
+          Parseval Bağıntısı • Güç Korunumu
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-purple-100 text-purple-800 rounded-full border border-purple-200">
+          Gerçel & Tek Sinyal Rekonstrüksiyonu
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 3.8: Parseval ve Simetri Koşullarından İki Farklı Sinyalin Belirlenmesi
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        Gerçel ve tek simetriye sahip, $T=2$ periyotlu, $|k| > 1$ için Fourier katsayıları sıfır olan ve bir periyotluk ortalama gücü $\frac{1}{2}\int_0^2 |x(t)|^2 dt = 1$ olan tüm sinyallerin Parseval teoremi ile sentezlenmesi.
+      </p>
+
+      <!-- Matematiksel Model Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2">
+        <div class="font-bold text-slate-800">Verilen 4 Temel Koşul:</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs font-mono text-slate-700 bg-white p-3 rounded-lg border border-slate-200">
+          <div>1. $x(t)$ gerçel ve tek $\implies a_0 = 0, a_{-k} = -a_k = -a_k^*$</div>
+          <div>2. Periyot $T = 2 \implies \omega_0 = \pi$ rad/s</div>
+          <div>3. $|k| > 1 \implies a_k = 0$ (Yalnızca $k = \pm 1$)</div>
+          <div>4. Parseval: $\sum |a_k|^2 = |a_1|^2 + |a_{-1}|^2 = 1$</div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="font-bold text-blue-700">1. Uygun Sinyal ($C = +1/\sqrt{2}$):</span>
+            <div class="text-slate-800 font-mono font-bold mt-0.5">$$x_1(t) = -\sqrt{2}\sin(\pi t)$$</div>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="font-bold text-emerald-700">2. Uygun Sinyal ($C = -1/\sqrt{2}$):</span>
+            <div class="text-slate-800 font-mono font-bold mt-0.5">$$x_2(t) = +\sqrt{2}\sin(\pi t)$$</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🎯</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>Ters Problem:</strong> Fourier katsayılarından sinyale değil, sinyal hakkındaki 4 kısıtlayıcı bilgiden analitik sinyalleri türetmek.</li>
+          <li><strong>İstenen:</strong> Koşulları sağlayan 2 farklı sinyalin tam matematiksel formülü.</li>
+          <li><strong>Kritik İncelik:</strong> Gerçel ve tek sinyallerin katsayılarının saf sanal ($a_1 = jC$) olması ve Parseval eşitliğinin $2C^2 = 1 \implies C = \pm 1/\sqrt{2}$ şeklinde iki zıt kök vermesi.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+          <li><strong>Simetri Analizi:</strong> $x(t)$ gerçel ve tek $\implies a_0 = 0$, $a_k$ saf sanal ve $a_{-1} = -a_1$.</li>
+          <li><strong>Bant Sınırı:</strong> $|k| > 1$ için $a_k = 0 \implies$ sadece $a_1$ ve $a_{-1}$ kalır.</li>
+          <li><strong>Parseval Güç Denklemi:</strong> $P = \frac{1}{2}\int_0^2 |x(t)|^2 dt = \sum_{k} |a_k|^2 = |a_1|^2 + |a_{-1}|^2 = 1$.</li>
+          <li><strong>Katsayıların Hesaplanması:</strong> $a_1 = jC \implies C^2 + C^2 = 2C^2 = 1 \implies C = \pm 1/\sqrt{2}$.</li>
+          <li><strong>Sentez Denklemi:</strong> $x(t) = a_1 e^{j\pi t} + a_{-1} e^{-j\pi t} = -2C\sin(\pi t) = \mp \sqrt{2}\sin(\pi t)$.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: Parseval Güç Çemberi & Sentez Dalgası</h2>
+          <p class="text-xs text-slate-500">Kök seçimini ($+1/\sqrt{2}$ veya $-1/\sqrt{2}$) ve zamanı değiştirerek sinyallerin güç integrallerini test edin.</p>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Çözüm Seçimi:</span>
+            <span id="solVal" class="text-blue-600 font-mono font-bold">x₁(t) = -√2 sin(πt)</span>
+          </div>
+          <div class="flex gap-2">
+            <button id="btnSol1" class="flex-1 py-1.5 bg-blue-600 text-white font-bold rounded-lg border border-blue-600 shadow-sm">
+              Çözüm 1: -√2 sin(πt)
+            </button>
+            <button id="btnSol2" class="flex-1 py-1.5 bg-slate-100 hover:bg-emerald-50 text-slate-700 font-bold rounded-lg border border-slate-200">
+              Çözüm 2: +√2 sin(πt)
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Zaman Konumu ($t$):</span>
+            <span id="timeVal" class="text-purple-600 font-mono font-bold">t = 0.50 s</span>
+          </div>
+          <input id="timeSlider" type="range" min="0" max="2" step="0.02" value="0.5" class="w-full slider-thumb accent-purple-600">
+        </div>
+      </div>
+
+      <!-- Çift Kanvas Alanı -->
+      <div class="space-y-3">
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Karmaşık Katsayı Düzlemi ve Parseval Çemberi ($|a_1|^2 + |a_{-1}|^2 = 1$)</span>
+            <span class="text-blue-600 font-semibold">Saf Sanal Eksen Üzerinde Konum</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="kCanvas" width="800" height="180" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Zaman Domeni: $x(t)$, Anlık Güç $|x(t)|^2$ ve Ortalama Güç Seviyesi ($P = 1.0$)</span>
+            <span class="text-indigo-600 font-semibold">Tek Fonksiyon: $x(-t) = -x(t)$</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="ynCanvas" width="800" height="220" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Paneli -->
+      <div id="simMath" class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs font-mono text-blue-900">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 6 Adım Kartları -->
+    <div class="space-y-6">
+      <!-- 1. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">1. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">1. Koşul: Gerçel ve Tek Fonksiyon Simetrisi</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_3_8_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x(t)$ sinyali gerçel ve tek olduğuna göre:
+          $$1.\; x(t) \in \mathbb{R} \implies a_{-k} = a_k^*$$
+          $$2.\; x(-t) = -x(t) \implies a_{-k} = -a_k \quad \text{ve} \quad a_0 = 0$$
+          İki özelliği birleştirirsek:
+          $$a_k^* = -a_k \implies a_k \text{ saf sanaldır (Purely Imaginary)}$$
+          Dolayısıyla $a_1 = j C$ şeklinde yazılabilir; burada $C \in \mathbb{R}$'dir. $a_{-1} = -a_1 = -j C$ olur.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img1" class="w-full h-auto block" alt="1. Adım">
+        </div>
+      </div>
+
+      <!-- 2. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">2. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">2. ve 3. Koşul: Periyot ve Harmonik Bant Sınırı</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_3_8_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Temel periyot $T = 2$ olduğundan temel frekans:
+          $$\omega_0 = \frac{2\pi}{T} = \frac{2\pi}{2} = \pi \text{ rad/s}$$
+          3. Koşul $|k| > 1$ için $a_k = 0$ olduğunu belirtmektedir. $a_0 = 0$ olduğunu da biliyoruz.<br>
+          Böylece sıfırdan farklı olabilecek yalnızca iki katsayı kalır: $\mathbf{a_1}$ ve $\mathbf{a_{-1}}$.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img2" class="w-full h-auto block" alt="2. Adım">
+        </div>
+      </div>
+
+      <!-- 3. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">3. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">4. Koşul: Parseval Teoremi ile Güç Eşitliği</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_3_8_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sürekli zaman Fourier serisi için Parseval bağıntısı:
+          $$P = \frac{1}{T} \int_0^T |x(t)|^2 dt = \sum_{k=-\infty}^{\infty} |a_k|^2$$
+          Verilen 4. koşul:
+          $$\frac{1}{2} \int_0^2 |x(t)|^2 dt = 1 \implies \sum_{k=-\infty}^{\infty} |a_k|^2 = 1$$
+          Yalnızca $k = \pm 1$ terimleri sıfırdan farklı olduğundan:
+          $$|a_1|^2 + |a_{-1}|^2 = 1$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img3" class="w-full h-auto block" alt="3. Adım">
+        </div>
+      </div>
+
+      <!-- 4. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">4. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Katsayı Genliklerinin Hesaplanması ($C = \pm 1/\sqrt{2}$)</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_3_8_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $a_1 = j C$ ve $a_{-1} = -j C$ ifadelerini Parseval denkleminde yerine yazalım:
+          $$|j C|^2 + |-j C|^2 = 1 \implies C^2 + C^2 = 1 \implies 2C^2 = 1$$
+          $$C^2 = \frac{1}{2} \implies \mathbf{C = \pm \frac{1}{\sqrt{2}}}$$
+          Buradan iki farklı katsayı çifti çıkar:
+          <ul class="list-disc list-inside space-y-1 mt-1 text-slate-700">
+            <li><strong>Durum A ($C = +1/\sqrt{2}$):</strong> $a_1 = \frac{j}{\sqrt{2}}, \quad a_{-1} = -\frac{j}{\sqrt{2}}$</li>
+            <li><strong>Durum B ($C = -1/\sqrt{2}$):</strong> $a_1 = -\frac{j}{\sqrt{2}}, \quad a_{-1} = \frac{j}{\sqrt{2}}$</li>
+          </ul>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img4" class="w-full h-auto block" alt="4. Adım">
+        </div>
+      </div>
+
+      <!-- 5. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">5. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Sentez Denklemi ile İki Sinyalin Türetilmesi</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_3_8_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Fourier serisi sentez denklemini yazalım:
+          $$x(t) = a_1 e^{j\pi t} + a_{-1} e^{-j\pi t} = jC e^{j\pi t} - jC e^{-j\pi t} = jC (e^{j\pi t} - e^{-j\pi t}) = jC \cdot (2j\sin(\pi t)) = -2C \sin(\pi t)$$
+          Bulduğumuz iki $C$ değerini koyarsak:
+          $$1.\; C = +\frac{1}{\sqrt{2}} \implies \mathbf{x_1(t) = -2\left(\frac{1}{\sqrt{2}}\right)\sin(\pi t) = -\sqrt{2}\sin(\pi t)}$$
+          $$2.\; C = -\frac{1}{\sqrt{2}} \implies \mathbf{x_2(t) = -2\left(-\frac{1}{\sqrt{2}}\right)\sin(\pi t) = +\sqrt{2}\sin(\pi t)}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img5" class="w-full h-auto block" alt="5. Adım">
+        </div>
+      </div>
+
+      <!-- 6. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">6. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Doğrulama ve Sağlama</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_3_8_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Bulunan $x(t) = \pm \sqrt{2}\sin(\pi t)$ sinyallerini 4 koşul üzerinden test edelim:
+          <ul class="list-disc list-inside space-y-1 mt-1 text-slate-700">
+            <li><strong>Gerçel ve Tek:</strong> $\sin(\pi t)$ gerçeldir ve $\sin(-\pi t) = -\sin(\pi t)$ olduğundan tektir. (Sağlar)</li>
+            <li><strong>Periyot:</strong> $\omega_0 = \pi \implies T = 2\pi/\pi = 2$. (Sağlar)</li>
+            <li><strong>Harmonik Sınırı:</strong> Sadece temel frekans bileşeni vardır ($k = \pm 1$). (Sağlar)</li>
+            <li><strong>Parseval Gücü:</strong>
+              $$\frac{1}{2} \int_0^2 (\pm \sqrt{2}\sin(\pi t))^2 dt = \frac{1}{2} \int_0^2 2\sin^2(\pi t) dt = \int_0^2 \frac{1 - \cos(2\pi t)}{2} dt = \frac{2}{2} = 1 \quad \text{(Tam Sağlar!)}$$
+            </li>
+          </ul>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img6" class="w-full h-auto block" alt="6. Adım">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2;
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    let activeSolution = 1; // 1: -sqrt(2) sin(pi t), 2: +sqrt(2) sin(pi t)
+    const btnSol1 = document.getElementById('btnSol1');
+    const btnSol2 = document.getElementById('btnSol2');
+    const solVal = document.getElementById('solVal');
+    const timeSlider = document.getElementById('timeSlider');
+    const timeVal = document.getElementById('timeVal');
+    const simMath = document.getElementById('simMath');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    function selectSol(s) {
+      activeSolution = s;
+      btnSol1.className = s === 1 ? 'flex-1 py-1.5 bg-blue-600 text-white font-bold rounded-lg border border-blue-600 shadow-sm' : 'flex-1 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 font-bold rounded-lg border border-slate-200';
+      btnSol2.className = s === 2 ? 'flex-1 py-1.5 bg-blue-600 text-white font-bold rounded-lg border border-blue-600 shadow-sm' : 'flex-1 py-1.5 bg-slate-100 hover:bg-blue-50 text-slate-700 font-bold rounded-lg border border-slate-200';
+      solVal.textContent = s === 1 ? 'x₁(t) = -√2 sin(πt)' : 'x₂(t) = +√2 sin(πt)';
+      drawSimulator();
+    }
+
+    btnSol1.addEventListener('click', () => selectSol(1));
+    btnSol2.addEventListener('click', () => selectSol(2));
+    timeSlider.addEventListener('input', drawSimulator);
+
+    function drawSimulator() {
+      const curT = parseFloat(timeSlider.value);
+      timeVal.textContent = 't = ' + curT.toFixed(2) + ' s';
+
+      // 1. Complex Plane Canvas
+      const kw = kCanvas.width / 2;
+      const kh = kCanvas.height / 2;
+      const kctx = kCanvas.getContext('2d');
+      kctx.setTransform(1, 0, 0, 1, 0, 0);
+      kctx.scale(2, 2);
+      kctx.clearRect(0, 0, kw, kh);
+
+      kctx.fillStyle = '#fafafa';
+      kctx.fillRect(0, 0, kw, kh);
+
+      const cx = kw / 2;
+      const cy = kh / 2;
+      const scaleR = 60; // 1 unit = 60 px
+
+      // Axes
+      kctx.strokeStyle = '#cbd5e1';
+      kctx.beginPath();
+      kctx.moveTo(cx - 100, cy); kctx.lineTo(cx + 100, cy);
+      kctx.moveTo(cx, cy - 80); kctx.lineTo(cx, cy + 80);
+      kctx.stroke();
+
+      // Circle for |a|^2 = 0.5 (radius = 1/sqrt(2) = 0.707)
+      const rCircle = (1 / Math.SQRT2) * scaleR;
+      kctx.strokeStyle = 'rgba(37, 99, 235, 0.25)';
+      kctx.setLineDash([3, 3]);
+      kctx.beginPath(); kctx.arc(cx, cy, rCircle, 0, 2*Math.PI); kctx.stroke();
+      kctx.setLineDash([]);
+
+      const sign = (activeSolution === 1) ? 1 : -1;
+      // a1 = j * sign * (1/sqrt(2)) -> on positive imaginary if sign=1
+      const a1_y = cy - sign * rCircle;
+      const am1_y = cy + sign * rCircle;
+
+      // Plot a1
+      kctx.fillStyle = '#2563eb';
+      kctx.beginPath(); kctx.arc(cx, a1_y, 4.5, 0, 2*Math.PI); kctx.fill();
+      kctx.font = 'bold 11px Inter';
+      kctx.fillText(`a₁ = ${sign > 0 ? '+' : '-'}j / √2`, cx + 10, a1_y + 4);
+
+      // Plot a_-1
+      kctx.fillStyle = '#e11d48';
+      kctx.beginPath(); kctx.arc(cx, am1_y, 4.5, 0, 2*Math.PI); kctx.fill();
+      kctx.fillText(`a₋₁ = ${sign > 0 ? '-' : '+'}j / √2`, cx + 10, am1_y + 4);
+
+      // 2. Waveform Canvas
+      const yw = ynCanvas.width / 2;
+      const yh = ynCanvas.height / 2;
+      const yctx = ynCanvas.getContext('2d');
+      yctx.setTransform(1, 0, 0, 1, 0, 0);
+      yctx.scale(2, 2);
+      yctx.clearRect(0, 0, yw, yh);
+
+      yctx.fillStyle = '#ffffff';
+      yctx.fillRect(0, 0, yw, yh);
+
+      const yMid = yh / 2;
+      const tMin = -1, tMax = 3;
+      const scaleX = (yw - 60) / (tMax - tMin);
+
+      // Axis
+      yctx.strokeStyle = '#cbd5e1';
+      yctx.beginPath(); yctx.moveTo(30, yMid); yctx.lineTo(yw - 20, yMid); yctx.stroke();
+
+      // Power Level Line P = 1.0
+      const pLevelY = yMid - 1.0 * 30;
+      yctx.strokeStyle = '#94a3b8'; yctx.setLineDash([4, 4]);
+      yctx.beginPath(); yctx.moveTo(30, pLevelY); yctx.lineTo(yw - 20, pLevelY); yctx.stroke();
+      yctx.setLineDash([]);
+      yctx.fillStyle = '#64748b'; yctx.font = '10px Inter';
+      yctx.fillText('Ortalama Güç P = 1.0', yw - 140, pLevelY - 5);
+
+      // Plot |x(t)|^2 (power) filled area
+      yctx.fillStyle = 'rgba(244, 63, 94, 0.12)';
+      yctx.beginPath();
+      for (let px = 0; px <= yw - 50; px++) {
+        const t = tMin + px / scaleX;
+        const xVal = -sign * Math.SQRT2 * Math.sin(Math.PI * t);
+        const powVal = xVal * xVal;
+        const py = yMid - powVal * 30;
+        if (px === 0) yctx.moveTo(30 + px, py); else yctx.lineTo(30 + px, py);
+      }
+      yctx.lineTo(yw - 20, yMid); yctx.lineTo(30, yMid);
+      yctx.fill();
+
+      // Plot x(t) solid purple
+      yctx.strokeStyle = '#7c3aed'; yctx.lineWidth = 2.5;
+      yctx.beginPath();
+      let curXVal = 0;
+      for (let px = 0; px <= yw - 50; px++) {
+        const t = tMin + px / scaleX;
+        const xVal = -sign * Math.SQRT2 * Math.sin(Math.PI * t);
+        const py = yMid - xVal * 35;
+        if (px === 0) yctx.moveTo(30 + px, py); else yctx.lineTo(30 + px, py);
+        if (Math.abs(t - curT) < (tMax - tMin) / (yw - 50)) curXVal = xVal;
+      }
+      yctx.stroke();
+
+      // Time cursor
+      const cursorX = 30 + (curT - tMin) * scaleX;
+      yctx.strokeStyle = '#2563eb'; yctx.lineWidth = 1.5;
+      yctx.beginPath(); yctx.moveTo(cursorX, 15); yctx.lineTo(cursorX, yh - 20); yctx.stroke();
+
+      yctx.fillStyle = '#2563eb';
+      yctx.beginPath(); yctx.arc(cursorX, yMid - curXVal * 35, 4.5, 0, 2*Math.PI); yctx.fill();
+
+      simMath.innerHTML = `Durum Analizi: t = ${curT.toFixed(2)} s | x(t) = ${curXVal.toFixed(3)} | Anlık Güç |x(t)|² = ${(curXVal*curXVal).toFixed(3)} | Ortalama Güç P = |a₁|² + |a₋₁|² = (1/√2)² + (1/√2)² = 1.000`;
+    }
+
+    function renderStep1() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('1. Adım: Gerçel ve Tek Fonksiyon Teoremi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('1. x(t) gerçel ise: a_{-k} = a_k* (Eşlenik simetrisi)', 30, 65);
+      ctx.fillText('2. x(t) tek ise: a_{-k} = -a_k ve a_0 = 0', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_k* = -a_k  ===>  a_k tamamen SAF SANALDIR (a_1 = j * C, C in R)', 30, 135);
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep2() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('2. Adım: Frekans ve Harmonik Kısıtı', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('T = 2  ===>  w0 = 2*pi / 2 = pi rad/s', 30, 65);
+      ctx.fillText('|k| > 1 için a_k = 0 ve a_0 = 0 olduğundan sadece k = +1 ve k = -1 kalır.', 30, 95);
+      ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Sinyal saf sinüzoidaldir: x(t) = a_1 * e^(j*pi*t) + a_{-1} * e^(-j*pi*t)', 30, 135);
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep3() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('3. Adım: Parseval Güç Teoremi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('P = (1/T) * INT_0^T |x(t)|^2 dt = SUM |a_k|^2', 30, 65);
+      ctx.fillText('Verilen (1/2) * INT_0^2 |x(t)|^2 dt = 1 olduğundan:', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('|a_1|^2 + |a_{-1}|^2 = 1', 30, 135);
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep4() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('4. Adım: İki Kökün Bulunması (C = +/- 1/sqrt(2))', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('|j * C|^2 + |-j * C|^2 = 1  ===>  C^2 + C^2 = 1  ===>  2 * C^2 = 1', 30, 65);
+      ctx.fillText('C = +1/sqrt(2)  veya  C = -1/sqrt(2)', 30, 95);
+      ctx.fillStyle = '#d97706'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('İki bağımsız katsayı çözümü mevcuttur!', 30, 135);
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep5() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('5. Adım: Sinyallerin Sentezlenmesi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('x(t) = j*C * (e^(j*pi*t) - e^(-j*pi*t)) = j*C * (2j * sin(pi*t)) = -2*C * sin(pi*t)', 30, 65);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('1. Sinyal: x1(t) = -sqrt(2) * sin(pi*t)', 30, 105);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('2. Sinyal: x2(t) = +sqrt(2) * sin(pi*t)', 30, 140);
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep6() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('6. Adım: 4 Koşulun Kesin Sağlaması', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('1. Gerçel ve tek: sin(pi*t) tek fonksiyondur. (Tam Sağlar)', 30, 60);
+      ctx.fillText('2. Periyot T = 2: w0 = pi. (Tam Sağlar)', 30, 85);
+      ctx.fillText('3. Harmonik sınırı: Yalnızca k = +/-1 mevcuttur. (Tam Sağlar)', 30, 110);
+      ctx.fillStyle = '#e11d48'; ctx.font = 'bold 12px Inter';
+      ctx.fillText('4. Güç: (1/2) * INT_0^2 2*sin^2(pi*t) dt = 1.0 (Tam Sağlar)', 30, 145);
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSimulator();
+      renderStep1();
+      renderStep2();
+      renderStep3();
+      renderStep4();
+      renderStep5();
+      renderStep6();
+    });
+  </script>
+</body>
+</html>

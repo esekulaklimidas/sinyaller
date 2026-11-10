@@ -122,7 +122,7 @@
         <button data-filter="cat-block" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg transition">Blok Diyagramları (2)</button>
         <button data-filter="cat-adv" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">İleri Düzey (4)</button>
         <button data-filter="cat-ext" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-emerald-100 text-emerald-800 rounded-lg transition">Fiziksel Sistemler (1)</button>
-        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (3)</button>
+        <button data-filter="cat-fourier" class="filter-pill px-3 py-1.5 bg-slate-100 hover:bg-indigo-100 text-indigo-900 rounded-lg transition">Fourier Serisi (10)</button>
         <span class="text-slate-300 mx-1 hidden sm:inline">|</span>
         <button data-domain="dt" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-purple-100 text-purple-800 rounded-lg transition">Ayrık Zaman (DT)</button>
         <button data-domain="ct" class="domain-pill px-2.5 py-1.5 bg-slate-100 hover:bg-amber-100 text-amber-800 rounded-lg transition">Sürekli Zaman (CT)</button>
@@ -1200,7 +1200,7 @@ eq 0$ ile nedensellik ihlali.
           </div>
           <p class="text-xs text-slate-500 mt-1">Sürekli ve Ayrık Zaman Fourier Serisi (CTFS / DTFS), Katsayılar ($a_k$), Harmonik Bileşenler, Eşlenik Simetrisi ve Trigonometrik Dönüşümler.</p>
         </div>
-        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2 &bull; 3.3</span>
+        <span class="text-xs font-mono text-slate-400">Problemler: 3.1 &bull; 3.2 &bull; 3.3 &bull; 3.4 &bull; 3.5 &bull; 3.6 &bull; 3.7 &bull; 3.8 &bull; 3.9 &bull; 3.10</span>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1249,6 +1249,125 @@ eq 0$ ile nedensellik ihlali.
           </p>
           <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
             <span class="text-emerald-600 font-medium font-bold">CT Harmonikler &amp; Fazör Simülatörü</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.4 -->
+        <a href="problem_3_4_surekli_zaman_kare_dalga_fourier_serisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.4 fourier serisi kare dalga sürekli zaman ctfs analiz denklemi 3.39 katsayılar ak tek harmonikler gibbs olayı oppenheim sayfa 282">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.4</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Kare Dalga</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Sürekli Zaman Kare Dalga Fourier Serisi Katsayıları</h3>
+          <p class="text-xs font-mono text-slate-700">$$a_0 = 0, \quad a_k = \begin{cases} 0, & k \text{ çift} \\ \frac{3}{j\pi k}, & k \text{ tek} \end{cases}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $\omega_0 = \pi, T = 2$ simetrik kare dalganın analiz integrali ile çözümü, sıfır DC bileşeni, yalnızca tek harmoniklerin varlığı ve Gibbs aşımı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">Tek Harmonik Spektrumu</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.5 -->
+        <a href="problem_3_5_zaman_kaymasi_ve_terslemesi_fourier_ozellikleri.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.5 fourier serisi özellikleri zaman kayması zaman terslemesi doğrusallık tablo 3.1 bk katsayıları frekans w2 oppenheim sayfa 282">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.5</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Fourier Özellikleri</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Zaman Kayması, Zaman Terslemesi ve Doğrusallık Özellikleri</h3>
+          <p class="text-xs font-mono text-slate-700">$$\omega_2 = \omega_1, \quad b_k = (a_k + a_{-k}) e^{-jk\omega_1}$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $x_2(t) = x_1(1-t) + x_1(t-1)$ sinyalinin temel frekans analizi, zaman terslemesi ve $t_0=1$ gecikmesinin frekans domenindeki çarpanı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-emerald-600 font-medium font-bold">Özellikler Tablosu 3.1</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.6 -->
+        <a href="problem_3_6_fourier_serisi_simetri_ve_gercellik_analizi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.6 fourier serisi simetri özellikleri gerçellik çiftlik eşlenik simetrisi ak a-k oppenheim sayfa 282">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.6</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Simetri & Gerçellik</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Fourier Serisi Simetri, Gerçellik ve Çiftlik Analizi</h3>
+          <p class="text-xs font-mono text-slate-700">$$\text{Gerçel: } x_2(t), x_3(t) \quad | \quad \text{Çift: Yalnızca } x_2(t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            3 farklı periyodik sinyalin katsayıları üzerinden eşlenik simetrisi ($a_k = a_{-k}^*$) ve çiftlik ($a_k = a_{-k}$) kriterlerinin kanıtı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-blue-600 font-medium font-bold">Simetri Kriterleri</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.7 -->
+        <a href="problem_3_7_turev_ve_integral_fourier_katsayilari_iliskisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.7 fourier serisi türev özelliği g(t)=dx/dt bk katsayıları ortalama dc değeri a0 integral oppenheim sayfa 282 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.7</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Türev & DC Analizi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Türev Özelliği ile Fourier Katsayıları ve Ortalama Değer</h3>
+          <p class="text-xs font-mono text-slate-700">$$a_0 = \frac{2}{T}, \quad a_k = \frac{T b_k}{j 2\pi k} \quad (k \ne 0)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Türev alma işlemi sırasında kaybolan DC bileşeninin $\int_T^{2T} x(t)dt = 2$ integrali ile bulunması ve $1/(j k \omega_0)$ çarpanı.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-purple-600 font-medium font-bold">Entegratör Davranışı</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.8 -->
+        <a href="problem_3_8_parseval_ve_simetriden_sinyal_belirleme.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="ct" data-keywords="3.8 parseval teoremi ortalama güç gerçel ve tek sinyal sinyal belirleme rekonstrüksiyon oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.8</span>
+            <span class="text-[10px] bg-indigo-100 text-indigo-800 font-bold px-2 py-0.5 rounded">CT &bull; Parseval Rekonstrüksiyon</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Parseval Teoremi ve Simetriden Sinyal Rekonstrüksiyonu</h3>
+          <p class="text-xs font-mono text-slate-700">$$x_1(t) = -\sqrt{2}\sin(\pi t), \quad x_2(t) = +\sqrt{2}\sin(\pi t)$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            Gerçel ve tek $x(t)$, $T=2$, bant sınırlılığı ($|k|>1 \implies a_k=0$) ve $P=1$ güç eşitliğinden 2 farklı sinyalin tam türetimi.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-amber-600 font-medium font-bold">Parseval Güç Korunumu</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.9 -->
+        <a href="problem_3_9_ayrik_zaman_durtu_katari_fourier_serisi.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.9 ayrık zaman fourier serisi dtfs analiz denklemi 3.95 periyodik dürtü katarı n=4 katsayılar a0 a1 a2 a3 oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.9</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; DTFS Analizi</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">Ayrık Zaman Periyodik Dürtü Katarı DTFS Analizi</h3>
+          <p class="text-xs font-mono text-slate-700">$$a_0 = 3, \quad a_1 = 1 - 2j, \quad a_2 = -1, \quad a_3 = 1 + 2j$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $N = 4$ periyotlu darbe katarının denklem (3.95) analiz eşitliği ile bir periyotluk sayısal katsayıları ve eşlenik simetrisi doğrulaması.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-indigo-600 font-medium font-bold">N=4 Katsayı Vektörü</span>
+            <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
+          </div>
+        </a>
+
+        <!-- 3.10 -->
+        <a href="problem_3_10_ayrik_zaman_fourier_periyodiklik_ve_simetri.html" class="problem-card group block p-4 bg-white rounded-2xl border border-indigo-200 hover:border-indigo-500 hover:shadow-md transition space-y-2 ring-1 ring-indigo-50" data-cat="cat-fourier" data-domain="dt" data-keywords="3.10 ayrık zaman fourier serisi dtfs periyodiklik modulo 7 indirgeme gerçel tek sinyal a0 a-1 a-2 a-3 oppenheim sayfa 283">
+          <div class="flex justify-between items-center text-xs">
+            <span class="font-extrabold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200">Problem 3.10</span>
+            <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded">DT &bull; Modulo 7 & Simetri</span>
+          </div>
+          <h3 class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition">DTFS Periyodiklik, Modulo 7 İndirgemesi ve Teklik Simetrisi</h3>
+          <p class="text-xs font-mono text-slate-700">$$a_0 = 0, \quad a_{-1} = -j, \quad a_{-2} = -2j, \quad a_{-3} = -3j$$</p>
+          <p class="text-[11px] text-slate-500 leading-relaxed">
+            $N = 7$ periyotlu, gerçel ve tek $x[n]$ için $a_{15}, a_{16}, a_{17}$ katsayılarından modulo 7 ve antisimetri ile negatif indislerin bulunması.
+          </p>
+          <div class="pt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-100">
+            <span class="text-rose-600 font-medium font-bold">Saf Sanal Katsayılar</span>
             <span class="text-indigo-600 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-0.5">İncele &rarr;</span>
           </div>
         </a>

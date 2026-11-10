@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.9: Ayrık Zaman Periyodik Dürtü Katarı DTFS Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- Üst Gezinme Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">Bölüm 3: Ayrık Zaman DTFS</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Problem 3.9</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">
+          Ayrık Zaman Fourier Serisi (DTFS) • Analiz Denklemi (3.95)
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-purple-100 text-purple-800 rounded-full border border-purple-200">
+          Periyot N = 4 Dürtü Katarı
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 3.9: Ayrık Zaman Periyodik Dürtü Katarının DTFS Katsayıları
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        $x[n] = \sum_{m=-\infty}^{\infty} \{4\delta[n - 4m] + 8\delta[n - 1 - 4m]\}$ periyodik ayrık zaman sinyalinin denklem (3.95) analiz eşitliği ile bir tam periyotluk ($k = 0, 1, 2, 3$) Fourier serisi katsayılarının kesin sayısal hesabı.
+      </p>
+
+      <!-- Matematiksel Model Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2">
+        <div class="font-bold text-slate-800">Verilen Ayrık Sinyal ve Bir Periyotluk Değerler:</div>
+        <div class="text-center font-mono text-sm py-1.5 text-indigo-900 bg-white rounded-lg border border-slate-200">
+          $$N = 4, \quad x[0] = 4, \quad x[1] = 8, \quad x[2] = 0, \quad x[3] = 0$$
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-center font-mono">
+          <div class="p-2 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = 0</span>
+            <span class="font-bold text-blue-600 text-sm">$$a_0 = 3$$</span>
+          </div>
+          <div class="p-2 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = 1</span>
+            <span class="font-bold text-indigo-600 text-sm">$$a_1 = 1 - 2j$$</span>
+          </div>
+          <div class="p-2 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = 2</span>
+            <span class="font-bold text-purple-600 text-sm">$$a_2 = -1$$</span>
+          </div>
+          <div class="p-2 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = 3</span>
+            <span class="font-bold text-rose-600 text-sm">$$a_3 = 1 + 2j$$</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🎯</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>Girdi:</strong> Her $4$ örnekte bir tekrarlayan ($N = 4$), $n=0$'da $4$, $n=1$'de $8$, $n=2$ ve $n=3$'te $0$ olan periyodik darbe katarı.</li>
+          <li><strong>İstenen:</strong> Denklem (3.95) analiz formülü $a_k = \frac{1}{N} \sum_{n=0}^{N-1} x[n] e^{-j k \frac{2\pi}{N} n}$ ile bir periyotluk ($k = 0, 1, 2, 3$) sayısal katsayılar.</li>
+          <li><strong>DTFS Temel Kuralı:</strong> Ayrık zamanda Fourier katsayıları da periyodiktir ($a_{k+N} = a_k$). Bu yüzden yalnızca $N = 4$ adet bağımsız katsayı vardır!</li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+          <li><strong>Periyot Tespiti:</strong> $n - 4m \implies N = 4$ ve $\omega_0 = 2\pi / 4 = \pi / 2$.</li>
+          <li><strong>Temel Periyot Örnekleri:</strong> $x[0] = 4, x[1] = 8, x[2] = 0, x[3] = 0$.</li>
+          <li><strong>Analiz Toplamı:</strong> $a_k = \frac{1}{4}[4 e^0 + 8 e^{-j k \frac{\pi}{2}}] = 1 + 2 e^{-j k \pi/2}$.</li>
+          <li><strong>Sayısal Değerler:</strong> $e^{-j k \pi/2} = (-j)^k$ özdeşliği ile $k=0,1,2,3$ için değerlerin hesaplanması.</li>
+          <li><strong>Eşlenik Simetrisi Kontrolü:</strong> $x[n]$ gerçel olduğundan $a_3 = a_{-1} = a_1^*$ sağlaması.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: DTFS Katsayı Spektrumu & Ayrık Zaman Stem Grafiği</h2>
+          <p class="text-xs text-slate-500">Harmonik indeksini seçerek karmaşık düzlemdeki $a_k$ fazörünü ve $x[n]$ sinyalinin $N=4$ periyotluk darbe yapısını inceleyin.</p>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Harmonik İndeksi ($k$):</span>
+            <span id="kVal" class="text-indigo-600 font-mono font-bold">k = 1</span>
+          </div>
+          <input id="kSlider" type="range" min="0" max="7" step="1" value="1" class="w-full slider-thumb accent-indigo-600">
+        </div>
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Darbe Genliği Çarpanı:</span>
+            <span id="ampVal" class="text-blue-600 font-mono font-bold">x1.0</span>
+          </div>
+          <input id="ampSlider" type="range" min="0.5" max="2.0" step="0.1" value="1.0" class="w-full slider-thumb accent-blue-600">
+        </div>
+      </div>
+
+      <!-- Çift Kanvas Alanı -->
+      <div class="space-y-3">
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>DTFS Katsayıları $a_k$ (Mavi: Gerçel Kısım, Kırmızı: Sanal Kısım)</span>
+            <span class="text-slate-400 font-normal">N = 4 Periyodik Tekrar ($a_{k+4} = a_k$)</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="kCanvas" width="800" height="180" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Ayrık Zaman Domeni $x[n]$ (Stem Grafiği)</span>
+            <span class="text-indigo-600 font-semibold">x[0]=4, x[1]=8, x[2]=0, x[3]=0</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="ynCanvas" width="800" height="200" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Paneli -->
+      <div id="simMath" class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs font-mono text-blue-900">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 6 Adım Kartları -->
+    <div class="space-y-6">
+      <!-- 1. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">1. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Ayrık Zaman Sinyalinin Tanımı ve Temel Periyot ($N = 4$)</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_3_9_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Verilen ayrık zaman sinyali:
+          $$x[n] = \sum_{m=-\infty}^{\infty} \{4\delta[n - 4m] + 8\delta[n - 1 - 4m]\}$$
+          Darbelerin indekslerinde yer alan $4m$ terimi, sinyalin her $4$ örnekte bir kendini tam olarak tekrarladığını gösterir:
+          $$\mathbf{N = 4 \text{ örnek}}, \quad \omega_0 = \frac{2\pi}{N} = \frac{2\pi}{4} = \frac{\pi}{2} \text{ rad/örnek}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img1" class="w-full h-auto block" alt="1. Adım">
+        </div>
+      </div>
+
+      <!-- 2. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">2. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Temel Periyot İçindeki Örnek Değerleri ($n = 0, 1, 2, 3$)</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_3_9_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $m = 0$ periyoduna odaklanalım ($n = 0, 1, 2, 3$):
+          $$n = 0 \implies x[0] = 4\delta[0] + 8\delta[-1] = 4 \cdot 1 + 0 = 4$$
+          $$n = 1 \implies x[1] = 4\delta[1] + 8\delta[0] = 0 + 8 \cdot 1 = 8$$
+          $$n = 2 \implies x[2] = 4\delta[2] + 8\delta[1] = 0$$
+          $$n = 3 \implies x[3] = 4\delta[3] + 8\delta[2] = 0$$
+          Bir periyotluk dizi: $\mathbf{x[n] = \{4, 8, 0, 0\}}, \quad 0 \le n \le 3$.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img2" class="w-full h-auto block" alt="2. Adım">
+        </div>
+      </div>
+
+      <!-- 3. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">3. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">DTFS Analiz Denkleminin (3.95) Kurulması</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_3_9_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Kitaptaki denklem (3.95):
+          $$a_k = \frac{1}{N} \sum_{n=\langle N \rangle} x[n] e^{-j k \frac{2\pi}{N} n} = \frac{1}{4} \sum_{n=0}^{3} x[n] e^{-j k \frac{\pi}{2} n}$$
+          Örnek değerlerini yerine koyalım:
+          $$a_k = \frac{1}{4} \left[ x[0] e^0 + x[1] e^{-j k \frac{\pi}{2}} + 0 + 0 \right] = \frac{1}{4} \left[ 4 + 8 e^{-j k \frac{\pi}{2}} \right]$$
+          $$\mathbf{a_k = 1 + 2 e^{-j k \frac{\pi}{2}} = 1 + 2(-j)^k}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img3" class="w-full h-auto block" alt="3. Adım">
+        </div>
+      </div>
+
+      <!-- 4. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">4. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Birebir Sayısal Katsayı Değerlerinin Hesaplanması</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_3_9_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Temel periyot $k \in \{0, 1, 2, 3\}$ için açık hesaplamalar:
+          <ul class="list-disc list-inside space-y-1.5 mt-1 text-slate-700 font-mono text-xs">
+            <li><strong>k = 0:</strong> $a_0 = 1 + 2 e^0 = 1 + 2 = \mathbf{3}$ (Ortalama değer: $(4+8+0+0)/4 = 3$).</li>
+            <li><strong>k = 1:</strong> $a_1 = 1 + 2 e^{-j\pi/2} = 1 + 2(-j) = \mathbf{1 - 2j}$.</li>
+            <li><strong>k = 2:</strong> $a_2 = 1 + 2 e^{-j\pi} = 1 + 2(-1) = 1 - 2 = \mathbf{-1}$.</li>
+            <li><strong>k = 3:</strong> $a_3 = 1 + 2 e^{-j3\pi/2} = 1 + 2(j) = \mathbf{1 + 2j}$.</li>
+          </ul>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img4" class="w-full h-auto block" alt="4. Adım">
+        </div>
+      </div>
+
+      <!-- 5. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">5. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">DTFS Periyodikliği ve Eşlenik Simetrisi Kontrolü</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_3_9_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          1. <strong>Periyodiklik:</strong> DTFS katsayıları $N=4$ periyodiktir ($a_{k+4} = a_k$):
+          $$a_4 = a_0 = 3, \quad a_5 = a_1 = 1 - 2j, \quad a_6 = a_2 = -1, \quad a_7 = a_3 = 1 + 2j$$
+          2. <strong>Eşlenik Simetrisi:</strong> $x[n]$ gerçel olduğu için $a_{-k} = a_k^*$ olmalıdır:
+          $$a_3 = a_{3-4} = a_{-1} = 1 + 2j = (1 - 2j)^* = a_1^* \quad \text{(Kusursuz Sağlar!)}$$
+          $$a_2 = a_{-2} = -1 = (-1)^* \quad \text{(Gerçel ve Simetrik)}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img5" class="w-full h-auto block" alt="5. Adım">
+        </div>
+      </div>
+
+      <!-- 6. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">6. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Parseval Güç Korunumu ve Sonuç Tablosu</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_3_9_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Parseval eşitliği ile sağlamasını yapalım:
+          $$\text{Zaman Domeni Gücü: } P = \frac{1}{4} \sum_{n=0}^3 |x[n]|^2 = \frac{1}{4} [4^2 + 8^2 + 0 + 0] = \frac{16 + 64}{4} = \frac{80}{4} = 20$$
+          $$\text{Frekans Domeni Gücü: } \sum_{k=0}^3 |a_k|^2 = |3|^2 + |1-2j|^2 + |-1|^2 + |1+2j|^2 = 9 + (1+4) + 1 + (1+4) = 9 + 5 + 1 + 5 = 20$$
+          İki taraf tam eşittir ($20 = 20$). Çözüm %100 doğrulanmıştır!
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img6" class="w-full h-auto block" alt="6. Adım">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2;
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    const kSlider = document.getElementById('kSlider');
+    const ampSlider = document.getElementById('ampSlider');
+    const kVal = document.getElementById('kVal');
+    const ampVal = document.getElementById('ampVal');
+    const simMath = document.getElementById('simMath');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    const baseA = [
+      { r: 3, i: 0 },
+      { r: 1, i: -2 },
+      { r: -1, i: 0 },
+      { r: 1, i: 2 }
+    ];
+
+    function drawSimulator() {
+      const selK = parseInt(kSlider.value);
+      const amp = parseFloat(ampSlider.value);
+      kVal.textContent = 'k = ' + selK + ' (mod 4 = ' + (selK % 4) + ')';
+      ampVal.textContent = 'x' + amp.toFixed(1);
+
+      // 1. kCanvas (DTFS coefficients bar / stem)
+      const kw = kCanvas.width / 2;
+      const kh = kCanvas.height / 2;
+      const kctx = kCanvas.getContext('2d');
+      kctx.setTransform(1, 0, 0, 1, 0, 0);
+      kctx.scale(2, 2);
+      kctx.clearRect(0, 0, kw, kh);
+
+      kctx.fillStyle = '#fafafa';
+      kctx.fillRect(0, 0, kw, kh);
+
+      const midY = kh / 2;
+      kctx.strokeStyle = '#cbd5e1';
+      kctx.beginPath(); kctx.moveTo(30, midY); kctx.lineTo(kw - 20, midY); kctx.stroke();
+
+      const dx = (kw - 80) / 8;
+      for (let k = 0; k < 8; k++) {
+        const cx = 50 + k * dx;
+        const modK = k % 4;
+        const rVal = baseA[modK].r * amp;
+        const iVal = baseA[modK].i * amp;
+
+        // Real part (Blue)
+        kctx.strokeStyle = (k === selK) ? '#1d4ed8' : '#3b82f6';
+        kctx.lineWidth = (k === selK) ? 3 : 2;
+        kctx.beginPath(); kctx.moveTo(cx - 4, midY); kctx.lineTo(cx - 4, midY - rVal * 18); kctx.stroke();
+        kctx.fillStyle = (k === selK) ? '#1d4ed8' : '#3b82f6';
+        kctx.beginPath(); kctx.arc(cx - 4, midY - rVal * 18, 3, 0, 2*Math.PI); kctx.fill();
+
+        // Imag part (Red)
+        if (Math.abs(iVal) > 0.001) {
+          kctx.strokeStyle = (k === selK) ? '#be123c' : '#f43f5e';
+          kctx.lineWidth = (k === selK) ? 3 : 2;
+          kctx.beginPath(); kctx.moveTo(cx + 4, midY); kctx.lineTo(cx + 4, midY - iVal * 18); kctx.stroke();
+          kctx.fillStyle = (k === selK) ? '#be123c' : '#f43f5e';
+          kctx.beginPath(); kctx.arc(cx + 4, midY - iVal * 18, 3, 0, 2*Math.PI); kctx.fill();
+        }
+
+        kctx.fillStyle = (k === selK) ? '#1e293b' : '#64748b';
+        kctx.font = (k === selK) ? 'bold 10px Inter' : '9px Inter';
+        kctx.textAlign = 'center';
+        kctx.fillText('k=' + k, cx, midY + (rVal < 0 || iVal < 0 ? -12 : 14));
+      }
+
+      kctx.fillStyle = '#1e293b'; kctx.font = 'bold 11px Inter'; kctx.textAlign = 'left';
+      kctx.fillText('DTFS Katsayıları a_k (Mavi: Re{a_k}, Kırmızı: Im{a_k})', 30, 20);
+
+      // 2. ynCanvas (x[n] stem)
+      const yw = ynCanvas.width / 2;
+      const yh = ynCanvas.height / 2;
+      const yctx = ynCanvas.getContext('2d');
+      yctx.setTransform(1, 0, 0, 1, 0, 0);
+      yctx.scale(2, 2);
+      yctx.clearRect(0, 0, yw, yh);
+
+      yctx.fillStyle = '#ffffff';
+      yctx.fillRect(0, 0, yw, yh);
+
+      const yZero = yh - 35;
+      yctx.strokeStyle = '#cbd5e1';
+      yctx.beginPath(); yctx.moveTo(30, yZero); yctx.lineTo(yw - 20, yZero); yctx.stroke();
+
+      const nMin = -2, nMax = 9;
+      const dxN = (yw - 80) / (nMax - nMin);
+      const baseX = [4, 8, 0, 0];
+
+      for (let n = nMin; n <= nMax; n++) {
+        const cx = 40 + (n - nMin) * dxN;
+        const modN = ((n % 4) + 4) % 4;
+        const val = baseX[modN] * amp;
+
+        yctx.strokeStyle = (modN === 1) ? '#7c3aed' : (modN === 0 ? '#2563eb' : '#94a3b8');
+        yctx.lineWidth = (val > 0) ? 2.5 : 1;
+        yctx.beginPath(); yctx.moveTo(cx, yZero); yctx.lineTo(cx, yZero - val * 14); yctx.stroke();
+
+        yctx.fillStyle = (modN === 1) ? '#7c3aed' : (modN === 0 ? '#2563eb' : '#94a3b8');
+        yctx.beginPath(); yctx.arc(cx, yZero - val * 14, val > 0 ? 4 : 2, 0, 2*Math.PI); yctx.fill();
+
+        yctx.fillStyle = '#64748b'; yctx.font = '9px Inter'; yctx.textAlign = 'center';
+        yctx.fillText(n, cx, yZero + 14);
+        if (val > 0) {
+          yctx.fillStyle = '#1e293b'; yctx.font = 'bold 9px Inter';
+          yctx.fillText(val.toFixed(0), cx, yZero - val * 14 - 6);
+        }
+      }
+
+      const curMod = selK % 4;
+      const curA = baseA[curMod];
+      simMath.innerHTML = `Seçili İndeks: k = ${selK} (mod 4 = ${curMod}) | a_${selK} = ${(curA.r * amp).toFixed(1)} ${curA.i < 0 ? '-' : '+'} ${Math.abs(curA.i * amp).toFixed(1)}j | Genlik |a_${selK}| = ${(Math.hypot(curA.r, curA.i) * amp).toFixed(3)}`;
+    }
+
+    kSlider.addEventListener('input', drawSimulator);
+    ampSlider.addEventListener('input', drawSimulator);
+
+    function renderStep1() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('1. Adım: Sinyalin Yapısı ve Periyot N = 4', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('x[n] = SUM { 4*delta[n - 4m] + 8*delta[n - 1 - 4m] }', 30, 65);
+      ctx.fillText('4m ötelemesi sinyalin periyodunun N = 4 olduğunu gösterir.', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Temel periyot N = 4, temel frekans w0 = 2*pi / 4 = pi / 2 rad/örnek', 30, 135);
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep2() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('2. Adım: Bir Periyotluk Örnek Değerleri', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('n = 0 için: x[0] = 4 * delta[0] = 4', 30, 65);
+      ctx.fillText('n = 1 için: x[1] = 8 * delta[0] = 8', 30, 95);
+      ctx.fillText('n = 2 ve n = 3 için: x[2] = 0, x[3] = 0', 30, 125);
+      ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('x[n] = {4, 8, 0, 0} (0 <= n <= 3)', 30, 155);
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep3() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('3. Adım: DTFS Analiz Eşitliği (3.95)', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('a_k = (1 / N) * SUM_{n=0}^{N-1} x[n] * e^(-j * k * (2*pi/N) * n)', 30, 65);
+      ctx.fillText('N = 4 ve x[n] = {4, 8, 0, 0} yerine konulduğunda:', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_k = (1 / 4) * [ 4 + 8 * e^(-j * k * pi / 2) ] = 1 + 2 * e^(-j * k * pi / 2)', 30, 135);
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep4() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('4. Adım: 4 Bağımsız Katsayının Hesaplanması', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('k = 0 : a_0 = 1 + 2*(1) = 3', 30, 65);
+      ctx.fillText('k = 1 : a_1 = 1 + 2*(-j) = 1 - 2j', 30, 95);
+      ctx.fillText('k = 2 : a_2 = 1 + 2*(-1) = -1', 30, 125);
+      ctx.fillText('k = 3 : a_3 = 1 + 2*(j) = 1 + 2j', 30, 155);
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep5() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('5. Adım: Simetri ve Periyodiklik Kontrolü', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('1. DTFS Periyodikliği: a_{k+4} = a_k', 30, 65);
+      ctx.fillText('2. Eşlenik Simetrisi (x[n] gerçel): a_{-k} = a_k*', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_3 = a_{-1} = 1 + 2j = a_1*  ===>  Simetri kusursuz sağlanır!', 30, 135);
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep6() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('6. Adım: Parseval Eşitliği ile Güç Doğrulaması', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('Zaman Gücü: (1/4) * (4^2 + 8^2 + 0 + 0) = (16 + 64) / 4 = 20', 30, 65);
+      ctx.fillText('Frekans Gücü: |3|^2 + |1-2j|^2 + |-1|^2 + |1+2j|^2 = 9 + 5 + 1 + 5 = 20', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('20 = 20 (Parseval eşitliği tam doğrulanmıştır)', 30, 135);
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSimulator();
+      renderStep1();
+      renderStep2();
+      renderStep3();
+      renderStep4();
+      renderStep5();
+      renderStep6();
+    });
+  </script>
+</body>
+</html>

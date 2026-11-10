@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Problem 3.10: Ayrık Zaman Fourier Serisinde Periyodiklik ve Simetri Analizi</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .slider-thumb::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen py-8 px-4">
+  <div class="max-w-4xl mx-auto space-y-8">
+    <!-- Üst Gezinme Kartı -->
+    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-wrap items-center justify-between gap-4">
+      <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-sm font-semibold rounded-lg transition-colors border border-slate-200 shadow-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Ana Menüye Dön (Tüm Sorular & Konu Anlatımı)
+      </a>
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-semibold px-2.5 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">Bölüm 3: Ayrık Zaman DTFS</span>
+        <span class="text-xs font-bold px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full border border-amber-200">Problem 3.10</span>
+      </div>
+    </div>
+
+    <!-- Başlık Kartı -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+      <div class="flex flex-wrap items-center gap-2 mb-3">
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full border border-indigo-200">
+          DTFS Periyodiklik ve Simetri Özellikleri • N = 7
+        </span>
+        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 bg-rose-100 text-rose-800 rounded-full border border-rose-200">
+          Gerçel & Tek Sinyal Katsayıları
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+        Problem 3.10: Periyodiklik Modulo 7 İndirgemesi ve $a_0, a_{-1}, a_{-2}, a_{-3}$ Hesabı
+      </h1>
+      <p class="mt-2 text-slate-600 text-sm sm:text-base leading-relaxed">
+        $N = 7$ periyotlu, gerçel ve tek simetrili bir periyodik ayrık zaman sinyali $x[n]$ için $a_{15} = j, a_{16} = 2j, a_{17} = 3j$ katsayılarından yola çıkılarak frekans domenindeki periyodiklik ve eşlenik teklik simetrisi ile $a_0, a_{-1}, a_{-2}, a_{-3}$ değerlerinin kesin analitik tespiti.
+      </p>
+
+      <!-- Matematiksel Model Özeti -->
+      <div class="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700 space-y-2">
+        <div class="font-bold text-slate-800">Verilenler ve Çıkarılan Temel Eşitlikler:</div>
+        <div class="text-center font-mono text-sm py-1.5 text-indigo-900 bg-white rounded-lg border border-slate-200">
+          $$N = 7, \quad a_{k+7} = a_k, \quad a_{15} = j \implies a_1 = j, \quad a_{16} = 2j \implies a_2 = 2j, \quad a_{17} = 3j \implies a_3 = 3j$$
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-center font-mono">
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">DC Bileşeni</span>
+            <span class="font-bold text-blue-600 text-sm">$$a_0 = 0$$</span>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = -1</span>
+            <span class="font-bold text-indigo-600 text-sm">$$a_{-1} = -j$$</span>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = -2</span>
+            <span class="font-bold text-purple-600 text-sm">$$a_{-2} = -2j$$</span>
+          </div>
+          <div class="p-2.5 bg-white rounded-lg border border-slate-200">
+            <span class="text-xs text-slate-500 block">k = -3</span>
+            <span class="font-bold text-rose-600 text-sm">$$a_{-3} = -3j$$</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Soru Analizi & Mini Konu Anlatımı (2 Kolon) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">🎯</span>
+          <h2 class="text-base font-bold text-slate-900">Soru Bizden Ne İstiyor?</h2>
+        </div>
+        <ul class="text-xs sm:text-sm text-slate-600 space-y-2 leading-relaxed">
+          <li><strong>Girdi:</strong> Gerçel ve tek $x[n]$ sinyali, $N = 7$ periyodu ve $a_{15} = j, a_{16} = 2j, a_{17} = 3j$ katsayıları.</li>
+          <li><strong>İstenen:</strong> $a_0, a_{-1}, a_{-2}, a_{-3}$ katsayılarının sayısal değerleri.</li>
+          <li><strong>Kritik DTFS Özellikleri:</strong>
+            <br>1. DTFS katsayıları periyodiktir: $a_{k+7} = a_k$.
+            <br>2. Gerçel ve tek sinyallerde $a_0 = 0$ ve $a_{-k} = -a_k = a_k^*$ (saf sanal ve tek simetri).
+          </li>
+        </ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💡</span>
+          <h2 class="text-base font-bold text-slate-900">Adım Adım Çözüm Metodolojisi</h2>
+        </div>
+        <ol class="text-xs sm:text-sm text-slate-600 space-y-2 list-decimal list-inside leading-relaxed">
+          <li><strong>Modulo 7 İndirgemesi:</strong> $a_{15} = a_{15 - 14} = a_1 = j$, $a_{16} = a_2 = 2j$, $a_{17} = a_3 = 3j$.</li>
+          <li><strong>Gerçel Sinyal Eşlenikliği:</strong> $x[n] \in \mathbb{R} \implies a_{-k} = a_k^*$.</li>
+          <li><strong>Tek Fonksiyon Özelliği:</strong> $x[-n] = -x[n] \implies a_0 = 0$ ve $a_{-k} = -a_k$.</li>
+          <li><strong>Katsayıların Hesabı:</strong> $a_0 = 0$, $a_{-1} = -a_1 = -j$, $a_{-2} = -2j$, $a_{-3} = -3j$.</li>
+          <li><strong>Tam Periyot Vektörü:</strong> $k \in \{0 \dots 6\}$ aralığındaki katsayıların döngüsel gösterimi.</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- Canlı Simülatör Kartı -->
+    <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900">Canlı Simülatör: Modulo 7 Periyodikliği ve Sanal Simetri Spektrumu</h2>
+          <p class="text-xs text-slate-500">Harmonik indeksini geniş aralıkta ($k = -7 \dots 20$) kaydırarak katsayıların 7'de bir tekrarlamasını ve antisimetrisini test edin.</p>
+        </div>
+      </div>
+
+      <!-- Kontrol Paneli -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>Harmonik İndeksi ($k$):</span>
+            <span id="kVal" class="text-indigo-600 font-mono font-bold">k = 1</span>
+          </div>
+          <input id="kSlider" type="range" min="-7" max="21" step="1" value="1" class="w-full slider-thumb accent-indigo-600">
+        </div>
+        <div>
+          <div class="flex justify-between font-semibold text-slate-700 mb-1">
+            <span>İndirgenmiş İndeks (k mod 7):</span>
+            <span id="modVal" class="text-purple-600 font-mono font-bold">k mod 7 = 1</span>
+          </div>
+          <div class="p-2 bg-white rounded-lg border border-slate-200 text-xs font-mono text-center text-slate-700">
+            $$a_k = a_{k \pmod 7}$$
+          </div>
+        </div>
+      </div>
+
+      <!-- Çift Kanvas Alanı -->
+      <div class="space-y-3">
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>DTFS Katsayıları $a_k$ (Saf Sanal Eksen Üzerinde Stem Grafiği)</span>
+            <span class="text-slate-400 font-normal">N = 7 Periyodik Tekrar</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="kCanvas" width="800" height="180" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+            <span>Ayrık Zaman Domeni $x[n]$ (Tek Fonksiyon Sentezi)</span>
+            <span class="text-indigo-600 font-semibold">x[-n] = -x[n], x[0] = 0</span>
+          </div>
+          <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+            <canvas id="ynCanvas" width="800" height="200" class="w-full h-auto block"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dinamik Matematiksel Durum Paneli -->
+      <div id="simMath" class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-xs font-mono text-blue-900">
+        Hesaplanıyor...
+      </div>
+    </div>
+
+    <!-- 6 Adım Kartları -->
+    <div class="space-y-6">
+      <!-- 1. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-blue-100 text-blue-800 border border-blue-200">1. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">DTFS Periyodiklik Teoremi ($a_{k+N} = a_k$)</h3>
+          </div>
+          <button onclick="downloadCard('img1', 'problem_3_10_adim_1.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-blue-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Ayrık zaman Fourier serisinin analiz denklemi:
+          $$a_k = \frac{1}{N} \sum_{n=0}^{N-1} x[n] e^{-j k \frac{2\pi}{N} n}$$
+          $k$ yerine $k + N$ yazarsak:
+          $$a_{k+N} = \frac{1}{N} \sum_{n=0}^{N-1} x[n] e^{-j(k+N)\frac{2\pi}{N}n} = \frac{1}{N} \sum_{n=0}^{N-1} x[n] e^{-jk\frac{2\pi}{N}n} \underbrace{e^{-j2\pi n}}_{1} = a_k$$
+          Dolayısıyla $N = 7$ için her 7 adımda bir katsayılar birebir tekrarlanır: $\mathbf{a_{k+7m} = a_k}$.
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img1" class="w-full h-auto block" alt="1. Adım">
+        </div>
+      </div>
+
+      <!-- 2. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-purple-100 text-purple-800 border border-purple-200">2. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Verilen Yüksek İndisli Katsayıların İndirgenmesi</h3>
+          </div>
+          <button onclick="downloadCard('img2', 'problem_3_10_adim_2.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-purple-50 text-slate-600 hover:text-purple-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Soruda verilen değerler:
+          $$a_{15} = j, \quad a_{16} = 2j, \quad a_{17} = 3j$$
+          Periyot $N = 7$ olduğundan, $2 \times 7 = 14$ çıkararak temel aralığa indirgeyebiliriz:
+          $$a_1 = a_{15 - 14} = a_{15} = \mathbf{j}$$
+          $$a_2 = a_{16 - 14} = a_{16} = \mathbf{2j}$$
+          $$a_3 = a_{17 - 14} = a_{17} = \mathbf{3j}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img2" class="w-full h-auto block" alt="2. Adım">
+        </div>
+      </div>
+
+      <!-- 3. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-amber-100 text-amber-800 border border-amber-200">3. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Gerçel Ayrık Zaman Sinyali Eşlenik Simetrisi</h3>
+          </div>
+          <button onclick="downloadCard('img3', 'problem_3_10_adim_3.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-amber-50 text-slate-600 hover:text-amber-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $x[n] \in \mathbb{R}$ koşulu gereğince:
+          $$a_{-k} = a_k^*$$
+          Bu kural uyarınca negatif indeksli katsayılar pozitif indeksli katsayıların karmaşık eşleniğidir:
+          $$a_{-1} = a_1^* = (j)^* = -j$$
+          $$a_{-2} = a_2^* = (2j)^* = -2j$$
+          $$a_{-3} = a_3^* = (3j)^* = -3j$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img3" class="w-full h-auto block" alt="3. Adım">
+        </div>
+      </div>
+
+      <!-- 4. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-100 text-emerald-800 border border-emerald-200">4. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Tek Fonksiyon Antisimetrisi ve $a_0 = 0$</h3>
+          </div>
+          <button onclick="downloadCard('img4', 'problem_3_10_adim_4.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sinyal tek fonksiyondur ($x[-n] = -x[n]$).<br>
+          1. <strong>DC Bileşeni:</strong> Tek periyodik bir sinyalin bir periyotluk ortalaması özdeş olarak sıfırdır:
+          $$a_0 = \frac{1}{7} \sum_{n=0}^{6} x[n] = \mathbf{0}$$
+          2. <strong>Antisimetri:</strong> $x[-n] = -x[n] \implies a_{-k} = -a_k$.
+          Eşlenik simetrisi $a_{-k} = a_k^*$ ile birleştiğinde:
+          $$a_k^* = -a_k \implies a_k \text{ saf sanaldır. (Verilen } j, 2j, 3j \text{ değerleri ile tam uyumlu!)}$$
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img4" class="w-full h-auto block" alt="4. Adım">
+        </div>
+      </div>
+
+      <!-- 5. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-indigo-100 text-indigo-800 border border-indigo-200">5. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">İstenen Katsayıların Kesin Değerleri</h3>
+          </div>
+          <button onclick="downloadCard('img5', 'problem_3_10_adim_5.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-indigo-50 text-slate-600 hover:text-indigo-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Sorunun bizden belirlememizi istediği 4 katsayı:
+          <div class="grid grid-cols-2 gap-3 mt-2 font-mono text-sm">
+            <div class="p-3 bg-blue-50 rounded-xl border border-blue-200 text-blue-900">$$\mathbf{a_0 = 0}$$</div>
+            <div class="p-3 bg-indigo-50 rounded-xl border border-indigo-200 text-indigo-900">$$\mathbf{a_{-1} = -j}$$</div>
+            <div class="p-3 bg-purple-50 rounded-xl border border-purple-200 text-purple-900">$$\mathbf{a_{-2} = -2j}$$</div>
+            <div class="p-3 bg-rose-50 rounded-xl border border-rose-200 text-rose-900">$$\mathbf{a_{-3} = -3j}$$</div>
+          </div>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img5" class="w-full h-auto block" alt="5. Adım">
+        </div>
+      </div>
+
+      <!-- 6. Adım -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-1 text-xs font-bold rounded-md bg-rose-100 text-rose-800 border border-rose-200">6. Adım</span>
+            <h3 class="text-base font-bold text-slate-900">Tam Periyot Katsayı Vektörü ve Doğrulama</h3>
+          </div>
+          <button onclick="downloadCard('img6', 'problem_3_10_adim_6.png')" class="text-xs px-2.5 py-1 bg-slate-50 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 rounded-lg transition-colors flex items-center gap-1 shadow-2xs">
+            📥 İndir
+          </button>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          $k \in \{0, 1, 2, 3, 4, 5, 6\}$ aralığındaki 7 katsayı:
+          <table class="w-full text-left border-collapse border border-slate-200 text-xs mt-2">
+            <thead>
+              <tr class="bg-slate-100 text-slate-700">
+                <th class="p-2 border border-slate-200">İndeks k</th>
+                <th class="p-2 border border-slate-200">Simetrik Karşılığı</th>
+                <th class="p-2 border border-slate-200">Sayısal Katsayı a_k</th>
+                <th class="p-2 border border-slate-200">Özellik</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200 text-slate-600 font-mono">
+              <tr><td class="p-2 border">k = 0</td><td class="p-2 border">a₀</td><td class="p-2 border text-blue-600 font-bold">0</td><td class="p-2 border">DC Ortalama = 0</td></tr>
+              <tr><td class="p-2 border">k = 1</td><td class="p-2 border">a₁₅ mod 7</td><td class="p-2 border text-indigo-600 font-bold">j</td><td class="p-2 border">Temel Harmonik</td></tr>
+              <tr><td class="p-2 border">k = 2</td><td class="p-2 border">a₁₆ mod 7</td><td class="p-2 border text-purple-600 font-bold">2j</td><td class="p-2 border">2. Harmonik</td></tr>
+              <tr><td class="p-2 border">k = 3</td><td class="p-2 border">a₁₇ mod 7</td><td class="p-2 border text-rose-600 font-bold">3j</td><td class="p-2 border">3. Harmonik</td></tr>
+              <tr><td class="p-2 border">k = 4</td><td class="p-2 border">a₋₃ (4 - 7)</td><td class="p-2 border text-rose-600 font-bold">-3j</td><td class="p-2 border">Antisimetrik Eşlenik</td></tr>
+              <tr><td class="p-2 border">k = 5</td><td class="p-2 border">a₋₂ (5 - 7)</td><td class="p-2 border text-purple-600 font-bold">-2j</td><td class="p-2 border">Antisimetrik Eşlenik</td></tr>
+              <tr><td class="p-2 border">k = 6</td><td class="p-2 border">a₋₁ (6 - 7)</td><td class="p-2 border text-indigo-600 font-bold">-j</td><td class="p-2 border">Antisimetrik Eşlenik</td></tr>
+            </tbody>
+          </table>
+        </p>
+        <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+          <img id="img6" class="w-full h-auto block" alt="6. Adım">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function createHiDPICanvas(w, h) {
+      const c = document.createElement('canvas');
+      const ratio = 2;
+      c.width = w * ratio;
+      c.height = h * ratio;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      const ctx = c.getContext('2d');
+      ctx.scale(ratio, ratio);
+      return { canvas: c, ctx: ctx };
+    }
+
+    function downloadCard(imgId, filename) {
+      const img = document.getElementById(imgId);
+      const a = document.createElement('a');
+      a.href = img.src;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    const kSlider = document.getElementById('kSlider');
+    const kVal = document.getElementById('kVal');
+    const modVal = document.getElementById('modVal');
+    const simMath = document.getElementById('simMath');
+    const kCanvas = document.getElementById('kCanvas');
+    const ynCanvas = document.getElementById('ynCanvas');
+
+    // N = 7 values for k = 0..6
+    // [0, j, 2j, 3j, -3j, -2j, -j]
+    const baseImag = [0, 1, 2, 3, -3, -2, -1];
+
+    function drawSimulator() {
+      const curK = parseInt(kSlider.value);
+      const mod7 = ((curK % 7) + 7) % 7;
+      kVal.textContent = 'k = ' + curK;
+      modVal.textContent = 'k mod 7 = ' + mod7;
+
+      // 1. kCanvas: Periodic Spectrum on Imaginary Axis
+      const kw = kCanvas.width / 2;
+      const kh = kCanvas.height / 2;
+      const kctx = kCanvas.getContext('2d');
+      kctx.setTransform(1, 0, 0, 1, 0, 0);
+      kctx.scale(2, 2);
+      kctx.clearRect(0, 0, kw, kh);
+
+      kctx.fillStyle = '#fafafa';
+      kctx.fillRect(0, 0, kw, kh);
+
+      const midY = kh / 2;
+      kctx.strokeStyle = '#cbd5e1';
+      kctx.beginPath(); kctx.moveTo(30, midY); kctx.lineTo(kw - 20, midY); kctx.stroke();
+
+      const kMin = -7, kMax = 21;
+      const dx = (kw - 60) / (kMax - kMin);
+
+      for (let k = kMin; k <= kMax; k++) {
+        const cx = 30 + (k - kMin) * dx;
+        const m = ((k % 7) + 7) % 7;
+        const imag = baseImag[m];
+
+        const isCurrent = (k === curK);
+        kctx.strokeStyle = isCurrent ? '#be123c' : (imag >= 0 ? '#4f46e5' : '#9333ea');
+        kctx.lineWidth = isCurrent ? 3 : 1.5;
+
+        kctx.beginPath(); kctx.moveTo(cx, midY); kctx.lineTo(cx, midY - imag * 18); kctx.stroke();
+        kctx.fillStyle = isCurrent ? '#be123c' : (imag >= 0 ? '#4f46e5' : '#9333ea');
+        kctx.beginPath(); kctx.arc(cx, midY - imag * 18, isCurrent ? 4 : 2.5, 0, 2*Math.PI); kctx.fill();
+
+        if (k % 7 === 0 || k === curK) {
+          kctx.fillStyle = isCurrent ? '#be123c' : '#64748b';
+          kctx.font = isCurrent ? 'bold 9px Inter' : '8px Inter';
+          kctx.textAlign = 'center';
+          kctx.fillText(k, cx, midY + (imag < 0 ? -10 : 12));
+        }
+      }
+
+      kctx.fillStyle = '#1e293b'; kctx.font = 'bold 11px Inter'; kctx.textAlign = 'left';
+      kctx.fillText('DTFS Katsayıları a_k = j × Im{a_k} (N = 7 Periyodik)', 30, 20);
+
+      // 2. ynCanvas: Synthesized Odd Signal x[n]
+      const yw = ynCanvas.width / 2;
+      const yh = ynCanvas.height / 2;
+      const yctx = ynCanvas.getContext('2d');
+      yctx.setTransform(1, 0, 0, 1, 0, 0);
+      yctx.scale(2, 2);
+      yctx.clearRect(0, 0, yw, yh);
+
+      yctx.fillStyle = '#ffffff';
+      yctx.fillRect(0, 0, yw, yh);
+
+      const yMid = yh / 2;
+      yctx.strokeStyle = '#cbd5e1';
+      yctx.beginPath(); yctx.moveTo(30, yMid); yctx.lineTo(yw - 20, yMid); yctx.stroke();
+
+      const nMin = -7, nMax = 14;
+      const dxN = (yw - 60) / (nMax - nMin);
+
+      // Synthesize x[n] = SUM_{k=0}^6 a_k e^(j k 2pi/7 n)
+      // Since a_k is purely imaginary and odd:
+      // x[n] = -2 * [ 1 * sin(2pi/7 n) + 2 * sin(4pi/7 n) + 3 * sin(6pi/7 n) ]
+      for (let n = nMin; n <= nMax; n++) {
+        const cx = 30 + (n - nMin) * dxN;
+        const w0 = 2 * Math.PI / 7;
+        const xVal = -2 * (1 * Math.sin(w0 * n) + 2 * Math.sin(2 * w0 * n) + 3 * Math.sin(3 * w0 * n));
+
+        yctx.strokeStyle = '#2563eb';
+        yctx.lineWidth = 2;
+        yctx.beginPath(); yctx.moveTo(cx, yMid); yctx.lineTo(cx, yMid - xVal * 8); yctx.stroke();
+
+        yctx.fillStyle = '#2563eb';
+        yctx.beginPath(); yctx.arc(cx, yMid - xVal * 8, 3, 0, 2*Math.PI); yctx.fill();
+
+        if (n % 7 === 0) {
+          yctx.fillStyle = '#64748b'; yctx.font = '8px Inter'; yctx.textAlign = 'center';
+          yctx.fillText('n=' + n, cx, yMid + 14);
+        }
+      }
+
+      const curImag = baseImag[mod7];
+      simMath.innerHTML = `Durum: k = ${curK} | k mod 7 = ${mod7} | Katsayı a_${curK} = ${curImag === 0 ? '0' : (curImag === 1 ? 'j' : (curImag === -1 ? '-j' : curImag + 'j'))} | İstenenler: a_0 = 0, a₋₁ = -j, a₋₂ = -2j, a₋₃ = -3j`;
+    }
+
+    kSlider.addEventListener('input', drawSimulator);
+
+    function renderStep1() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('1. Adım: DTFS Katsayılarının N = 7 Periyodikliği', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('Ayrık zaman Fourier serisinde katsayılar N periyoduyla kendini tekrarlar:', 30, 65);
+      ctx.fillText('a_{k + 7m} = a_k  (Tüm m in Z için)', 30, 95);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('Bu nedenle sadece 7 adet bağımsız katsayı mevcuttur.', 30, 135);
+      document.getElementById('img1').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep2() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('2. Adım: a15, a16, a17 Modulo 7 İndirgemesi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('a_15 = a_{15 - 14} = a_1 = j', 30, 65);
+      ctx.fillText('a_16 = a_{16 - 14} = a_2 = 2j', 30, 95);
+      ctx.fillText('a_17 = a_{17 - 14} = a_3 = 3j', 30, 125);
+      ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_1 = j, a_2 = 2j, a_3 = 3j olarak temel aralığa taşınır.', 30, 155);
+      document.getElementById('img2').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep3() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('3. Adım: Gerçel Sinyal Eşlenik Simetrisi', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('x[n] gerçel olduğu için: a_{-k} = a_k*', 30, 65);
+      ctx.fillText('a_{-1} = a_1* = (j)* = -j', 30, 95);
+      ctx.fillText('a_{-2} = a_2* = (2j)* = -2j', 30, 120);
+      ctx.fillText('a_{-3} = a_3* = (3j)* = -3j', 30, 145);
+      document.getElementById('img3').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep4() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('4. Adım: Tek Sinyal Özelliği ve a0 = 0', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('x[-n] = -x[n] (Tek Sinyal)  ===>  a_{-k} = -a_k', 30, 65);
+      ctx.fillText('k = 0 için: a_0 = -a_0  ===>  2 * a_0 = 0  ===>  a_0 = 0', 30, 95);
+      ctx.fillStyle = '#059669'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_{-k} = a_k* = -a_k sağlandığından katsayılar saf sanaldır.', 30, 135);
+      document.getElementById('img4').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep5() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('5. Adım: İstenen 4 Katsayının Kesin Değerleri', 25, 28);
+      ctx.fillStyle = '#2563eb'; ctx.font = 'bold 13px Inter';
+      ctx.fillText('a_0  =  0', 50, 65);
+      ctx.fillText('a_{-1} = -j', 50, 95);
+      ctx.fillText('a_{-2} = -2j', 50, 125);
+      ctx.fillText('a_{-3} = -3j', 50, 155);
+      document.getElementById('img5').src = canvas.toDataURL('image/png');
+    }
+
+    function renderStep6() {
+      const { canvas, ctx } = createHiDPICanvas(760, 180);
+      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, 760, 180);
+      ctx.fillStyle = '#1e293b'; ctx.font = 'bold 14px Inter'; ctx.fillText('6. Adım: Tam Periyot Vektörü ve Sınav İpuçları', 25, 28);
+      ctx.fillStyle = '#475569'; ctx.font = '12px Inter';
+      ctx.fillText('7 elemanlı temel periyot katsayıları:', 30, 65);
+      ctx.fillStyle = '#7c3aed'; ctx.font = 'bold 12px Inter';
+      ctx.fillText('[a_0, a_1, a_2, a_3, a_4, a_5, a_6] = [0, j, 2j, 3j, -3j, -2j, -j]', 30, 95);
+      ctx.fillStyle = '#e11d48'; ctx.font = 'bold 11px Inter';
+      ctx.fillText('Not: a_4 = a_{-3} = -3j, a_5 = a_{-2} = -2j, a_6 = a_{-1} = -j (Modulo 7 döngüsü).', 30, 135);
+      document.getElementById('img6').src = canvas.toDataURL('image/png');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      drawSimulator();
+      renderStep1();
+      renderStep2();
+      renderStep3();
+      renderStep4();
+      renderStep5();
+      renderStep6();
+    });
+  </script>
+</body>
+</html>
